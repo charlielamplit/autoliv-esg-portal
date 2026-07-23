@@ -1,0 +1,7 @@
+metric_code,clause_zh,clause_en,source,owner,due,evidence,current,target,suppliers
+ALV-E-001,供应商须在2050年前实现全价值链碳中和并设定经SBTi核准的中期目标；奇瑞要求2045年达成,Suppliers shall reach value-chain carbon neutrality by 2050 with SBTi-validated interim targets; Chery requires 2045,待核实：各OEM可持续采购手册条款号,集团可持续发展部,2026 Q4,SBTi 承诺函 ✓,已承诺,2045–2050,Tier-1 · 全部产线;运营边界
+ALV-E-002,范围一二排放2030年较基年下降42%，部分客户附加单车碳强度或达峰年要求,Scope 1&2 down 42% by 2030 vs base year; some OEMs add per-vehicle intensity or peak-year clauses,待核实：SBTi 1.5°C路径·基年,各工厂 EHS,2027 中期核查,能源台账 · 待归档,−19.3%,−42%,自有工厂
+ALV-E-004,奇瑞要求Tier-1供应商2030年绿电使用比例达60%；其余客户为鼓励性条款,Chery requires 60% renewable electricity for Tier-1 suppliers by 2030; others encourage but do not mandate,待核实：奇瑞绿色供应链协议版本,能源采购组,14天内提交路径,I-REC 采购意向 · 缺失,38%,60%,SUP-0142;SUP-0087;奇瑞配套园区
+ALV-E-005,关键金属与织物件须声明再生料比例并提供第三方验证；含气体发生器金属壳体,Key metal & fabric parts must declare recycled content with third-party verification incl. inflator housings,待核实：循环材料附录,材料工程部,2026 Q3,再生料声明 · 部分,部分声明,按件声明,SUP-0087;SUP-0310
+ALV-S-001,供应商须签署行为准则、完成RBA自评并回收人权尽调问卷；蔚来附加Tier-2溯源,Suppliers must sign the CoC complete RBA self-assessment and return the HR due-diligence questionnaire; NIO adds Tier-2 traceability,待核实：供应商行为准则 v3,采购合规组,2026-07-30,CoC 签署 ✓ · 问卷缺失,60%,100%,SUP-0231;Tier-2 电子;蔚来配套
+ALV-G-002,供应商须逐级披露Tier-1/Tier-2碳与活动数据并接入客户碳数据平台,Suppliers must disclose Tier-1/Tier-2 carbon & activity data and connect to the OEM carbon-data platform,待核实：数据透明度条款,数字化与数据组,季度滚动,PCF 报告 ✓,96%,Tier-2 全覆盖,SUP-0142;SUP-0087;SUP-0231

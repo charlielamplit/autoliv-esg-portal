@@ -1,0 +1,8 @@
+# 只部署 index.html + support.js；调研底稿/截图/原始数据不上公网
+uploads/
+screenshots/
+data/
+HANDOFF.md
+README.md
+sync.sh
+Autoliv ESG Cockpit.dc.html

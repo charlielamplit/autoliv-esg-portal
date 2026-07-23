@@ -1,0 +1,31 @@
+metric_code,metric_zh,metric_en,dimension,oem,status,target_note,priority
+ALV-E-001,碳中和目标,NetZero target,E,Geely,committed,2045,H
+ALV-E-001,碳中和目标,NetZero target,E,GWM,committed,2045,M
+ALV-E-001,碳中和目标,NetZero target,E,Changan,committed,2045 · 峰值2027,M
+ALV-E-001,碳中和目标,NetZero target,E,Xiaomi,committed,2050,M
+ALV-E-001,碳中和目标,NetZero target,E,NIO,request,−43%,M
+ALV-E-001,碳中和目标,NetZero target,E,Chery,committed,2047,H
+ALV-E-002,范围一二中期,Scope 1&2 interim,E,Geely,committed,2030,M
+ALV-E-002,范围一二中期,Scope 1&2 interim,E,GWM,committed,强度 −18%,M
+ALV-E-002,范围一二中期,Scope 1&2 interim,E,Changan,committed,峰值 2027,M
+ALV-E-002,范围一二中期,Scope 1&2 interim,E,Xiaomi,request,−30% by 2030,M
+ALV-E-002,范围一二中期,Scope 1&2 interim,E,Chery,request,单车 −60% by 2030,H
+ALV-E-004,可再生能源,Renewable energy,E,Geely,request,绿电提升,L
+ALV-E-004,可再生能源,Renewable energy,E,Xiaomi,request,优先采购,L
+ALV-E-004,可再生能源,Renewable energy,E,NIO,request,采购意向,L
+ALV-E-004,可再生能源,Renewable energy,E,Chery,gap,Tier-1 60% by 2030,H
+ALV-E-005,循环材料,Circularity,E,Geely,request,再生料声明,L
+ALV-E-005,循环材料,Circularity,E,Xiaomi,request,再生料比例,L
+ALV-E-005,循环材料,Circularity,E,NIO,request,包装循环,L
+ALV-E-005,循环材料,Circularity,E,Chery,committed,再生铝应用,M
+ALV-S-001,人权与劳工,Human rights,S,Geely,committed,CoC 签署,H
+ALV-S-001,人权与劳工,Human rights,S,GWM,request,冲突矿产,M
+ALV-S-001,人权与劳工,Human rights,S,Xiaomi,request,RBA 自评,M
+ALV-S-001,人权与劳工,Human rights,S,NIO,gap,人权尽调问卷,H
+ALV-S-001,人权与劳工,Human rights,S,Chery,committed,供应商 CoC 传导,M
+ALV-G-002,数据透明度,Transparency,G,Geely,committed,Tier-2 ✓,H
+ALV-G-002,数据透明度,Transparency,G,GWM,committed,Tier-2 ✓,H
+ALV-G-002,数据透明度,Transparency,G,Changan,committed,Tier-1 ✓,M
+ALV-G-002,数据透明度,Transparency,G,Xiaomi,request,Tier-2 问卷,M
+ALV-G-002,数据透明度,Transparency,G,NIO,committed,Tier-2 ✓,H
+ALV-G-002,数据透明度,Transparency,G,Chery,committed,Tier-2 ✓,H

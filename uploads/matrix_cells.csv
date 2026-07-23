@@ -1,0 +1,34 @@
+metric_code,metric_zh,metric_en,dimension,oem,status,target_note,priority
+ALV-E-001,碳中和目标,NetZero target,E,Geely,committed,2045 全链路,H
+ALV-E-001,碳中和目标,NetZero target,E,GWM,committed,2045,M
+ALV-E-001,碳中和目标,NetZero target,E,Changan,committed,2045 · 峰值2027,M
+ALV-E-001,碳中和目标,NetZero target,E,Xiaomi,committed,2040 运营碳中和 · 2050 净零愿景,M
+ALV-E-001,碳中和目标,NetZero target,E,NIO,committed,2035 单车LCA −43%（基年2023）,M
+ALV-E-001,碳中和目标,NetZero target,E,Chery,committed,2047 价值链,H
+ALV-E-002,范围一二中期,Scope 1&2 interim,E,Geely,committed,2030（已承诺 SBTi）,M
+ALV-E-002,范围一二中期,Scope 1&2 interim,E,GWM,committed,制造碳强度 −18%,M
+ALV-E-002,范围一二中期,Scope 1&2 interim,E,Changan,committed,峰值 2027,M
+ALV-E-002,范围一二中期,Scope 1&2 interim,E,Xiaomi,committed,−70% by 2030（基年2021）,M
+ALV-E-002,范围一二中期,Scope 1&2 interim,E,Chery,committed,单车制造 −60% by 2030（基年2023）,H
+ALV-E-004,可再生能源,Renewable energy,E,Geely,committed,核心T1 100%绿电 by 2025,H
+ALV-E-004,可再生能源,Renewable energy,E,GWM,request,低碳供应商评价引导,L
+ALV-E-004,可再生能源,Renewable energy,E,Changan,request,倡议分布式光伏/风电,L
+ALV-E-004,可再生能源,Renewable energy,E,Xiaomi,committed,汽车T1 绿电50% by 2025,M
+ALV-E-004,可再生能源,Renewable energy,E,NIO,request,低碳开发要求 · 无量化,L
+ALV-E-004,可再生能源,Renewable energy,E,Chery,gap,Tier-1 60% by 2030,H
+ALV-E-005,循环材料,Circularity,E,Geely,committed,再生钢20% · 铝30% · 塑料25%,M
+ALV-E-005,循环材料,Circularity,E,Xiaomi,request,再生料比例,L
+ALV-E-005,循环材料,Circularity,E,NIO,request,再生铝闭环 · 包装循环,L
+ALV-E-005,循环材料,Circularity,E,Chery,committed,100%再生铝压铸 · 零毁林,M
+ALV-S-001,人权与劳工,Human rights,S,Geely,committed,CoC签署 + DS SAQ + 区块链溯源,H
+ALV-S-001,人权与劳工,Human rights,S,GWM,unknown,未见公开要求,M
+ALV-S-001,人权与劳工,Human rights,S,Changan,committed,伙伴准则 100%签署 · ESG审核,M
+ALV-S-001,人权与劳工,Human rights,S,Xiaomi,committed,RBA体系CoC · CMRT尽调,M
+ALV-S-001,人权与劳工,Human rights,S,NIO,gap,人权尽调问卷 · 矿产尽调138家,H
+ALV-S-001,人权与劳工,Human rights,S,Chery,committed,CoC 100%签署 · CMRT 606家,M
+ALV-G-002,数据透明度,Transparency,G,Geely,committed,Tier-2 ✓ · 吉碳云平台,H
+ALV-G-002,数据透明度,Transparency,G,GWM,committed,Tier-2 ✓ · 碳数据收集起步,H
+ALV-G-002,数据透明度,Transparency,G,Changan,committed,Tier-1 ✓,M
+ALV-G-002,数据透明度,Transparency,G,Xiaomi,request,Tier-2 问卷,M
+ALV-G-002,数据透明度,Transparency,G,NIO,committed,Tier-2 ✓ · 可持续评估2.0,H
+ALV-G-002,数据透明度,Transparency,G,Chery,committed,Tier-2 ✓ · 供应商碳数据平台,H
