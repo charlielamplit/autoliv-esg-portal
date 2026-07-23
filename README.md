@@ -2,6 +2,8 @@
 
 供应链 ESG 合规工作台（演示原型）。纯静态单页，无构建步骤。
 
+**仓库（唯一）**：https://github.com/charlielamplit/autoliv-esg-portal · private · 默认分支 `main`。所有更新提交到这里。
+
 **首页即总览驾驶舱**：`index.html` 加载后默认 `state.view = 'v1'`（总览驾驶舱），访问根路径 `/` 直接进入。
 
 ## 文件
