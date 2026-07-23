@@ -27,6 +27,32 @@
 git add -A && git commit -m "..." && git push
 ```
 
+### ⚠️ 提交邮箱必须是 charlielamplit
+
+Vercel 会校验 commit 作者邮箱对应的 GitHub 账号是否有本项目权限，**不匹配的提交会被拦下**
+（部署状态显示 `Deployment was blocked`，不是构建失败，日志里看不出问题）。
+
+本仓库已设好局部身份，正常不用管：
+
+```bash
+git config user.name    # → charlielamplit
+git config user.email   # → charlielamplit@gmail.com
+```
+
+注意全局配置是另一个账号（`charlieccx@hotmail.com` → GitHub 用户 `CharlieCXC`），
+**新克隆一份仓库时要重新设**，否则会继承全局值被拦：
+
+```bash
+git config user.name charlielamplit
+git config user.email charlielamplit@gmail.com
+```
+
+万一 gmail 地址没在 GitHub 账号里验证过，改用一定能匹配的 noreply 地址：
+`293292275+charlielamplit@users.noreply.github.com`
+
+排查：`gh api repos/charlielamplit/autoliv-esg-portal/commits/<sha> --jq .author.login`
+应返回 `charlielamplit`。
+
 ## 本地预览
 
 ```bash
