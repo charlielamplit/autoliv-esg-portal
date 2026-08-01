@@ -8,8 +8,13 @@ HANDOFF.md
 README.md
 sync.sh
 
-# DC 编辑源（入口页由 sync.sh 生成，源文件不必上线）
-*.dc.html
+# DC 编辑源（入口页由 sync.sh 生成，源文件不必上线）。
+# 注意这里是逐个排除、不能写 *.dc.html ——
+# "ASSI 线上供应商可持续问卷.dc.html" 被 index.html 第 2509 行用 iframe 内嵌
+# （供应商问卷的 ASSI 标签页），排掉它线上 iframe 就是 404，
+# 而本地和设计文件夹里文件都在，测不出来。改名/删除该文件前先改那处 iframe src。
+Autoliv ESG Cockpit.dc.html
+Autoliv Demo 页面框架.dc.html
 
 # data/ 下只有这三个 JSON 是 index.html 运行时 fetch 的，必须部署；
 # 其余是已回填进代码的底稿，排除。

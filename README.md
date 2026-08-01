@@ -83,6 +83,41 @@ git config user.email charlielamplit@gmail.com
 排查：`gh api repos/charlielamplit/autoliv-esg-portal/commits/<sha> --jq .author.login`
 应返回 `charlielamplit`。
 
+## 每次从设计文件夹同步后的自检清单
+
+这几条都是真踩过的坑，且**共同点是不报错**——页面照常打开，只是内容不对，很容易一路带到线上。
+
+**1. 新增的 `.dc.html` 是否已加进 `sync.sh`**
+漏加 = 源文件进了仓库但没有对应入口页，线上访问 404 或停在旧版。
+
+**2. 新出现的运行时依赖是否被 `.vercelignore` 挡住**（本轮就栽在这条）
+每次同步后跑一遍，把结果和 `.vercelignore` 对一遍：
+
+```bash
+grep -ohE 'src="\./[^"]+"|fetch\('"'"'\./[^'"'"']+' *.dc.html | grep -oE '\./[^"'"'"']+' | sort -u
+```
+
+工作台的三个 `fetch` 全是 `.catch(()=>{})`，`assi.html` 的 `window.ASSI` 拿不到也只是空题库——
+**漏部署一律静默降级成空列表，控制台干净、构建成功、看不出任何异常**。
+
+同理还有一处 `iframe`：工作台「供应商问卷 → ASSI」标签页内嵌的是
+`./ASSI%20线上供应商可持续问卷.dc.html`（源文件本身，不是 `assi.html`），
+所以 `.vercelignore` 里 DC 源文件只能**逐个排除**，写成 `*.dc.html` 会把它一起排掉、
+线上 iframe 变 404，而本地文件都在、完全测不出来。要改这个文件名先改 iframe。
+
+**3. `assi-data.js` 的数据契约**
+`ASSI 线上供应商可持续问卷.dc.html` 读 `window.ASSI` 的 `QS`/`PIL`/`INFO`/`DEMO`/`HIST` 五个键，
+换题库时确认键名没变：
+
+```bash
+node -e "global.window={};require('./assi-data.js');console.log(Object.keys(window.ASSI))"
+```
+
+**4. 起 http server 逐个验 200**（见下节），别只开首页——
+`data/*.json`、`assi-data.js` 这类资源正是最容易漏的。
+
+**5. 提交身份是 `charlielamplit`**（见上节）。
+
 ## 本地预览
 
 ```bash
