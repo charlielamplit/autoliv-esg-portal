@@ -1,8 +1,18 @@
-# 只部署 index.html + support.js；调研底稿/截图/原始数据不上公网
+# 部署清单 = 3 个入口页 + support.js + assi-data.js + data/ 下的 3 个运行时 JSON。
+# 调研底稿 / 截图 / DC 编辑源不上公网。
+
+# 调研底稿与开发产物
 uploads/
 screenshots/
-data/
 HANDOFF.md
 README.md
 sync.sh
-Autoliv ESG Cockpit.dc.html
+
+# DC 编辑源（入口页由 sync.sh 生成，源文件不必上线）
+*.dc.html
+
+# data/ 下只有这三个 JSON 是 index.html 运行时 fetch 的，必须部署；
+# 其余是已回填进代码的底稿，排除。
+data/matrix_cells.csv
+data/matrix_detail.csv
+data/合规矩阵_填写模板_说明.md

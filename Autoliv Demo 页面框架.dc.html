@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EEF2F4;color:#0F1E24;font-family:'Plus Jakarta Sans','Noto Sans SC',system-ui,sans-serif;font-size:13px;line-height:1.45;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
+</style>
+</helmet>
+<div style="width:1480px;margin:0 auto;background:#EEF2F4;padding:26px 22px 40px;display:flex;flex-direction:column;gap:16px">
+
+  <div style="background:#fff;border:1px solid #E1E7EA;border-left:3px solid #002D6B;border-radius:14px;padding:18px 22px">
+    <div style="font-size:9.5px;letter-spacing:.2em;color:#003A7A;font-weight:700;text-transform:uppercase">Autoliv ESG 工作台 · 信息架构梳理 · 2026-07-30</div>
+    <div style="font-size:24px;font-weight:800;letter-spacing:-.025em;margin-top:4px">页面框架与路径全景</div>
+    <div style="font-size:13px;color:#33484F;margin-top:7px;line-height:1.6;max-width:1080px">现状 10 个一级页面里存在三类结构问题：<b>同一域被拆成多页</b>（3 个"合规"、2 个"供应商"）、<b>动作与生命周期节点被提到一级</b>（报告导出、新供应商尽调）、<b>角色切换混进了内容导航</b>。下方先呈现现状树与问题定位，再给出建议框架（一级栏目 10 → 5）与演示动线。</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start">
+
+    <div style="background:#fff;border:1px solid #E1E7EA;border-radius:14px">
+      <div style="padding:14px 18px;border-bottom:1px solid #E1E7EA;display:flex;align-items:center;gap:10px">
+        <h3 style="margin:0;font-size:14px;font-weight:700">现状 · 侧边栏 4 组 / 10 页</h3>
+        <span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;background:#FBE9E7;color:#B0291D">4 处结构问题</span>
+      </div>
+      <div style="padding:16px 18px 18px;display:flex;flex-direction:column;gap:14px">
+
+        <div>
+          <div style="font-size:9px;letter-spacing:.15em;color:#9AABB1;font-weight:700;text-transform:uppercase;margin-bottom:7px">工作台</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:#F7FAFB;border:1px solid #E6EBEE;border-radius:9px">
+              <span style="font-family:Manrope;font-size:10px;font-weight:800;color:#002D6B;background:#EBF2FA;padding:2px 6px;border-radius:5px;flex-shrink:0">V1</span>
+              <div style="flex:1"><b style="font-size:12.5px">总览驾驶舱</b><div style="font-size:11px;color:#5A6E75;margin-top:1px">集团态势 · KPI · 双向传导图 · 待处理事项</div></div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:#FFF9F8;border:1px solid #EFD8D4;border-radius:9px">
+              <span style="font-family:Manrope;font-size:10px;font-weight:800;color:#002D6B;background:#EBF2FA;padding:2px 6px;border-radius:5px;flex-shrink:0">V2</span>
+              <div style="flex:1"><b style="font-size:12.5px">客户要求矩阵</b><div style="font-size:11px;color:#5A6E75;margin-top:1px">8 指标 × 6 OEM 承诺/请求/缺口热力</div>
+                <div style="font-size:10.5px;color:#B0291D;font-weight:600;margin-top:4px">⚠ 与 V4 同一份数据的两种画法</div></div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:#FFFBF5;border:1px solid #F2E0C4;border-radius:9px">
+              <span style="font-family:Manrope;font-size:10px;font-weight:800;color:#002D6B;background:#EBF2FA;padding:2px 6px;border-radius:5px;flex-shrink:0">V3</span>
+              <div style="flex:1"><b style="font-size:12.5px">供应商管理</b><div style="font-size:11px;color:#5A6E75;margin-top:1px">327 家主数据 · 碳数据齐全度 · A–D 分级</div>
+                <div style="font-size:10.5px;color:#A3620F;font-weight:600;margin-top:4px">⚠ 与 V7 同一对象（供应商）的两套数据</div></div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:#FFF9F8;border:1px solid #EFD8D4;border-radius:9px">
+              <span style="font-family:Manrope;font-size:10px;font-weight:800;color:#002D6B;background:#EBF2FA;padding:2px 6px;border-radius:5px;flex-shrink:0">V4</span>
+              <div style="flex:1"><b style="font-size:12.5px">合规雷达</b><div style="font-size:11px;color:#5A6E75;margin-top:1px">metric × OEM 热力 + ESG 雷达 + 缺口预警</div>
+                <div style="font-size:10.5px;color:#B0291D;font-weight:600;margin-top:4px">⚠ 合规其一 · 对象=客户要求</div></div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:#FFFBF5;border:1px solid #F2E0C4;border-radius:9px">
+              <span style="font-family:Manrope;font-size:10px;font-weight:800;color:#002D6B;background:#EBF2FA;padding:2px 6px;border-radius:5px;flex-shrink:0">V5</span>
+              <div style="flex:1"><b style="font-size:12.5px">报告导出</b><div style="font-size:11px;color:#5A6E75;margin-top:1px">报告向导 · 模板库 · 历史报告</div>
+                <div style="font-size:10.5px;color:#A3620F;font-weight:600;margin-top:4px">⚠ 这是"动作"，不是工作对象</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size:9px;letter-spacing:.15em;color:#9AABB1;font-weight:700;text-transform:uppercase;margin-bottom:7px">Autoliv 自身合规</div>
+          <div style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:#FFF9F8;border:1px solid #EFD8D4;border-radius:9px">
+            <span style="font-family:Manrope;font-size:10px;font-weight:800;color:#002D6B;background:#EBF2FA;padding:2px 6px;border-radius:5px;flex-shrink:0">V6</span>
+            <div style="flex:1"><b style="font-size:12.5px">法规合规图谱</b><div style="font-size:11px;color:#5A6E75;margin-top:1px">CBAM/LkSG/EUDR/CSDDD 适用性分级 + AI 顾问</div>
+              <div style="font-size:10.5px;color:#B0291D;font-weight:600;margin-top:4px">⚠ 合规其二 · 对象=法规义务（结构化）</div></div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size:9px;letter-spacing:.15em;color:#9AABB1;font-weight:700;text-transform:uppercase;margin-bottom:7px">供应链 · 采购侧</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:#FFFBF5;border:1px solid #F2E0C4;border-radius:9px">
+              <span style="font-family:Manrope;font-size:10px;font-weight:800;color:#0B5B4A;background:#EDF9F4;padding:2px 6px;border-radius:5px;flex-shrink:0">V7</span>
+              <div style="flex:1"><b style="font-size:12.5px">能力指挥舱</b><div style="font-size:11px;color:#5A6E75;margin-top:1px">317 家 × 10 题达标率 · 四象限 · 帮扶映射</div>
+                <div style="font-size:10.5px;color:#A3620F;font-weight:600;margin-top:4px">⚠ 与 V3 应合为一个"供应商"域</div></div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:#FFF9F8;border:1px solid #EFD8D4;border-radius:9px">
+              <span style="font-family:Manrope;font-size:10px;font-weight:800;color:#0B5B4A;background:#EDF9F4;padding:2px 6px;border-radius:5px;flex-shrink:0">V8</span>
+              <div style="flex:1"><b style="font-size:12.5px">合规监控墙</b><div style="font-size:11px;color:#5A6E75;margin-top:1px">管制名单发布 → 主数据碰撞 → 分级告警</div>
+                <div style="font-size:10.5px;color:#B0291D;font-weight:600;margin-top:4px">⚠ 合规其三 · 对象=法规事件（实时）</div></div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:#FFFBF5;border:1px solid #F2E0C4;border-radius:9px">
+              <span style="font-family:Manrope;font-size:10px;font-weight:800;color:#0B5B4A;background:#EDF9F4;padding:2px 6px;border-radius:5px;flex-shrink:0">V9</span>
+              <div style="flex:1"><b style="font-size:12.5px">新供应商尽调</b><div style="font-size:11px;color:#5A6E75;margin-top:1px">5 步筛查 · 红黄绿准入 · 尽调报告</div>
+                <div style="font-size:10.5px;color:#A3620F;font-weight:600;margin-top:4px">⚠ 供应商生命周期第 0 步，应是二级</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size:9px;letter-spacing:.15em;color:#9AABB1;font-weight:700;text-transform:uppercase;margin-bottom:7px">视角切换</div>
+          <div style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:#FFF9F8;border:1px solid #EFD8D4;border-radius:9px">
+            <span style="font-family:Manrope;font-size:10px;font-weight:800;color:#5B3FA8;background:#EDE7FB;padding:2px 6px;border-radius:5px;flex-shrink:0">V10</span>
+            <div style="flex:1"><b style="font-size:12.5px">供应商门户</b><div style="font-size:11px;color:#5A6E75;margin-top:1px">37 项任务包 · AI 人话卡 · 术语卡（换皮 shell）</div>
+              <div style="font-size:10.5px;color:#B0291D;font-weight:600;margin-top:4px">⚠ 换的是"人"不是"页"，不该在内容导航里</div></div>
+          </div>
+        </div>
+
+        <div style="padding:11px 13px;background:#F5F7F8;border-radius:10px;font-size:11.5px;color:#33484F;line-height:1.6">
+          <b>另一处口径混乱</b>：V3 说 327 家，V7 说 317 家。前者=供应商主数据全量，后者=本年度气候问卷回收范围（直接材料）。合并后需在一处说明，不能两个数字各挂一页。
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div style="background:#fff;border:1px solid #E1E7EA;border-radius:14px">
+        <div style="padding:14px 18px;border-bottom:1px solid #E1E7EA;display:flex;align-items:center;gap:10px">
+          <h3 style="margin:0;font-size:14px;font-weight:700">建议框架 · 一级栏目 5 项</h3>
+          <span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;background:#EAF7EA;color:#1F6B32">10 → 5</span>
+          <span style="margin-left:auto;font-size:11px;color:#8397A0">按"工作对象"分域，不按功能分页</span>
+        </div>
+        <div style="padding:16px 18px 18px;display:flex;flex-direction:column;gap:11px">
+
+          <div style="border:1px solid #CDE0F2;border-radius:11px;background:linear-gradient(135deg,#F7FAFD,#fff)">
+            <div style="padding:10px 13px;display:flex;align-items:center;gap:9px;border-bottom:1px dashed #CDE0F2">
+              <span style="width:22px;height:22px;border-radius:7px;background:#002D6B;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;font-family:Manrope">1</span>
+              <b style="font-size:13px">总览驾驶舱</b>
+              <span style="margin-left:auto;font-size:10px;font-weight:700;color:#1F6B32;background:#EAF7EA;padding:2px 7px;border-radius:5px">沿用 V1</span>
+            </div>
+            <div style="padding:9px 13px;font-size:11.5px;color:#33484F;line-height:1.6">保持不变。作为四个域的入口：双向传导图三段可点 —— 上游客户要求 → 我的目标 → 下游供应商能力。</div>
+          </div>
+
+          <div style="border:1px solid #CDE0F2;border-radius:11px;background:linear-gradient(135deg,#F7FAFD,#fff)">
+            <div style="padding:10px 13px;display:flex;align-items:center;gap:9px;border-bottom:1px dashed #CDE0F2">
+              <span style="width:22px;height:22px;border-radius:7px;background:#002D6B;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;font-family:Manrope">2</span>
+              <b style="font-size:13px">客户要求</b>
+              <span style="font-size:10.5px;color:#8397A0">Autoliv 作为供应商，被要求的一侧</span>
+              <span style="margin-left:auto;font-size:10px;font-weight:700;color:#A3620F;background:#FDF3E7;padding:2px 7px;border-radius:5px">V2 + V4 合并</span>
+            </div>
+            <div style="padding:11px 13px;display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;gap:7px;flex-wrap:wrap">
+                <span style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:7px;background:#002D6B;color:#fff">要求矩阵</span>
+                <span style="font-size:11px;font-weight:600;padding:4px 10px;border-radius:7px;background:#EEF2F4;color:#4C6169">合规雷达</span>
+                <span style="font-size:11px;font-weight:600;padding:4px 10px;border-radius:7px;background:#EEF2F4;color:#4C6169">客户问卷 <span style="font-family:Manrope;color:#B0291D">4</span></span>
+                <span style="font-size:11px;font-weight:600;padding:4px 10px;border-radius:7px;background:#EEF2F4;color:#4C6169">缺口与整改</span>
+              </div>
+              <div style="font-size:11.5px;color:#33484F;line-height:1.6">同一份"客户要什么 / 我们差多少"的数据，三种视图切换：<b>矩阵</b>看全貌、<b>雷达</b>看维度短板、<b>问卷</b>看具体一份卷（7a 收件箱 → 7b 逐题作答 → 7c 得分模拟）。矩阵每格向下挂到具体问卷题号，回答"要求从哪来"。</div>
+            </div>
+          </div>
+
+          <div style="border:1px solid #BFE3D6;border-radius:11px;background:linear-gradient(135deg,#F6FBF9,#fff)">
+            <div style="padding:10px 13px;display:flex;align-items:center;gap:9px;border-bottom:1px dashed #BFE3D6">
+              <span style="width:22px;height:22px;border-radius:7px;background:#0B5B4A;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;font-family:Manrope">3</span>
+              <b style="font-size:13px">供应商</b>
+              <span style="font-size:10.5px;color:#8397A0">Autoliv 作为链主，要求别人的一侧</span>
+              <span style="margin-left:auto;font-size:10px;font-weight:700;color:#A3620F;background:#FDF3E7;padding:2px 7px;border-radius:5px">V3 + V7 + V9 合并</span>
+            </div>
+            <div style="padding:11px 13px;display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;gap:7px;flex-wrap:wrap">
+                <span style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:7px;background:#0B5B4A;color:#fff">主数据清单</span>
+                <span style="font-size:11px;font-weight:600;padding:4px 10px;border-radius:7px;background:#EEF2F4;color:#4C6169">能力达标</span>
+                <span style="font-size:11px;font-weight:600;padding:4px 10px;border-radius:7px;background:#EEF2F4;color:#4C6169">分级与减排</span>
+                <span style="font-size:11px;font-weight:600;padding:4px 10px;border-radius:7px;background:#EEF2F4;color:#4C6169">帮扶服务</span>
+                <span style="font-size:11px;font-weight:600;padding:4px 10px;border-radius:7px;background:#fff;border:1px dashed #BFE3D6;color:#0B5B4A">+ 新供应商引入（二级）</span>
+              </div>
+              <div style="font-size:11.5px;color:#33484F;line-height:1.6">一个供应商域、一套顶部 KPI（327 主数据 / 317 已回卷）、<b>一个供应商详情抽屉</b>内部分 tab：档案 · 碳数据 · 问卷能力 · 关联客户要求 · 帮扶记录。尽调作为"入库前"的二级流程，从清单页「+ 新供应商」进入。</div>
+            </div>
+          </div>
+
+          <div style="border:1px solid #D9CEF5;border-radius:11px;background:linear-gradient(135deg,#FAF8FE,#fff)">
+            <div style="padding:10px 13px;display:flex;align-items:center;gap:9px;border-bottom:1px dashed #D9CEF5">
+              <span style="width:22px;height:22px;border-radius:7px;background:#5B3FA8;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;font-family:Manrope">4</span>
+              <b style="font-size:13px">传导对齐</b>
+              <span style="font-size:10.5px;color:#8397A0">客户要我的 ↔ 我的目标 ↔ 我要求供应商的</span>
+              <span style="margin-left:auto;font-size:10px;font-weight:700;color:#5B3FA8;background:#EDE7FB;padding:2px 7px;border-radius:5px">新增 · 回答问题 5</span>
+            </div>
+            <div style="padding:11px 13px;font-size:11.5px;color:#33484F;line-height:1.6">三列对齐表：左=客户条款（客户P SSI 112 题 / SAQ 5.0 / CMRT / 6 家 OEM 要求），中=Autoliv 自身目标与 37 项可持续采购要求，右=发给供应商的 10 题气候问卷。逐条连线并标注 <b style="color:#1F6B32">已覆盖</b> / <b style="color:#A3620F">部分覆盖</b> / <b style="color:#B0291D">未传导</b>。这一页直接回答"你问供应商的问题，凭什么是这些"。</div>
+          </div>
+
+          <div style="border:1px solid #CDEFF6;border-radius:11px;background:linear-gradient(135deg,#F6FCFD,#fff)">
+            <div style="padding:10px 13px;display:flex;align-items:center;gap:9px;border-bottom:1px dashed #CDEFF6">
+              <span style="width:22px;height:22px;border-radius:7px;background:#045B75;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;font-family:Manrope">5</span>
+              <b style="font-size:13px">法规与管制合规</b>
+              <span style="font-size:10.5px;color:#8397A0">对象=政府/立法，与客户要求分开</span>
+              <span style="margin-left:auto;font-size:10px;font-weight:700;color:#A3620F;background:#FDF3E7;padding:2px 7px;border-radius:5px">V6 + V8 合并</span>
+            </div>
+            <div style="padding:11px 13px;display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;gap:7px;flex-wrap:wrap">
+                <span style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:7px;background:#045B75;color:#fff">义务图谱（结构化 · 年度）</span>
+                <span style="font-size:11px;font-weight:600;padding:4px 10px;border-radius:7px;background:#EEF2F4;color:#4C6169">实时监控墙（事件 · 分钟级）<span style="font-family:Manrope;color:#B0291D">3</span></span>
+              </div>
+              <div style="font-size:11.5px;color:#33484F;line-height:1.6">同一个域的两个时间尺度：<b>图谱</b>=CBAM/CSDDD/EUDR 这类"什么时候要交什么"；<b>监控墙</b>=管制名单突发公告碰撞供应链。两者共用同一套法规源与同一个义务抽屉。</div>
+            </div>
+          </div>
+
+          <div style="border:1px solid #E1E7EA;border-radius:11px;background:#FAFBFC;padding:11px 13px">
+            <div style="font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#8397A0">移出侧边栏 · 改为全局</div>
+            <div style="display:flex;flex-direction:column;gap:7px;margin-top:8px">
+              <div style="display:flex;gap:9px;align-items:flex-start;font-size:11.5px;color:#33484F;line-height:1.55">
+                <span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px;background:#EBF2FA;color:#002D6B;flex-shrink:0;white-space:nowrap">顶栏右侧</span>
+                <div><b>角色切换器</b>：Autoliv 采购 ⇄ Autoliv 可持续 ⇄ 供应商 ABC56 ⇄ 客户视角。切换后整个 shell 换皮（供应商门户即"供应商"角色下的首页），不再占内容导航。</div>
+              </div>
+              <div style="display:flex;gap:9px;align-items:flex-start;font-size:11.5px;color:#33484F;line-height:1.55">
+                <span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px;background:#EBF2FA;color:#002D6B;flex-shrink:0;white-space:nowrap">顶栏动作</span>
+                <div><b>导出 / 生成报告</b>：任何页面都能导出当前范围；报告中心（模板库 + 历史）降为该动作下的二级页面。</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:#fff;border:1px solid #E1E7EA;border-radius:14px">
+    <div style="padding:14px 18px;border-bottom:1px solid #E1E7EA"><h3 style="margin:0;font-size:14px;font-weight:700">逐条回答</h3></div>
+    <div style="padding:16px 18px 18px;display:grid;grid-template-columns:repeat(5,1fr);gap:12px">
+      <div style="border:1px solid #E6EBEE;border-radius:11px;padding:12px 13px;background:#FAFBFC">
+        <div style="font-size:10px;font-weight:800;color:#B0291D;font-family:Manrope">Q1 · 三个"合规"</div>
+        <div style="font-size:11.5px;font-weight:700;margin-top:6px;line-height:1.4">重复的是 V2/V4，不是三个合规</div>
+        <div style="font-size:11px;color:#33484F;line-height:1.6;margin-top:5px">V4 的对象是<b>客户要求</b>（该并入"客户要求"域，与 V2 同页）；V6 的对象是<b>法规义务</b>；V8 的对象是<b>法规事件</b>。后两者同域不同时间尺度 → 合成 1 页 2 tab。结果：合规类一级栏目从 3 降到 1。</div>
+      </div>
+      <div style="border:1px solid #E6EBEE;border-radius:11px;padding:12px 13px;background:#FAFBFC">
+        <div style="font-size:10px;font-weight:800;color:#A3620F;font-family:Manrope">Q2 · 供应商 × 能力</div>
+        <div style="font-size:11.5px;font-weight:700;margin-top:6px;line-height:1.4">合并，用视图切换</div>
+        <div style="font-size:11px;color:#33484F;line-height:1.6;margin-top:5px">同一对象两套数据，不该是两页。建议"供应商"一级 + 顶部视图 tab（主数据 / 能力达标 / 分级 / 帮扶），共用一个供应商抽屉分 tab 展开。327 与 317 的口径在页头一次说清。</div>
+      </div>
+      <div style="border:1px solid #E6EBEE;border-radius:11px;padding:12px 13px;background:#FAFBFC">
+        <div style="font-size:10px;font-weight:800;color:#A3620F;font-family:Manrope">Q3 · 报告 / 尽调</div>
+        <div style="font-size:11.5px;font-weight:700;margin-top:6px;line-height:1.4">都不该是一级</div>
+        <div style="font-size:11px;color:#33484F;line-height:1.6;margin-top:5px">报告导出是<b>全局动作</b> → 顶栏按钮 + 报告中心二级。新供应商尽调是<b>供应商生命周期第 0 步</b> → 供应商清单页的「+ 新供应商」二级流程。一级栏目只放"工作对象"。</div>
+      </div>
+      <div style="border:1px solid #E6EBEE;border-radius:11px;padding:12px 13px;background:#FAFBFC">
+        <div style="font-size:10px;font-weight:800;color:#5B3FA8;font-family:Manrope">Q4 · 视角切换</div>
+        <div style="font-size:11.5px;font-weight:700;margin-top:6px;line-height:1.4">移到顶栏用户区</div>
+        <div style="font-size:11px;color:#33484F;line-height:1.6;margin-top:5px">切换的是<b>身份</b>而非页面，位置应与账号/语言/匿名开关同列。切换到"供应商 ABC56"后整个 shell 换成门户皮肤，返回按钮也在顶栏 —— 与"一个平台·四个角色"的叙事一致。</div>
+      </div>
+      <div style="border:1px solid #E9DFFA;border-radius:11px;padding:12px 13px;background:#FAF8FE">
+        <div style="font-size:10px;font-weight:800;color:#5B3FA8;font-family:Manrope">Q5 · 问卷与客户要求对齐</div>
+        <div style="font-size:11.5px;font-weight:700;margin-top:6px;line-height:1.4">缺一页"传导对齐"</div>
+        <div style="font-size:11px;color:#33484F;line-height:1.6;margin-top:5px">现在没有任何地方能看到"我问供应商的 10 题"从哪条客户要求推导而来。新增三列对齐页 + 在能力指挥舱每题旁标注来源条款（如 LCA ← 客户P SSI Q9 + 要求 #2 + CBAM），并在客户问卷 7c 的差距行提供「传导给供应商」动作闭环。</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1.25fr 1fr;gap:16px;align-items:start">
+    <div style="background:#fff;border:1px solid #E1E7EA;border-radius:14px">
+      <div style="padding:14px 18px;border-bottom:1px solid #E1E7EA;display:flex;align-items:center;gap:10px">
+        <h3 style="margin:0;font-size:14px;font-weight:700">页面路径 · 数据流向</h3>
+        <span style="margin-left:auto;font-size:11px;color:#8397A0">箭头 = 页面内可点跳转</span>
+      </div>
+      <div style="padding:18px">
+        <div style="display:grid;grid-template-columns:1fr 26px 1fr 26px 1fr;align-items:center;gap:0">
+          <div style="border:1.5px solid #CDE0F2;background:#F7FAFD;border-radius:11px;padding:12px 13px">
+            <div style="font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:#003A7A">上游 · 14 家客户</div>
+            <div style="font-size:12.5px;font-weight:700;margin-top:4px">客户要求</div>
+            <div style="font-size:10.5px;color:#5A6E75;line-height:1.5;margin-top:3px">矩阵 · 雷达 · 问卷 7a/7b/7c</div>
+          </div>
+          <div style="text-align:center;color:#8397A0;font-size:15px">→</div>
+          <div style="border:1.5px solid #002D6B;background:linear-gradient(135deg,#002D6B,#001B41);color:#fff;border-radius:11px;padding:12px 13px">
+            <div style="font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:#7FB0E8">Autoliv 自身</div>
+            <div style="font-size:12.5px;font-weight:700;margin-top:4px">传导对齐 + 法规义务</div>
+            <div style="font-size:10.5px;color:#B8CDE8;line-height:1.5;margin-top:3px">我承诺什么 · 我必须做什么</div>
+          </div>
+          <div style="text-align:center;color:#8397A0;font-size:15px">→</div>
+          <div style="border:1.5px solid #BFE3D6;background:#F6FBF9;border-radius:11px;padding:12px 13px">
+            <div style="font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:#0B5B4A">下游 · 327 家供应商</div>
+            <div style="font-size:12.5px;font-weight:700;margin-top:4px">供应商域</div>
+            <div style="font-size:10.5px;color:#5A6E75;line-height:1.5;margin-top:3px">主数据 · 能力 · 帮扶 · 尽调</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 26px 1fr 26px 1fr;align-items:center;margin-top:9px">
+          <div style="text-align:center;color:#8397A0;font-size:15px">↑</div><div></div>
+          <div style="text-align:center;color:#8397A0;font-size:15px">↕</div><div></div>
+          <div style="text-align:center;color:#8397A0;font-size:15px">↓</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 26px 1fr 26px 1fr;align-items:start;gap:0;margin-top:5px">
+          <div style="border:1px dashed #CDE0F2;border-radius:10px;padding:9px 12px;font-size:11px;color:#33484F;line-height:1.55">问卷回答与得分回填矩阵；缺口生成整改任务</div>
+          <div></div>
+          <div style="border:1px dashed #C4D0D5;border-radius:10px;padding:9px 12px;font-size:11px;color:#33484F;line-height:1.55">总览驾驶舱 = 三层同屏；法规监控墙碰撞主数据产生告警</div>
+          <div></div>
+          <div style="border:1px dashed #BFE3D6;border-radius:10px;padding:9px 12px;font-size:11px;color:#33484F;line-height:1.55">供应商门户（角色切换）回传数据，刷新三个状态位</div>
+        </div>
+        <div style="margin-top:16px;padding-top:14px;border-top:1px dashed #E1E7EA;display:flex;flex-direction:column;gap:7px">
+          <div style="font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#8397A0">现有已实现的跳转（保留）</div>
+          <div style="font-size:11.5px;color:#33484F;line-height:1.7">总览 双向传导图 → 供应商能力 · 供应商分级 → 能力视图 · 供应商清单 → 新供应商尽调 · 合规缺口预警 → 监控墙 · 差距下钻 → 供应商主数据 · 能力档案抽屉 → 供应商门户 · 碰撞图谱 → 合规雷达 · 尽调结论 → 供应商门户</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #E1E7EA;border-radius:14px">
+      <div style="padding:14px 18px;border-bottom:1px solid #E1E7EA"><h3 style="margin:0;font-size:14px;font-weight:700">工作进度</h3></div>
+      <div style="padding:14px 18px 18px;display:flex;flex-direction:column;gap:9px">
+        <div style="display:flex;gap:9px;align-items:flex-start"><span style="width:17px;height:17px;border-radius:5px;background:#3FAE55;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0">✓</span><div style="font-size:11.5px;line-height:1.5"><b>V1–V6</b> 原有六屏（含 4 类抽屉、双语、匿名开关）</div></div>
+        <div style="display:flex;gap:9px;align-items:flex-start"><span style="width:17px;height:17px;border-radius:5px;background:#3FAE55;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0">✓</span><div style="font-size:11.5px;line-height:1.5"><b>M2 能力指挥舱</b> 317 家真数据 · 四象限 · 帮扶映射 · 异常拦截</div></div>
+        <div style="display:flex;gap:9px;align-items:flex-start"><span style="width:17px;height:17px;border-radius:5px;background:#3FAE55;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0">✓</span><div style="font-size:11.5px;line-height:1.5"><b>M3 监控墙</b> MOFCOM 公告 · 三链路碰撞 · 处置留痕</div></div>
+        <div style="display:flex;gap:9px;align-items:flex-start"><span style="width:17px;height:17px;border-radius:5px;background:#3FAE55;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0">✓</span><div style="font-size:11.5px;line-height:1.5"><b>M4 尽调流</b> 5 步 · 有条件准入 · 红线清单</div></div>
+        <div style="display:flex;gap:9px;align-items:flex-start"><span style="width:17px;height:17px;border-radius:5px;background:#3FAE55;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0">✓</span><div style="font-size:11.5px;line-height:1.5"><b>M1 供应商门户</b> 37 项任务包 · 独立皮肤 · 术语卡</div></div>
+        <div style="display:flex;gap:9px;align-items:flex-start;padding-top:9px;margin-top:2px;border-top:1px dashed #E6EBEE"><span style="width:17px;height:17px;border-radius:5px;background:#B0291D;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0">!</span><div style="font-size:11.5px;line-height:1.5"><b>客户问卷线 7a/7b/7c</b> 未建（112 题数据已就位）</div></div>
+        <div style="display:flex;gap:9px;align-items:flex-start"><span style="width:17px;height:17px;border-radius:5px;background:#B0291D;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0">!</span><div style="font-size:11.5px;line-height:1.5"><b>传导对齐页</b> 未建（Q5 的答案，数据可算）</div></div>
+        <div style="display:flex;gap:9px;align-items:flex-start"><span style="width:17px;height:17px;border-radius:5px;background:#E8A33D;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0">·</span><div style="font-size:11.5px;line-height:1.5">数据请求单抬头来源、V2 三处来源徽章、V3 换装 317 家</div></div>
+        <div style="display:flex;gap:9px;align-items:flex-start"><span style="width:17px;height:17px;border-radius:5px;background:#5B3FA8;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0">→</span><div style="font-size:11.5px;line-height:1.5"><b>IA 重构</b>：本页确认后执行（10 → 5 一级 + 顶栏角色切换 + 报告降级）</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:#0F1E24;border-radius:14px;padding:16px 20px;color:#fff">
+    <div style="font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#7ED0B4">建议执行顺序</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:11px">
+      <div><div style="font-family:Manrope;font-size:11px;font-weight:800;color:#7ED0B4">第 1 步</div><div style="font-size:12px;font-weight:700;margin-top:3px">导航重构</div><div style="font-size:11px;color:#C4D0D5;line-height:1.55;margin-top:3px">10 → 5 一级；V2+V4、V6+V8、V3+V7 各自加视图 tab；报告与尽调降级；角色切换上顶栏。不动内容，只动壳。</div></div>
+      <div><div style="font-family:Manrope;font-size:11px;font-weight:800;color:#7ED0B4">第 2 步</div><div style="font-size:12px;font-weight:700;margin-top:3px">客户问卷线</div><div style="font-size:11px;color:#C4D0D5;line-height:1.55;margin-top:3px">7a/7b/7c 建在"客户要求"域的第三个 tab 里，天然归位。</div></div>
+      <div><div style="font-family:Manrope;font-size:11px;font-weight:800;color:#7ED0B4">第 3 步</div><div style="font-size:12px;font-weight:700;margin-top:3px">传导对齐页</div><div style="font-size:11px;color:#C4D0D5;line-height:1.55;margin-top:3px">三列对齐 + 每题来源标注，回答 Q5，也是全场最强的收口叙事。</div></div>
+      <div><div style="font-family:Manrope;font-size:11px;font-weight:800;color:#7ED0B4">第 4 步</div><div style="font-size:12px;font-weight:700;margin-top:3px">细节回填</div><div style="font-size:11px;color:#C4D0D5;line-height:1.55;margin-top:3px">来源徽章、请求单抬头、317/327 口径统一、供应商抽屉合并为 tab 式。</div></div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1480,&quot;height&quot;:2100}}"></script>
+</body>
+</html>

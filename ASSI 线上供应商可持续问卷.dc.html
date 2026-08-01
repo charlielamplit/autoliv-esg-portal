@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F5F7F8;color:#0F1E24;font-family:'Plus Jakarta Sans','Noto Sans SC',system-ui,sans-serif;font-size:13px;line-height:1.45;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit;padding:0}
+input,textarea{font-family:inherit;color:inherit}
+textarea{resize:vertical}
+a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
+.en{display:none}
+[data-lang="en"] .zh{display:none}
+[data-lang="en"] .en{display:inline}
+[data-lang="en"] .en.b{display:block}
+.na{display:none}
+[data-anon="1"] .nr{display:none}
+[data-anon="1"] .na{display:inline}
+::placeholder{color:#A9B7BD}
+</style>
+<script src="./assi-data.js"></script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+</helmet>
+
+<div data-lang="{{ lang }}" data-anon="{{ anon }}" style="min-height:100vh">
+
+  <div style="position:sticky;top:0;z-index:40;background:#0E3B3A;color:#fff;padding:0 20px;box-shadow:0 1px 0 rgba(255,255,255,.06),0 10px 30px -20px rgba(15,30,36,.6)">
+    <div style="display:flex;align-items:center;gap:18px;height:66px">
+      <div style="display:flex;align-items:center;gap:11px;min-width:0">
+        <div style="width:32px;height:32px;border-radius:9px;background:#7ED0B4;color:#0E3B3A;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;font-family:Manrope,sans-serif;flex-shrink:0">ASSI</div>
+        <div style="line-height:1.25;min-width:0">
+          <div style="font-size:13.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><span class="zh">Autoliv 供应商可持续指数 · 线上自评问卷</span><span class="en">Autoliv Supplier Sustainability Index · Online Self-Assessment</span></div>
+          <div style="font-size:9.5px;color:#8FB8AE;letter-spacing:.05em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">v1.0 · 133 <span class="zh">题</span><span class="en">items</span> · 6 <span class="zh">大支柱</span><span class="en">pillars</span> · <span class="zh">基准 Polestar SSI + Autoliv 采购要求 37 项</span><span class="en">Polestar SSI baseline + Autoliv 37 sourcing requirements</span></div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:baseline;gap:9px;margin-left:14px;padding-left:20px;border-left:1px solid rgba(255,255,255,.15);flex-shrink:0">
+        <div style="font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#7ED0B4;white-space:nowrap"><span class="zh">当前总分</span><span class="en">Score</span></div>
+        <div style="font-family:Manrope,sans-serif;font-size:38px;font-weight:800;letter-spacing:-.03em;line-height:1">{{ total }}</div>
+        <div style="font-size:12px;color:#8FB8AE;font-weight:600;white-space:nowrap">/ 100</div>
+      </div>
+
+      <div style="width:172px;flex-shrink:0">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:#8FB8AE;font-weight:600;margin-bottom:5px"><span><span class="zh">作答进度</span><span class="en">Progress</span></span><span style="color:#E4EFEC;font-family:Manrope,sans-serif">{{ doneN }} / 133</span></div>
+        <div style="height:6px;border-radius:99px;background:rgba(255,255,255,.14);overflow:hidden"><div style="height:100%;border-radius:99px;background:#7ED0B4;width:{{ donePct }}"></div></div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:9px;margin-left:auto;flex-shrink:0">
+        <div style="display:{{ warnShow }};align-items:center;gap:7px;background:rgba(226,120,110,.16);border:1px solid rgba(233,155,146,.45);border-radius:8px;padding:6px 11px">
+          <span style="font-size:11.5px;font-weight:700;color:#FFC9C2">⚠ <span class="zh">{{ belowN }} 项最低要求未达标</span><span class="en">{{ belowN }} requirements below minimum</span></span>
+        </div>
+        <div style="display:{{ okShow }};align-items:center;gap:7px;background:rgba(126,208,180,.16);border:1px solid rgba(126,208,180,.4);border-radius:8px;padding:6px 11px">
+          <span style="font-size:11.5px;font-weight:700;color:#9BE3C8">✓ <span class="zh">所有最低要求已满足</span><span class="en">All requirements met</span></span>
+        </div>
+        <div style="display:flex;background:rgba(255,255,255,.1);border-radius:8px;padding:2px">
+          <button onClick="{{ setZh }}" style="{{ segZh }}">中文</button>
+          <button onClick="{{ setEn }}" style="{{ segEn }}">EN</button>
+        </div>
+        <button onClick="{{ toggleAnon }}" style="display:flex;align-items:center;gap:7px;padding:6px 11px;border-radius:8px;background:{{ anonBg }};border:1px solid {{ anonBd }};color:{{ anonFg }};font-size:11.5px;font-weight:600">
+          <span style="width:22px;height:12px;border-radius:99px;background:{{ anonDotBg }};position:relative;flex-shrink:0"><span style="position:absolute;top:2px;left:{{ anonDotX }};width:8px;height:8px;border-radius:50%;background:#0E3B3A"></span></span>
+          <span class="zh">匿名</span><span class="en">Anonymise</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:238px minmax(0,1fr) 312px;gap:16px;padding:16px 20px 48px;align-items:start;max-width:1720px;margin:0 auto">
+
+    <div style="position:sticky;top:82px;display:flex;flex-direction:column;gap:12px">
+      <div style="background:#fff;border:1px solid #E1E7EA;border-radius:13px;overflow:hidden">
+        <div style="padding:12px 14px 9px;border-bottom:1px solid #EDF1F3">
+          <div style="font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">问卷章节</span><span class="en">Sections</span></div>
+        </div>
+        <sc-for list="{{ nav }}" as="s" hint-placeholder-count="7">
+          <button onClick="{{ s.go }}" style="display:block;width:100%;text-align:left;padding:10px 13px;border-bottom:1px solid #F1F5F6;background:{{ s.bg }};border-left:3px solid {{ s.edge }}">
+            <div style="display:flex;align-items:center;gap:7px">
+              <span style="font-family:Manrope,sans-serif;font-size:9.5px;font-weight:800;letter-spacing:.06em;color:{{ s.c }}">{{ s.code }}</span>
+              <span style="font-size:11.5px;font-weight:{{ s.fw }};color:#0F1E24;line-height:1.3;flex:1;min-width:0"><span class="zh">{{ s.zh }}</span><span class="en b">{{ s.en }}</span></span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-top:7px">
+              <div style="flex:1;height:5px;border-radius:99px;background:#EDF1F3;overflow:hidden"><div style="height:100%;border-radius:99px;background:{{ s.c }};width:{{ s.pct }}"></div></div>
+              <span style="font-family:Manrope,sans-serif;font-size:10px;font-weight:700;color:{{ s.c }};min-width:22px;text-align:right">{{ s.score }}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:9.5px;color:#8397A0;margin-top:3px">
+              <span>{{ s.doneLabel }}</span>
+              <span style="display:{{ s.rShow }};color:#B0291D;font-weight:700">⚠ {{ s.rBelow }}R</span>
+            </div>
+          </button>
+        </sc-for>
+      </div>
+
+      <div style="background:#fff;border:1px solid #E1E7EA;border-radius:13px;padding:12px 14px">
+        <div style="font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#8397A0;margin-bottom:9px"><span class="zh">图例</span><span class="en">Legend</span></div>
+        <div style="display:flex;flex-direction:column;gap:7px;font-size:10.5px;color:#5A6E75;line-height:1.4">
+          <div style="display:flex;gap:8px;align-items:flex-start"><span style="flex-shrink:0;font-size:9px;font-weight:800;padding:2px 6px;border-radius:5px;background:#FBECEA;color:#8A1E14;border:1px solid #E9C9C4">R</span><span><span class="zh">硬性要求 · 长期合作最低门槛（28 项）</span><span class="en">Requirement · minimum threshold (28)</span></span></div>
+          <div style="display:flex;gap:8px;align-items:flex-start"><span style="flex-shrink:0;font-size:9px;font-weight:800;padding:2px 6px;border-radius:5px;background:#EEF4FD;color:#0B3A82;border:1px solid #D7E3F6">E</span><span><span class="zh">期望 · 未来将转为强制（8 项）</span><span class="en">Expectation · will become mandatory (8)</span></span></div>
+          <div style="display:flex;gap:8px;align-items:flex-start"><span style="flex-shrink:0;font-size:9px;font-weight:800;padding:2px 6px;border-radius:5px;background:#EAF7F1;color:#0B5B4A;border:1px solid #BFE3D6">N</span><span><span class="zh">2025 新增要求（2 项）</span><span class="en">New in 2025 (2)</span></span></div>
+          <div style="display:flex;gap:8px;align-items:flex-start;padding-top:6px;border-top:1px dashed #EDF1F3"><span style="flex-shrink:0;font-family:Manrope,sans-serif;font-size:9px;font-weight:800;padding:2px 6px;border-radius:5px;background:#F3F6F7;color:#4C6169">×3</span><span><span class="zh">加权项 · 透明度·冲突矿产·治理与安全（20 项）</span><span class="en">Weighted · transparency, minerals, governance & safety (20)</span></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:14px;min-width:0">
+
+      <div style="display:{{ histShow }};align-items:flex-start;gap:12px;background:#F8F6FD;border:1px solid #E3DAF7;border-radius:13px;padding:13px 16px">
+        <span style="width:26px;height:26px;border-radius:8px;background:#EDE7FA;color:#5B3FA0;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">⟲</span>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:700;color:#3E2A73"><span class="zh">检测到您 {{ histAt }} 提交的 ASSI 历史答卷（当年总分 {{ histScore }}）</span><span class="en b">Found your ASSI submission from {{ histAt }} (score {{ histScore }})</span></div>
+          <div style="font-size:11px;color:#5A6E75;line-height:1.6;margin-top:4px"><span class="zh">其中 <b style="color:#5B3FA0">{{ histReusable }} 题</b>与本年度题目一致且您本年尚未作答，可直接复用；复用后的题目会标注「沿用 {{ histYear }} 年答卷」，请逐题确认或修改后再提交。</span><span class="en b"><b style="color:#5B3FA0">{{ histReusable }} items</b> match this year’s wording and are still unanswered — they can be carried over. Carried-over items are tagged “from {{ histYear }}” for you to confirm or edit before submitting.</span></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0">
+          <button onClick="{{ applyHist }}" style="padding:8px 14px;border-radius:8px;background:#5B3FA0;color:#fff;font-size:11.5px;font-weight:700;white-space:nowrap"><span class="zh">一键复用 {{ histReusable }} 题</span><span class="en">Carry over {{ histReusable }}</span></button>
+          <button onClick="{{ dismissHist }}" style="padding:6px 14px;border-radius:8px;background:#fff;border:1px solid #E3DAF7;color:#5A6E75;font-size:10.5px;font-weight:600;white-space:nowrap"><span class="zh">不复用</span><span class="en">Skip</span></button>
+        </div>
+      </div>
+
+      <div style="display:{{ infoShow }};flex-direction:column;gap:14px">
+        <div style="background:#fff;border:1px solid #E1E7EA;border-radius:13px;padding:17px 19px">
+          <div style="font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:#0B5B4A"><span class="zh">第一部分</span><span class="en">Part one</span></div>
+          <h1 style="margin:5px 0 0;font-size:19px;font-weight:800;letter-spacing:-.02em"><span class="zh">工厂基本信息</span><span class="en">General Information</span></h1>
+          <p style="font-size:12px;color:#33484F;margin:6px 0 0;line-height:1.6;max-width:760px"><span class="zh">『产品』指供货 Autoliv 的产品；『工厂』指生产该产品的工厂。请同时提供集团与工厂两级信息 —— 集团层字段已按演示预填，工厂层需由您补全。</span><span class="en b">“Product” means the product supplied to Autoliv; “factory” means the plant producing it. Provide both corporate- and factory-level information — corporate fields are pre-filled for this demo, factory fields are yours to complete.</span></p>
+          <div style="display:flex;align-items:center;gap:9px;margin-top:12px">
+            <div style="flex:1;max-width:280px;height:6px;border-radius:99px;background:#EDF1F3;overflow:hidden"><div style="height:100%;border-radius:99px;background:#0B5B4A;width:{{ infoPct }}"></div></div>
+            <span style="font-size:11px;color:#5A6E75;font-weight:600">{{ infoDone }} / {{ infoTotal }} <span class="zh">字段已填</span><span class="en">fields filled</span></span>
+          </div>
+        </div>
+
+        <sc-for list="{{ infoGroups }}" as="g" hint-placeholder-count="5">
+          <div style="background:#fff;border:1px solid #E1E7EA;border-radius:13px;overflow:hidden">
+            <div style="display:flex;align-items:center;gap:9px;padding:11px 16px;background:#FAFCFC;border-bottom:1px solid #EDF1F3">
+              <span style="width:6px;height:6px;border-radius:50%;background:#0B5B4A"></span>
+              <span style="font-size:11.5px;font-weight:700"><span class="zh">{{ g.zh }}</span><span class="en">{{ g.en }}</span></span>
+              <span style="margin-left:auto;font-size:10px;color:#8397A0">{{ g.count }}</span>
+            </div>
+            <div style="padding:14px 16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(288px,1fr));gap:12px 16px">
+              <sc-for list="{{ g.fields }}" as="f" hint-placeholder-count="4">
+                <label style="display:flex;flex-direction:column;gap:5px">
+                  <span style="font-size:10.5px;font-weight:600;color:#5A6E75;line-height:1.35"><span class="zh">{{ f.zh }}</span><span class="en b">{{ f.en }}</span></span>
+                  <input value="{{ f.v }}" onChange="{{ f.on }}" placeholder="{{ f.ph }}" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid {{ f.bd }};background:{{ f.bg }};font-size:12px;outline:none"/>
+                </label>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+
+        <button onClick="{{ goP1 }}" style="align-self:flex-start;display:flex;align-items:center;gap:8px;padding:10px 17px;border-radius:9px;background:#0B5B4A;color:#fff;font-size:12.5px;font-weight:700"><span class="zh">继续 · 支柱一 可持续管理框架与传导 →</span><span class="en">Continue · Pillar 1 Sustainability Framework →</span></button>
+      </div>
+
+      <div style="display:{{ qShow }};flex-direction:column;gap:14px">
+        <div style="background:{{ pilBg }};border:1px solid {{ pilBd }};border-radius:13px;padding:16px 19px">
+          <div style="display:flex;align-items:flex-start;gap:16px">
+            <div style="min-width:0;flex:1">
+              <div style="font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:{{ pilC }}"><span class="zh">支柱 {{ pilCode }}</span><span class="en">Pillar {{ pilCode }}</span></div>
+              <h1 style="margin:5px 0 0;font-size:19px;font-weight:800;letter-spacing:-.02em"><span class="zh">{{ pilZh }}</span><span class="en b">{{ pilEn }}</span></h1>
+              <p style="font-size:11.5px;color:#4C6169;margin:6px 0 0;line-height:1.6;max-width:760px"><span class="zh">{{ pilNote }}</span><span class="en b">{{ pilNoteEn }}</span></p>
+            </div>
+            <div style="text-align:right;flex-shrink:0">
+              <div style="font-family:Manrope,sans-serif;font-size:32px;font-weight:800;letter-spacing:-.03em;line-height:1;color:{{ pilC }}">{{ pilScore }}</div>
+              <div style="font-size:10px;color:#5A6E75;margin-top:3px">{{ pilDoneLabel }}</div>
+              <div style="font-size:10px;color:#8397A0;margin-top:2px"><span class="zh">满分权重</span><span class="en">Max weight</span> {{ pilMaxW }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:#fff;border:1px solid #E1E7EA;border-radius:11px;padding:9px 13px">
+          <span style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#8397A0"><span class="zh">筛选</span><span class="en">Filter</span></span>
+          <sc-for list="{{ filters }}" as="f" hint-placeholder-count="4">
+            <button onClick="{{ f.on }}" style="font-size:11.5px;font-weight:{{ f.fw }};padding:5px 11px;border-radius:7px;background:{{ f.bg }};border:1px solid {{ f.bd }};color:{{ f.fg }}"><span class="zh">{{ f.zh }}</span><span class="en">{{ f.en }}</span> {{ f.n }}</button>
+          </sc-for>
+          <span style="margin-left:auto;font-size:10.5px;color:#8397A0"><span class="zh">显示</span><span class="en">Showing</span> <b style="color:#33484F;font-family:Manrope,sans-serif">{{ visN }}</b> / {{ pilN }} <span class="zh">题</span><span class="en">items</span></span>
+        </div>
+
+        <sc-for list="{{ visQs }}" as="q" hint-placeholder-count="6">
+          <div style="background:#fff;border:1px solid {{ q.cardBd }};border-radius:13px;overflow:hidden;box-shadow:{{ q.cardSh }}">
+            <div style="display:{{ q.alertShow }};align-items:center;gap:8px;background:#FBECEA;border-bottom:1px solid #E9C9C4;padding:7px 16px">
+              <span style="font-size:11px;font-weight:800;color:#8A1E14">⚠ <span class="zh">未达最低要求 · 该题为硬性要求（R），答「否」将触发优先整改</span><span class="en">Below minimum · this is a Requirement (R); answering “No” triggers priority remediation</span></span>
+            </div>
+            <div style="padding:14px 16px 15px">
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:9px">
+                <span style="font-family:Manrope,sans-serif;font-size:12px;font-weight:800;color:#0F1E24">#{{ q.n }}</span>
+                <span style="font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:5px;background:#F3F6F7;color:#4C6169;border:1px solid #E1E7EA"><span class="zh">{{ q.objZh }}</span><span class="en">{{ q.objEn }}</span></span>
+                <span style="display:{{ q.flagShow }};font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:5px;background:{{ q.flagBg }};color:{{ q.flagFg }};border:1px solid {{ q.flagBd }}">{{ q.flagLabel }}</span>
+                <span style="font-family:Manrope,sans-serif;font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:5px;background:{{ q.wtBg }};color:{{ q.wtFg }};border:1px solid {{ q.wtBd }}">×{{ q.w }}</span>
+                <span style="display:{{ q.histShow }};font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:5px;background:#F3EFFC;color:#5B3FA0;border:1px solid #E3DAF7"><span class="zh">⟲ 沿用 {{ q.histYear }} 年答卷 · 待确认</span><span class="en">⟲ From {{ q.histYear }} · confirm</span></span>
+                <span style="display:{{ q.histShow }}"><button onClick="{{ q.onConfirmHist }}" style="font-size:9.5px;font-weight:700;color:#5B3FA0;padding:2px 4px"><span class="zh">确认沿用</span><span class="en">Confirm</span></button></span>
+                <span style="margin-left:auto;font-size:10px;color:#9AABB1;text-align:right">{{ q.sub }}</span>
+              </div>
+
+              <div style="font-size:13.5px;font-weight:600;line-height:1.62;color:#0F1E24;text-wrap:pretty"><span class="zh">{{ q.zh }}</span><span class="en b">{{ q.en }}</span></div>
+
+              <button onClick="{{ q.onEv }}" style="display:flex;align-items:center;gap:6px;margin-top:9px;font-size:10.5px;font-weight:600;color:#5A6E75">
+                <span style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border-radius:4px;background:#EDF1F3;font-size:9px;font-weight:800;color:#5A6E75">{{ q.evIcon }}</span>
+                <span class="zh">说明与证据要求</span><span class="en">Guideline &amp; evidence</span>
+              </button>
+              <div style="display:{{ q.evShow }};margin-top:8px;background:#FAFCFC;border:1px solid #EDF1F3;border-left:2px solid #C4D0D5;border-radius:0 9px 9px 0;padding:10px 13px;font-size:11.5px;color:#5A6E75;line-height:1.65">{{ q.ev }}</div>
+
+              <div style="display:flex;align-items:center;gap:8px;margin-top:13px;flex-wrap:wrap">
+                <span style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#8397A0"><span class="zh">作答</span><span class="en">Answer</span></span>
+                <div style="display:flex;gap:6px">
+                  <button onClick="{{ q.onYes }}" style="min-width:74px;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:700;background:{{ q.yesBg }};border:1px solid {{ q.yesBd }};color:{{ q.yesFg }}"><span class="zh">是</span><span class="en">Yes</span></button>
+                  <button onClick="{{ q.onNo }}" style="min-width:74px;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:700;background:{{ q.noBg }};border:1px solid {{ q.noBd }};color:{{ q.noFg }}"><span class="zh">否</span><span class="en">No</span></button>
+                  <button onClick="{{ q.onNa }}" style="min-width:84px;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:700;background:{{ q.naBg }};border:1px solid {{ q.naBd }};color:{{ q.naFg }}"><span class="zh">不适用</span><span class="en">N/A</span></button>
+                </div>
+                <span style="display:{{ q.clearShow }}"><button onClick="{{ q.onClear }}" style="font-size:10.5px;color:#9AABB1;padding:4px 6px"><span class="zh">清除</span><span class="en">Clear</span></button></span>
+                <span style="display:{{ q.needSupShow }};margin-left:auto;font-size:10.5px;font-weight:700;color:#A35A12"><span class="zh">⚑ 答「是」需填写支持信息</span><span class="en">⚑ “Yes” needs supporting information</span></span>
+              </div>
+
+              <div style="display:{{ q.supShow }};flex-direction:column;gap:5px;margin-top:11px">
+                <span style="font-size:10.5px;font-weight:700;color:#5A6E75"><span class="zh">支持信息（评分依据）</span><span class="en">Supporting information (basis for scoring)</span></span>
+                <textarea value="{{ q.sup }}" onChange="{{ q.onSup }}" rows="2" placeholder="{{ q.supPh }}" style="width:100%;padding:9px 11px;border-radius:9px;border:1px solid {{ q.supBd }};background:{{ q.supBg }};font-size:12px;line-height:1.6;outline:none"></textarea>
+              </div>
+
+              <div style="display:{{ q.supShow }};flex-wrap:wrap;align-items:center;gap:7px;margin-top:9px">
+                <label style="display:flex;align-items:center;gap:6px;padding:6px 11px;border-radius:8px;background:#FAFCFC;border:1px dashed #C4D0D5;color:#5A6E75;font-size:10.5px;font-weight:600;cursor:pointer">
+                  <span>📎</span><span class="zh">上传佐证文件</span><span class="en">Attach evidence</span>
+                  <input type="file" multiple onChange="{{ q.onFile }}" style="display:none"/>
+                </label>
+                <span style="font-size:9.5px;color:#9AABB1"><span class="zh">支持 PDF / 图片 / Word / Excel / 压缩包</span><span class="en">PDF, images, Word, Excel, archives</span></span>
+                <sc-for list="{{ q.files }}" as="f" hint-placeholder-count="0">
+                  <span style="display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border-radius:7px;background:#F1F9FC;border:1px solid #CFE9F2;font-size:10.5px;color:#0B4A5E;max-width:260px">
+                    <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ f.name }}</span>
+                    <span style="color:#7FA3AE;flex-shrink:0">{{ f.size }}</span>
+                    <button onClick="{{ f.remove }}" style="color:#7FA3AE;font-size:11px;flex-shrink:0">✕</button>
+                  </span>
+                </sc-for>
+              </div>
+
+              <div style="display:{{ q.apShow }};flex-direction:column;gap:5px;margin-top:9px">
+                <span style="font-size:10.5px;font-weight:700;color:#8A1E14"><span class="zh">行动计划（措施 · 责任人 · 完成时间）</span><span class="en">Action plan (measure · owner · due date)</span></span>
+                <textarea value="{{ q.ap }}" onChange="{{ q.onAp }}" rows="2" placeholder="{{ q.apPh }}" style="width:100%;padding:9px 11px;border-radius:9px;border:1px solid #E9C9C4;background:#FEFAFA;font-size:12px;line-height:1.6;outline:none"></textarea>
+              </div>
+
+              <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;padding-top:10px;border-top:1px dashed #EDF1F3;font-size:10px;color:#9AABB1;line-height:1.5">
+                <span><span class="zh">对齐 #37</span><span class="en">Aligns</span> · <b style="color:#5A6E75;font-weight:600">{{ q.al }}</b></span>
+                <span style="color:#D5DFE3">｜</span>
+                <span><span class="zh">来源</span><span class="en">Source</span> · <b style="color:#5A6E75;font-weight:600"><span class="nr">{{ q.src }}</span><span class="na">{{ q.srcA }}</span></b></span>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+
+        <div style="display:{{ emptyShow }};background:#fff;border:1px dashed #D5DFE3;border-radius:13px;padding:34px;text-align:center;font-size:12.5px;color:#8397A0"><span class="zh">当前筛选下没有题目。</span><span class="en">No items match this filter.</span></div>
+
+        <div style="display:flex;gap:9px;padding-top:2px">
+          <button onClick="{{ prevSec }}" style="display:{{ prevShow }};padding:10px 16px;border-radius:9px;background:#fff;border:1px solid #D5DFE3;color:#33484F;font-size:12px;font-weight:600">← {{ prevLabel }}</button>
+          <button onClick="{{ nextSec }}" style="display:{{ nextShow }};padding:10px 16px;border-radius:9px;background:#0B5B4A;color:#fff;font-size:12px;font-weight:700">{{ nextLabel }} →</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="position:sticky;top:82px;display:flex;flex-direction:column;gap:12px">
+      <div style="background:#0E3B3A;border-radius:13px;padding:16px 17px;color:#fff">
+        <div style="font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#7ED0B4"><span class="zh">实时计分卡</span><span class="en">Live scorecard</span></div>
+        <div style="display:flex;align-items:baseline;gap:8px;margin-top:8px">
+          <div style="font-family:Manrope,sans-serif;font-size:44px;font-weight:800;letter-spacing:-.035em;line-height:1">{{ total }}</div>
+          <div style="font-size:12px;color:#8FB8AE;font-weight:600">/ 100</div>
+        </div>
+        <div style="font-size:10px;color:#8FB8AE;line-height:1.55;margin-top:5px"><span class="zh">得分 = Σ权重(是) / Σ权重(全部，剔除不适用) × 100</span><span class="en b">Score = Σweight(Yes) / Σweight(all, excl. N/A) × 100</span></div>
+        <div style="display:flex;gap:16px;margin-top:11px;padding-top:11px;border-top:1px solid rgba(255,255,255,.12)">
+          <div><div style="font-size:9.5px;color:#8FB8AE;white-space:nowrap"><span class="zh">已答</span><span class="en">Answered</span></div><div style="font-family:Manrope,sans-serif;font-size:15px;font-weight:800;white-space:nowrap">{{ doneN }}<span style="font-size:10px;color:#8FB8AE;font-weight:600"> / 133</span></div></div>
+          <div><div style="font-size:9.5px;color:#8FB8AE;white-space:nowrap"><span class="zh">计分权重</span><span class="en">Scoring weight</span></div><div style="font-family:Manrope,sans-serif;font-size:15px;font-weight:800;white-space:nowrap">{{ numW }}<span style="font-size:10px;color:#8FB8AE;font-weight:600"> / {{ denW }}</span></div></div>
+        </div>
+      </div>
+
+      <div style="background:#fff;border:1px solid #E1E7EA;border-radius:13px;padding:13px 15px">
+        <div style="font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#8397A0;margin-bottom:10px"><span class="zh">各支柱得分</span><span class="en">Pillar scores</span></div>
+        <sc-for list="{{ pilBars }}" as="b" hint-placeholder-count="6">
+          <div style="margin-bottom:9px">
+            <div style="display:flex;align-items:baseline;gap:6px;font-size:10.5px">
+              <span style="font-family:Manrope,sans-serif;font-weight:800;color:{{ b.c }};font-size:9.5px">{{ b.code }}</span>
+              <span style="color:#5A6E75;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><span class="zh">{{ b.zh }}</span><span class="en">{{ b.en }}</span></span>
+              <span style="font-family:Manrope,sans-serif;font-weight:800;color:#0F1E24">{{ b.score }}</span>
+            </div>
+            <div style="height:5px;border-radius:99px;background:#EDF1F3;overflow:hidden;margin-top:4px"><div style="height:100%;border-radius:99px;background:{{ b.c }};width:{{ b.pct }}"></div></div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="background:#fff;border:1px solid #E1E7EA;border-radius:13px;padding:13px 15px">
+        <div style="font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#8397A0;margin-bottom:9px"><span class="zh">数据校验</span><span class="en">Data checks</span></div>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <button onClick="{{ jumpTodo }}" style="display:flex;align-items:center;gap:9px;width:100%;text-align:left;padding:7px 9px;border-radius:8px;background:{{ chk1Bg }}">
+            <span style="width:6px;height:6px;border-radius:50%;background:{{ chk1C }};flex-shrink:0"></span>
+            <span style="font-size:11px;color:#33484F;flex:1"><span class="zh">未作答</span><span class="en">No answer</span></span>
+            <span style="font-family:Manrope,sans-serif;font-size:13px;font-weight:800;color:{{ chk1C }}">{{ todoN }}</span>
+          </button>
+          <button onClick="{{ jumpSup }}" style="display:flex;align-items:center;gap:9px;width:100%;text-align:left;padding:7px 9px;border-radius:8px;background:{{ chk2Bg }}">
+            <span style="width:6px;height:6px;border-radius:50%;background:{{ chk2C }};flex-shrink:0"></span>
+            <span style="font-size:11px;color:#33484F;flex:1"><span class="zh">答「是」但缺支持信息</span><span class="en">“Yes” without support</span></span>
+            <span style="font-family:Manrope,sans-serif;font-size:13px;font-weight:800;color:{{ chk2C }}">{{ noSupN }}</span>
+          </button>
+          <button onClick="{{ jumpBelow }}" style="display:flex;align-items:center;gap:9px;width:100%;text-align:left;padding:7px 9px;border-radius:8px;background:{{ chk3Bg }}">
+            <span style="width:6px;height:6px;border-radius:50%;background:{{ chk3C }};flex-shrink:0"></span>
+            <span style="font-size:11px;color:#33484F;flex:1"><span class="zh">最低要求(R)未达标</span><span class="en">Below minimum (R)</span></span>
+            <span style="font-family:Manrope,sans-serif;font-size:13px;font-weight:800;color:{{ chk3C }}">{{ belowN }}</span>
+          </button>
+        </div>
+        <div style="display:{{ belowListShow }};margin-top:9px;padding-top:9px;border-top:1px dashed #EDF1F3;font-size:10.5px;color:#8A1E14;line-height:1.55"><span class="zh">未达标题号：</span><span class="en">Below-minimum items: </span>{{ belowList }}</div>
+      </div>
+
+      <div style="background:#fff;border:1px solid #E1E7EA;border-radius:13px;padding:13px 15px;display:flex;flex-direction:column;gap:8px">
+        <button onClick="{{ openSubmit }}" style="width:100%;padding:11px;border-radius:9px;background:#0B5B4A;color:#fff;font-size:12.5px;font-weight:700"><span class="zh">提交自评</span><span class="en">Submit self-assessment</span></button>
+        <div style="display:flex;gap:7px">
+          <button onClick="{{ dlFilled }}" style="flex:1;padding:9px;border-radius:8px;background:#F2FAF7;border:1px solid #BFE3D6;color:#0B5B4A;font-size:11px;font-weight:700;line-height:1.3"><span class="zh">下载 xlsx<br/>（含作答）</span><span class="en b">Download xlsx<br/>(with answers)</span></button>
+          <button onClick="{{ dlBlank }}" style="flex:1;padding:9px;border-radius:8px;background:#fff;border:1px solid #D5DFE3;color:#4C6169;font-size:11px;font-weight:600;line-height:1.3"><span class="zh">下载 xlsx<br/>空白模板</span><span class="en b">Download xlsx<br/>blank template</span></button>
+        </div>
+        <label style="display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:9px;border-radius:8px;background:#F2F6FD;border:1px solid #D7E3F6;color:#0B3A82;font-size:11.5px;font-weight:700;cursor:pointer">
+          <span>↑</span><span class="zh">导入填好的 Excel / CSV</span><span class="en">Import a filled Excel / CSV</span>
+          <input type="file" accept=".xlsx,.xls,.csv" onChange="{{ onImport }}" style="display:none"/>
+        </label>
+        <div style="display:flex;align-items:center;gap:7px;padding-top:7px;border-top:1px dashed #EDF1F3">
+          <button onClick="{{ saveDraft }}" style="flex:1;padding:8px;border-radius:8px;background:#fff;border:1px solid #D5DFE3;color:#33484F;font-size:11.5px;font-weight:700"><span class="zh">保存草稿</span><span class="en">Save draft</span></button>
+          <span style="font-size:9.5px;color:#9AABB1;line-height:1.35;flex:1"><span class="zh">每次点选与输入均已自动保存<br/>最近保存 {{ savedAt }}</span><span class="en b">Every click and keystroke is auto-saved<br/>Last saved {{ savedAt }}</span></span>
+        </div>
+        <div style="display:flex;gap:7px;padding-top:7px;border-top:1px dashed #EDF1F3">
+          <button onClick="{{ loadDemo }}" style="flex:1;padding:7px;border-radius:7px;background:#F3F6F7;color:#5A6E75;font-size:10.5px;font-weight:600"><span class="zh">载入演示答卷</span><span class="en">Load demo answers</span></button>
+          <button onClick="{{ clearAll }}" style="flex:1;padding:7px;border-radius:7px;background:#F3F6F7;color:#5A6E75;font-size:10.5px;font-weight:600"><span class="zh">清空作答</span><span class="en">Clear all</span></button>
+        </div>
+        <div style="font-size:9.5px;color:#9AABB1;line-height:1.5"><span class="zh">作答自动保存在本浏览器，刷新后恢复。提交后数据回传 Autoliv 采购与可持续团队，并自动回填对应客户问卷条目。</span><span class="en b">Answers are auto-saved in this browser. On submission they return to Autoliv sourcing &amp; sustainability and back-fill the matching customer-questionnaire items.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:{{ modalShow }};position:fixed;inset:0;z-index:90;align-items:center;justify-content:center;padding:28px">
+    <div onClick="{{ closeModal }}" style="position:absolute;inset:0;background:rgba(15,30,36,.4);backdrop-filter:blur(2px)"></div>
+    <div style="position:relative;width:100%;max-width:560px;max-height:84vh;overflow:auto;background:#fff;border-radius:16px;box-shadow:0 30px 70px -25px rgba(15,30,36,.5)">
+      <div style="display:{{ confirmShow }};flex-direction:column;padding:22px 24px 20px">
+        <div style="font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:#0B5B4A"><span class="zh">提交前校验</span><span class="en">Pre-submission check</span></div>
+        <h2 style="margin:6px 0 0;font-size:18px;font-weight:800;letter-spacing:-.02em"><span class="zh">确认提交 ASSI 自评？</span><span class="en">Submit your ASSI self-assessment?</span></h2>
+        <p style="font-size:12px;color:#5A6E75;margin:8px 0 0;line-height:1.6"><span class="zh">提交后仍可修改并重新提交，但 Autoliv 采购与可持续团队会立即看到当前版本。请先确认下列校验项。</span><span class="en b">You can revise and resubmit later, but Autoliv sourcing &amp; sustainability will see this version immediately. Please review the checks below.</span></p>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:15px">
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 13px;border-radius:10px;background:{{ chk1Bg }};border:1px solid #EDF1F3">
+            <span style="font-family:Manrope,sans-serif;font-size:17px;font-weight:800;color:{{ chk1C }};min-width:30px">{{ todoN }}</span>
+            <span style="font-size:11.5px;color:#33484F;line-height:1.45"><span class="zh">题未作答 —— 未作答计入分母，会拉低总分</span><span class="en b">unanswered — counted in the denominator, lowering your score</span></span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 13px;border-radius:10px;background:{{ chk2Bg }};border:1px solid #EDF1F3">
+            <span style="font-family:Manrope,sans-serif;font-size:17px;font-weight:800;color:{{ chk2C }};min-width:30px">{{ noSupN }}</span>
+            <span style="font-size:11.5px;color:#33484F;line-height:1.45"><span class="zh">题答「是」但缺支持信息 —— 缺证据的「是」在复核时可能被驳回</span><span class="en b">answered “Yes” without supporting information — may be rejected at review</span></span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 13px;border-radius:10px;background:{{ chk3Bg }};border:1px solid #EDF1F3">
+            <span style="font-family:Manrope,sans-serif;font-size:17px;font-weight:800;color:{{ chk3C }};min-width:30px">{{ belowN }}</span>
+            <span style="font-size:11.5px;color:#33484F;line-height:1.45"><span class="zh">项最低要求(R)未达标 —— 不可谈判项，须提交整改行动计划</span><span class="en b">Requirements below minimum — non-negotiable; an action plan is required</span></span>
+          </div>
+        </div>
+        <div style="display:flex;gap:9px;margin-top:18px">
+          <button onClick="{{ doSubmit }}" style="flex:1;padding:11px;border-radius:9px;background:#0B5B4A;color:#fff;font-size:12.5px;font-weight:700"><span class="zh">确认提交</span><span class="en">Confirm &amp; submit</span></button>
+          <button onClick="{{ closeModal }}" style="padding:11px 17px;border-radius:9px;background:#fff;border:1px solid #D5DFE3;color:#5A6E75;font-size:12.5px;font-weight:600"><span class="zh">返回继续填写</span><span class="en">Keep editing</span></button>
+        </div>
+      </div>
+
+      <div style="display:{{ receiptShow }};flex-direction:column">
+        <div style="background:#0E3B3A;color:#fff;padding:20px 24px;border-radius:16px 16px 0 0">
+          <div style="font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:#7ED0B4"><span class="zh">提交回执</span><span class="en">Submission receipt</span></div>
+          <h2 style="margin:6px 0 0;font-size:18px;font-weight:800;letter-spacing:-.02em"><span class="zh">ASSI 自评已提交至 Autoliv</span><span class="en">ASSI self-assessment submitted to Autoliv</span></h2>
+          <div style="font-size:11px;color:#8FB8AE;margin-top:6px">{{ receiptMeta }}</div>
+        </div>
+        <div style="padding:18px 24px 22px;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;gap:12px">
+            <div style="flex:1;background:#F2FAF7;border:1px solid #BFE3D6;border-radius:11px;padding:12px 14px">
+              <div style="font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:#0B5B4A"><span class="zh">总分</span><span class="en">Total score</span></div>
+              <div style="font-family:Manrope,sans-serif;font-size:32px;font-weight:800;letter-spacing:-.03em;color:#0B5B4A;line-height:1.1">{{ total }}</div>
+            </div>
+            <div style="flex:1;background:#FAFCFC;border:1px solid #E1E7EA;border-radius:11px;padding:12px 14px">
+              <div style="font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">作答完成</span><span class="en">Completion</span></div>
+              <div style="font-family:Manrope,sans-serif;font-size:32px;font-weight:800;letter-spacing:-.03em;color:#0F1E24;line-height:1.1">{{ donePctNum }}<span style="font-size:15px">%</span></div>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:#8397A0;margin-bottom:8px"><span class="zh">三项数据校验</span><span class="en">Three data checks</span></div>
+            <div style="border:1px solid #E1E7EA;border-radius:11px;overflow:hidden">
+              <sc-for list="{{ receiptChecks }}" as="c" hint-placeholder-count="3">
+                <div style="display:flex;align-items:center;gap:10px;padding:9px 13px;border-bottom:1px solid #F1F5F6">
+                  <span style="width:6px;height:6px;border-radius:50%;background:{{ c.c }};flex-shrink:0"></span>
+                  <span style="font-size:11.5px;color:#33484F;flex:1"><span class="zh">{{ c.zh }}</span><span class="en">{{ c.en }}</span></span>
+                  <span style="font-family:Manrope,sans-serif;font-size:13px;font-weight:800;color:{{ c.c }}">{{ c.v }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="background:{{ rBannerBg }};border:1px solid {{ rBannerBd }};border-radius:11px;padding:11px 14px;font-size:11.5px;font-weight:700;color:{{ rBannerFg }};line-height:1.5"><span class="zh">{{ rBannerZh }}</span><span class="en b">{{ rBannerEn }}</span></div>
+          <div style="font-size:11px;color:#5A6E75;line-height:1.65"><span class="zh">下一步：Autoliv 采购与可持续团队将在 10 个工作日内复核证据；未达标的最低要求项将转为整改任务并跟踪至关闭；您的得分会自动回填至对应客户问卷与传导对齐视图。</span><span class="en b">Next: Autoliv sourcing &amp; sustainability will review the evidence within 10 working days; below-minimum Requirements become tracked remediation tasks; your score back-fills the matching customer questionnaire and cascade views.</span></div>
+          <div style="display:flex;gap:9px">
+            <button onClick="{{ dlFilled }}" style="flex:1;padding:10px;border-radius:9px;background:#0B5B4A;color:#fff;font-size:12px;font-weight:700"><span class="zh">下载已提交问卷 xlsx</span><span class="en">Download submitted xlsx</span></button>
+            <button onClick="{{ closeModal }}" style="padding:10px 17px;border-radius:9px;background:#fff;border:1px solid #D5DFE3;color:#5A6E75;font-size:12px;font-weight:600"><span class="zh">关闭</span><span class="en">Close</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:{{ toastShow }};position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:95;background:#0F1E24;color:#fff;border-radius:10px;padding:11px 18px;font-size:12px;font-weight:600;box-shadow:0 18px 40px -14px rgba(15,30,36,.55);max-width:640px;line-height:1.5">{{ toast }}</div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;defaultLang&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;zh&quot;,&quot;en&quot;],&quot;default&quot;:&quot;zh&quot;,&quot;tsType&quot;:&quot;'zh'|'en'&quot;,&quot;section&quot;:&quot;呈现&quot;},&quot;initialData&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;demo&quot;,&quot;blank&quot;],&quot;default&quot;:&quot;demo&quot;,&quot;tsType&quot;:&quot;'demo'|'blank'&quot;,&quot;section&quot;:&quot;呈现&quot;},&quot;anonymous&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;呈现&quot;}}">
+class Component extends DCLogic {
+  state = {
+    ready: false, lang: 'zh', anon: '0', sec: 'info', filt: 'all',
+    ans: {}, info: {}, ev: {}, files: {}, modal: '', toast: '', submitted: null,
+    histDone: false, savedAt: ''
+  };
+
+  componentDidMount() {
+    const boot = () => {
+      if (!window.ASSI) { this.t0 = setTimeout(boot, 40); return; }
+      const D = window.ASSI;
+      let st = null;
+      try { st = JSON.parse(localStorage.getItem('assi_v1') || 'null'); } catch (e) { st = null; }
+      const base = {
+        ready: true,
+        lang: this.props.defaultLang || 'zh',
+        anon: this.props.anonymous ? '1' : '0'
+      };
+      if (st && st.ans) {
+        this.setState(Object.assign(base, {
+          ans: st.ans, info: st.info || {}, sec: st.sec || 'info', files: st.files || {},
+          histDone: !!st.histDone, savedAt: st.savedAt || '',
+          lang: st.lang || base.lang, anon: st.anon || base.anon, submitted: st.submitted || null
+        }));
+      } else {
+        const blank = (this.props.initialData || 'demo') === 'blank';
+        this.setState(Object.assign(base, { ans: blank ? {} : this.cloneDemo(), info: this.defaultInfo() }));
+      }
+    };
+    boot();
+  }
+  componentWillUnmount() { clearTimeout(this.t0); clearTimeout(this.t1); }
+
+  cloneDemo() { return JSON.parse(JSON.stringify(window.ASSI.DEMO)); }
+  defaultInfo() {
+    const o = {};
+    window.ASSI.INFO.forEach(g => g.f.forEach(f => { if (f[3]) o[f[0]] = f[3]; }));
+    return o;
+  }
+  save(next) {
+    const stamp = new Date().toLocaleTimeString('zh-CN', { hour12: false });
+    const s = Object.assign({}, this.state, next, { savedAt: stamp });
+    try {
+      localStorage.setItem('assi_v1', JSON.stringify({
+        ans: s.ans, info: s.info, sec: s.sec, lang: s.lang, anon: s.anon,
+        submitted: s.submitted, files: s.files, histDone: s.histDone, savedAt: stamp
+      }));
+    } catch (e) {}
+    this.setState(Object.assign({}, next, { savedAt: stamp }));
+  }
+  fmtSize(b) {
+    if (b < 1024) return b + ' B';
+    if (b < 1048576) return Math.round(b / 1024) + ' KB';
+    return (b / 1048576).toFixed(1) + ' MB';
+  }
+  addFiles(n, list) {
+    const files = Object.assign({}, this.state.files);
+    const cur = (files[n] || []).slice();
+    for (const f of list) cur.push({ name: f.name, size: this.fmtSize(f.size) });
+    files[n] = cur;
+    this.save({ files: files });
+    this.toast('已附加 ' + list.length + ' 个佐证文件到第 ' + n + ' 题，并已保存。', 'Attached ' + list.length + ' file(s) to item ' + n + ' — saved.');
+  }
+  histReusableIds() {
+    const H = (window.ASSI.HIST || {}).ans || {};
+    return Object.keys(H).map(Number).filter(n => !(this.state.ans[n] || {}).a);
+  }
+  applyHistory() {
+    const H = window.ASSI.HIST, ids = this.histReusableIds();
+    const ans = Object.assign({}, this.state.ans);
+    ids.forEach(n => { ans[n] = { a: H.ans[n].a, s: H.ans[n].s, ap: '', from: H.at.slice(0, 4) }; });
+    this.save({ ans: ans, histDone: true });
+    this.toast('已复用 ' + ids.length + ' 题 ' + H.at.slice(0, 4) + ' 年答卷内容，每题标注「沿用 ' + H.at.slice(0, 4) + ' 年答卷 · 待确认」，请逐题确认。', 'Carried over ' + ids.length + ' items from ' + H.at.slice(0, 4) + ' — each is tagged for confirmation.');
+  }
+  importAnswers(file) {
+    if (!file) return;
+    const done = (rows, label) => {
+      const idx = {};
+      rows.forEach(r => { const n = parseInt(r[0], 10); if (n >= 1 && n <= 133) idx[n] = r; });
+      const ans = Object.assign({}, this.state.ans);
+      let hit = 0, bad = 0;
+      Object.keys(idx).forEach(k => {
+        const r = idx[k], raw = String(r[7] == null ? '' : r[7]).trim();
+        const map = { '是': '是', 'yes': '是', 'y': '是', '否': '否', 'no': '否', 'n': '否', '不适用': '不适用', 'na': '不适用', 'n/a': '不适用' };
+        const a = map[raw.toLowerCase()] || map[raw] || '';
+        if (!raw) return;
+        if (!a) { bad++; return; }
+        ans[k] = { a: a, s: String(r[8] == null ? '' : r[8]), ap: String(r[9] == null ? '' : r[9]), from: 'import' };
+        hit++;
+      });
+      this.save({ ans: ans });
+      this.toast('已从 ' + label + ' 导入 ' + hit + ' 题作答与支持信息' + (bad ? ('；' + bad + ' 题作答值无法识别已跳过') : '') + '，并已保存。', 'Imported ' + hit + ' answers from ' + label + (bad ? (' — ' + bad + ' unrecognised values skipped') : '') + '. Saved.');
+    };
+    const rd = new FileReader();
+    if (/\.csv$/i.test(file.name) || !window.XLSX) {
+      rd.onload = () => {
+        const lines = String(rd.result).split(/\r?\n/);
+        const rows = lines.map(l => {
+          const out = []; let cur = '', q = false;
+          for (let i = 0; i < l.length; i++) {
+            const c = l[i];
+            if (q) { if (c === '"' && l[i + 1] === '"') { cur += '"'; i++; } else if (c === '"') q = false; else cur += c; }
+            else if (c === '"') q = true;
+            else if (c === ',') { out.push(cur); cur = ''; }
+            else cur += c;
+          }
+          out.push(cur); return out;
+        });
+        done(rows, file.name);
+      };
+      rd.readAsText(file);
+    } else {
+      rd.onload = () => {
+        try {
+          const wb = window.XLSX.read(new Uint8Array(rd.result), { type: 'array' });
+          const nm = wb.SheetNames.find(x => x.indexOf('问卷正文') === 0) || wb.SheetNames[0];
+          const rows = window.XLSX.utils.sheet_to_json(wb.Sheets[nm], { header: 1, defval: '' });
+          done(rows, file.name);
+        } catch (e) {
+          this.toast('无法解析该文件，请使用本页「下载 xlsx」导出的模板填写后再导入。', 'Could not parse that file — please use the template exported from this page.');
+        }
+      };
+      rd.readAsArrayBuffer(file);
+    }
+  }
+  toast(zh, en) {
+    clearTimeout(this.t1);
+    this.setState({ toast: this.state.lang === 'en' ? en : zh });
+    this.t1 = setTimeout(() => this.setState({ toast: '' }), 3600);
+  }
+  setAns(n, patch) {
+    const ans = Object.assign({}, this.state.ans);
+    ans[n] = Object.assign({ a: '', s: '', ap: '' }, ans[n] || {}, patch);
+    this.save({ ans: ans });
+  }
+  anonText(t) {
+    if (!t) return t;
+    const m = { '吉利': '客户A', '奇瑞': '客户B', '小米': '客户C', '蔚来': '客户D', '长城': '客户E', '长安': '客户F', '小鹏': '客户G', '赛力斯': '客户H', 'Polestar': '基准客户' };
+    let o = t; for (const k in m) o = o.split(k).join(m[k]); return o;
+  }
+
+  score(list) {
+    let den = 0, num = 0;
+    for (const q of list) {
+      const a = (this.state.ans[q.n] || {}).a;
+      if (a === '不适用') continue;
+      den += q.w; if (a === '是') num += q.w;
+    }
+    return { den: den, num: num, v: den ? Math.round(num / den * 100) : 0 };
+  }
+  stats(list) {
+    const ans = this.state.ans;
+    let done = 0, todo = 0, noSup = 0, below = 0; const belowIds = [];
+    for (const q of list) {
+      const r = ans[q.n] || {};
+      if (r.a) done++; else todo++;
+      if (r.a === '是' && !(r.s || '').trim()) noSup++;
+      if (q.ren === 'R' && r.a === '否') { below++; belowIds.push(q.n); }
+    }
+    return { done: done, todo: todo, noSup: noSup, below: below, belowIds: belowIds };
+  }
+
+  // ---------- export ----------
+  srcOut(q) { return this.state.anon === '1' ? (q.srcA || q.src) : q.src; }
+  sheets(filled) {
+    const D = window.ASSI, s = this.state, ans = filled ? s.ans : {}, info = filled ? s.info : {};
+    const tot = this.score(D.QS), st = this.stats(D.QS);
+    const inst = [['Autoliv 供应商可持续指数 · 填写说明  |  ASSI Instructions'], [''],
+      ['1. 用途：Autoliv 对直接材料供应商的新供应商准入评估与现有供应商年度可持续绩效评估。'],
+      ['2. 填写人：供应商有能力的人员（如可持续发展经理）完整填写；须同时提供集团与工厂两级信息。'],
+      ['3. 作答：每题选择 是 / 否 / 不适用；并填写支持信息作为评分依据。'],
+      ['4. 计分：得分 = Σ权重(是) / Σ权重(全部，剔除不适用) × 100。权重 1 或 3。'],
+      ['5. R = Requirement 硬性要求（28 项，最低门槛）；E = Expectation 期望；N = 2025 新增。'],
+      ['6. 真实性：Autoliv 可通过现场审核与文件审阅核实（要求 #37）。'],
+      ['7. 传导：须将本要求逐级传导至上游 Tier-2/Tier-3 并验证采纳（要求 #34）。'], [''],
+      ['导出时间 Exported', new Date().toLocaleString('sv-SE')],
+      ['导出内容 Content', filled ? '含作答 With answers' : '空白模板 Blank template']];
+    const gi = [['字段 Field', '填写 Fill in']];
+    D.INFO.forEach(g => { gi.push([g.g, '']); g.f.forEach(f => gi.push([f[1], info[f[0]] || ''])); });
+    const qh = [['编号 No.', '支柱 Pillar', '二级目录 Subcategory', '对象 Subject', '题目（中文）', 'Question (EN)', '说明与证据要求 Guideline / Evidence', '作答 Answer', '支持信息 Supporting Info', '行动计划 Action Plan', '强制 R/E/N', '权重 Wt', '对齐#37 Align', '来源 Source', '佐证文件 Evidence files', '作答来源 Answer origin']];
+    D.QS.forEach(q => {
+      const r = ans[q.n] || {};
+      const fl = filled ? (s.files[q.n] || []).map(f => f.name).join(' | ') : '';
+      const org = r.from ? (r.from === 'import' ? '导入 Imported' : ('沿用 ' + r.from + ' 年答卷 Carried over')) : (r.a ? '本次填写 This round' : '');
+      qh.push([q.n, q.p, q.sub, q.obj, q.zh, q.en, q.ev, r.a || '', r.s || '', r.ap || '', q.ren, q.w, q.al, this.srcOut(q), fl, org]);
+    });
+    const sc = [['支柱 Pillar', '题数 Q', '当前得分 Score', '满分权重 Max Wt', '最低项 R', 'R 未达标 Below-min']];
+    D.PIL.forEach(p => {
+      const list = D.QS.filter(q => q.p.slice(0, 2) === p.k);
+      const ps = this.score(list), pst = this.stats(list);
+      sc.push([p.k + ' ' + p.zh, list.length, filled ? ps.v : 0, list.reduce((a, q) => a + q.w, 0), list.filter(q => q.ren === 'R').length, filled ? pst.below : 0]);
+    });
+    sc.push(['总计 TOTAL', 133, filled ? tot.v : 0, 173, 28, filled ? st.below : 0]);
+    sc.push([]); sc.push(['数据校验 Data checks', '']);
+    sc.push(['  • 未作答 No answer', filled ? st.todo : 133]);
+    sc.push(['  • 答「是」但缺支持信息 Yes w/o support', filled ? st.noSup : 0]);
+    sc.push(['  • 最低要求(R)未达标 Below-minimum', filled ? st.below : 0]);
+    return [['填写说明 Instructions', inst], ['工厂基本信息 General Info', gi], ['问卷正文 Questionnaire', qh], ['计分汇总 Score', sc]];
+  }
+  download(filled) {
+    const sheets = this.sheets(filled);
+    const name = 'Autoliv供应商可持续问卷_ASSI_' + (filled ? '已作答' : '空白模板') + '_' + new Date().toISOString().slice(0, 10);
+    if (window.XLSX) {
+      const wb = window.XLSX.utils.book_new();
+      sheets.forEach(([n, rows]) => {
+        const ws = window.XLSX.utils.aoa_to_sheet(rows);
+        if (n.indexOf('问卷正文') === 0) ws['!cols'] = [{ wch: 6 }, { wch: 22 }, { wch: 24 }, { wch: 12 }, { wch: 62 }, { wch: 62 }, { wch: 46 }, { wch: 10 }, { wch: 40 }, { wch: 34 }, { wch: 8 }, { wch: 6 }, { wch: 26 }, { wch: 40 }, { wch: 30 }, { wch: 22 }];
+        if (n.indexOf('工厂') === 0) ws['!cols'] = [{ wch: 48 }, { wch: 46 }];
+        if (n.indexOf('填写') === 0) ws['!cols'] = [{ wch: 96 }, { wch: 24 }];
+        if (n.indexOf('计分') === 0) ws['!cols'] = [{ wch: 34 }, { wch: 9 }, { wch: 13 }, { wch: 14 }, { wch: 11 }, { wch: 15 }];
+        window.XLSX.utils.book_append_sheet(wb, ws, n.slice(0, 31));
+      });
+      window.XLSX.writeFile(wb, name + '.xlsx');
+      this.toast('已导出 ' + name + '.xlsx（4 个表：填写说明 / 工厂基本信息 / 问卷正文 / 计分汇总）', 'Exported ' + name + '.xlsx (4 sheets)');
+    } else {
+      const esc = v => '"' + String(v == null ? '' : v).split('"').join('""') + '"';
+      let csv = '';
+      sheets.forEach(([n, rows]) => { csv += '### ' + n + '\n' + rows.map(r => r.map(esc).join(',')).join('\n') + '\n\n'; });
+      const url = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' }));
+      const a = document.createElement('a'); a.href = url; a.download = name + '.csv'; a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 4000);
+      this.toast('未能加载 Excel 组件，已改为导出等价 CSV（同样 4 个表）。', 'Excel component unavailable — exported an equivalent CSV instead.');
+    }
+  }
+
+  renderVals() {
+    const s = this.state, zh = s.lang !== 'en';
+    const D = window.ASSI;
+    const seg = on => on
+      ? 'font-size:11.5px;font-weight:700;padding:4px 12px;border-radius:6px;background:#fff;color:#0E3B3A'
+      : 'font-size:11.5px;font-weight:600;padding:4px 12px;border-radius:6px;color:#8FB8AE;background:transparent';
+    const base = {
+      lang: s.lang, anon: s.anon, toast: s.toast, toastShow: s.toast ? 'block' : 'none',
+      segZh: seg(zh), segEn: seg(!zh),
+      setZh: () => this.save({ lang: 'zh' }), setEn: () => this.save({ lang: 'en' }),
+      toggleAnon: () => this.save({ anon: s.anon === '1' ? '0' : '1' }),
+      anonBg: s.anon === '1' ? '#7ED0B4' : 'rgba(255,255,255,.1)',
+      anonBd: s.anon === '1' ? '#7ED0B4' : 'rgba(255,255,255,.18)',
+      anonFg: s.anon === '1' ? '#0E3B3A' : '#C9DED8',
+      anonDotBg: s.anon === '1' ? 'rgba(14,59,58,.35)' : 'rgba(255,255,255,.3)',
+      anonDotX: s.anon === '1' ? '12px' : '2px',
+      closeModal: () => this.setState({ modal: '' }),
+      dlFilled: () => this.download(true), dlBlank: () => this.download(false)
+    };
+    if (!s.ready || !D) return Object.assign(base, {
+      total: '0', doneN: '0', donePct: '0%', nav: [], pilBars: [], visQs: [], infoGroups: [], filters: [], receiptChecks: [],
+      infoShow: 'flex', qShow: 'none', modalShow: 'none', warnShow: 'none', okShow: 'none', emptyShow: 'none',
+      belowN: '0', todoN: '0', noSupN: '0', infoDone: '0', infoTotal: '29', infoPct: '0%'
+    });
+
+    const QS = D.QS, PIL = D.PIL;
+    const tot = this.score(QS), st = this.stats(QS);
+    const pilOf = k => QS.filter(q => q.p.slice(0, 2) === k);
+
+    const nav = [{
+      code: '00', zh: '工厂基本信息', en: 'General Information', c: '#0B5B4A',
+      go: () => this.save({ sec: 'info', filt: 'all' }), key: 'info'
+    }].concat(PIL.map(p => ({ code: p.k, zh: p.zh, en: p.en, c: p.c, go: () => this.save({ sec: p.k, filt: 'all' }), key: p.k })));
+
+    const infoFields = [].concat.apply([], D.INFO.map(g => g.f));
+    const infoDone = infoFields.filter(f => (s.info[f[0]] || '').trim()).length;
+
+    nav.forEach(item => {
+      const on = s.sec === item.key;
+      item.bg = on ? '#F4F8F8' : '#fff';
+      item.edge = on ? item.c : 'transparent';
+      item.fw = on ? '700' : '600';
+      if (item.key === 'info') {
+        const pct = Math.round(infoDone / infoFields.length * 100);
+        item.pct = pct + '%'; item.score = pct + '%';
+        item.doneLabel = infoDone + ' / ' + infoFields.length + (zh ? ' 字段' : ' fields');
+        item.rShow = 'none'; item.rBelow = 0;
+      } else {
+        const list = pilOf(item.key), sc = this.score(list), ps = this.stats(list);
+        item.pct = sc.v + '%'; item.score = sc.v;
+        item.doneLabel = ps.done + ' / ' + list.length + (zh ? ' 题' : '');
+        item.rShow = ps.below ? 'inline' : 'none'; item.rBelow = ps.below;
+      }
+    });
+
+    const pilBars = PIL.map(p => {
+      const sc = this.score(pilOf(p.k));
+      return { code: p.k, zh: p.zh, en: p.en, c: p.c, score: sc.v, pct: sc.v + '%' };
+    });
+
+    const secIdx = s.sec === 'info' ? 0 : PIL.findIndex(p => p.k === s.sec) + 1;
+    const prev = nav[secIdx - 1], next = nav[secIdx + 1];
+
+    let visQs = [], filters = [], pil = null, pilStats = null, pilScore = null, pilList = [];
+    if (s.sec !== 'info') {
+      pil = PIL.find(p => p.k === s.sec);
+      pilList = pilOf(s.sec);
+      pilStats = this.stats(pilList); pilScore = this.score(pilList);
+      const f = s.filt;
+      visQs = pilList.filter(q => {
+        const r = s.ans[q.n] || {};
+        if (f === 'todo') return !r.a;
+        if (f === 'R') return q.ren === 'R';
+        if (f === 'no') return r.a === '否';
+        if (f === 'nosup') return r.a === '是' && !(r.s || '').trim();
+        return true;
+      });
+      const fdef = [
+        ['all', '全部', 'All', pilList.length],
+        ['todo', '未作答', 'Unanswered', pilStats.todo],
+        ['R', '仅 R 硬性', 'Requirements', pilList.filter(q => q.ren === 'R').length],
+        ['no', '答「否」', 'Answered No', pilList.filter(q => (s.ans[q.n] || {}).a === '否').length],
+        ['nosup', '缺支持信息', 'Missing support', pilList.filter(q => { const r = s.ans[q.n] || {}; return r.a === '是' && !(r.s || '').trim(); }).length]
+      ];
+      filters = fdef.map(d => {
+        const on = s.filt === d[0];
+        return {
+          zh: d[1], en: d[2], n: d[3], on: () => this.setState({ filt: d[0] }),
+          bg: on ? '#0E3B3A' : '#fff', bd: on ? '#0E3B3A' : '#E1E7EA', fg: on ? '#fff' : '#5A6E75', fw: on ? '700' : '600'
+        };
+      });
+    }
+
+    const flagMap = {
+      R: { label: zh ? 'R 硬性' : 'R Requirement', bg: '#FBECEA', fg: '#8A1E14', bd: '#E9C9C4' },
+      E: { label: zh ? 'E 期望' : 'E Expectation', bg: '#EEF4FD', fg: '#0B3A82', bd: '#D7E3F6' },
+      N: { label: zh ? 'N 2025 新增' : 'N New 2025', bg: '#EAF7F1', fg: '#0B5B4A', bd: '#BFE3D6' }
+    };
+    const objMap = { '集团': ['集团', 'Corporate'], '工厂': ['工厂', 'Factory'], '集团+工厂': ['集团+工厂', 'Corp + Factory'] };
+
+    const items = visQs.map(q => {
+      const r = s.ans[q.n] || {}; const a = r.a || '';
+      const below = q.ren === 'R' && a === '否';
+      const need = a === '是' && !(r.s || '').trim();
+      const fl = flagMap[q.ren];
+      const om = objMap[q.obj] || [q.obj, q.obj];
+      const pick = (val, onBg, onBd, onFg) => a === val
+        ? { bg: onBg, bd: onBd, fg: onFg }
+        : { bg: '#fff', bd: '#D5DFE3', fg: '#5A6E75' };
+      const y = pick('是', '#0B5B4A', '#0B5B4A', '#ffffff');
+      const nn = pick('否', '#B0291D', '#B0291D', '#ffffff');
+      const na = pick('不适用', '#4C6169', '#4C6169', '#ffffff');
+      return {
+        n: q.n, w: q.w, sub: q.sub, zh: q.zh, en: q.en, ev: q.ev, al: q.al,
+        src: q.src, srcA: q.srcA || q.src,
+        objZh: om[0], objEn: om[1],
+        flagShow: fl ? 'inline' : 'none',
+        flagLabel: fl ? fl.label : '', flagBg: fl ? fl.bg : '#fff', flagFg: fl ? fl.fg : '#fff', flagBd: fl ? fl.bd : '#fff',
+        wtBg: q.w === 3 ? '#FFF6E8' : '#F3F6F7', wtFg: q.w === 3 ? '#8A5410' : '#4C6169', wtBd: q.w === 3 ? '#F0DFC5' : '#E1E7EA',
+        cardBd: below ? '#E9C9C4' : '#E1E7EA',
+        cardSh: below ? '0 6px 18px -12px rgba(176,41,29,.4)' : 'none',
+        alertShow: below ? 'flex' : 'none',
+        evIcon: s.ev[q.n] ? '−' : '+',
+        evShow: s.ev[q.n] ? 'block' : 'none',
+        onEv: () => { const ev = Object.assign({}, s.ev); ev[q.n] = !ev[q.n]; this.setState({ ev: ev }); },
+        yesBg: y.bg, yesBd: y.bd, yesFg: y.fg,
+        noBg: nn.bg, noBd: nn.bd, noFg: nn.fg,
+        naBg: na.bg, naBd: na.bd, naFg: na.fg,
+        onYes: () => this.setAns(q.n, { a: '是' }),
+        onNo: () => this.setAns(q.n, { a: '否' }),
+        onNa: () => this.setAns(q.n, { a: '不适用' }),
+        onClear: () => this.setAns(q.n, { a: '' }),
+        clearShow: a ? 'inline' : 'none',
+        needSupShow: need ? 'inline' : 'none',
+        supShow: a ? 'flex' : 'none',
+        sup: r.s || '',
+        supPh: zh ? '填写佐证：制度/证书编号、数据、链接、负责人…' : 'Evidence: policy or certificate ref., data, links, owner…',
+        supBd: need ? '#F0DFC5' : '#D5DFE3', supBg: need ? '#FFFCF6' : '#FCFDFD',
+        onSup: e => this.setAns(q.n, { s: e.target.value }),
+        apShow: a === '否' ? 'flex' : 'none',
+        ap: r.ap || '',
+        apPh: zh ? '整改措施 · 责任人 · 完成时间' : 'Remediation · owner · due date',
+        onAp: e => this.setAns(q.n, { ap: e.target.value }),
+        histShow: (r.from && r.from !== 'import') ? 'inline-flex' : 'none',
+        histYear: r.from || '',
+        onConfirmHist: () => this.setAns(q.n, { from: '' }),
+        files: (s.files[q.n] || []).map((f, i) => Object.assign({}, f, {
+          remove: () => {
+            const fs = Object.assign({}, s.files);
+            fs[q.n] = (fs[q.n] || []).filter((x, j) => j !== i);
+            this.save({ files: fs });
+          }
+        })),
+        onFile: e => { if (e.target.files && e.target.files.length) this.addFiles(q.n, e.target.files); e.target.value = ''; }
+      };
+    });
+
+    const infoGroups = D.INFO.map(g => ({
+      zh: g.g, en: g.gEn, count: g.f.length + (zh ? ' 项' : ' fields'),
+      fields: g.f.map(f => {
+        const v = s.info[f[0]] || '';
+        return {
+          zh: f[1], en: f[2], v: v,
+          ph: f[3] ? (zh ? '例：' + f[3] : 'e.g. ' + f[3]) : (zh ? '请填写' : 'Please fill in'),
+          bd: v ? '#D5DFE3' : '#F0DFC5', bg: v ? '#FCFDFD' : '#FFFCF6',
+          on: e => { const info = Object.assign({}, s.info); info[f[0]] = e.target.value; this.save({ info: info }); }
+        };
+      })
+    }));
+
+    const jump = (filt) => {
+      const target = PIL.find(p => pilOf(p.k).some(q => {
+        const r = s.ans[q.n] || {};
+        if (filt === 'todo') return !r.a;
+        if (filt === 'nosup') return r.a === '是' && !(r.s || '').trim();
+        return q.ren === 'R' && r.a === '否';
+      }));
+      if (target) this.save({ sec: target.k, filt: filt === 'below' ? 'no' : filt });
+      else this.toast('没有符合该校验项的题目 ✓', 'No items match this check ✓');
+    };
+
+    const donePctNum = Math.round(st.done / 133 * 100);
+
+    return Object.assign(base, {
+      total: tot.v, numW: tot.num, denW: tot.den,
+      doneN: st.done, donePct: donePctNum + '%', donePctNum: donePctNum,
+      todoN: st.todo, noSupN: st.noSup, belowN: st.below,
+      belowList: st.belowIds.map(n => '#' + n).join('、'),
+      belowListShow: st.below ? 'block' : 'none',
+      warnShow: st.below ? 'flex' : 'none', okShow: st.below ? 'none' : 'flex',
+      chk1C: st.todo ? '#A35A12' : '#0B5B4A', chk1Bg: st.todo ? '#FFFCF6' : '#F5FAF8',
+      chk2C: st.noSup ? '#A35A12' : '#0B5B4A', chk2Bg: st.noSup ? '#FFFCF6' : '#F5FAF8',
+      chk3C: st.below ? '#B0291D' : '#0B5B4A', chk3Bg: st.below ? '#FDF6F5' : '#F5FAF8',
+      jumpTodo: () => jump('todo'), jumpSup: () => jump('nosup'), jumpBelow: () => jump('below'),
+      histAt: (D.HIST || {}).at || '', histYear: ((D.HIST || {}).at || '').slice(0, 4),
+      histScore: (D.HIST || {}).score || 0,
+      histReusable: this.histReusableIds().length,
+      histShow: (!s.histDone && D.HIST && this.histReusableIds().length) ? 'flex' : 'none',
+      applyHist: () => this.applyHistory(),
+      dismissHist: () => this.save({ histDone: true }),
+      onImport: e => { const f = e.target.files && e.target.files[0]; this.importAnswers(f); e.target.value = ''; },
+      saveDraft: () => { this.save({}); this.toast('草稿已保存 —— 关闭页面后重新打开可继续填写。', 'Draft saved — reopen this page to continue.'); },
+      savedAt: s.savedAt || (zh ? '尚未保存' : 'not yet'),
+      nav: nav, pilBars: pilBars,
+      infoShow: s.sec === 'info' ? 'flex' : 'none',
+      qShow: s.sec === 'info' ? 'none' : 'flex',
+      infoGroups: infoGroups, infoDone: infoDone, infoTotal: infoFields.length,
+      infoPct: Math.round(infoDone / infoFields.length * 100) + '%',
+      goP1: () => this.save({ sec: 'P1', filt: 'all' }),
+      pilCode: pil ? pil.k : '', pilZh: pil ? pil.zh : '', pilEn: pil ? pil.en : '',
+      pilNote: pil ? pil.note : '', pilNoteEn: pil ? pil.noteEn : '',
+      pilBg: pil ? pil.bg : '#fff', pilBd: pil ? pil.bd : '#E1E7EA', pilC: pil ? pil.c : '#0F1E24',
+      pilScore: pilScore ? pilScore.v : 0, pilN: pilList.length,
+      pilMaxW: pilList.reduce((a, q) => a + q.w, 0),
+      pilDoneLabel: pilStats ? (pilStats.done + ' / ' + pilList.length + (zh ? ' 题已答' : ' answered')) : '',
+      filters: filters, visQs: items, visN: items.length,
+      emptyShow: items.length ? 'none' : 'block',
+      prevShow: prev ? 'block' : 'none', nextShow: next ? 'block' : 'none',
+      prevLabel: prev ? (zh ? prev.zh : prev.en) : '', nextLabel: next ? (zh ? next.zh : next.en) : '',
+      prevSec: () => prev && this.save({ sec: prev.key, filt: 'all' }),
+      nextSec: () => next && this.save({ sec: next.key, filt: 'all' }),
+      openSubmit: () => this.setState({ modal: 'confirm' }),
+      doSubmit: () => {
+        const stamp = new Date().toLocaleString('sv-SE');
+        this.save({ submitted: { at: stamp, score: tot.v } });
+        this.setState({ modal: 'receipt' });
+      },
+      modalShow: s.modal ? 'flex' : 'none',
+      confirmShow: s.modal === 'confirm' ? 'flex' : 'none',
+      receiptShow: s.modal === 'receipt' ? 'flex' : 'none',
+      receiptMeta: (s.submitted ? s.submitted.at : '') + ' · ' + (zh ? '受理编号' : 'Ref.') + ' ASSI-2026-' + (s.info.code || 'ABC56') + ' · ' + (zh ? '接收方 Autoliv 采购与可持续团队' : 'To Autoliv Sourcing & Sustainability'),
+      receiptChecks: [
+        { zh: '未作答', en: 'No answer', v: st.todo, c: st.todo ? '#A35A12' : '#0B5B4A' },
+        { zh: '答「是」但缺支持信息', en: '“Yes” without supporting info', v: st.noSup, c: st.noSup ? '#A35A12' : '#0B5B4A' },
+        { zh: '最低要求(R)未达标', en: 'Requirements below minimum', v: st.below, c: st.below ? '#B0291D' : '#0B5B4A' }
+      ],
+      rBannerBg: st.below ? '#FDF6F5' : '#F2FAF7',
+      rBannerBd: st.below ? '#E9C9C4' : '#BFE3D6',
+      rBannerFg: st.below ? '#8A1E14' : '#0B5B4A',
+      rBannerZh: st.below ? ('⚠ ' + st.below + ' 项最低要求未达标（' + st.belowIds.map(n => '#' + n).join('、') + '）—— 不可谈判项，Autoliv 将开具整改任务并跟踪至关闭。') : '✓ 所有 28 项最低要求(R)均已满足，具备长期合作资格。',
+      rBannerEn: st.below ? ('⚠ ' + st.below + ' Requirements below minimum (' + st.belowIds.map(n => '#' + n).join(', ') + ') — non-negotiable; Autoliv will raise tracked remediation tasks.') : '✓ All 28 Requirements (R) are met — qualified for long-term cooperation.',
+      loadDemo: () => { this.save({ ans: this.cloneDemo(), info: this.defaultInfo(), files: {}, histDone: false }); this.toast('已载入演示答卷：97 题已答，2 项最低要求未达标（#27 绿电凭证 · #114 申诉机制）。', 'Demo answers loaded: 97 answered, 2 Requirements below minimum (#27, #114).'); },
+      clearAll: () => { this.save({ ans: {}, info: {}, files: {}, histDone: false }); this.toast('已清空全部作答与基本信息。', 'All answers and general information cleared.'); }
+    });
+  }
+}
+</script>
+</body>
+</html>
