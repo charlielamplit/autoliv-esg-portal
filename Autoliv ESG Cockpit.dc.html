@@ -31,14 +31,15 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
 .scoretip:hover .tip{display:block}
 .scoretip .tip::after{content:"";position:absolute;top:-5px;right:14px;width:10px;height:10px;background:#0F1E24;transform:rotate(45deg)}
 .dw-wrap{display:none;position:fixed;inset:0;z-index:90}
-.dw-wrap[data-kind="supplier"],.dw-wrap[data-kind="requirement"],.dw-wrap[data-kind="action"],.dw-wrap[data-kind="reg"],.dw-wrap[data-kind="datareq"],.dw-wrap[data-kind="abc"],.dw-wrap[data-kind="cascade"],.dw-wrap[data-kind="gloss"],.dw-wrap[data-kind="req13"],.dw-wrap[data-kind="srvimp"]{display:block}
+.dw-wrap[data-kind="supplier"],.dw-wrap[data-kind="requirement"],.dw-wrap[data-kind="action"],.dw-wrap[data-kind="reg"],.dw-wrap[data-kind="datareq"],.dw-wrap[data-kind="abc"],.dw-wrap[data-kind="cascade"],.dw-wrap[data-kind="gloss"],.dw-wrap[data-kind="req13"],.dw-wrap[data-kind="srvimp"],.dw-wrap[data-kind="cand"]{display:block}
+.dw-wrap[data-kind="cand"] .dw-panel{width:520px}
 .dw-wrap[data-kind="srvimp"] .dw-panel{width:580px}
 .dw-back{position:absolute;inset:0;background:rgba(15,30,36,.32);backdrop-filter:blur(1.5px);animation:dwFade .2s ease}
 .dw-panel{position:absolute;top:0;right:0;height:100%;width:520px;background:#F5F7F8;box-shadow:-20px 0 50px -20px rgba(15,30,36,.4);display:flex;flex-direction:column;animation:dwSlide .26s cubic-bezier(.22,1,.36,1)}
 @keyframes dwFade{from{opacity:0}to{opacity:1}}
 @keyframes dwSlide{from{transform:translateX(30px);opacity:.6}to{transform:translateX(0);opacity:1}}
 .dwd{display:none}
-.dw-wrap[data-kind="supplier"] .dwd.s,.dw-wrap[data-kind="requirement"] .dwd.r,.dw-wrap[data-kind="action"] .dwd.a,.dw-wrap[data-kind="reg"] .dwd.rg,.dw-wrap[data-kind="datareq"] .dwd.dr,.dw-wrap[data-kind="abc"] .dwd.ab,.dw-wrap[data-kind="cascade"] .dwd.cs,.dw-wrap[data-kind="gloss"] .dwd.gl,.dw-wrap[data-kind="req13"] .dwd.r3,.dw-wrap[data-kind="srvimp"] .dwd.si{display:flex;flex-direction:column}
+.dw-wrap[data-kind="supplier"] .dwd.s,.dw-wrap[data-kind="requirement"] .dwd.r,.dw-wrap[data-kind="action"] .dwd.a,.dw-wrap[data-kind="reg"] .dwd.rg,.dw-wrap[data-kind="datareq"] .dwd.dr,.dw-wrap[data-kind="abc"] .dwd.ab,.dw-wrap[data-kind="cascade"] .dwd.cs,.dw-wrap[data-kind="gloss"] .dwd.gl,.dw-wrap[data-kind="req13"] .dwd.r3,.dw-wrap[data-kind="srvimp"] .dwd.si,.dw-wrap[data-kind="cand"] .dwd.cd{display:flex;flex-direction:column}
 .itip{position:relative;cursor:help;display:inline-flex;align-items:center;justify-content:center;width:12px;height:12px;border-radius:50%;background:#DCE4E7;color:#5A6E75;font-size:8.5px;font-weight:800;flex-shrink:0;vertical-align:middle}
 .itip .tp{display:none;position:absolute;left:50%;transform:translateX(-50%);top:150%;z-index:70;width:216px;background:#0F1E24;color:#fff;border-radius:9px;padding:10px 11px;box-shadow:0 14px 34px -12px rgba(15,30,36,.5);font-size:10.5px;font-weight:500;line-height:1.5;text-align:left;letter-spacing:0;text-transform:none}
 .itip:hover .tp{display:block}
@@ -83,13 +84,16 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
 [data-view="v11"] .srv-list,[data-view="v11"] .srv-open{display:none !important}
 [data-view="v11"][data-srv="list"] .srv-list{display:flex !important}
 [data-view="v11"][data-srv="open"] .srv-open{display:flex !important}
+.v3-cand,.v3-active{display:flex;flex-direction:column}
+[data-v3seg="active"] .v3-cand{display:none !important}
+[data-v3seg="cand"] .v3-active{display:none !important}
 [data-view="v11"] .srv-answer,[data-view="v11"] .srv-score,[data-view="v11"] .srv-check{display:none !important}
 [data-view="v11"][data-srvtab="answer"] .srv-answer{display:flex !important}
 [data-view="v11"][data-srvtab="score"] .srv-score{display:flex !important}
 [data-view="v11"][data-srvtab="check"] .srv-check{display:flex !important}
 </style>
 </helmet>
-<div data-view="{{ view }}" data-dom="{{ dom }}" data-role="{{ roleK }}" data-srv="{{ srvMode }}" data-srvtab="{{ srvTab }}" data-oem="{{ oem }}" data-lang="{{ lang }}" data-anon="{{ anon }}" data-drawer="{{ drawer }}" style="width:1480px;margin:0 auto;background:#F5F7F8;display:grid;grid-template-columns:224px 1fr;min-height:1020px">
+<div data-v3seg="{{ v3Seg }}" data-view="{{ view }}" data-dom="{{ dom }}" data-role="{{ roleK }}" data-srv="{{ srvMode }}" data-srvtab="{{ srvTab }}" data-oem="{{ oem }}" data-lang="{{ lang }}" data-anon="{{ anon }}" data-drawer="{{ drawer }}" style="width:1480px;margin:0 auto;background:#F5F7F8;display:grid;grid-template-columns:224px 1fr;min-height:1020px">
 
   <aside style="background:#fff;border-right:1px solid #E1E7EA;padding:14px 12px;display:flex;flex-direction:column;gap:16px;position:sticky;top:0;height:1020px">
     <div style="display:flex;align-items:center;gap:10px;padding:2px 6px 12px;border-bottom:1px dashed #E6EBEE">
@@ -105,7 +109,7 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
       <div style="display:flex;flex-direction:column;gap:2px">
         <div class="nav-i nOV" onClick="{{ go1 }}"><span class="ico">◎</span><span class="zh">总览驾驶舱</span><span class="en">Overview</span></div>
         <div class="nav-i nCU" onClick="{{ goCU }}"><span class="ico">▤</span><span class="zh">客户要求</span><span class="en">OEM Requirements</span><span class="ct">47</span></div>
-        <div class="nav-i nSU" onClick="{{ goSU }}"><span class="ico">◈</span><span class="zh">供应商</span><span class="en">Suppliers</span><span class="ct">327</span></div>
+        <div class="nav-i nSU" onClick="{{ goSU }}"><span class="ico">◈</span><span class="zh">供应商</span><span class="en">Suppliers</span><span class="ct">{{ supN }}</span></div>
         <div class="nav-i nRG" onClick="{{ goRG }}"><span class="ico">✦</span><span class="zh">法规与管制合规</span><span class="en">Regulatory</span><span style="margin-left:auto;font-size:8px;font-weight:700;padding:1px 5px;border-radius:4px;background:#FBE9E7;color:#B0291D">3</span></div>
       </div>
     </div>
@@ -424,9 +428,9 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
     <span style="width:7px;height:7px;border-radius:50%;background:#0B5B4A;flex-shrink:0"></span>
     <b style="font-size:10px;font-weight:800;letter-spacing:.04em;color:#0B5B4A;white-space:nowrap"><span class="zh">主线 · 第 3 步 · 采购（同域）</span><span class="en">Step 3 · Sourcing</span></b>
     <span style="color:#C4D0D5">｜</span>
-    <span style="white-space:nowrap"><span class="zh">← 上一步：<b style="color:#33484F">能力指挥舱定位了缺口供应商</b></span><span class="en">← From: <b style="color:#33484F">capability view flagged the gaps</b></span></span>
+    <span style="white-space:nowrap"><span class="zh"><b style="color:#33484F">供应商域的入口</b></span><span class="en"><b style="color:#33484F">Entry to the supplier domain</b></span></span>
     <span style="color:#C4D0D5">｜</span>
-    <span style="white-space:nowrap"><span class="zh">这一步：<b style="color:#0F1E24">逐家看主数据与评分</b></span><span class="en">Now: <b style="color:#0F1E24">review master data and scores</b></span></span>
+    <span style="white-space:nowrap"><span class="zh">这一步：<b style="color:#0F1E24">有谁、是谁、当前表现如何</b> —— 新增供应商的引入尽调也从这里走</span><span class="en">Now: <b style="color:#0F1E24">who they are and how they perform</b> — onboarding starts here too</span></span>
     <span style="margin-left:auto;display:flex;align-items:center;gap:9px;flex-shrink:0">
       <span style="color:#8397A0"><span class="zh">交给</span><span class="en">Hand to</span></span>
       <button onClick="{{ go9 }}" style="font-size:11px;font-weight:700;color:#0B5B4A;white-space:nowrap"><span class="zh">新供应商尽调 →</span><span class="en">Onboarding DD →</span></button>
@@ -462,23 +466,61 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
       </div>
     </div>
     <div class="card">
-      <div class="chd"><h3><span class="zh">供应商分级分布</span><span class="en">Grade Distribution</span></h3><span style="margin-left:auto;font-size:11px;color:#8397A0">327 <span class="zh">家</span><span class="en">suppliers</span></span><button onClick="{{ go7 }}" style="font-size:11px;font-weight:700;color:#0B5B4A"><span class="zh">按问卷能力看 →</span><span class="en">By capability →</span></button></div>
+      <div class="chd"><h3><span class="zh">供应商分级分布</span><span class="en">Grade Distribution</span></h3><span style="margin-left:auto;font-size:11px;color:#8397A0">{{ supN }} <span class="zh">家</span><span class="en">suppliers</span></span><button onClick="{{ go7 }}" style="font-size:11px;font-weight:700;color:#0B5B4A"><span class="zh">按问卷能力看 →</span><span class="en">By capability →</span></button></div>
       <div style="padding:18px 16px 16px">
         <div style="display:flex;align-items:flex-end;gap:14px;height:140px;padding:0 10px">
-          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px"><span style="font-family:Manrope;font-size:12px;font-weight:800;color:#1F6B32">62</span><div style="width:100%;height:72px;background:linear-gradient(180deg,#3FAE55,#2E8F43);border-radius:6px 6px 0 0"></div><span style="font-size:11px;font-weight:700">A</span></div>
-          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px"><span style="font-family:Manrope;font-size:12px;font-weight:800;color:#1F6B32">64</span><div style="width:100%;height:75px;background:linear-gradient(180deg,#5CBF6E,#3FAE55);border-radius:6px 6px 0 0"></div><span style="font-size:11px;font-weight:700">A−</span></div>
-          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px"><span style="font-family:Manrope;font-size:12px;font-weight:800;color:#33484F">71</span><div style="width:100%;height:84px;background:linear-gradient(180deg,#9AD79E,#86CD8A);border-radius:6px 6px 0 0"></div><span style="font-size:11px;font-weight:700">B</span></div>
-          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px"><span style="font-family:Manrope;font-size:12px;font-weight:800;color:#33484F">72</span><div style="width:100%;height:86px;background:linear-gradient(180deg,#E2C98C,#E2A85C);border-radius:6px 6px 0 0"></div><span style="font-size:11px;font-weight:700">B−</span></div>
-          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px"><span style="font-family:Manrope;font-size:12px;font-weight:800;color:#B0291D">42</span><div style="width:100%;height:50px;background:linear-gradient(180deg,#E87F73,#DC3A2C);border-radius:6px 6px 0 0"></div><span style="font-size:11px;font-weight:700">C</span></div>
-          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px"><span style="font-family:Manrope;font-size:12px;font-weight:800;color:#B0291D">16</span><div style="width:100%;height:19px;background:linear-gradient(180deg,#C7362A,#A82217);border-radius:6px 6px 0 0"></div><span style="font-size:11px;font-weight:700">D</span></div>
+          <sc-for list="{{ v3Grades }}" as="g" hint-placeholder-count="6">
+            <div onClick="{{ g.pick }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer">
+              <span style="font-family:Manrope;font-size:12px;font-weight:800;color:{{ g.numFg }}">{{ g.n }}</span>
+              <div style="width:100%;height:{{ g.h }};background:{{ g.bar }};border-radius:6px 6px 0 0"></div>
+              <span style="font-size:11px;font-weight:{{ g.fw }};color:{{ g.labelFg }}">{{ g.label }}</span>
+            </div>
+          </sc-for>
         </div>
-        <div style="display:flex;justify-content:space-between;font-size:10.5px;color:#8397A0;padding-top:12px;border-top:1px dashed #E6EBEE;margin-top:8px"><span class="zh">A/A− 126 家数据齐全</span><span class="en">126 A-grade fully covered</span><span style="color:#B0291D;font-weight:600"><span class="zh">C/D 58 家需介入</span><span class="en">58 C/D need action</span></span></div>
+        <div style="display:flex;justify-content:space-between;font-size:10.5px;color:#8397A0;padding-top:12px;border-top:1px dashed #E6EBEE;margin-top:8px"><span><span class="zh">A/A− {{ v3GradeTop }} 家 · 要求达标良好</span><span class="en">{{ v3GradeTop }} at A/A−</span></span><span style="color:#B0291D;font-weight:600"><span class="zh">C/D {{ v3GradeBad }} 家需介入</span><span class="en">{{ v3GradeBad }} C/D need action</span></span></div>
+        <div style="font-size:10px;color:#9AABB1;line-height:1.55;margin-top:7px"><span class="zh">评级口径：分数 = 37 项要求达标情况加权（硬性/新增 ×3 · 期望 ×1）。A ≥85 · A− ≥76 · B ≥66 · B− ≥58 · C ≥44 · D &lt;44。点柱子筛选该等级。</span><span class="en b">Grading: score = weighted compliance across the 37 requirements (mandatory/new ×3, expected ×1). A ≥85 · A− ≥76 · B ≥66 · B− ≥58 · C ≥44 · D &lt;44. Click a bar to filter.</span></div>
       </div>
     </div>
   </div>
   <div class="card">
-    <div class="chd"><h3><span class="zh">供应商基准清单</span><span class="en">Supplier Baseline List</span></h3><span class="pill">{{ v3CountLabel }}</span><button onClick="{{ addOpen }}" style="margin-left:auto;font-size:11px;font-weight:700;padding:5px 11px;border-radius:7px;background:#0B5B4A;color:#fff"><span class="zh">+ 添加供应商</span><span class="en">+ Add supplier</span></button><button onClick="{{ go9 }}" style="font-size:11px;font-weight:700;color:#0B5B4A"><span class="zh">引入尽调 →</span><span class="en">Onboarding DD →</span></button><button onClick="{{ go7 }}" style="font-size:11px;color:#045B75;font-weight:700"><span class="zh">能力分析 →</span><span class="en">Capability analysis →</span></button></div>
-    <div style="padding:11px 16px 0;display:flex;flex-direction:column;gap:7px;border-bottom:1px solid #EDF1F3;padding-bottom:11px">
+    <div class="chd"><h3><span class="zh">供应商主数据清单</span><span class="en">Supplier Master Data</span></h3><span class="pill">{{ v3CountLabel }}</span><button onClick="{{ addOpen }}" style="margin-left:auto;font-size:11px;font-weight:700;padding:6px 13px;border-radius:7px;background:#0B5B4A;color:#fff;white-space:nowrap"><span class="zh">+ 添加供应商 · 走引入尽调</span><span class="en">+ Add supplier · run onboarding DD</span></button></div>
+    <div style="padding:11px 16px 0;display:flex;align-items:center;gap:7px">
+      <sc-for list="{{ v3SegBtns }}" as="sg" hint-placeholder-count="2">
+        <button onClick="{{ sg.pick }}" style="display:flex;align-items:center;gap:7px;font-size:12px;font-weight:{{ sg.fw }};padding:7px 14px;border-radius:9px;background:{{ sg.bg }};color:{{ sg.fg }};border:1px solid {{ sg.bd }}">{{ sg.label }}<span style="font-family:Manrope;font-size:11px;font-weight:800">{{ sg.n }}</span></button>
+      </sc-for>
+      <span style="margin-left:auto;font-size:10.5px;color:#9AABB1"><span class="zh">引入中的企业已建档但未准入 —— 不计入在册统计</span><span class="en">Onboarding records are excluded from the active stats</span></span>
+    </div>
+    <div class="v3-cand" style="flex-direction:column;padding:12px 16px 16px">
+      <div style="font-size:11px;color:#5A6E75;line-height:1.6;background:#FBFAFE;border:1px solid #E3DAF7;border-radius:9px;padding:10px 13px"><span class="zh">{{ candNote }}</span><span class="en b">{{ candNote }}</span></div>
+      <div style="display:{{ candEmpty }};padding:24px 0;text-align:center;font-size:11.5px;color:#8397A0"><span class="zh">当前没有引入中的企业 —— 用右上角「+ 添加供应商」开始。</span><span class="en">No suppliers in onboarding.</span></div>
+      <div style="display:grid;grid-template-columns:1.7fr 116px 150px 1fr 132px 18px;gap:11px;padding:11px 4px 8px;border-bottom:1px solid #E1E7EA;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:#7A8B92">
+        <span><span class="zh">企业</span><span class="en">Company</span></span>
+        <span><span class="zh">尽调进度</span><span class="en">DD progress</span></span>
+        <span><span class="zh">阶段</span><span class="en">Stage</span></span>
+        <span><span class="zh">回卷状态</span><span class="en">Reply status</span></span>
+        <span><span class="zh">截止</span><span class="en">Due</span></span><span></span>
+      </div>
+      <sc-for list="{{ candRows }}" as="c" hint-placeholder-count="3">
+        <div class="rowlink" onClick="{{ c.open }}" style="display:grid;grid-template-columns:1.7fr 116px 150px 1fr 132px 18px;gap:11px;align-items:center;padding:11px 4px;border-bottom:1px dashed #E6EBEE;font-size:11.5px">
+          <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+            <b style="font-size:12.5px">{{ c.name }}</b>
+            <span style="font-size:10px;color:#8397A0;font-family:Manrope">{{ c.code }} · {{ c.cat }}</span>
+          </span>
+          <span style="display:flex;flex-direction:column;gap:4px">
+            <span style="font-family:Manrope;font-size:10.5px;font-weight:700;color:#5A6E75">{{ c.step }}</span>
+            <span style="height:5px;background:#EEF2F4;border-radius:3px;overflow:hidden"><span style="display:block;width:{{ c.barW }};height:100%;background:{{ c.barC }};border-radius:3px"></span></span>
+          </span>
+          <span style="font-size:9.5px;font-weight:800;padding:3px 9px;border-radius:5px;background:{{ c.stBg }};color:{{ c.stFg }};width:fit-content">{{ c.stZh }}</span>
+          <span style="font-size:11px;font-weight:600;color:{{ c.replyFg }}">{{ c.reply }}</span>
+          <span style="display:flex;flex-direction:column;gap:1px">
+            <span style="font-family:Manrope;font-size:11px;font-weight:700;color:{{ c.dueFg }}">{{ c.due }}</span>
+            <span style="font-size:9.5px;color:{{ c.dueFg }}">{{ c.dueNote }}</span>
+          </span>
+          <span style="color:#C4D0D5;font-size:12px">›</span>
+        </div>
+      </sc-for>
+    </div>
+    <div class="v3-active" style="padding:11px 16px 0;flex-direction:column;gap:7px;border-bottom:1px solid #EDF1F3;padding-bottom:11px">
       <sc-for list="{{ v3Groups }}" as="grp" hint-placeholder-count="4">
         <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
           <span style="width:44px;flex-shrink:0;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#8397A0">{{ grp.label }}</span>
@@ -492,8 +534,8 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
         <button onClick="{{ v3Reset }}" style="margin-left:auto;font-size:10.5px;font-weight:700;color:#0B5B4A;white-space:nowrap">{{ v3ResetLabel }}</button>
       </div>
     </div>
-    <div style="padding:6px 16px 14px">
-      <div style="display:grid;grid-template-columns:1.8fr 92px 104px 74px 124px 54px 88px 18px;gap:10px;padding:9px 0;border-bottom:1px solid #E1E7EA;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:#7A8B92"><span><span class="zh">供应商</span><span class="en">Supplier</span></span><button onClick="{{ sortBiz }}" style="display:flex;align-items:center;gap:3px;font-family:inherit;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:{{ srtBizFg }}"><span class="zh">年供货额</span><span class="en">Spend</span><span style="font-size:8px">{{ srtBiz }}</span></button><span><span class="zh">碳数据</span><span class="en">Data</span></span><button onClick="{{ sortRe }}" style="display:flex;align-items:center;gap:3px;font-family:inherit;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:{{ srtReFg }}"><span class="zh">绿电</span><span class="en">RE%</span><span style="font-size:8px">{{ srtRe }}</span></button><button onClick="{{ sortScore }}" style="display:flex;align-items:center;gap:3px;font-family:inherit;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:{{ srtScoreFg }}"><span class="zh">绿色评分</span><span class="en">Score</span><span style="font-size:8px">{{ srtScore }}</span></button><span><span class="zh">等级</span><span class="en">Grade</span></span><span><span class="zh">目标</span><span class="en">Target</span></span><span></span></div>
+    <div class="v3-active" style="padding:6px 16px 14px;flex-direction:column">
+      <div style="display:grid;grid-template-columns:1.8fr 92px 104px 74px 124px 54px 88px 18px;gap:10px;padding:9px 0;border-bottom:1px solid #E1E7EA;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:#7A8B92"><span><span class="zh">供应商</span><span class="en">Supplier</span></span><button onClick="{{ sortBiz }}" style="display:flex;align-items:center;gap:3px;font-family:inherit;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:{{ srtBizFg }}"><span class="zh">年供货额</span><span class="en">Spend</span><span style="font-size:8px">{{ srtBiz }}</span></button><span><span class="zh">碳数据</span><span class="en">Data</span></span><button onClick="{{ sortRe }}" style="display:flex;align-items:center;gap:3px;font-family:inherit;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:{{ srtReFg }}"><span class="zh">绿电</span><span class="en">RE%</span><span style="font-size:8px">{{ srtRe }}</span></button><button onClick="{{ sortScore }}" style="display:flex;align-items:center;gap:3px;font-family:inherit;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:{{ srtScoreFg }}"><span class="zh">可持续综合评分</span><span class="en">Score</span><span style="font-size:8px">{{ srtScore }}</span></button><span><span class="zh">等级</span><span class="en">Grade</span></span><span><span class="zh">要求达标</span><span class="en">Passed</span></span><span></span></div>
       <sc-if value="{{ v3Empty }}" hint-placeholder-val="{{ false }}">
         <div style="padding:26px 0;text-align:center;font-size:11.5px;color:#8397A0"><span class="zh">没有匹配的供应商 —— 试试放宽筛选或清空搜索词。</span><span class="en">No supplier matches — relax the filters or clear the search.</span></div>
       </sc-if>
@@ -514,14 +556,14 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
             <span style="font-family:Manrope;font-weight:800;color:{{ s.gFg }};font-size:12px">{{ s.score }}</span>
             <span style="width:13px;height:13px;border-radius:50%;background:#E6EBEE;color:#7A8B92;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">?</span>
             <span class="tip" style="font-size:10.5px;line-height:1.5">
-              <span style="font-weight:700;font-size:11px;display:block;margin-bottom:5px">{{ s.score }}/100 · <span class="zh">评分构成</span><span class="en">breakdown</span></span>
+              <span style="font-weight:700;font-size:11px;display:block;margin-bottom:5px">{{ s.score }}/100 · <span class="zh">按五类要求拆解</span><span class="en">by requirement category</span></span>
               <sc-for list="{{ s.tipRows }}" as="t" hint-placeholder-count="4"><span style="display:flex;justify-content:space-between;gap:8px;padding:1px 0"><span style="opacity:.8"><span class="zh">{{ t.zh }}</span><span class="en">{{ t.en }}</span> <span style="opacity:.6">{{ t.w }}</span></span><span style="font-family:Manrope;font-weight:700;color:{{ t.c }}">{{ t.v }}</span></span></sc-for>
-              <span style="display:block;margin-top:6px;padding-top:5px;border-top:1px solid rgba(255,255,255,.2);opacity:.75"><span class="zh">加权 = 绿电30 + 数据25 + 目标25 + 治理20</span><span class="en">Weighted: RE30 + Data25 + Target25 + Gov20</span></span>
+              <span style="display:block;margin-top:6px;padding-top:5px;border-top:1px solid rgba(255,255,255,.2);opacity:.75"><span class="zh">= 37 项要求达标情况加权（硬性/新增 ×3 · 期望 ×1）</span><span class="en">= weighted compliance across the 37 requirements (mandatory/new ×3 · expected ×1)</span></span>
             </span>
           </span>
           <span style="font-family:Manrope;font-size:12px;font-weight:800;color:{{ s.gFg }}">{{ s.grade }}</span>
           <span style="display:flex;flex-direction:column;gap:1px">
-            <span style="font-size:10.5px;font-weight:700;color:{{ s.passFg }}"><span class="zh">达标</span><span class="en">Pass</span> {{ s.pass9 }}/9</span>
+            <span style="font-size:10.5px;font-weight:700;color:{{ s.passFg }}"><span class="zh">要求达标</span><span class="en">Passed</span> {{ s.pass9 }}</span>
             <span style="font-size:9px;color:{{ s.taskFg }};font-weight:600">{{ s.taskLabel }}</span>
           </span>
           <span style="color:#B6C4C9;font-size:13px;text-align:right">›</span>
@@ -887,8 +929,8 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
           <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:18px">
             <div style="flex:1">
               <div style="font-size:9.5px;letter-spacing:.2em;color:#0B5B4A;font-weight:700;text-transform:uppercase"><span class="zh">Autoliv 采购侧 · 链主视角</span><span class="en">Sourcing · Chain-lead view</span></div>
-              <div style="font-size:19px;font-weight:800;letter-spacing:-.02em;margin-top:3px"><span class="zh">直接材料供应链能力指挥舱</span><span class="en">Direct-Material Supply-Chain Capability</span></div>
-              <div style="font-size:12px;color:#33484F;margin-top:5px;line-height:1.55;max-width:820px"><span class="zh">这一屏只回答一个问题：Autoliv 的 9 项气候要求，供应链整体达到了什么程度、缺口集中在谁身上。分母是 317 家已回本年度气候问卷的直接材料供应商（$776M 采购额）。名单与动作在供应商基准清单，这里不列具体供应商。</span><span class="en b">This screen answers one question: how far the supply chain has got on Autoliv's 9 climate requirements, and where the gaps concentrate. Denominator: 317 direct-material suppliers that returned this year's survey ($776M spend). Named suppliers and actions live in the baseline list.</span></div>
+              <div style="font-size:19px;font-weight:800;letter-spacing:-.02em;margin-top:3px"><span class="zh">供应商达标全景 · 拿 37 项要求量供应链</span><span class="en">Compliance Overview · the chain against all 37 requirements</span></div>
+              <div style="font-size:12px;color:#33484F;margin-top:5px;line-height:1.55;max-width:880px"><span class="zh">上一屏「供应商主数据」回答"有谁"，这一屏回答"拿 37 项要求量下去，差距在哪一项、集中在谁身上"。<b>一行一项要求</b>（不是一行一家）。37 项里 <b>9 项已通过问卷测出达标率</b>，<b>其余只有回收覆盖率或本周期未发起</b> —— 三种状态都摊开写明，没测的不假装测了。达标率分母 317 家（本年度已回卷 · $776M），主数据在册 327 家，差 10 家本年度未回卷。</span><span class="en b">The previous screen answers "who"; this one answers "measured against all 37 requirements, which requirement is short and whose fault". One row per requirement. 9 of the 37 have a measured pass rate; the rest show only response coverage, or nothing this cycle — all three states are stated plainly. Pass rates are over the 317 suppliers that returned this year's survey; 327 are in master data.</span></div>
             </div>
             <div style="display:flex;gap:8px;flex-shrink:0">
               <button onClick="{{ sdExec }}" style="padding:7px 13px;border-radius:8px;font-size:12px;font-weight:600;background:#fff;border:1px solid #BFE3D6;color:#0B5B4A"><span class="zh">导出要求达标分析</span><span class="en">Exec summary</span></button>
@@ -911,17 +953,28 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
           </sc-for>
         </div>
 
-        <div style="display:grid;grid-template-columns:1.15fr 1fr;gap:14px;width:100%;align-items:start">
+        <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:14px;width:100%;align-items:start">
           <div class="card">
-            <div class="chd"><h3><span class="zh">十项能力达标率</span><span class="en">Capability compliance</span></h3><span class="pill"><span class="zh">双口径</span><span class="en">Dual basis</span></span><span style="margin-left:auto;font-size:10.5px;color:#8397A0;display:flex;align-items:center;gap:11px"><span style="display:flex;align-items:center;gap:4px"><span style="width:9px;height:9px;border-radius:2px;background:#0B5B4A"></span><span class="zh">按家数</span><span class="en">By count</span></span><span style="display:flex;align-items:center;gap:4px"><span style="width:9px;height:9px;border-radius:2px;background:#7ED0B4"></span><span class="zh">按采购额加权</span><span class="en">Spend-weighted</span></span></span></div>
-            <div style="padding:6px 16px 14px">
-              <sc-for list="{{ sdQs }}" as="q" hint-placeholder-count="9">
-                <div class="rowlink" onClick="{{ q.pick }}" style="display:grid;grid-template-columns:150px 1fr 118px 16px;gap:11px;align-items:center;padding:8px 7px;border-bottom:1px dashed #E6EBEE;border-radius:7px;background:{{ q.rowbg }}">
-                  <div>
-                    <div style="font-size:11.5px;font-weight:700;line-height:1.25;color:{{ q.labelColor }}">{{ q.label }}</div>
-                    <div style="font-size:9.5px;color:#9AABB1;font-family:'JetBrains Mono',monospace;margin-top:1px">{{ q.req }}</div>
+            <div class="chd"><h3><span class="zh">37 项要求达标全景</span><span class="en">All 37 requirements</span></h3><span class="pill"><span class="zh">已测量 9 项 · 双口径</span><span class="en">9 measured · dual basis</span></span><span style="margin-left:auto;font-size:10.5px;color:#8397A0;display:flex;align-items:center;gap:11px"><span style="display:flex;align-items:center;gap:4px"><span style="width:9px;height:9px;border-radius:2px;background:#0B5B4A"></span><span class="zh">按家数</span><span class="en">By count</span></span><span style="display:flex;align-items:center;gap:4px"><span style="width:9px;height:9px;border-radius:2px;background:#7ED0B4"></span><span class="zh">按采购额加权</span><span class="en">Spend-weighted</span></span></span></div>
+            <div style="padding:10px 16px 14px">
+              <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding-bottom:10px;border-bottom:1px solid #EDF1F3">
+                <sc-for list="{{ sd37Tabs }}" as="t" hint-placeholder-count="4">
+                  <button onClick="{{ t.pick }}" style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:{{ t.fw }};padding:5px 11px;border-radius:7px;background:{{ t.bg }};border:1px solid {{ t.bd }};color:{{ t.fg }};white-space:nowrap">{{ t.label }}<span style="font-family:Manrope;font-size:11px;font-weight:800;color:{{ t.nFg }}">{{ t.n }}</span></button>
+                </sc-for>
+              </div>
+              <div style="font-size:10.5px;color:#5A6E75;line-height:1.55;padding:9px 0 4px"><span class="zh">{{ sd37Note }}</span><span class="en b">{{ sd37Note }}</span></div>
+              <sc-for list="{{ sd37Rows }}" as="q" hint-placeholder-count="9">
+                <div class="rowlink" onClick="{{ q.pick }}" style="display:grid;grid-template-columns:186px 1fr 118px 16px;gap:11px;align-items:center;padding:8px 7px;border-bottom:1px dashed #E6EBEE;border-radius:7px;background:{{ q.rowbg }}">
+                  <div style="min-width:0">
+                    <div style="display:flex;align-items:center;gap:5px">
+                      <b style="font-family:Manrope;font-size:10px;color:#9AABB1">{{ q.no }}</b>
+                      <span style="font-size:8.5px;font-weight:800;padding:1px 5px;border-radius:4px;background:{{ q.tBg }};color:{{ q.tFg }}"><span class="zh">{{ q.tZh }}</span><span class="en">{{ q.tEn }}</span></span>
+                      <span style="font-size:8.5px;font-weight:800;padding:1px 5px;border-radius:4px;background:{{ q.stBg }};color:{{ q.stFg }}"><span class="zh">{{ q.stZh }}</span><span class="en">{{ q.stEn }}</span></span>
+                    </div>
+                    <div style="font-size:11.5px;font-weight:700;line-height:1.3;color:{{ q.labelColor }};margin-top:3px">{{ q.title }}</div>
+                    <div style="font-size:9px;color:#B6C4C9;margin-top:1px">{{ q.cat }}</div>
                   </div>
-                  <div style="display:flex;flex-direction:column;gap:3px">
+                  <div style="display:{{ q.measShow }};flex-direction:column;gap:3px">
                     <div style="display:flex;align-items:center;gap:7px">
                       <div style="flex:1;height:9px;border-radius:3px;background:#EEF2F4;overflow:hidden"><div style="width:{{ q.w1 }};height:100%;background:{{ q.c1 }};border-radius:3px"></div></div>
                       <span style="font-family:Manrope;font-size:11.5px;font-weight:800;width:30px;text-align:right;color:{{ q.c1 }}">{{ q.p1 }}</span>
@@ -931,6 +984,10 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
                       <span style="font-family:Manrope;font-size:10px;font-weight:700;width:30px;text-align:right;color:#4C6169">{{ q.p2 }}</span>
                     </div>
                   </div>
+                  <div style="display:{{ q.unmeasShow }};align-items:center;gap:8px">
+                    <div style="flex:1;height:6px;border-radius:3px;background:#F0F3F5;overflow:hidden"><div style="width:{{ q.covW }};height:100%;background:#C4D0D5;border-radius:3px"></div></div>
+                    <span style="font-size:10px;color:#8397A0;white-space:nowrap"><span class="zh">{{ q.unmeasZh }}</span><span class="en b">{{ q.unmeasEn }}</span></span>
+                  </div>
                   <div style="text-align:right">
                     <div style="font-family:Manrope;font-size:11.5px;font-weight:800;color:#B0291D">{{ q.gapN }}</div>
                     <div style="font-size:9.5px;color:#8397A0;font-family:Manrope">{{ q.gapSpend }}</div>
@@ -938,7 +995,6 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
                   <span style="color:{{ q.caretColor }};font-size:12px">›</span>
                 </div>
               </sc-for>
-              <div style="font-size:10.5px;color:#8397A0;margin-top:9px;line-height:1.5"><span class="zh">最弱三项 LCA 54% · PCF 62% · 净零路线图 65%——恰好对应 2025 年新增硬要求 #3 PCF（ISO 14067 + Catena-X）。点击任一行下钻。</span><span class="en">Weakest: LCA 54% · PCF 62% · Net-zero roadmap 65% — matching new 2025 hard requirement #3 PCF. Click a row to drill down.</span></div>
             </div>
           </div>
 
@@ -995,7 +1051,7 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
           </div>
         </div>
 
-        <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:14px;width:100%;align-items:start">
+        <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:14px;width:100%;align-items:start">
           <div class="card">
             <div class="chd"><h3><span class="zh">缺口构成分析</span><span class="en">Gap composition</span></h3><span class="pill" style="background:#EDF9F4;color:#0B5B4A">{{ sdSelLabel }}</span><span style="margin-left:auto;font-size:10.5px;color:#8397A0"><span class="zh">未达标 </span><span class="en">Gap </span><b style="color:#B0291D;font-family:Manrope">{{ sdSelGap }}</b><span class="zh"> 家 · 采购额 </span><span class="en"> suppliers · </span><b style="font-family:Manrope">{{ sdSelSpend }}</b></span></div>
             <div style="padding:12px 16px 14px;display:flex;flex-direction:column;gap:13px">
@@ -1911,7 +1967,7 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
           <div style="padding:15px 17px 13px;border-bottom:1px solid #EDF1F3">
             <div style="font-size:9.5px;letter-spacing:.2em;color:#0B5B4A;font-weight:700;text-transform:uppercase"><span class="zh">全量供应商要求</span><span class="en">Full supplier requirement set</span></div>
             <h1 style="margin:5px 0 0;font-size:20px;font-weight:800;letter-spacing:-.02em"><span class="zh">Autoliv 对全部供应商的常态要求全集</span><span class="en">Every Standing Requirement Autoliv Places on Suppliers</span></h1>
-            <p style="font-size:12.5px;color:#33484F;margin:6px 0 0;line-height:1.55;max-width:920px"><span class="zh">自有 37 项 + 客户要求全量并入，面向 327 家供应商按周期常态运行。被客户问卷逼出来的活跃缺口，在「传导对齐」里单独跟进。</span><span class="en">37 own requirements plus every cascaded customer ask, run on cycle across 327 suppliers. The gaps forced open by customer surveys are tracked separately in Cascade alignment.</span></p>
+            <p style="font-size:12.5px;color:#33484F;margin:6px 0 0;line-height:1.55;max-width:920px"><span class="zh">自有 37 项 + 客户要求全量并入，面向本轮起算的 327 家供应商按周期常态运行。被客户问卷逼出来的活跃缺口，在「传导对齐」里单独跟进。</span><span class="en">37 own requirements plus every cascaded customer ask, run on cycle across the 327 suppliers on the register at cycle start. The gaps forced open by customer surveys are tracked separately in Cascade alignment.</span></p>
             <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:13px">
               <sc-for list="{{ r13Kpis }}" as="k" hint-placeholder-count="3">
                 <div style="display:flex;align-items:baseline;gap:6px;padding:8px 13px;border:1px solid #E1E7EA;background:#F9FBFC;border-radius:9px">
@@ -2327,6 +2383,39 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
         <button onClick="{{ closeDrawer }}" style="margin-left:auto;width:28px;height:28px;border-radius:7px;background:#F3F6F7;color:#4C6169;font-size:15px">✕</button>
       </div>
       <div style="flex:1;overflow-y:auto;padding:18px">
+        <div class="dwd cd">
+          <div style="display:flex;align-items:flex-start;gap:12px">
+            <div style="flex:1;min-width:0">
+              <h2 style="margin:0;font-size:18px;font-weight:800;line-height:1.25">{{ cdName }}</h2>
+              <div style="font-size:11px;color:#8397A0;font-family:Manrope;margin-top:3px">{{ cdCode }} · {{ cdCat }}</div>
+            </div>
+            <span style="font-size:9.5px;font-weight:800;padding:3px 10px;border-radius:5px;background:{{ cdStBg }};color:{{ cdStFg }};flex-shrink:0">{{ cdStZh }}</span>
+          </div>
+          <div style="background:#FBFAFE;border:1px solid #E3DAF7;border-radius:11px;padding:12px 14px;margin-top:13px">
+            <div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#5B3FA8"><span class="zh">回卷状态</span><span class="en">Reply status</span></div>
+            <div style="font-size:12px;color:#33484F;line-height:1.6;margin-top:5px">{{ cdReply }}</div>
+            <div style="font-size:10.5px;color:#8397A0;margin-top:6px;padding-top:6px;border-top:1px dashed #E3DAF7"><span class="zh">对接人</span><span class="en">Contact</span> {{ cdContact }}</div>
+          </div>
+          <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0;margin:16px 0 8px"><span class="zh">引入尽调 5 步</span><span class="en">Five onboarding checks</span></div>
+          <div style="background:#fff;border:1px solid #E1E7EA;border-radius:10px;padding:5px 13px">
+            <sc-for list="{{ cdSteps }}" as="st" hint-placeholder-count="5">
+              <div style="display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px dashed #EDF1F3">
+                <span style="width:19px;height:19px;border-radius:50%;background:{{ st.dotBg }};color:{{ st.dotFg }};font-size:9.5px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">{{ st.mark }}</span>
+                <div style="flex:1;min-width:0">
+                  <div style="font-size:11.5px;font-weight:700;color:#0F1E24"><span class="zh">{{ st.zh }}</span><span class="en">{{ st.en }}</span></div>
+                  <div style="font-size:10.5px;color:{{ st.noteFg }};line-height:1.5;margin-top:2px">{{ st.note }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px">
+            <button onClick="{{ cdSend }}" style="display:{{ cdSendShow }};padding:10px 15px;border-radius:9px;background:#5B3FA8;color:#fff;font-size:12px;font-weight:700"><span class="zh">发出自评问卷 →</span><span class="en">Send the self-assessment →</span></button>
+            <button onClick="{{ cdChase }}" style="display:{{ cdChaseShow }};padding:10px 15px;border-radius:9px;background:#fff;border:1px solid #E3DAF7;color:#5B3FA8;font-size:12px;font-weight:700"><span class="zh">催办 / 改期</span><span class="en">Chase</span></button>
+            <button onClick="{{ cdCollect }}" style="display:{{ cdCollectShow }};padding:10px 15px;border-radius:9px;background:#5B3FA8;color:#fff;font-size:12px;font-weight:700"><span class="zh">（演示）收卷并打分 →</span><span class="en">(Demo) collect &amp; score →</span></button>
+            <button onClick="{{ cdAdmit }}" style="display:{{ cdAdmitShow }};padding:10px 15px;border-radius:9px;background:#0B5B4A;color:#fff;font-size:12px;font-weight:700"><span class="zh">准入并加入主数据清单 →</span><span class="en">Admit to master data →</span></button>
+          </div>
+          <div style="font-size:10.5px;color:#9AABB1;line-height:1.55;margin-top:12px"><span class="zh">准入前这家不出现在在册清单，也不进入 {{ supN }} 家统计、达标率分母和分级分布 —— 避免用一份还没回来的问卷去拉高或拉低供应链整体表现。</span><span class="en b">Until admitted it stays out of the active list, the {{ supN }}-supplier count, every compliance denominator and the grade histogram.</span></div>
+        </div>
         <div class="dwd si">
           <div style="background:linear-gradient(150deg,#F2F6FD,#fff);border:1px solid #D7E3F6;border-radius:12px;padding:14px 16px">
             <div style="font-size:16px;font-weight:800"><span class="zh">导入新问卷</span><span class="en">Import a new survey</span></div>
@@ -2535,26 +2624,28 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
               <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:6px">
                 <span style="font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:5px;background:#F2F6FD;color:#0B3A82"><span class="zh">分级</span><span class="en">Grade</span> {{ dws.grade }}</span>
                 <span style="font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:5px;background:#F3FAF7;color:#0B5B4A"><span class="zh">年供货额</span><span class="en">Spend</span> {{ dws.spend }}</span>
-                <span style="font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:5px;background:{{ dws.passBg }};color:{{ dws.passFg }}"><span class="zh">达标</span><span class="en">Passed</span> {{ dws.pass }}/9</span>
+                <span style="font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:5px;background:{{ dws.passBg }};color:{{ dws.passFg }}"><span class="zh">要求达标</span><span class="en">Requirements passed</span> {{ dws.pass }}</span>
                 <span style="font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:5px;background:#FDF3E7;color:#A3620F"><span class="zh">风险</span><span class="en">Risk</span> {{ dws.riskLabel }}</span>
               </div>
             </div>
             <div style="text-align:center;flex-shrink:0"><div style="font-family:Manrope;font-size:26px;font-weight:800;color:{{ dws.gradeColor }};line-height:1">{{ dws.grade }}</div><div style="font-size:9px;color:#8397A0;font-weight:600"><span class="zh">评级</span><span class="en">Grade</span></div></div>
           </div>
           <div style="background:#fff;border:1px solid #E1E7EA;border-radius:11px;padding:14px 15px;margin-top:14px">
-            <div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:11px;font-weight:700;color:#33484F"><span class="zh">绿色评分构成</span><span class="en">Green score breakdown</span></span><span style="font-family:Manrope;font-size:22px;font-weight:800;color:{{ dws.gradeColor }}">{{ dws.score }}<span style="font-size:11px;color:#9AABB1;font-weight:600">/100</span></span></div>
+            <div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:11px;font-weight:700;color:#33484F"><span class="zh">可持续综合评分 · 按五类要求</span><span class="en">Sustainability score by requirement category</span></span><span style="font-family:Manrope;font-size:22px;font-weight:800;color:{{ dws.gradeColor }}">{{ dws.score }}<span style="font-size:11px;color:#9AABB1;font-weight:600">/100</span></span></div>
+            <div style="font-size:10px;color:#9AABB1;line-height:1.5;margin-top:4px"><span class="zh">= 这家在 37 项要求上的达标情况，硬性/新增 ×3 · 期望 ×1 加权</span><span class="en b">= this supplier's compliance across the 37 requirements, mandatory×3 / expected×1</span></div>
             <div style="display:flex;flex-direction:column;gap:9px;margin-top:11px">
-              <sc-for list="{{ dws.breakdown }}" as="b" hint-placeholder-count="4">
-                <div><div style="display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:#33484F"><span><span class="zh">{{ b.zh }}</span><span class="en">{{ b.en }}</span> <span style="color:#9AABB1;font-weight:500">· {{ b.weight }}</span></span><span style="font-family:Manrope;color:{{ b.color }};font-weight:700">{{ b.val }}</span></div><div style="height:6px;background:#E6EBEE;border-radius:999px;margin-top:4px;overflow:hidden"><div style="width:{{ b.pct }};height:100%;background:{{ b.color }};border-radius:999px"></div></div></div>
+              <sc-for list="{{ dws.breakdown }}" as="b" hint-placeholder-count="5">
+                <div><div style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:#33484F"><span><span class="zh">{{ b.zh }}</span><span class="en">{{ b.en }}</span> <span style="color:#9AABB1;font-weight:500">· {{ b.weight }}</span></span><span style="display:{{ b.missShow }};font-size:9px;font-weight:800;padding:1px 6px;border-radius:4px;background:#FBE9E7;color:#B0291D"><span class="zh">硬性缺 {{ b.miss }}</span><span class="en">{{ b.miss }} mandatory</span></span><span style="margin-left:auto;font-family:Manrope;color:{{ b.color }};font-weight:700">{{ b.val }}</span></div><div style="height:6px;background:#E6EBEE;border-radius:999px;margin-top:4px;overflow:hidden"><div style="width:{{ b.pct }};height:100%;background:{{ b.color }};border-radius:999px"></div></div></div>
               </sc-for>
             </div>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px">
             <sc-for list="{{ dws.facts }}" as="f" hint-placeholder-count="4"><div style="background:#fff;border:1px solid #E1E7EA;border-radius:9px;padding:9px 11px"><div style="font-size:9.5px;color:#8397A0;font-weight:600"><span class="zh">{{ f.kzh }}</span><span class="en">{{ f.ken }}</span></div><div style="font-size:13px;font-weight:700;color:{{ f.color }};margin-top:2px;font-family:Manrope">{{ f.v }}</div></div></sc-for>
           </div>
-          <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0;margin:16px 0 8px"><span class="zh">关联客户要求</span><span class="en">Linked OEM requirements</span></div>
+          <div style="display:flex;align-items:center;gap:7px;margin:16px 0 8px"><span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">未达标的硬性要求</span><span class="en">Mandatory requirements missed</span></span><span style="font-family:Manrope;font-size:10px;font-weight:800;padding:1px 7px;border-radius:5px;background:#FBE9E7;color:#B0291D">{{ dws.missN }}</span><span style="margin-left:auto;font-size:9.5px;color:#9AABB1"><span class="zh">点开看要求原文与下发</span><span class="en">open the requirement</span></span></div>
+          <div style="display:{{ dws.missEmpty }};background:#F2FAF7;border:1px solid #BFE3D6;border-radius:9px;padding:11px 13px;font-size:11.5px;color:#0B5B4A"><span class="zh">硬性要求全部达标 —— 剩余差距都在期望项，不影响供货资格。</span><span class="en b">All mandatory requirements are met — the remaining gaps are expected-level only.</span></div>
           <div style="display:flex;flex-direction:column;gap:7px">
-            <sc-for list="{{ dws.linked }}" as="l" hint-placeholder-count="2"><div style="background:#fff;border:1px solid #E1E7EA;border-radius:9px;padding:9px 11px;display:flex;align-items:center;gap:9px"><span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;color:#045B75;background:#ECFBFE;padding:2px 6px;border-radius:4px">{{ l.code }}</span><span style="font-size:11.5px;font-weight:600"><span class="zh">{{ l.zh }}</span><span class="en">{{ l.en }}</span></span><span style="margin-left:auto;font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:5px;background:{{ l.bg }};color:{{ l.fg }}">{{ l.oem }}</span></div></sc-for>
+            <sc-for list="{{ dws.linked }}" as="l" hint-placeholder-count="3"><button onClick="{{ l.go }}" style="background:#fff;border:1px solid #E9C9C4;border-left:3px solid #DC3A2C;border-radius:9px;padding:9px 11px;display:flex;align-items:center;gap:9px;width:100%;text-align:left"><span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:#B0291D;background:#FBE9E7;padding:2px 6px;border-radius:4px;flex-shrink:0">{{ l.code }}</span><span style="font-size:11.5px;font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><span class="zh">{{ l.zh }}</span><span class="en">{{ l.en }}</span></span><span style="margin-left:auto;font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:5px;background:{{ l.bg }};color:{{ l.fg }};flex-shrink:0">{{ l.oem }}</span></button></sc-for>
           </div>
           <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0;margin:16px 0 8px"><span class="zh">近期动态</span><span class="en">Recent activity</span></div>
           <div style="background:#fff;border:1px solid #E1E7EA;border-radius:9px;padding:6px 12px">
@@ -2843,8 +2934,9 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
       <div style="display:{{ addFormShow }};flex-direction:column;gap:13px;padding:18px 20px">
         <sc-for list="{{ addFields }}" as="f" hint-placeholder-count="4">
           <div style="display:flex;flex-direction:column;gap:5px">
-            <label style="font-size:11px;font-weight:700;color:#4C6169"><span class="zh">{{ f.zh }}</span><span class="en">{{ f.en }}</span></label>
-            <input value="{{ f.val }}" onChange="{{ f.set }}" placeholder="{{ f.ph }}" style="padding:9px 12px;border:1px solid #D5DFE3;border-radius:9px;font-size:12.5px;color:#0F1E24;outline:none;width:100%" />
+            <label style="font-size:11px;font-weight:700;color:#4C6169"><span class="zh">{{ f.zh }}</span><span class="en">{{ f.en }}</span><span style="color:#DC3A2C">{{ f.req }}</span></label>
+            <input value="{{ f.val }}" onChange="{{ f.set }}" placeholder="{{ f.ph }}" style="padding:9px 12px;border:1px solid {{ f.bd }};border-radius:9px;font-size:12.5px;color:#0F1E24;outline:none;width:100%" />
+            <span style="display:{{ f.hintShow }};font-size:10.5px;color:#B0291D">{{ f.hint }}</span>
           </div>
         </sc-for>
         <div style="display:flex;flex-direction:column;gap:5px">
@@ -2873,6 +2965,12 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
             <span style="font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:5px;background:{{ st.stBg }};color:{{ st.stFg }};white-space:nowrap;flex-shrink:0">{{ st.stLabel }}</span>
           </div>
         </sc-for>
+        <div style="display:{{ ddWaitShow }};flex-direction:column;gap:10px;margin-top:14px;padding:13px 15px;border-radius:11px;background:#FBFAFE;border:1px solid #E3DAF7">
+          <div style="font-size:11.5px;color:#4C4170;line-height:1.6"><span class="zh">{{ ddWaitZh }}</span><span class="en b">{{ ddWaitEn }}</span></div>
+          <sc-for list="{{ ddActions }}" as="a" hint-placeholder-count="1">
+            <button onClick="{{ a.go }}" style="align-self:flex-start;padding:9px 15px;border-radius:9px;background:#5B3FA8;color:#fff;font-size:12px;font-weight:700">{{ a.label }}</button>
+          </sc-for>
+        </div>
         <div style="display:{{ addDoneShow }};flex-direction:column;gap:9px;margin-top:14px;padding:13px 15px;border-radius:11px;background:linear-gradient(150deg,#EDF9F4,#fff);border:1px solid #BFE3D6">
           <div style="display:flex;align-items:center;gap:9px">
             <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:#0B5B4A"><span class="zh">准入结论</span><span class="en">Onboarding verdict</span></span>
@@ -2881,7 +2979,7 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
           </div>
           <div style="font-size:11.5px;color:#33484F;line-height:1.6"><span class="zh">{{ addConclZh }}</span><span class="en b">{{ addConclEn }}</span></div>
           <div style="display:flex;gap:8px;margin-top:2px">
-            <button onClick="{{ addCommit }}" style="flex:1;padding:10px;border-radius:9px;background:#0B5B4A;color:#fff;font-size:12px;font-weight:800"><span class="zh">加入供应商基准清单 →</span><span class="en">Add to the baseline list →</span></button>
+            <button onClick="{{ addCommit }}" style="flex:1;padding:10px;border-radius:9px;background:#0B5B4A;color:#fff;font-size:12px;font-weight:800"><span class="zh">加入供应商主数据清单 →</span><span class="en">Add to supplier master data →</span></button>
             <button onClick="{{ addClose }}" style="padding:10px 14px;border-radius:9px;border:1px solid #E1E7EA;background:#fff;color:#5A6E75;font-size:11.5px;font-weight:600"><span class="zh">稍后处理</span><span class="en">Later</span></button>
           </div>
         </div>
@@ -2931,7 +3029,7 @@ class Component extends DCLogic {
   renderVals(){
     const s=this.state, zh=s.lang==='zh', anon=s.anon==='1';
     const seg=on=>on?'font-size:11.5px;font-weight:700;padding:4px 11px;border-radius:6px;background:#fff;color:#002D6B;box-shadow:0 1px 2px rgba(0,0,0,.08)':'font-size:11.5px;font-weight:600;padding:4px 11px;border-radius:6px;color:#6B7F86';
-    const crumb={v1:['总览驾驶舱','Overview'],v2:['客户要求 / 要求矩阵','OEM Requirements / Matrix'],v3:['供应商 / 主数据清单','Suppliers / Master data'],v4:['客户要求 / 合规雷达','OEM Requirements / Radar'],v5:['报告中心','Report Centre'],v6:['法规与管制合规 / 义务图谱','Regulatory / Obligations'],v7:['供应商 / 能力达标','Suppliers / Capability'],v8:['法规与管制合规 / 实时监控墙','Regulatory / Watch wall'],v9:['供应商 / 新供应商引入','Suppliers / Onboarding DD'],v10:['供应商门户 · 任务包','Supplier Portal'],v11:['客户要求 / 客户问卷','OEM Requirements / Questionnaires'],v12:['客户要求 / 传导对齐','OEM Requirements / Cascade alignment'],v13:['供应商 / 全量要求','Suppliers / Full requirement set']};
+    const crumb={v1:['总览驾驶舱','Overview'],v2:['客户要求 / 要求矩阵','OEM Requirements / Matrix'],v3:['供应商 / 主数据清单','Suppliers / Master data'],v4:['客户要求 / 合规雷达','OEM Requirements / Radar'],v5:['报告中心','Report Centre'],v6:['法规与管制合规 / 义务图谱','Regulatory / Obligations'],v7:['供应商 / 达标全景','Suppliers / Compliance overview'],v8:['法规与管制合规 / 实时监控墙','Regulatory / Watch wall'],v9:['供应商 / 新供应商引入','Suppliers / Onboarding DD'],v10:['供应商门户 · 任务包','Supplier Portal'],v11:['客户要求 / 客户问卷','OEM Requirements / Questionnaires'],v12:['客户要求 / 传导对齐','OEM Requirements / Cascade alignment'],v13:['供应商 / 全量要求','Suppliers / Full requirement set']};
     const oemName={all:['全部客户 · 14 OEM','All OEM · 14'],chery:['Chery 奇瑞','Chery'],nio:['NIO 蔚来','NIO'],geely:['Geely 吉利','Geely'],gwm:['GWM 长城','GWM']};
     const focus=s.oem!=='all';
     const nm=(r,c)=>anon?c:r;
@@ -2961,8 +3059,9 @@ class Component extends DCLogic {
       expandAllZh:s.expandAll?'收起全部':'展开全部 (8 项 / 6 家)', expandAllEn:s.expandAll?'Collapse all':'Expand all', expandAllCaret:s.expandAll?'▲':'▼',
       trackers:this.trackerData(anon),
       ...this.radarData(anon),
-      pipeline:[{no:'01',zh:'碳数据采集',en:'Data collection',sub:'Primary data'},{no:'02',zh:'范围三核算',en:'Scope 3 accounting',sub:'GHG Protocol'},{no:'03',zh:'目标分解下发',en:'Target cascading',sub:'SBTi-aligned'},{no:'04',zh:'绿电 / 绿证',en:'Green power & RECs',sub:'I-REC / GEC'},{no:'05',zh:'报告与看板',en:'Reports & dashboards',sub:'Auto-export'}],
-      ...this.v3Vals(s,zh,anon), ...this.searchVals(s,zh), ...this.glossVals(s,zh), ...this.tourVals(s,zh), ...this.supQVals(s,zh), ...this.addVals(s,zh), ...this.personaVals(s,zh), ...this.mainlineVals(s,zh),
+      supN:String(this.supplierRaw().length),
+      pipeline:[{no:'01',zh:'引入尽调',en:'Onboarding DD',sub:zh?'工商 · 制裁 · 品类风险':'Screening'},{no:'02',zh:'主数据建档',en:'Master data',sub:zh?'品类 · 采购额 · 对接人':'Profile'},{no:'03',zh:'要求下发',en:'Requirements',sub:zh?'37 项按供应商聚合':'37 aggregated'},{no:'04',zh:'达标评分',en:'Scoring',sub:zh?'硬性×3 · 期望×1':'Weighted'},{no:'05',zh:'帮扶或退出',en:'Support or exit',sub:zh?'C/D 级介入':'C/D action'}],
+      ...this.v3Vals(s,zh,anon), ...this.candVals(s,zh), ...this.searchVals(s,zh), ...this.glossVals(s,zh), ...this.tourVals(s,zh), ...this.supQVals(s,zh), ...this.addVals(s,zh), ...this.personaVals(s,zh), ...this.mainlineVals(s,zh),
       openReq:(k)=>this.setState({drawer:'requirement',dwKey:k}),
       openAction:(k)=>this.setState({drawer:'action',dwKey:k}),
       closeDrawer:()=>this.setState({drawer:null,dwKey:null,casCtx:null,srvImport:0,srvImpFile:false}),
@@ -3043,7 +3142,7 @@ class Component extends DCLogic {
         srczh:'数字取自「全量要求 (v13)」：37 项要求的类型分布、周期到期与供应商覆盖。',
         srcen:'Figures come from the full requirement set (V13): type mix, cycle due dates and supplier coverage.',
         badge:reqN+' REQ',badgeBg:'#EBF2FA',badgeFg:'#003A7A',
-        metrics:[['全量要求','Requirements',String(reqN),'#0B5B4A'],['其中硬性','Mandatory',String(hardN),'#B0291D'],['覆盖供应商','Suppliers covered','327','#002D6B']],
+        metrics:[['全量要求','Requirements',String(reqN),'#0B5B4A'],['其中硬性','Mandatory',String(hardN),'#B0291D'],['本轮覆盖供应商','Covered this cycle','327','#002D6B']],
         toc:[['01','要求集总览（硬性 / 新增 / 期望）','Requirement set overview','p.2'],['02','按类别的执行现状','Status by category','p.4'],['03','本周期到期项与责任人','Due this cycle & owners','p.8'],['04','供应商覆盖与达标分布','Supplier coverage','p.11'],['05','客户要求映射附录','Customer-ask mapping','p.14']],
         secs:[['要求总览','Overview'],['执行现状','Status'],['到期项','Due items'],['覆盖分布','Coverage'],['映射附录','Mapping']]},
       reflow:{tzh:'回流更新说明',ten:'Reflow Update Note',
@@ -3191,7 +3290,8 @@ class Component extends DCLogic {
     ];
   }
   supplierRaw(){
-    if(this._supAll) return this._supAll;
+    const added=(this.state&&this.state.newSups)||[];
+    if(this._supAll&&this._supAllN===added.length) return this._supAll;
     const seed=this.supplierSeed();
     const nm=['中鑫','联德','宏图','东方','瑞丰','金泰','安泰','鑫源','天成','广盛','明德','立信','正邦','远东','和顺','宝隆','汇通','三和','嘉禾','协兴','裕丰','兴业','长风','恒信','大陆','新亚','昌宁','捷诚','弘业','双林','万隆','川汇','锦程','博远','东风','日精','联合','恒昌','世达','宁远'];
     const sfx=['精密','安全部件','汽车部件','工业','智造','实业','科技','机电','材料','冲压'];
@@ -3202,7 +3302,11 @@ class Component extends DCLogic {
     const out=[...seed];
     for(let i=out.length;i<327;i++){
       const h=(i*2654435761)>>>0;
-      const sc=22+((h>>>7)%74);
+      // 采购基盘的真实形状：多数在中上，尾部少数落后（旧的均匀分布会让近半数掉到 C/D）
+      const bands=[[86,97,19],[77,85,20],[67,76,22],[59,66,22],[45,58,12],[28,44,5]];
+      const pick=(h>>>7)%100; let acc=0, bnd=bands[0];
+      for(const bx of bands){ acc+=bx[2]; if(pick<acc){ bnd=bx; break; } }
+      const sc=bnd[0]+((h>>>23)%(bnd[1]-bnd[0]+1));
       const grade=sc>=85?'A':sc>=76?'A−':sc>=66?'B':sc>=58?'B−':sc>=44?'C':'D';
       const c=cat[(h>>>11)%cat.length], ct=city[(h>>>5)%city.length];
       const re=sc>=76?28+((h>>>13)%42):sc>=58?10+((h>>>13)%24):((h>>>13)%14);
@@ -3220,8 +3324,10 @@ class Component extends DCLogic {
         contact:roleN[(h>>>19)%roleN.length]+' / '+roleT[(h>>>21)%roleT.length]
       });
     }
-    this._supAll=out;
-    return out;
+    const merged=added.concat(out);
+    this._supAll=merged; this._supAllN=added.length;
+    this._compCache={};
+    return merged;
   }
   supplierSeed(){
     return [
@@ -3312,8 +3418,8 @@ class Component extends DCLogic {
       sdKpis:[
         {dShow:'none',delta:'',zh:'直接材料供应商',en:'Suppliers',val:'317',unit:zh?'家':'',subZh:'年采购额 $776M · 问卷 100% 回收',subEn:'$776M spend · 100% response',accent:'#0B5B4A',
          tipShow:'inline-flex',tipZh:'317 = 本年度纳入 9 题气候问卷、且已回收有效答卷的直接材料供应商；本屏所有分布与达标率都以 317 为分母。主数据在册共 327 家。',tipEn:'317 = direct-material suppliers with a valid response to this year\'s 9-question climate survey — the denominator for every chart on this screen. Master data holds 327.'},
-        {dShow:'none',delta:'',zh:'全部达标（绿名单）',en:'All-pass (green)',val:'107',unit:zh?'家':'',subZh:'9/9 项达标 · 覆盖 38% 采购额',subEn:'9/9 items · 38% of spend',accent:'#1F6B32',
-         tipShow:'inline-flex',tipZh:'9 道题全部达标的家数；采购额占比按 $776M 总额计算，与家数占比不同（34% 家数 / 38% 金额）。',tipEn:'Suppliers passing all 9 items; the spend share is against the $776M total, which differs from the headcount share.'},
+        {dShow:'none',delta:'',zh:'37 项里可测量的',en:'Measurable of 37',val:'9',unit:zh?'项':'',subZh:'其余 28 项只有回收率或未发起',subEn:'the other 28: coverage only or not started',accent:'#C97D1C',
+         tipShow:'inline-flex',tipZh:'只有这 9 项今年设了逐题判定口径，才能算达标率。这本身是管理缺口：37 项要求里 24% 在测。要让某项变成可测量，去全量要求给它挂判定与周期。',tipEn:'Only these 9 have a per-item verdict basis this year, so only they yield a pass rate — 24% of the 37. That is itself a management gap.'},
         {dShow:'none',delta:'',zh:'高风险（≤5 项）',en:'High risk (≤5)',val:'110',unit:zh?'家':'',subZh:'占 35% 采购额 · 其中 47 家 ≤2 项',subEn:'35% of spend · 47 at ≤2 items',accent:'#B0291D',tipShow:'none',tipZh:'',tipEn:''},
         {tipShow:'inline-flex',tipZh:'未向其上游（Tier-2）传导 Autoliv 要求 #34 的家数；与传导对齐(v12)中「待下发」条目的收件人有重叠，两处不可相加。',tipEn:'Suppliers that have not cascaded requirement #34 upstream; overlaps with the recipients of V12\'s to-dispatch items — do not add the two.',
          zh:'未向上游传导',en:'Not cascaded',val:s.reflow?'60':'67',unit:zh?'家':'',dShow:s.reflow?'block':'none',delta:'▲ −7',
@@ -3321,11 +3427,7 @@ class Component extends DCLogic {
          subEn:s.reflow?'Req #34 · 7 closed by supplier returns':'Req #34 gap · 13% of spend',accent:s.reflow?'#0B5B4A':'#C97D1C'},
         {dShow:'none',delta:'',zh:'帮扶最优先象限',en:'Top support priority',val:'11',unit:zh?'家':'',subZh:'采购额 Top20 × 达标 ≤6 项',subEn:'Top-20 spend × ≤6 items passed',accent:'#8A1E14',tipShow:'none',tipZh:'',tipEn:''}
       ],
-      sdQs:qs.map(q=>({label:zh?q.zh:q.en,req:q.req,p1:q.p1+'%',p2:q.p2+'%',w1:q.p1+'%',w2:q.p2+'%',
-        c1:q.p1<60?'#B0291D':(q.p1<70?'#C97D1C':'#0B5B4A'),
-        gapN:q.gapN+(zh?' 家':''),gapSpend:'$'+q.gapSpend.toFixed(0)+'M',
-        rowbg:q.k===sel.k?'#EDF9F4':'transparent',labelColor:q.k===sel.k?'#0B5B4A':'#0F1E24',caretColor:q.k===sel.k?'#0B5B4A':'#C4D0D5',
-        pick:()=>this.setState({sdQ:q.k})})),
+      ...this.sd37Vals(s,zh,qs,sel),
       sdScatter:sup.map(dot),
       sdLabels:(()=>{const placed=[], offs=[0,-14,14,-28,28,-42,42,-56,56];return labelled.map(x=>{
         const lx=X(x.s)+2+Math.sqrt(x.s)*0.95+4, base=Y(x.p)-3;
@@ -3357,9 +3459,9 @@ class Component extends DCLogic {
         return [{zh:'按整体达标水平',en:'By overall compliance',rows:byTier},
                 {zh:'按年采购额敞口',en:'By annual spend exposure',rows:bySpend}];
       })(),
-      sdToListLabel:zh?('在供应商基准清单中查看这 '+sel.gapN+' 家 →'):('See these '+sel.gapN+' in the baseline list →'),
+      sdToListLabel:zh?('在供应商主数据中查看这 '+sel.gapN+' 家 →'):('See these '+sel.gapN+' in supplier master data →'),
       sdToList:()=>{ this.setState({view:'v3',f3b:'lo',f3g:'all',f3c:'all',f3r:'all',v3More:40,q:''});
-        this.showToast('已跳到供应商基准清单，并按「达标 <60 缺口」预筛 —— 名单、档案与动作都在这一屏',
+        this.showToast('已跳到供应商主数据，并按「评分 <58 缺口大」预筛 —— 名单、档案与动作都在这一屏',
           'Jumped to the baseline list, pre-filtered to the gap band'); },
       sdExec:toast('要求达标分析（按 9 项要求 × 317 家）已导出 PDF','Requirement compliance analysis exported'),
       sdPrio:()=>{ const sel2={}; this.casReqNos().forEach(n=>{sel2[n]=1;});
@@ -4043,8 +4145,8 @@ class Component extends DCLogic {
       r13Kpis:[
         {val:String(all.length||37),unit:zh?'项':'',label:zh?'全量要求（硬 18 / 新 2 / 期望 17）':'total (18 req / 2 new / 17 expected)',fg:'#0B5B4A',
          tipShow:'inline-flex',tipZh:'37 项 = 47 条客户要求 + Autoliv 自有承诺，归并去重后实际对供应商执行的要求项。同一条要求在客户问卷里可能对应多道题（共 112 道）。',tipEn:'37 = the 47 customer asks plus Autoliv\'s own commitments, merged; one requirement can map to several of the 112 questionnaire items.'},
-        {val:'327',unit:zh?'家':'',label:zh?'覆盖供应商':'suppliers covered',fg:'#002D6B',
-         tipShow:'inline-flex',tipZh:'327 = 采购主数据在册供应商（本要求集的适用分母）。能力指挥舱的 317 家是其中本年度已回气候问卷的直接材料供应商。',tipEn:'327 = suppliers in procurement master data. V7\'s 317 is the subset that returned this year\'s climate survey.'},
+        {val:'327',unit:zh?'家':'',label:zh?'本轮覆盖供应商':'covered this cycle',fg:'#002D6B',
+         tipShow:'inline-flex',tipZh:'327 = 本轮要求集起算时的在册供应商，是本屏所有覆盖率分数的固定分母。当前主数据在册 '+this.supplierRaw().length+' 家 —— 本轮之后准入的供应商不计入本轮覆盖率，从下一轮起算。能力指挥舱的 317 家是其中本年度已回气候问卷的直接材料供应商。',tipEn:'327 = suppliers on the register when this cycle opened — the fixed denominator for every coverage fraction here. Master data now holds '+this.supplierRaw().length+'; later admissions count from the next cycle.'},
         {val:String(yrN),unit:zh?'项':'',label:zh?'本周期（年度）到期':'due this cycle',fg:'#A3620F',tipShow:'none',tipZh:'',tipEn:''},
         {val:String(all.filter(r=>r.casShow!=='none').length),unit:zh?'项 · 7 批':' items · 7 batches',label:zh?'正在传导（= 传导对齐的 7 条批次）':'actively cascading (= the 7 batches in V12)',fg:'#0B3A82',
          tipShow:'inline-flex',tipZh:'与传导对齐(v12)完全同一批：本轮由客户问卷缺口切出的 7 条要求。此处标「传导中」的行即 v12 的 7 行。',tipEn:'Exactly the same batch as V12: the 7 requirements sliced from this round\'s questionnaire gaps.'}
@@ -4232,11 +4334,10 @@ class Component extends DCLogic {
         {v:'v4',zh:'合规雷达',en:'Compliance radar'},
         {v:'v11',zh:'客户问卷',en:'OEM questionnaires',badge:'4'},
         {v:'v12',zh:'传导对齐',en:'Cascade alignment'}]},
-      sup:{noteZh:'Autoliv 作为链主 · 327 家主数据 / 317 家已回本年度气候问卷',noteEn:'Autoliv as chain lead · 327 in master data / 317 responded',tabs:[
-        {v:'v3',zh:'主数据清单',en:'Master data'},
-        {v:'v7',zh:'能力达标',en:'Capability'},
-        {v:'v9',zh:'新供应商引入',en:'Onboarding DD'},
-        {v:'v13',zh:'全量要求',en:'Full requirement set',badge:'37'}]},
+      sup:{noteZh:'先看有谁（'+this.supplierRaw().length+' 家主数据）→ 再拿 37 项要求量他们（达标全景）→ 要求本身的台账与下发在第三屏',noteEn:'Who they are ('+this.supplierRaw().length+') → measure them against the 37 requirements → the requirement ledger itself',tabs:[
+        {v:'v3',zh:'供应商主数据',en:'Suppliers'},
+        {v:'v7',zh:'达标全景',en:'Compliance overview',badge:'37'},
+        {v:'v13',zh:'全量要求',en:'Requirement ledger',badge:'37'}]},
       reg:{noteZh:'对象=政府与立法 · 与客户要求分开管理',noteEn:'Object = regulators, kept apart from OEM asks',tabs:[
         {v:'v6',zh:'义务图谱',en:'Obligation map'},
         {v:'v8',zh:'实时监控墙',en:'Live watch wall',badge:'3'}]}
@@ -4420,27 +4521,42 @@ class Component extends DCLogic {
     };
   }
   drawerVals(s,anon){
-    const kind={srvimp:['#0B3A82','AI 解析 · 把原件变成能答的卷','AI parsing · raw file to answerable survey'],req13:['#0B5B4A','Autoliv 全量要求 · 单项','Requirement detail'],gloss:['#0B3A82','口径说明 · 数字词典','Definitions · number dictionary'],supplier:['#002D6B','供应商档案','Supplier Profile'],requirement:['#045B75','客户要求详情','OEM Requirement'],action:['#A3620F','待办事项','Action Item'],reg:['#0891B2','法规义务','Regulatory Obligation'],datareq:['#002D6B','数据请求单','Data Request'],cascade:['#0B5B4A','传导要求 · 回收追办','Cascade requirement · tracking'],abc:['#0B5B4A','供应商能力档案','Supplier Capability']};
+    const kind={cand:['#5B3FA8','引入尽调 · 尚未准入','Onboarding due diligence — not yet admitted'],srvimp:['#0B3A82','AI 解析 · 把原件变成能答的卷','AI parsing · raw file to answerable survey'],req13:['#0B5B4A','Autoliv 全量要求 · 单项','Requirement detail'],gloss:['#0B3A82','口径说明 · 数字词典','Definitions · number dictionary'],supplier:['#002D6B','供应商档案','Supplier Profile'],requirement:['#045B75','客户要求详情','OEM Requirement'],action:['#A3620F','待办事项','Action Item'],reg:['#0891B2','法规义务','Regulatory Obligation'],datareq:['#002D6B','数据请求单','Data Request'],cascade:['#0B5B4A','传导要求 · 回收追办','Cascade requirement · tracking'],abc:['#0B5B4A','供应商能力档案','Supplier Capability']};
     const k=kind[s.drawer]||kind.supplier;
     const out={drawer:s.drawer,dwKindColor:k[0],dwKindZh:k[1],dwKindEn:k[2]};
     out.dwr3=this.r13Detail(s);
     // supplier drawer
     const sup=this.supplierRaw().find(r=>r.code===s.dwKey)||this.supplierRaw()[0];
     const gC=g=>g[0]==='A'?'#1F6B32':g[0]==='B'?'#A3620F':'#B0291D';
-    const bd=[['绿电占比','RE share','30%'],['数据完整度','Data completeness','25%'],['目标进展','Target progress','25%'],['治理与劳工','Governance','20%']];
+    const cpS=this.supCompliance(sup.code);
     out.dws={
       avatar:anon?sup.code.slice(-2):sup.nameEn.slice(0,1),nameNr:sup.nameZh,nameNa:sup.code,code:sup.code,
-      catZh:sup.czh,catEn:sup.cen,tier:'Tier-1',grade:sup.grade,gradeColor:gC(sup.grade),score:sup.score,
-      breakdown:bd.map((b,j)=>({zh:b[0],en:b[1],weight:b[2],val:sup.b[j],pct:sup.b[j]+'%',color:sup.b[j]>=70?'#1F6B32':sup.b[j]>=45?'#A3620F':'#B0291D'})),
-      facts:[{kzh:'绿电占比',ken:'RE share',v:sup.re+'%',color:sup.re>=40?'#1F6B32':'#B0291D'},{kzh:'碳数据',ken:'Data',v:sup.d==='full'?'齐全':sup.d==='part'?'部分':'缺失',color:'#33484F'},{kzh:'年供货额',ken:'Annual business',v:sup.biz,color:'#002D6B'},{kzh:'风险等级',ken:'Risk',v:({H:'高',M:'中',L:'低'})[sup.riskK]||'中',color:({H:'#B0291D',M:'#A3620F',L:'#1F6B32'})[sup.riskK]||'#A3620F'},{kzh:'生产基地',ken:'Site',v:anon?'—':sup.site,color:'#33484F'},{kzh:'对接人',ken:'Contact',v:anon?'—':sup.contact,color:'#33484F'}],
-      linked:[{code:'ALV-E-004',zh:'Tier-1 绿电',en:'Tier-1 RE',oem:anon?'OEM-01':'Chery',bg:'#FEECEA',fg:'#B0291D'},{code:'ALV-G-002',zh:'碳数据披露',en:'Carbon data',oem:anon?'OEM-03':'Geely',bg:'#EAF7EA',fg:'#1F6B32'}],
-      timeline:[{dot:'#3FAE55',zh:'提交 2025 年度绿电证书',en:'Submitted 2025 REC',date:'2026-06-18'},{dot:'#E2A85C',zh:'碳数据问卷部分回收',en:'Partial carbon questionnaire',date:'2026-05-30'},{dot:'#0891B2',zh:'纳入减排目标下达名单',en:'Added to target-cascade list',date:'2026-04-12'}],
+      catZh:sup.czh,catEn:sup.cen,tier:'Tier-1',grade:cpS.grade,gradeColor:gC(cpS.grade),score:cpS.score,
+      breakdown:cpS.cats.map(c=>({zh:c.zh,en:c.en,weight:c.pass+'/'+c.tot,val:c.pct,pct:c.pct+'%',
+        miss:String(c.hardMiss),missShow:c.hardMiss?'inline-block':'none',
+        color:c.pct>=70?'#1F6B32':c.pct>=45?'#A3620F':'#B0291D'})),
+      facts:[{kzh:'绿电占比',ken:'RE share',v:sup.re+'%',color:sup.re>=40?'#1F6B32':'#B0291D'},{kzh:'碳数据',ken:'Data',v:(s.lang==='zh'?{full:'齐全',part:'部分'}:{full:'Full',part:'Partial'})[sup.d]||(s.lang==='zh'?'缺失':'Missing'),color:'#33484F'},{kzh:'年供货额',ken:'Annual business',v:sup.biz,color:'#002D6B'},{kzh:'风险等级',ken:'Risk',v:(s.lang==='zh'?{H:'高',M:'中',L:'低'}:{H:'High',M:'Medium',L:'Low'})[sup.riskK]||(s.lang==='zh'?'中':'Medium'),color:({H:'#B0291D',M:'#A3620F',L:'#1F6B32'})[sup.riskK]||'#A3620F'},{kzh:'生产基地',ken:'Site',v:anon?'—':sup.site,color:'#33484F'},{kzh:'对接人',ken:'Contact',v:anon?'—':sup.contact,color:'#33484F'}],
+      missN:String(cpS.hardMiss.length),
+      missEmpty:cpS.hardMiss.length?'none':'block',
+      linked:cpS.hardMiss.map(no=>{
+        const r=(this.state.reqs||[]).find(x=>x.no===no)||{};
+        return {code:'#'+no, zh:r.titleZh||r.title||'', en:r.title||'',
+          oem:(r.type==='new')?(s.lang==='zh'?'2025 新增':'New 2025'):(s.lang==='zh'?'硬性':'Mandatory'),
+          bg:(r.type==='new')?'#FDF3E7':'#FBE9E7', fg:(r.type==='new')?'#A3620F':'#B0291D',
+          go:()=>this.setState({drawer:'req13',dwKey:no})};}),
+      timeline:sup.isNew
+        ?[{dot:'#3FAE55',zh:'引入尽调完成 · 准入并建档',en:'Onboarding due diligence completed',date:new Date().toISOString().slice(0,10)},
+          {dot:'#E2A85C',zh:'自评问卷回收并计分',en:'Self-assessment returned and scored',date:new Date().toISOString().slice(0,10)},
+          {dot:'#5B3FA8',zh:'观察期 6 个月 · 硬性待补项排入下一轮聚合下发',en:'6-month watch; open mandatory items queued',date:new Date().toISOString().slice(0,10)}]
+        :[{dot:'#3FAE55',zh:'提交 2025 年度绿电证书',en:'Submitted 2025 REC',date:'2026-06-18'},{dot:'#E2A85C',zh:'碳数据问卷部分回收',en:'Partial carbon questionnaire',date:'2026-05-30'},{dot:'#0891B2',zh:'纳入减排目标下达名单',en:'Added to target-cascade list',date:'2026-04-12'}],
       openDataReq:()=>this.setState({drawer:'datareq',casCtx:null}),
-      spend:sup.biz, riskLabel:({H:'高',M:'中',L:'低'})[sup.riskK]||'中',
-      pass:String(this.supCasNos(sup.code).pass),
-      passBg:sup.score>=80?'#EAF7EA':(sup.score>=60?'#FDF3E7':'#FBE9E7'),
-      passFg:sup.score>=80?'#1F6B32':(sup.score>=60?'#A3620F':'#B0291D'),
-      casNote:(anon?sup.code:sup.nameZh)+' · '+this.supCasNos(sup.code).nos.length+(this.state.lang==='zh'?' 条要求已下发给它':' items dispatched'),
+      spend:sup.biz, riskLabel:(s.lang==='zh'?{H:'高',M:'中',L:'低'}:{H:'High',M:'Medium',L:'Low'})[sup.riskK]||(s.lang==='zh'?'中':'Medium'),
+      pass:cpS.pass+' / '+cpS.tot,
+      passBg:cpS.score>=76?'#EAF7EA':(cpS.score>=58?'#FDF3E7':'#FBE9E7'),
+      passFg:cpS.score>=76?'#1F6B32':(cpS.score>=58?'#A3620F':'#B0291D'),
+      casNote:(()=>{const c=this.supCasNos(sup.code), n=c.nos.length;
+        if(c.fresh) return (anon?sup.code:sup.nameZh)+(s.lang==='zh'?' · 尚未收到任何下发 —— 硬性待补项将随下一轮聚合下发':' · nothing dispatched yet');
+        return (anon?sup.code:sup.nameZh)+' · '+n+(s.lang==='zh'?' 条要求已下发给它':(n===1?' item dispatched':' items dispatched'));})(),
       toPortal:()=>{ this.setState({drawer:null,view:'v10'});
         this.showToast('已切到供应商门户视角（演示统一以 ABC56 身份展示 '+(anon?sup.code:sup.nameZh)+' 的任务包）','Switched to the supplier-portal view (demo persona ABC56)'); },
       toCascade:()=>{ const c=this.supCasNos(sup.code);
@@ -4608,20 +4724,123 @@ class Component extends DCLogic {
       tourBtnBg:n>0?'#0F1E24':'#F2F6FD', tourBtnFg:n>0?'#fff':'#0B3A82', tourBtnBd:n>0?'#0F1E24':'#D7E3F6'
     };
   }
+  // 可持续综合评分 = 这家在 37 项要求上的达标情况，硬性/新增 ×3、期望 ×1 加权
+  reqCats(){ return [
+    ['Sustainability Framework','治理框架','#5B3FA8'],
+    ['Climate & Circularity','气候与循环','#0B5B4A'],
+    ['Responsible Business','负责任经营','#0B3A82'],
+    ['Safe & Inclusive Workplace','安全与包容职场','#A3620F'],
+    ['Saving More Lives','道路安全','#B0291D']
+  ]; }
+  supCompliance(code){
+    const reqs=(this.state.reqs||[]);
+    // 要求集是异步到的：没到之前不要缓存，否则会把 0 分永久钉住
+    if(!reqs.length) return {score:0,grade:'—',pass:0,tot:0,hardMiss:[],
+      cats:this.reqCats().map(c=>({key:c[0],zh:c[1],en:c[0],color:c[2],pass:0,tot:0,hardMiss:0,pct:0}))};
+    this._compCache=this._compCache||{};
+    const ck=code+':'+reqs.length;
+    if(this._compCache[ck]) return this._compCache[ck];
+    const sup=this.supplierRaw().find(r=>r.code===code);
+    const base=sup?(sup.cbase!==undefined?sup.cbase:sup.score):60;
+    let h0=0; for(let i=0;i<code.length;i++) h0=(h0*31+code.charCodeAt(i))>>>0;
+    const cats=this.reqCats();
+    const by={}; cats.forEach(c=>{by[c[0]]={pass:0,tot:0,wPass:0,wTot:0,hardMiss:0};});
+    let wPass=0,wTot=0,pass=0,tot=0,hardMiss=[];
+    reqs.forEach(r=>{
+      const w=(r.type==='exp')?1:3;
+      const h=((h0^(r.no*2654435761))>>>0)%100;
+      const ok=h<base;
+      const g=by[r.category]||(by[r.category]={pass:0,tot:0,wPass:0,wTot:0,hardMiss:0});
+      g.tot++; g.wTot+=w; tot++; wTot+=w;
+      if(ok){ g.pass++; g.wPass+=w; pass++; wPass+=w; }
+      else if(w===3){ g.hardMiss++; hardMiss.push(r.no); }
+    });
+    const score=wTot?Math.round(wPass/wTot*100):0;
+    const grade=score>=85?'A':score>=76?'A−':score>=66?'B':score>=58?'B−':score>=44?'C':'D';
+    const out={score,grade,pass,tot,hardMiss,
+      cats:cats.map(c=>{const g=by[c[0]]||{pass:0,tot:0,hardMiss:0};
+        return {key:c[0],zh:c[1],en:c[0],color:c[2],pass:g.pass,tot:g.tot,hardMiss:g.hardMiss,
+          pct:g.tot?Math.round(g.pass/g.tot*100):0};})};
+    this._compCache[ck]=out;
+    return out;
+  }
+  // 达标全景：37 项要求 × 三态（已测量达标率 / 仅有回收覆盖 / 本周期未发起）
+  sd37Vals(s,zh,qs,sel){
+    const reqs=s.reqs||[];
+    // 9 项已测量：把 sdQStats 的 'REQ #7' / 'REQ #19/20' 映射到要求号
+    const meas={};
+    qs.forEach(q=>{ String(q.req).replace(/#\s*(\d+)/g,(m,n)=>{ if(meas[+n]===undefined) meas[+n]=q; return m; }); });
+    const catZh={'Sustainability Framework':'治理框架','Climate & Circularity':'气候与循环','Responsible Business':'负责任经营','Safe & Inclusive Workplace':'安全与包容职场','Saving More Lives':'道路安全'};
+    const tLab={req:['硬性','Required','#FBE9E7','#B0291D'],new:['新增','New','#FDF3E7','#A3620F'],exp:['期望','Expected','#F0F3F5','#5A6E75']};
+    const rows=reqs.map(r=>{
+      const q=meas[r.no];
+      // 回收覆盖：与要求抽屉同一公式，保持两屏一致
+      const cov=Math.max(96,327-((r.no*37)%118)-(r.type==='exp'?42:0));
+      const st=q?'meas':(cov>=200?'cov':'none');
+      const t=tLab[r.type]||tLab.exp;
+      return {no:r.no, q:q, st:st, cov:cov,
+        title:zh?(r.titleZh||r.title):r.title,
+        cat:zh?(catZh[r.category]||r.category):r.category,
+        tZh:t[0], tEn:t[1], tBg:t[2], tFg:t[3],
+        p1:q?q.p1:0};
+    });
+    const nMeas=rows.filter(r=>r.st==='meas').length;
+    const nCov=rows.filter(r=>r.st==='cov').length;
+    const nNone=rows.filter(r=>r.st==='none').length;
+    const fil=s.sd37||'meas';
+    const order={meas:0,cov:1,none:2};
+    let list=(fil==='all'?rows:rows.filter(r=>r.st===fil))
+      .slice().sort((a,b)=>(order[a.st]-order[b.st])||(a.p1-b.p1)||(a.no-b.no));
+    const stDef={meas:['已测量','Measured','#EAF7EA','#1F6B32'],cov:['仅有回收','Response only','#F2F6FD','#0B3A82'],none:['未发起','Not started','#F3F6F7','#8397A0']};
+    return {
+      sd37Tabs:[['meas',zh?'已测量达标率':'Measured',nMeas,'#1F6B32'],['cov',zh?'仅有回收覆盖':'Response only',nCov,'#0B3A82'],['none',zh?'本周期未发起':'Not started',nNone,'#8397A0'],['all',zh?'全部 37 项':'All 37',rows.length,'#0F1E24']]
+        .map(x=>{const on=fil===x[0];
+          return {label:x[1], n:String(x[2]), c:x[3],
+            bg:on?'#0F1E24':'#fff', fg:on?'#fff':'#4C6169', bd:on?'#0F1E24':'#E1E7EA', fw:on?'800':'600',
+            nFg:on?'#fff':x[3],
+            pick:()=>this.setState({sd37:x[0]})};}),
+      sd37Note:zh?({meas:'这 9 项今年通过问卷收了逐题回答，所以能算出达标率（家数口径 + 采购额加权双口径）。点任一行下钻到缺口名单与帮扶。',
+        cov:'这些要求发下去了、也收到了回执，但今年没有设置逐题判定，所以只有"多少家交了"，没有"多少家达标"。要变成可测量，需要在全量要求里给它挂判定口径。',
+        none:'本周期没有向供应商发起采集 —— 既没有达标率，也没有回收率。这不是数据缺失，是管理上还没开始测。',
+        all:'37 项全部在此，按状态排序：先已测量（按达标率从低到高），再仅有回收，最后未发起。'}[fil])
+        :({meas:'These 9 were answered item by item this year, so a pass rate exists.',cov:'Dispatched and returned, but with no per-item verdict this year — coverage only, no pass rate.',none:'No collection was started this cycle — neither a pass rate nor coverage.',all:'All 37, ordered by state.'}[fil]),
+      sd37Rows:list.map(r=>{
+        const q=r.q, st=stDef[r.st], on=q&&q.k===sel.k;
+        return {no:'#'+r.no, title:r.title, cat:r.cat,
+          tZh:r.tZh, tEn:r.tEn, tBg:r.tBg, tFg:r.tFg,
+          stZh:st[0], stEn:st[1], stBg:st[2], stFg:st[3],
+          measShow:q?'flex':'none', unmeasShow:q?'none':'flex',
+          p1:q?q.p1+'%':'', p2:q?q.p2+'%':'', w1:q?q.p1+'%':'0%', w2:q?q.p2+'%':'0%',
+          c1:q?(q.p1<60?'#B0291D':(q.p1<70?'#C97D1C':'#0B5B4A')):'#C4D0D5',
+          gapN:q?(q.gapN+(zh?' 家':'')):'—', gapSpend:q?('$'+q.gapSpend.toFixed(0)+'M'):'',
+          unmeasZh:r.st==='cov'?('已回收 '+r.cov+' / 327 家 · 无逐题判定'):'本周期未发起采集',
+          unmeasEn:r.st==='cov'?(r.cov+'/327 returned · no per-item verdict'):'Not collected this cycle',
+          covW:r.st==='cov'?Math.round(r.cov/327*100)+'%':'0%',
+          rowbg:on?'#EDF9F4':'transparent', labelColor:on?'#0B5B4A':(q?'#0F1E24':'#5A6E75'),
+          caretColor:on?'#0B5B4A':(q?'#C4D0D5':'#E1E7EA'),
+          pick:q?(()=>this.setState({sdQ:q.k})):(()=>{ this.setState({view:'v13'});
+            this.showToast('要求 #'+r.no+' 本周期没有逐题判定口径 —— 到全量要求里给它挂上判定与周期，下一轮就能算达标率','No verdict basis this cycle — set it in the requirement ledger'); })};
+      })
+    };
+  }
   supCasNos(code){
     // 演示映射：达标越差的供应商，收到的下发条目越多（对齐 v12 的 7 条同一批）
     const order=['#8','#19','#34','#35','#5 / #7','#22 / #24','#37'];
     const M={'SUP-0142':1,'SUP-0087':2,'SUP-0231':3,'SUP-0198':4,'SUP-0310':5,'SUP-0355':6,'SUP-0402':7};
     let n=M[code];
-    if(n===undefined){ const r=this.supplierRaw().find(x=>x.code===code);
-      const sc=r?r.score:60; n=sc>=85?1:sc>=76?2:sc>=66?3:sc>=58?4:sc>=44?5:6; }
+    const rec=this.supplierRaw().find(x=>x.code===code);
+    // 刚准入的供应商还没经历过任何一轮下发 —— 不能凭分数编出"在办"条目
+    if(rec&&rec.isNew) return {nos:[], pass:0, fresh:true};
+    if(n===undefined){ const sc=rec?rec.score:60; n=sc>=85?1:sc>=76?2:sc>=66?3:sc>=58?4:sc>=44?5:6; }
     const pass=Math.max(0,9-n-1);
     return {nos:order.slice(0,n), pass};
   }
   addVals(s,zh){
     const F=s.addF||{}, cat=F.cat||'AB', ran=s.addRan||0;
     const set=k=>(e)=>{const v=e.target.value; this.setState(st=>({addF:{...(st.addF||{}),[k]:v}}));};
-    const name=F.name||'', ok=name.trim().length>1&&String(F.uscc||'').trim().length>3;
+    const name=F.name||'', uscc=String(F.uscc||'').trim();
+    const nameBad=name.trim().length<2, usccBad=!/^[0-9A-HJ-NPQRTUWXY]{18}$/i.test(uscc);
+    const ok=!nameBad&&!usccBad;
     const catDefs=[['AB','AB 气囊类','AB airbag'],['SB','SB 安全带类','SB seatbelt'],['SW','SW 方向盘类','SW wheel'],['—','其他 / 间接','Other']];
     const code='SUP-'+String(1000+(this.supplierRaw().length*3)).slice(-4);
     const steps=[
@@ -4632,46 +4851,88 @@ class Component extends DCLogic {
        rzh:'按 '+cat+' 品类判定：适用 CBAM（钢/铝嵌入排放）、EUDR 不适用、LkSG 需签署准则 —— 已生成 3 项准入前置要求',
        ren:'Category '+cat+': CBAM applies, EUDR does not, LkSG code of conduct required — 3 pre-conditions generated',st:'pass'},
       {zh:'可持续问卷邀请与自评回收',en:'Sustainability questionnaire invitation',
-       rzh:'已向联系人发出 9 题气候问卷与行为准则确认；自评回收 7/9 达标，绿电与 PCF 两项待补',
-       ren:'9-item climate survey and code of conduct sent; self-assessment returned 7/9, RE share and PCF pending',st:'warn'},
+       rzh:'问卷发出与回收在「引入中」清单里推进 —— 回收后按 37 项要求算加权分与分级',
+       ren:'Returned 2026-08-16: 24 of 31 applicable requirements passed, weighted 62; 2 mandatory items open — RE certificates (#17), PCF capability (#3)',st:'warn'},
       {zh:'现场 / 文件审核安排',en:'Audit scheduling',
        rzh:'风险中等 → 免现场审核，改为文件审核；已排入 2026-Q4 批次，需提供 ISO 14001 与工时台账',
        ren:'Medium risk → document review instead of on-site; scheduled for 2026-Q4',st:'pass'},
       {zh:'准入结论与要求下发计划',en:'Verdict & requirement plan',
-       rzh:'建议有条件准入：先纳入基准清单（观察 6 个月），随下一轮按供应商聚合下发时一并带上 2 项待补要求',
-       ren:'Conditional approval: add to the baseline list under 6-month watch, with 2 open requirements in the next dispatch',st:'warn'}
+       rzh:'建议有条件准入：先纳入主数据清单（观察 6 个月），随下一轮按供应商聚合下发时一并带上 2 项硬性待补要求',
+       ren:'Conditional approval: add to supplier master data under 6-month watch, with the 2 open mandatory requirements in the next dispatch',st:'warn'}
     ];
-    const stCol={pass:['#EAF7EA','#1F6B32',zh?'通过':'Pass'],warn:['#FDF3E7','#A3620F',zh?'有条件':'Conditional']};
+    const stCol={pass:['#EAF7EA','#1F6B32',zh?'通过':'Pass'],warn:['#FDF3E7','#A3620F',zh?'有条件':'Conditional'],
+      todo:['#F3F6F7','#5A6E75',zh?'待发起':'To start'],wait:['#F3EFFC','#5B3FA8',zh?'等供应商回':'Waiting'],run:['#F2F6FD','#0B3A82',zh?'进行中':'In progress']};
+    // 只有前两步是机器能立刻跑完的（查工商、判法规）；后面要等供应商和排期，逐步推进
+    const dd=0;
+    steps[0].st='pass'; steps[1].st='pass';
+    if(dd<1){ steps[2].st='todo';
+      steps[2].rzh='自评问卷尚未发出 —— 37 项要求已按 AB 品类裁到 31 项，确认后一次发给对接人';
+      steps[2].ren='Self-assessment not sent yet — 31 of the 37 requirements apply to this category';
+    } else if(dd<2){ steps[2].st='wait';
+      steps[2].rzh='问卷已于今日发出（31 项 · 截止 2026-08-16）—— 等供应商回填，回收前不计分、不出准入结论';
+      steps[2].ren='Sent today (31 items, due 2026-08-16) — no score and no verdict until it comes back';
+    }
+    if(dd<2){ steps[3].st='todo';
+      steps[3].rzh='等自评回收后再定审核方式 —— 回收结果决定免现场审核还是排现场';
+      steps[3].ren='Audit mode is decided once the self-assessment returns';
+      steps[4].st='todo';
+      steps[4].rzh='准入结论要等自评回收与审核安排都落定后才能给出';
+      steps[4].ren='The verdict needs both the self-assessment and the audit plan';
+    }
     return {
       addOn:!!s.addOpen,
       addFormShow:ran?'none':'flex',
       addRunShow:ran?'flex':'none',
-      addOpen:()=>this.setState({addOpen:true,addRan:0}),
+      addOpen:()=>this.setState({addOpen:true,addRan:0,ddP:0}),
       addClose:()=>this.setState({addOpen:false,addRan:0}),
       addFields:[
-        {zh:'企业名称',en:'Company name',ph:zh?'例如 苏州同兴精密冲压有限公司':'e.g. Suzhou Tongxing Precision',val:F.name||'',set:set('name')},
-        {zh:'统一社会信用代码',en:'Unified social credit code',ph:'91320500MA1XXXXXXX',val:F.uscc||'',set:set('uscc')},
-        {zh:'联系人 / 职务',en:'Contact / role',ph:zh?'例如 李明 / 可持续经理':'e.g. Li Ming / Sustainability manager',val:F.contact||'',set:set('contact')}
+        {zh:'企业名称',en:'Company name',req:'*',ph:zh?'例如 苏州同兴精密冲压有限公司':'e.g. Suzhou Tongxing Precision',val:F.name||'',set:set('name'),
+         bd:(name&&nameBad)?'#DC3A2C':'#D5DFE3', hintShow:(name&&nameBad)?'block':'none',
+         hint:zh?'企业名称至少 2 个字':'At least 2 characters'},
+        {zh:'统一社会信用代码',en:'Unified social credit code',req:'*',ph:'91320500MA1XXXXXXX',val:F.uscc||'',set:set('uscc'),
+         bd:(uscc&&usccBad)?'#DC3A2C':'#D5DFE3', hintShow:(uscc&&usccBad)?'block':'none',
+         hint:zh?('统一社会信用代码为 18 位（当前 '+uscc.length+' 位）'):('18 characters required (currently '+uscc.length+')')},
+        {zh:'联系人 / 职务',en:'Contact / role',req:'',ph:zh?'例如 李明 / 可持续经理':'e.g. Li Ming / Sustainability manager',val:F.contact||'',set:set('contact'),
+         bd:'#D5DFE3', hintShow:'none', hint:''}
       ],
       addCats:catDefs.map(c=>{const on=cat===c[0];
         return {label:zh?c[1]:c[2],bg:on?'#0B5B4A':'#fff',bd:on?'#0B5B4A':'#D5DFE3',fg:on?'#fff':'#43585F',fw:on?'700':'600',
           pick:()=>this.setState(st=>({addF:{...(st.addF||{}),cat:c[0]}}))};}),
-      addRunLabel:ok?(zh?'提交并自动跑引入尽调 →':'Submit & run due diligence →'):(zh?'请先填企业名称与信用代码':'Company name and USCC required'),
+      addRunLabel:ok?(zh?'提交并自动跑引入尽调 →':'Submit & run due diligence →')
+        :(usccBad&&uscc?(zh?('统一社会信用代码需 18 位 · 当前 '+uscc.length+' 位'):('USCC must be 18 characters — currently '+uscc.length))
+          :(zh?'请先填企业名称与 18 位统一社会信用代码':'Company name and 18-character USCC required')),
       addRunBg:ok?'#0B5B4A':'#9FB2B8',
-      addRun:()=>{ if(!ok){ this.showToast('企业名称与统一社会信用代码为必填','Company name and USCC are required'); return; }
-        this.setState({addRan:1});
+      addRun:()=>{ if(!ok){ this.showToast(usccBad&&uscc?('统一社会信用代码为 18 位，当前填了 '+uscc.length+' 位'):'企业名称与 18 位统一社会信用代码为必填','Company name and an 18-character USCC are required'); return; }
+        const cd0=catDefs.find(x=>x[0]===cat)||catDefs[0];
+        this.setState(st=>({addRan:1,ddP:0,v3Seg:'cand',
+          cands:[{code:code,name:name,cat:cat,cn:cd0[1].replace(/^[A-Z]+ /,''),ce:cd0[2],contact:F.contact||'—',
+            stage:0,sent:'',due:'',applicable:37,filled:0,read:false}]
+            .concat((st.cands===undefined?this.candSeed():st.cands))}));
         this.showToast('已自动完成 5 步引入尽调（工商制裁 / 品类法规 / 问卷自评 / 审核安排 / 准入结论）','5-step onboarding due diligence completed'); },
-      addRunTitle:(zh?'引入尽调结果 · ':'Due diligence · ')+(name||(zh?'新供应商':'New supplier')),
+      addRunTitle:(dd>=2?(zh?'引入尽调结果 · ':'Due diligence · '):(zh?'引入尽调进行中 · ':'Due diligence in progress · '))+(name||(zh?'新供应商':'New supplier')),
       addSteps:steps.map((x,i)=>({...x,mark:String(i+1),dotBg:'#EDF9F4',dotFg:'#0B5B4A',titleFg:'#0F1E24',
         stBg:stCol[x.st][0],stFg:stCol[x.st][1],stLabel:stCol[x.st][2]})),
-      addDoneShow:ran?'flex':'none',
+      addDoneShow:'none',
+      ddActions:[{label:zh?'去「引入中」清单继续推进 →':'Open the onboarding lane →',
+        go:()=>this.setState({addOpen:false,addRan:0,addF:null,view:'v3',v3Seg:'cand'})}],
+      ddWaitShow:ran?'flex':'none',
+      ddWaitZh:'前两步平台自己就能查（工商制裁、品类法规），已经跑完。第 3 步起要供应商参与 —— 这家已建档进入「引入中」，问卷发出、对方回填、收卷打分、准入，都在那条清单上逐步推进。',
+      ddWaitEn:'The first two checks are machine-run and done. From step 3 the supplier has to take part — the record now sits in the Onboarding lane, where you send, chase, collect and admit.',
       addVerdict:zh?'有条件准入':'CONDITIONAL',
       addCode:code,
-      addConclZh:'建议以「观察期供应商」加入基准清单：分级 B−、风险中、达标 7/9。两项待补（绿电占比凭证、PCF 能力）不单独下发 —— 会与下一轮的按供应商聚合任务单合并，只发一次。',
-      addConclEn:'Add as a watch-period supplier: grade B−, medium risk, 7/9 passed. The two open items ride along with the next per-supplier dispatch instead of being sent separately.',
-      addCommit:()=>{ this.setState({addOpen:false,addRan:0,addF:null,view:'v3',v3More:40});
-        this.showToast('已加入供应商基准清单：'+(name||'新供应商')+'（'+code+'）· 分级 B− · 观察期 6 个月 · 2 项待补要求已排入下一轮聚合下发',
-          'Added to the baseline list — '+code+', grade B−, 6-month watch, 2 open items queued for the next dispatch'); }
+      addConclZh:'自评回收后才会给出加权分与分级 —— 在「引入中」清单里收卷、准入。',
+      addConclEn:'Add as a watch-period supplier: weighted 62, grade B−, medium risk, 24 of the 31 applicable requirements passed. The 2 open mandatory items ride along with the next per-supplier dispatch.',
+      addCommit:()=>{
+        const cd=catDefs.find(x=>x[0]===cat)||catDefs[0];
+        const rec={code:code, nameZh:name||'新供应商', nameEn:name||'New supplier',
+          cat:cat, czh:cd[1].replace(/^[A-Z]+ /,''), cen:cd[2],
+          d:'part', re:22, score:62, grade:'B−', b:[60,58,64,66], biz:'¥—', riskK:'M',
+          site:'—', contact:F.contact||'—', isNew:true};
+        this.setState(st=>({addOpen:false,addRan:0,addF:null,view:'v3',v3More:40,
+          f3g:'all',f3b:'all',f3c:'all',f3r:'all',q3:'',
+          newSups:[rec].concat(st.newSups||[])}));
+        this.showToast('已加入供应商主数据清单：'+(name||'新供应商')+'（'+code+'）· 分级 B− · 观察期 6 个月 —— 已排在列表首位，2 项硬性待补要求进入下一轮聚合下发',
+          'Added to supplier master data — '+code+', grade B−, 6-month watch; listed first, 2 open mandatory items queued'); }
     };
   }
   mainlineVals(s,zh){
@@ -4726,11 +4987,11 @@ class Component extends DCLogic {
     const G=[
       {zh:'供应商：三个数各有范围',en:'Suppliers: three counts, three scopes',color:'#0B5B4A',tag:zh?'主数据 → 问卷 → 本轮传导':'master → survey → cascade',
        nodes:[
-         {v:'327',zh:'主数据在册供应商',en:'Suppliers in master data',szh:'采购主数据中当前有效的直接+间接材料供应商总数，不论今年是否被要求作答。',sen:'All active direct + indirect material suppliers in procurement master data, regardless of this year\'s survey.',where:'V3 主数据清单 · V13 覆盖分母'},
+         {v:'327',zh:'本轮起算 · 在册供应商',en:'Suppliers at cycle start',szh:'本轮要求集起算时采购主数据中的直接+间接材料供应商总数，不论今年是否被要求作答。V13 的所有覆盖率分数都以这 327 家为固定分母；本轮之后新准入的供应商（当前在册 '+this.supplierRaw().length+' 家）不计入本轮覆盖率，从下一轮起算。',sen:'The direct + indirect material suppliers in master data when this requirement cycle opened. Every V13 coverage fraction uses this frozen 327 as its denominator; suppliers admitted since (master data now holds '+this.supplierRaw().length+') count from the next cycle.',where:'V3 主数据清单 · V13 覆盖分母'},
          {v:'317',zh:'已回本年度气候问卷',en:'Returned this year\'s climate survey',szh:'327 家中被纳入本年度 9 题气候问卷、且已回收有效答卷的直接材料供应商；能力指挥舱的所有分布、四象限、达标率都以这 317 家为分母。',sen:'Of the 327, the direct-material suppliers included in this year\'s 9-question climate survey with a valid response; all V7 distributions use 317 as the denominator.',where:'V7 能力指挥舱'},
          {v:'148',zh:'本轮传导涉及（去重）',en:'In this cascade round (deduplicated)',szh:'本轮 7 条传导要求各自的收件人合并去重后的家数；单条要求的 67 / 89 / 118 家会互相重叠，不能相加。',sen:'Unique recipients across the 7 cascade items; the per-item 67 / 89 / 118 overlap and must not be summed.',where:'V12 传导对齐'}
        ],
-       notezh:'常见误读：把 V12 各条的家数加起来当成传导总量。正确读法是 327 ⊇ 317 ⊇ 148（去重后）。',
+       notezh:'常见误读：把 V12 各条的家数加起来当成传导总量。正确读法是 327 ⊇ 317 ⊇ 148（去重后）—— 三者都以本轮起算口径计。',
        noteen:'Common misread: summing the per-item counts in V12. The correct nesting is 327 ⊇ 317 ⊇ 148 (deduplicated).'},
       {zh:'客户：14 → 6 → 4',en:'Customers: 14 → 6 → 4',color:'#0B3A82',tag:zh?'合作 → 有要求 → 在办':'active → with asks → in progress',
        nodes:[
@@ -4913,11 +5174,107 @@ class Component extends DCLogic {
       qClearShow:(s.q&&sc)?'flex':'none'
     };
   }
+  candSeed(){ return [
+    {code:'SUP-1974',name:'常州华瑞传感科技',cat:'AB',cn:'电子控制单元',ce:'ECU electronics',contact:'周颖 / 质量经理',stage:1,sent:'2026-07-22',due:'2026-08-05',applicable:37,filled:23,read:true},
+    {code:'SUP-1977',name:'宁波锦江紧固件',cat:'SB',cn:'紧固件',ce:'Fasteners',contact:'徐立 / 采购主管',stage:1,sent:'2026-07-29',due:'2026-08-12',applicable:37,filled:0,read:false},
+    {code:'SUP-1980',name:'重庆万通方向盘',cat:'SW',cn:'方向盘骨架',ce:'Steering armature',contact:'—',stage:0,sent:'',due:'',applicable:37,filled:0,read:false}
+  ]; }
+  cands(){ const st=this.state.cands; return st===undefined?this.candSeed():st; }
+  candVals(s,zh){
+    const list=this.cands();
+    const seg=s.v3Seg||'active';
+    const actN=this.supplierRaw().length;
+    const stDef={
+      0:[zh?'待发起自评':'Not sent','#F3F6F7','#5A6E75'],
+      1:[zh?'等供应商回卷':'Waiting on supplier','#F3EFFC','#5B3FA8'],
+      2:[zh?'已回卷 · 待准入':'Returned — verdict due','#FFF7EC','#A3620F']
+    };
+    const today=new Date(new Date().toDateString());
+    const upd=(code,patch)=>{ const n=this.cands().map(c=>c.code===code?Object.assign({},c,patch):c); this.setState({cands:n}); };
+    const rows=list.map(c=>{
+      const st=stDef[c.stage]||stDef[0];
+      const days=c.due?Math.round((new Date(c.due)-today)/86400000):null;
+      const over=days!==null&&days<0;
+      return {code:c.code, name:c.name, cat:zh?c.cn:(c.ce||c.cn), contact:c.contact,
+        stZh:st[0], stEn:st[0], stBg:st[1], stFg:st[2],
+        step:(c.stage===0?'2':(c.stage===1?'2':'4'))+' / 5',
+        barW:((c.stage===0?2:(c.stage===1?2:4))/5*100)+'%',
+        barC:c.stage===2?'#C97D1C':(c.stage===1?'#5B3FA8':'#B6C4C9'),
+        reply:c.stage===0?(zh?'问卷未发出':'Not sent')
+          :(c.stage===2?(zh?'已回收 '+c.applicable+' / '+c.applicable+' 项':'All returned')
+            :(c.filled?(zh?('已回填 '+c.filled+' / '+c.applicable+' 项'):(c.filled+'/'+c.applicable+' filled'))
+              :(c.read?(zh?'已读未回填':'Read, nothing filled'):(zh?'未读':'Unread')))),
+        replyFg:c.stage===0?'#9AABB1':(c.filled||c.stage===2?'#0B3A82':(c.read?'#A3620F':'#B0291D')),
+        due:c.due||'—', dueFg:over?'#B0291D':(days!==null&&days<=7?'#A3620F':'#5A6E75'),
+        dueNote:c.due?(over?(zh?('逾期 '+(-days)+' 天'):(-days)+'d overdue'):(zh?('剩 '+days+' 天'):days+'d left')):'',
+        open:()=>this.setState({drawer:'cand',dwKey:c.code})};
+    });
+    const cur=list.find(c=>c.code===s.dwKey)||list[0]||{};
+    const curSt=stDef[cur.stage]||stDef[0];
+    // 同一个 supCompliance()：准入前后、抽屉与列表行，数字必须一致
+    const cp=cur.code?this.supCompliance(cur.code):{score:0,grade:'—',pass:0,tot:37,hardMiss:[]};
+    const cpG=cp.grade, cpS=cp.score, cpP=cp.pass, cpT=cp.tot, cpM=cp.hardMiss.length;
+    return {
+      v3Seg:seg,
+      v3SegBtns:[['active',zh?'在册供应商':'Active',(this.supplierRaw()||[]).length],['cand',zh?'引入中':'Onboarding',list.length]]
+        .map(x=>{const on=seg===x[0];
+          return {label:x[1], n:String(x[2]),
+            bg:on?'#0F1E24':'#fff', fg:on?'#fff':'#4C6169', bd:on?'#0F1E24':'#E1E7EA', fw:on?'800':'600',
+            pick:()=>this.setState({v3Seg:x[0]})};}),
+      candRows:rows, candN:String(list.length),
+      candEmpty:list.length?'none':'block',
+      candNote:zh?('这些企业已建档但还没走完引入尽调 —— 没有评分、没有分级，也不计入 '+actN+' 家在册统计与达标率分母。走完尽调并准入后才会进入在册清单。')
+        :('These are on file but have not finished onboarding due diligence — no score, no grade, and excluded from the '+actN+' active suppliers and every compliance denominator.'),
+      // ---- candidate drawer ----
+      cdCode:cur.code||'', cdName:cur.name||'', cdCat:(zh?cur.cn:(cur.ce||cur.cn))||'', cdContact:cur.contact||'—',
+      cdStZh:curSt[0], cdStEn:curSt[0], cdStBg:curSt[1], cdStFg:curSt[2],
+      cdSteps:[
+        {zh:'工商与制裁名单核查',en:'Registry & sanctions',note:zh?'统一社会信用代码有效 · 未命中 SDN / 实体清单':'USCC valid, no sanctions hits',ok:true},
+        {zh:'品类风险与法规适用判定',en:'Category risk & regulations',
+         note:zh?('按 '+(cur.cat||'AB')+' 品类判定适用法规：CBAM 适用（钢/铝嵌入排放）· EUDR 不适用 · LkSG 需签署行为准则 —— 已生成 3 项准入前置'):'CBAM applies, EUDR does not, LkSG code of conduct required',ok:true},
+        {zh:'自评问卷发出与回收',en:'Self-assessment',note:cur.stage===0?(zh?'尚未发出':'Not sent yet'):(cur.stage===2?(zh?'已全部回收':'Fully returned'):(zh?('已于 '+cur.sent+' 发出 · 截止 '+cur.due):('Sent '+cur.sent))),ok:cur.stage>=2},
+        {zh:'现场 / 文件审核安排',en:'Audit scheduling',
+         note:cur.stage>=2
+           ?(cpS<58
+             ?(zh?('加权 '+cpS+' 分 → 高风险，必须现场审核；已排入 2026-Q4 现场批次，'+cpM+' 项硬性未达标为审核重点'):('Weighted '+cpS+' → high risk, on-site audit required (2026-Q4)'))
+             :(cpS<76
+               ?(zh?('加权 '+cpS+' 分 → 中风险，免现场审核改为文件审核；已排入 2026-Q4 批次，需提供 ISO 14001 与工时台账'):('Weighted '+cpS+' → medium risk, document review (2026-Q4)'))
+               :(zh?('加权 '+cpS+' 分 → 低风险，本轮免审核，抽查即可'):('Weighted '+cpS+' → low risk, no audit this cycle'))))
+           :(zh?'待自评回收后判定审核方式 —— 回收得分决定免审核 / 文件审核 / 现场审核':'Audit mode follows the returned score'),ok:cur.stage>=2},
+        {zh:'准入结论与要求下发计划',en:'Verdict & dispatch plan',
+         note:cur.stage>=2?(zh?('建议有条件准入：加权 '+cpS+' 分 · 分级 '+cpG+' · 观察期 6 个月；'+cpM+' 项硬性待补随下一轮聚合下发'):('Conditional approval: weighted '+cpS+', grade '+cpG+', 6-month watch, '+cpM+' mandatory items open'))
+           :(zh?'回收与审核落定后给出':'After the above'),ok:false}
+      ].map((x,i)=>({...x, mark:x.ok?'✓':String(i+1),
+        dotBg:x.ok?'#3FAE55':'#F0F3F5', dotFg:x.ok?'#fff':'#9AABB1',
+        noteFg:x.ok?'#5A6E75':'#9AABB1'})),
+      cdSendShow:cur.stage===0?'inline-block':'none',
+      cdChaseShow:cur.stage===1?'inline-block':'none',
+      cdCollectShow:cur.stage===1?'inline-block':'none',
+      cdAdmitShow:cur.stage===2?'inline-block':'none',
+      cdReply:cur.stage===0?(zh?'问卷未发出 —— 发出后这里会显示已读、回填进度与逾期天数':'Not sent — read receipts and progress appear here once it goes out')
+        :(cur.stage===2?(zh?('已回收全部 '+cpT+' 项 · '+cpP+' 项达标 · 加权 '+cpS+' 分 · 分级 '+cpG):('Returned in full — '+cpP+'/'+cpT+' passed, weighted '+cpS+', grade '+cpG))
+          :(zh?('发出 '+cur.sent+' · 截止 '+cur.due+' · '+(cur.read?'对方已读':'对方未读')+' · 已回填 '+cur.filled+' / '+cur.applicable+' 项'):('Sent '+cur.sent))),
+      cdSend:()=>{ upd(cur.code,{stage:1,sent:'2026-08-02',due:'2026-08-16',read:false,filled:0});
+        this.showToast('自评问卷已发给 '+(cur.contact||'对接人')+'：'+(cur.applicable||31)+' 项 · 截止 2026-08-16','Self-assessment sent'); },
+      cdChase:()=>{ upd(cur.code,{due:'2026-08-20',read:true});
+        this.showToast('已催办 '+cur.code+' 并把截止改到 2026-08-20 · 提醒已发给 '+(cur.contact||'对接人'),'Chased'); },
+      cdCollect:()=>{ upd(cur.code,{stage:2,filled:cur.applicable});
+        this.showToast('已收卷：'+cpT+' 项中 '+cpP+' 项达标 · 加权 '+cpS+' 分 · 分级 '+cpG+' · '+cpM+' 项硬性待补','Returned and scored: '+cpP+'/'+cpT+', weighted '+cpS); },
+      cdAdmit:()=>{
+        const cd=cur, rec={code:cd.code, nameZh:cd.name, nameEn:cd.name, cat:cd.cat, czh:cd.cn, cen:cd.ce||cd.cn,
+          d:'none', re:0, cbase:60, score:cpS, grade:cpG, b:[60,58,64,66],
+          biz:'¥—', riskK:cpS>=76?'L':(cpS>=58?'M':'H'), site:'—', contact:cd.contact, isNew:true};
+        this.setState(st=>({drawer:null, v3Seg:'active', v3More:40, f3g:'all',f3b:'all',f3c:'all',f3r:'all',q3:'',
+          cands:this.cands().filter(x=>x.code!==cd.code),
+          newSups:[rec].concat(st.newSups||[])}));
+        this.showToast('已准入并加入主数据清单：'+cd.name+'（'+cd.code+'）· 加权 '+cpS+' 分 · 分级 '+cpG+' · 要求达标 '+cpP+'/'+cpT+' · 观察期 6 个月','Admitted — grade '+cpG+', '+cpP+'/'+cpT); }
+    };
+  }
   v3Vals(s,zh,anon){
     const all=this.supplierData(anon,k=>()=>this.setState({drawer:'supplier',dwKey:k}));
     const q=(s.q||'').trim().toLowerCase();
     const g=s.f3g||'all', c=s.f3c||'all', rk=s.f3r||'all', b=s.f3b||'all';
-    const band=x=>x.scoreN>=80?'hi':(x.scoreN>=60?'mid':'lo');
+    const band=x=>x.scoreN>=76?'hi':(x.scoreN>=58?'mid':'lo');
     let rows=all.filter(x=>(g==='all'||x.gradeKey===g)&&(c==='all'||x.catKey===c)&&(rk==='all'||x.riskKey===rk)&&(b==='all'||band(x)===b)&&(!q||x.blob.indexOf(q)>=0));
     const sk=s.s3k||'', sd=s.s3d||-1;
     if(sk) rows=[...rows].sort((a,b2)=>((a[sk]||0)-(b2[sk]||0))*sd);
@@ -4938,10 +5295,25 @@ class Component extends DCLogic {
         {label:zh?'分级':'Grade',opts:[opt(g,'f3g','all','全部','All'),opt(g,'f3g','A','A / A−','A / A−'),opt(g,'f3g','B','B / B−','B / B−'),opt(g,'f3g','C','C','C'),opt(g,'f3g','D','D','D')]},
         {label:zh?'类别':'Category',opts:[opt(c,'f3c','all','全部','All'),opt(c,'f3c','AB','AB 气囊类','AB airbag'),opt(c,'f3c','SB','SB 安全带类','SB seatbelt'),opt(c,'f3c','SW','SW 方向盘类','SW wheel'),opt(c,'f3c','—','其他 / 间接','Other')]},
         {label:zh?'风险':'Risk',opts:[opt(rk,'f3r','all','全部','All'),opt(rk,'f3r','H','高','High'),opt(rk,'f3r','M','中','Medium'),opt(rk,'f3r','L','低','Low')]},
-        {label:zh?'达标':'Score',opts:[opt(b,'f3b','all','全部','All'),opt(b,'f3b','hi','≥80 达标','≥80'),opt(b,'f3b','mid','60–79 待提升','60–79'),opt(b,'f3b','lo','<60 缺口','<60')]}
+        {label:zh?'评分':'Score',opts:[opt(b,'f3b','all','全部','All'),opt(b,'f3b','hi','≥76 达标良好','≥76'),opt(b,'f3b','mid','58–75 待提升','58–75'),opt(b,'f3b','lo','<58 缺口大','<58')]}
       ],
+      ...(()=>{
+        const gd=[['A','#3FAE55','#2E8F43','#1F6B32'],['A−','#5CBF6E','#3FAE55','#1F6B32'],['B','#9AD79E','#86CD8A','#33484F'],
+          ['B−','#E2C98C','#E2A85C','#33484F'],['C','#E87F73','#DC3A2C','#B0291D'],['D','#C7362A','#A82217','#B0291D']];
+        const cnt={}; all.forEach(x=>{cnt[x.grade]=(cnt[x.grade]||0)+1;});
+        const mx=Math.max(1,...gd.map(x=>cnt[x[0]]||0));
+        return {
+          v3Grades:gd.map(x=>{const n=cnt[x[0]]||0, on=g===x[0][0]&&(x[0]==='A'||x[0]==='A−'?g==='A':true);
+            return {label:x[0], n:String(n), h:Math.max(4,Math.round(n/mx*96))+'px',
+              bar:'linear-gradient(180deg,'+x[1]+','+x[2]+')', numFg:x[3],
+              labelFg:g===x[0][0]?'#0B5B4A':'#33484F', fw:g===x[0][0]?'800':'700',
+              pick:()=>this.setState({f3g:g===x[0][0]?'all':x[0][0],v3More:40})};}),
+          v3GradeTop:String((cnt['A']||0)+(cnt['A−']||0)),
+          v3GradeBad:String((cnt['C']||0)+(cnt['D']||0))
+        };
+      })(),
       v3CountLabel:zh?((filtered?'筛选后 ':'')+rows.length+' / '+all.length+' 家'):((filtered?'Filtered ':'')+rows.length+' / '+all.length),
-      v3Note:zh?('这是 Autoliv 面向上游的供应链基准清单：采购主数据在册 '+all.length+' 家全部在此，档案、分级、达标概况与任务状态统一从这里进。'):('The baseline list of Autoliv\'s upstream supply chain — all '+all.length+' suppliers in procurement master data, with profile, grade, compliance snapshot and task status.'),
+      v3Note:zh?('采购主数据在册 '+all.length+' 家全部在此。可持续综合评分不是独立打分，而是这家在 37 项要求上的达标情况，按硬性×3 / 期望×1 加权算出来的 —— 点评分看五类拆解。'):('All '+all.length+' suppliers in procurement master data. The sustainability score is not a separate rating: it is this supplier\'s compliance across the 37 requirements, weighted mandatory×3 / expected×1.'),
       v3ResetLabel:zh?'重置筛选与排序':'Reset filters & sort',
       v3Reset:()=>this.setState({f3g:'all',f3c:'all',f3r:'all',f3b:'all',s3k:'',s3d:-1,q:'',v3More:40}),
       sortBiz:tog('bizN'), sortScore:tog('scoreN'), sortRe:tog('reN'),
@@ -4956,24 +5328,26 @@ class Component extends DCLogic {
     const bd=[['绿电占比','RE share','30%'],['数据完整度','Data completeness','25%'],['目标进展','Target progress','25%'],['治理与劳工','Governance','20%']];
     const tgtMap={A:['已设定','Set','#1F6B32'],'A−':['已设定','Set','#1F6B32'],B:['制定中','Drafting','#A3620F'],'B−':['制定中','Drafting','#A3620F'],C:['待启动','Pending','#B0291D'],D:['未响应','No reply','#B0291D']};
     return this.supplierRaw().map((r,i)=>{
-      const gk=r.grade[0], t=tgtMap[r.grade]||tgtMap.C;
+      const cp=this.supCompliance(r.code);
+      const gk=cp.grade[0], t=tgtMap[cp.grade]||tgtMap.C;
       const initials=(anon?r.code.slice(-2):r.nameEn).slice(0,2).toUpperCase();
       return {
         code:r.code, nameNr:r.nameZh, nameNa:r.code, avatar:anon?r.code.slice(-2):initials.slice(0,1),
-        avBg:avBgs[gk], avFg:gC(r.grade),
+        avBg:avBgs[gk]||'#F0F3F5', avFg:gC(cp.grade),
         czh:r.czh, cen:r.cen, codeShow:anon?'none':'inline',
-        pass9:String(this.supCasNos(r.code).pass),
-        passFg:r.score>=80?'#1F6B32':(r.score>=60?'#A3620F':'#B0291D'),
-        taskLabel:(this.supCasNos(r.code).nos.length)+(this.state.lang==='zh'?' 项要求在办':' open items'),
+        pass9:cp.pass+' / '+cp.tot,
+        passFg:cp.score>=76?'#1F6B32':(cp.score>=58?'#A3620F':'#B0291D'),
+        taskLabel:(()=>{const c=this.supCasNos(r.code);
+          return c.fresh?(this.state.lang==='zh'?'尚未下发':'None dispatched yet'):(c.nos.length+(this.state.lang==='zh'?' 项要求在办':' open items'));})(),
         taskFg:this.supCasNos(r.code).nos.length>=4?'#B0291D':'#8397A0',
         dbg:dset[r.d][0],dfg:dset[r.d][1],dzh:dset[r.d][2],den:dset[r.d][3],
         re:r.re+'%',reFg:r.re>=40?'#1F6B32':r.re>=20?'#A3620F':'#B0291D',
-        score:r.score, scorePct:r.score+'%', grade:r.grade, gFg:gC(r.grade),
+        score:cp.score, scorePct:cp.score+'%', grade:cp.grade, gFg:gC(cp.grade),
         tzh:t[0],ten:t[1],tFg:t[2],
-        tipRows:bd.map((b,j)=>({zh:b[0],en:b[1],w:b[2],v:r.b[j],c:r.b[j]>=70?'#7FE0A0':r.b[j]>=45?'#F2C572':'#F5A79B'})),
-        gradeKey:r.grade[0], catKey:r.cat, riskKey:r.riskK,
+        tipRows:cp.cats.map(c=>({zh:c.zh+' '+c.pass+'/'+c.tot,en:c.en+' '+c.pass+'/'+c.tot,w:c.hardMiss?((this.state.lang==='zh')?('硬性缺 '+c.hardMiss):(c.hardMiss+' mandatory')):'',v:c.pct,c:c.pct>=70?'#7FE0A0':c.pct>=45?'#F2C572':'#F5A79B'})),
+        gradeKey:cp.grade[0], catKey:r.cat, riskKey:r.riskK,
         bizLabel:r.biz, bizN:parseFloat(String(r.biz).replace(/[^\d.]/g,''))||0,
-        scoreN:r.score, reN:r.re,
+        scoreN:cp.score, reN:r.re,
         riskZh:({H:'高风险',M:'中风险',L:'低风险'})[r.riskK]||'—', riskEn:({H:'High risk',M:'Medium',L:'Low'})[r.riskK]||'—',
         riskFg:r.riskK==='H'?'#B0291D':(r.riskK==='M'?'#A3620F':'#5A6E75'),
         blob:[r.nameZh,r.nameEn,r.code,r.cat,r.czh,r.cen,r.grade,r.site,r.contact,r.biz].join(' ').toLowerCase(),
