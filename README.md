@@ -135,4 +135,5 @@ python3 -m http.server 8080
 - Build Command / Output Directory / Install Command：均留空（根目录直出）
 
 运行时需联网加载：React 18.3.1 UMD（`unpkg.com`）、Google Fonts，
-以及 `/assi` 的 SheetJS 0.20.3（`cdn.sheetjs.com`，问卷 Excel 导入导出用）。
+以及 SheetJS 0.20.3（`cdn.sheetjs.com`）——`/` 和 `/assi` **两个页面都要**：
+`/` 用它按客户模板导出问卷（`exportSurvey()`），`/assi` 用它做问卷 Excel 导入导出。

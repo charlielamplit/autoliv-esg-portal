@@ -10,6 +10,7 @@
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <style>
 body{margin:0;background:#F5F7F8;color:#0F1E24;font-family:'Plus Jakarta Sans','Noto Sans SC',system-ui,sans-serif;font-size:13px;line-height:1.45;-webkit-font-smoothing:antialiased}
 *{box-sizing:border-box}
@@ -30,13 +31,14 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
 .scoretip:hover .tip{display:block}
 .scoretip .tip::after{content:"";position:absolute;top:-5px;right:14px;width:10px;height:10px;background:#0F1E24;transform:rotate(45deg)}
 .dw-wrap{display:none;position:fixed;inset:0;z-index:90}
-.dw-wrap[data-kind="supplier"],.dw-wrap[data-kind="requirement"],.dw-wrap[data-kind="action"],.dw-wrap[data-kind="reg"],.dw-wrap[data-kind="datareq"],.dw-wrap[data-kind="abc"],.dw-wrap[data-kind="cascade"],.dw-wrap[data-kind="gloss"],.dw-wrap[data-kind="req13"]{display:block}
+.dw-wrap[data-kind="supplier"],.dw-wrap[data-kind="requirement"],.dw-wrap[data-kind="action"],.dw-wrap[data-kind="reg"],.dw-wrap[data-kind="datareq"],.dw-wrap[data-kind="abc"],.dw-wrap[data-kind="cascade"],.dw-wrap[data-kind="gloss"],.dw-wrap[data-kind="req13"],.dw-wrap[data-kind="srvimp"]{display:block}
+.dw-wrap[data-kind="srvimp"] .dw-panel{width:580px}
 .dw-back{position:absolute;inset:0;background:rgba(15,30,36,.32);backdrop-filter:blur(1.5px);animation:dwFade .2s ease}
 .dw-panel{position:absolute;top:0;right:0;height:100%;width:520px;background:#F5F7F8;box-shadow:-20px 0 50px -20px rgba(15,30,36,.4);display:flex;flex-direction:column;animation:dwSlide .26s cubic-bezier(.22,1,.36,1)}
 @keyframes dwFade{from{opacity:0}to{opacity:1}}
 @keyframes dwSlide{from{transform:translateX(30px);opacity:.6}to{transform:translateX(0);opacity:1}}
 .dwd{display:none}
-.dw-wrap[data-kind="supplier"] .dwd.s,.dw-wrap[data-kind="requirement"] .dwd.r,.dw-wrap[data-kind="action"] .dwd.a,.dw-wrap[data-kind="reg"] .dwd.rg,.dw-wrap[data-kind="datareq"] .dwd.dr,.dw-wrap[data-kind="abc"] .dwd.ab,.dw-wrap[data-kind="cascade"] .dwd.cs,.dw-wrap[data-kind="gloss"] .dwd.gl,.dw-wrap[data-kind="req13"] .dwd.r3{display:flex;flex-direction:column}
+.dw-wrap[data-kind="supplier"] .dwd.s,.dw-wrap[data-kind="requirement"] .dwd.r,.dw-wrap[data-kind="action"] .dwd.a,.dw-wrap[data-kind="reg"] .dwd.rg,.dw-wrap[data-kind="datareq"] .dwd.dr,.dw-wrap[data-kind="abc"] .dwd.ab,.dw-wrap[data-kind="cascade"] .dwd.cs,.dw-wrap[data-kind="gloss"] .dwd.gl,.dw-wrap[data-kind="req13"] .dwd.r3,.dw-wrap[data-kind="srvimp"] .dwd.si{display:flex;flex-direction:column}
 .itip{position:relative;cursor:help;display:inline-flex;align-items:center;justify-content:center;width:12px;height:12px;border-radius:50%;background:#DCE4E7;color:#5A6E75;font-size:8.5px;font-weight:800;flex-shrink:0;vertical-align:middle}
 .itip .tp{display:none;position:absolute;left:50%;transform:translateX(-50%);top:150%;z-index:70;width:216px;background:#0F1E24;color:#fff;border-radius:9px;padding:10px 11px;box-shadow:0 14px 34px -12px rgba(15,30,36,.5);font-size:10.5px;font-weight:500;line-height:1.5;text-align:left;letter-spacing:0;text-transform:none}
 .itip:hover .tp{display:block}
@@ -81,9 +83,10 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
 [data-view="v11"] .srv-list,[data-view="v11"] .srv-open{display:none !important}
 [data-view="v11"][data-srv="list"] .srv-list{display:flex !important}
 [data-view="v11"][data-srv="open"] .srv-open{display:flex !important}
-[data-view="v11"] .srv-answer,[data-view="v11"] .srv-score{display:none !important}
+[data-view="v11"] .srv-answer,[data-view="v11"] .srv-score,[data-view="v11"] .srv-check{display:none !important}
 [data-view="v11"][data-srvtab="answer"] .srv-answer{display:flex !important}
 [data-view="v11"][data-srvtab="score"] .srv-score{display:flex !important}
+[data-view="v11"][data-srvtab="check"] .srv-check{display:flex !important}
 </style>
 </helmet>
 <div data-view="{{ view }}" data-dom="{{ dom }}" data-role="{{ roleK }}" data-srv="{{ srvMode }}" data-srvtab="{{ srvTab }}" data-oem="{{ oem }}" data-lang="{{ lang }}" data-anon="{{ anon }}" data-drawer="{{ drawer }}" style="width:1480px;margin:0 auto;background:#F5F7F8;display:grid;grid-template-columns:224px 1fr;min-height:1020px">
@@ -546,7 +549,7 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
         </div>
         <div style="display:grid;grid-template-columns:1.35fr 1fr;gap:14px;width:100%;align-items:stretch">
           <div class="card" style="align-self:start">
-            <div class="chd"><h3><span class="zh">按客户看满足率</span><span class="en">Fulfilment by OEM</span></h3><span class="pill">6 <span class="zh">主要客户</span><span class="en">key OEM</span></span><span style="margin-left:auto;font-size:11px;color:#8397A0"><span class="zh">点行进入该客户聚焦视图</span><span class="en">Click a row to focus that OEM</span></span></div>
+            <div class="chd"><h3><span class="zh">按客户看满足率</span><span class="en">Fulfilment by OEM</span></h3><span class="pill">6 <span class="zh">主要客户</span><span class="en">key OEM</span></span><span style="margin-left:auto;font-size:11px;color:#8397A0"><span class="zh">点行进入该客户聚焦视图</span><span class="en">Click a row to focus that OEM</span></span><button onClick="{{ toggleAnon }}" style="font-size:10.5px;font-weight:700;padding:4px 10px;border-radius:7px;border:1px solid #E1E7EA;background:#fff;color:#43585F;display:flex;align-items:center;gap:6px;white-space:nowrap"><span style="width:6px;height:6px;border-radius:50%;background:{{ anonDot }}"></span><span class="zh">{{ anonZh }}</span><span class="en">{{ anonEn }}</span></button></div>
             <div style="padding:8px 16px 14px">
               <div style="display:grid;grid-template-columns:104px 1fr 62px 118px 16px;gap:11px;padding:7px 6px;border-bottom:1px solid #E6EBEE;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:#9AABB1">
                 <span>OEM</span><span><span class="zh">要求满足率</span><span class="en">Fulfilment</span></span><span style="text-align:right"><span class="zh">缺口</span><span class="en">Gaps</span></span><span><span class="zh">构成（覆盖/进行/缺口）</span><span class="en">Breakdown</span></span><span></span>
@@ -589,7 +592,7 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
           </div>
         </div>
         <div class="card" style="width:100%">
-          <div class="chd"><h3><span class="zh">客户要求全景 · 难量化的 S 要求长什么样</span><span class="en">What the OEM asks look like</span></h3><span class="pill">SAQ 5.0 · RSCI</span><span style="margin-left:auto;font-size:11px;color:#8397A0"><span class="zh">吉利/奇瑞/长城为 Drive Sustainability 成员 · 德系客户推 RSCI</span><span class="en">Geely/Chery/GWM in Drive Sustainability · German OEMs push RSCI</span></span></div>
+          <div class="chd"><h3><span class="zh">客户要求全景 · 难量化的 S 要求长什么样</span><span class="en">What the OEM asks look like</span></h3><span class="pill">SAQ 5.0 · RSCI</span><span style="margin-left:auto;font-size:11px;color:#8397A0"><span class="nr"><span class="zh">吉利/奇瑞/长城为 Drive Sustainability 成员 · 德系客户推 RSCI</span><span class="en">Geely/Chery/GWM in Drive Sustainability · German OEMs push RSCI</span></span><span class="na"><span class="zh">OEM-03 / OEM-01 / OEM-04 为 Drive Sustainability 成员 · 德系客户推 RSCI</span><span class="en">OEM-03 / OEM-01 / OEM-04 in Drive Sustainability · German OEMs push RSCI</span></span></span></div>
           <div style="padding:14px 16px 16px;display:grid;grid-template-columns:1fr 1fr;gap:14px">
             <sc-for list="{{ panorama }}" as="p" hint-placeholder-count="2">
               <div style="border:1px solid #E1E7EA;border-radius:10px;padding:13px 15px">
@@ -1225,14 +1228,14 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
         </div>
       </div>
 
-      <div class="m2 v11" data-screen-label="V11 客户问卷 · 到达与转译" style="flex-direction:column;gap:14px">
+      <div class="m2 v11" data-screen-label="V11 客户问卷 · 校卷 / 作答 / 交卷" style="flex-direction:column;gap:14px">
         <div style="display:flex;align-items:center;gap:9px;height:34px;padding:0 13px;background:#F2F6FD;border:1px solid #D7E3F6;border-radius:9px;font-size:11px;color:#5A6E75;overflow:hidden;flex-shrink:0">
           <span style="width:7px;height:7px;border-radius:50%;background:#0B3A82;flex-shrink:0"></span>
           <b style="font-size:10px;font-weight:800;letter-spacing:.04em;color:#0B3A82;white-space:nowrap"><span class="zh">主线 · 第 1 步 · 客户要求导入</span><span class="en">Step 1 · OEM asks in</span></b>
           <span style="color:#C4D0D5">｜</span>
           <span style="white-space:nowrap"><span class="zh">← 上一步：<b style="color:#33484F">客户 P 发来年度问卷</b></span><span class="en">← From: <b style="color:#33484F">Customer P sent the annual survey</b></span></span>
           <span style="color:#C4D0D5">｜</span>
-          <span style="white-space:nowrap"><span class="zh">这一步：<b style="color:#0F1E24">AI 转译 + 逐题作答</b></span><span class="en">Now: <b style="color:#0F1E24">AI translation, then answer</b></span></span>
+          <span style="white-space:nowrap"><span class="zh">这一步：<b style="color:#0F1E24">AI 校卷 → 作答 → 交卷</b></span><span class="en">Now: <b style="color:#0F1E24">verify, answer, submit</b></span></span>
           <span style="margin-left:auto;display:flex;align-items:center;gap:9px;flex-shrink:0">
             <span style="color:#8397A0"><span class="zh">交给</span><span class="en">Hand to</span></span>
             <button onClick="{{ go7 }}" style="font-size:11px;font-weight:700;color:#0B5B4A;white-space:nowrap"><span class="zh">缺口传导给采购（第 3 步）→</span><span class="en">Cascade gaps to sourcing →</span></button>
@@ -1241,79 +1244,62 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
 
         <div class="srv-list" style="flex-direction:column;gap:14px;width:100%">
           <div class="card">
-            <div class="chd" style="padding-bottom:11px"><h3 style="font-size:12.5px"><span class="zh">问卷收件箱</span><span class="en">Inbox</span></h3><span class="pill" style="background:#F2F6FD;color:#0B3A82">4</span><button onClick="{{ srvImportOpen }}" style="margin-left:auto;font-size:11px;font-weight:700;padding:5px 11px;border-radius:7px;background:#0B3A82;color:#fff"><span class="zh">+ 导入新问卷</span><span class="en">+ Import survey</span></button></div>
-            <div style="display:{{ srvImpShow }};margin:0 13px;border:1px solid #D7E3F6;background:#F7FAFD;border-radius:11px;padding:13px 15px;flex-direction:column;gap:11px">
-              <div style="display:flex;align-items:center;gap:9px">
-                <span style="font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#0B3A82"><span class="zh">AI 解析·把看不懂的原件变成能答的卷</span><span class="en">AI parsing · raw file → answerable survey</span></span>
-                <button onClick="{{ srvImportClose }}" style="margin-left:auto;font-size:11px;font-weight:700;color:#8397A0">✕</button>
+            <div class="chd" style="padding-bottom:11px"><h3 style="font-size:12.5px"><span class="zh">问卷收件箱</span><span class="en">Inbox</span></h3><span class="pill" style="background:#F2F6FD;color:#0B3A82">4</span>
+              <div style="display:flex;align-items:center;gap:16px;margin-left:20px;padding-left:20px;border-left:1px solid #E6EBEE">
+                <sc-for list="{{ srvKpis }}" as="k" hint-placeholder-count="4">
+                  <div style="display:flex;align-items:baseline;gap:5px;white-space:nowrap">
+                    <span style="font-family:Manrope;font-size:15px;font-weight:800;letter-spacing:-.02em;color:{{ k.c }}">{{ k.v }}</span>
+                    <span style="font-size:10px;color:#8397A0;font-weight:600"><span class="zh">{{ k.zh }}</span><span class="en">{{ k.en }}</span></span>
+                  </div>
+                </sc-for>
               </div>
-              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
-                <div style="border:1px solid {{ s1bd }};background:{{ s1bg }};border-radius:10px;padding:11px 12px">
-                  <div style="display:flex;align-items:center;gap:7px"><span style="width:18px;height:18px;border-radius:5px;background:{{ s1dot }};color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;font-family:Manrope">{{ s1mark }}</span><b style="font-size:11.5px"><span class="zh">选客户 + 上传原件</span><span class="en">Customer + file</span></b></div>
-                  <div style="font-size:9.5px;color:#8397A0;font-weight:600;margin-top:8px"><span class="zh">所属客户</span><span class="en">Customer</span></div>
-                  <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:4px">
-                    <sc-for list="{{ srvImpCusts }}" as="u" hint-placeholder-count="4">
-                      <button onClick="{{ u.pick }}" style="font-size:10px;font-weight:{{ u.fw }};padding:3px 8px;border-radius:5px;background:{{ u.bg }};border:1px solid {{ u.bd }};color:{{ u.fg }}">{{ u.label }}</button>
-                    </sc-for>
-                  </div>
-                  <div style="font-size:9.5px;color:#8397A0;font-weight:600;margin-top:9px"><span class="zh">原始文件</span><span class="en">Source file</span></div>
-                  <div onClick="{{ srvImpDrop }}" style="margin-top:4px;border:1.5px dashed {{ srvImpDropBd }};background:{{ srvImpDropBg }};border-radius:9px;padding:11px 10px;text-align:center;cursor:pointer;transition:.14s" style-hover="border-color:#0B3A82;background:#F2F6FD">
-                    <div style="font-size:15px;color:#0B3A82;line-height:1">⤓</div>
-                    <div style="font-size:10.5px;font-weight:700;color:#0B3A82;margin-top:4px">{{ srvImpFileLabel }}</div>
-                    <div style="font-size:9.5px;color:#8397A0;margin-top:2px">{{ srvImpFileSub }}</div>
-                  </div>
-                  <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:7px">
-                    <span style="font-size:9.5px;font-weight:600;padding:2px 6px;border-radius:4px;background:#fff;border:1px solid #E1E7EA;color:#8397A0">Excel</span>
-                    <span style="font-size:9.5px;font-weight:600;padding:2px 6px;border-radius:4px;background:#fff;border:1px solid #E1E7EA;color:#8397A0">PDF</span>
-                    <span style="font-size:9.5px;font-weight:600;padding:2px 6px;border-radius:4px;background:#fff;border:1px solid #E1E7EA;color:#8397A0"><span class="zh">邮件附件</span><span class="en">Email</span></span>
-                    <span style="font-size:9.5px;font-weight:600;padding:2px 6px;border-radius:4px;background:#fff;border:1px solid #E1E7EA;color:#8397A0"><span class="zh">门户链接</span><span class="en">Portal</span></span>
-                  </div>
-                </div>
-                <div style="border:1px solid {{ s2bd }};background:{{ s2bg }};border-radius:10px;padding:11px 12px">
-                  <div style="display:flex;align-items:center;gap:7px"><span style="width:18px;height:18px;border-radius:5px;background:{{ s2dot }};color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;font-family:Manrope">{{ s2mark }}</span><b style="font-size:11.5px"><span class="zh">AI 解析中</span><span class="en">AI parsing</span></b></div>
-                  <div style="display:flex;flex-direction:column;gap:4px;margin-top:8px;font-size:10.5px;color:#33484F">
-                    <div><span class="zh">识别 </span><span class="en">Found </span><b style="font-family:Manrope">112</b><span class="zh"> 题</span><span class="en"> questions</span></div>
-                    <div><b style="font-family:Manrope">5</b><span class="zh"> 大支柱归类</span><span class="en"> pillars mapped</span></div>
-                    <div><b style="font-family:Manrope;color:#B0291D">17</b><span class="zh"> 项最低要求（红线）</span><span class="en"> minimum requirements</span></div>
-                    <div><b style="font-family:Manrope">3</b><span class="zh"> 类证据需求</span><span class="en"> evidence types</span></div>
-                    <div style="margin-top:3px;padding:6px 8px;background:#FFF7EC;border:1px solid #F2D9AE;border-radius:6px;font-size:10px;color:#A3620F;line-height:1.45"><b style="font-family:Manrope">6</b><span class="zh"> 题低置信 / 未识别 → 已挑出待人工确认</span><span class="en"> low-confidence → flagged for human review</span></div>
-                  </div>
-                </div>
-                <div style="border:1px solid {{ s3bd }};background:{{ s3bg }};border-radius:10px;padding:11px 12px">
-                  <div style="display:flex;align-items:center;gap:7px"><span style="width:18px;height:18px;border-radius:5px;background:{{ s3dot }};color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;font-family:Manrope">{{ s3mark }}</span><b style="font-size:11.5px"><span class="zh">自动预填</span><span class="en">Auto pre-fill</span></b></div>
-                  <div style="display:flex;align-items:baseline;gap:4px;margin-top:7px"><span style="font-family:Manrope;font-size:20px;font-weight:800;color:#0B3A82">83</span><span style="font-size:11px;color:#5A6E75">/ 112</span></div>
-                  <div style="display:flex;flex-direction:column;gap:3px;margin-top:5px;font-size:10px;color:#5A6E75">
-                    <div><span class="zh">平台直出</span><span class="en">Platform</span> <b style="font-family:Manrope;color:#045B75">36</b></div>
-                    <div><span class="zh">证据库引用</span><span class="en">Evidence</span> <b style="font-family:Manrope;color:#0B3A82">27</b></div>
-                    <div><span class="zh">历史复用</span><span class="en">History</span> <b style="font-family:Manrope;color:#5B3FA8">20</b></div>
-                  </div>
-                </div>
+              <button onClick="{{ srvImportOpen }}" style="margin-left:auto;font-size:11px;font-weight:700;padding:5px 11px;border-radius:7px;background:#0B3A82;color:#fff;white-space:nowrap"><span class="zh">+ 导入新问卷</span><span class="en">+ Import survey</span></button></div>
+            <div style="padding:2px 16px 0">
+              <div style="display:grid;grid-template-columns:176px minmax(0,1fr) 86px 58px 70px 62px 152px 74px 74px;gap:12px;align-items:center;padding:8px 8px;border-bottom:1px solid #E6EBEE;font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;font-weight:700;color:#9AABB1;white-space:nowrap">
+                <span><span class="zh">客户</span><span class="en">Customer</span></span>
+                <span><span class="zh">问卷与来源</span><span class="en">Survey &amp; source</span></span>
+                <span><span class="zh">状态</span><span class="en">Status</span></span>
+                <span style="text-align:right"><span class="zh">题量</span><span class="en">Items</span></span>
+                <span style="text-align:right"><span class="zh">当前得分</span><span class="en">Score</span></span>
+                <span style="text-align:right"><span class="zh">剩余</span><span class="en">Left</span></span>
+                <span><span class="zh">完成度</span><span class="en">Progress</span></span>
+                <span style="text-align:right"><span class="zh">收到 / 截止</span><span class="en">Rcvd / due</span></span>
+                <span style="text-align:right"><span class="zh">导出</span><span class="en">Export</span></span>
               </div>
-              <div style="display:flex;align-items:center;gap:11px">
-                <div style="flex:1;height:6px;border-radius:3px;background:#E4EBF5;overflow:hidden"><div style="width:{{ srvImpPct }};height:100%;background:linear-gradient(90deg,#0B3A82,#4B7BC4);transition:.3s"></div></div>
-                <button onClick="{{ srvImportNext }}" style="padding:7px 14px;border-radius:8px;background:{{ srvImpBtnBg }};color:#fff;font-size:11.5px;font-weight:700;white-space:nowrap">{{ srvImpBtn }}</button>
-              </div>
-            </div>
-            <div style="padding:10px 13px 13px;display:flex;flex-direction:column;gap:8px">
               <sc-for list="{{ srvInbox }}" as="i" hint-placeholder-count="4">
-                <div class="rowlink" onClick="{{ i.pick }}" style="border:1px solid {{ i.bd }};background:{{ i.bg }};border-radius:10px;padding:10px 12px">
-                  <div style="display:flex;align-items:center;gap:6px">
-                    <span style="font-size:8.5px;font-weight:800;padding:1px 6px;border-radius:4px;background:{{ i.curBg }};color:{{ i.curFg }}">{{ i.curLabel }}</span>
-                    <b style="font-size:11.5px">{{ i.cust }}</b>
-                    <span style="display:{{ i.grpShow }};align-items:center;font-size:9px;font-weight:700;padding:1px 6px;border-radius:4px;background:#EDE7FB;color:#5B3FA8">{{ i.grpLabel }}</span>
-                    <span style="margin-left:auto;font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;background:{{ i.stBg }};color:{{ i.stFg }};white-space:nowrap">{{ i.status }}</span>
+                <div class="rowlink" onClick="{{ i.pick }}" style="display:grid;grid-template-columns:176px minmax(0,1fr) 86px 58px 70px 62px 152px 74px 74px;gap:12px;align-items:center;padding:9px 8px;border-bottom:1px dashed #E6EBEE;border-left:3px solid {{ i.edge }};background:{{ i.bg }};border-radius:7px;white-space:nowrap">
+                  <div style="display:flex;align-items:center;gap:8px;min-width:0">
+                    <span style="width:24px;height:24px;border-radius:7px;background:{{ i.avBg }};color:{{ i.avFg }};display:flex;align-items:center;justify-content:center;font-family:Manrope;font-size:11px;font-weight:800;flex-shrink:0">{{ i.avatar }}</span>
+                    <span style="min-width:0;overflow:hidden;text-overflow:ellipsis"><b style="font-size:12px">{{ i.cust }}</b></span>
+                    <span style="display:{{ i.grpShow }};align-items:center;font-size:8.5px;font-weight:700;padding:1px 5px;border-radius:4px;background:#EDE7FB;color:#5B3FA8;flex-shrink:0">×{{ i.grpN }}</span>
+                    <span style="display:{{ i.curShow }};align-items:center;font-size:8.5px;font-weight:800;padding:1px 5px;border-radius:4px;background:#0B3A82;color:#fff;flex-shrink:0"><span class="zh">当前</span><span class="en">Now</span></span>
                   </div>
-                  <div style="font-size:11px;color:#33484F;font-weight:600;margin-top:4px">{{ i.type }}</div>
-                  <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:#8397A0;margin-top:4px"><span style="font-size:9px">✉</span><span class="zh">来源：</span><span class="en">Source: </span>{{ i.src }}</div>
-                  <div style="display:flex;align-items:center;gap:7px;margin-top:6px">
-                    <div style="flex:1;height:5px;border-radius:3px;background:#EEF2F4;overflow:hidden"><div style="width:{{ i.w }};height:100%;background:{{ i.bar }};border-radius:3px"></div></div>
-                    <span style="font-family:Manrope;font-size:9.5px;font-weight:700;color:#5A6E75">{{ i.pct }}</span>
+                  <div style="min-width:0;display:flex;align-items:baseline;gap:8px;overflow:hidden">
+                    <b style="font-size:11.5px;color:#0F1E24;flex-shrink:0">{{ i.type }}</b>
+                    <span style="font-size:10px;color:#9AABB1;min-width:0;overflow:hidden;text-overflow:ellipsis">✉ {{ i.src }}</span>
                   </div>
-                  <div style="display:flex;justify-content:space-between;font-size:9.5px;color:#9AABB1;font-family:Manrope;margin-top:4px"><span>{{ i.received }}</span><span><span class="zh">截止 </span><span class="en">due </span>{{ i.due }}</span></div>
-                  <div style="display:{{ i.ctaShow }};align-items:center;gap:5px;margin-top:7px;padding-top:7px;border-top:1px dashed #D7E3F6;font-size:10.5px;font-weight:700;color:#0B3A82"><span class="zh">点击进入作答 →</span><span class="en">Open to answer →</span></div>
+                  <span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:5px;background:{{ i.stBg }};color:{{ i.stFg }};width:fit-content">{{ i.status }}</span>
+                  <span style="font-family:Manrope;font-size:11.5px;font-weight:700;color:#33484F;text-align:right">{{ i.qty }}</span>
+                  <span style="font-family:Manrope;font-size:11.5px;font-weight:800;color:{{ i.scoreC }};text-align:right">{{ i.score }}</span>
+                  <span style="font-family:Manrope;font-size:11.5px;font-weight:800;color:{{ i.dueC }};text-align:right">{{ i.left }}</span>
+                  <div style="display:flex;align-items:center;gap:7px">
+                    <div style="flex:1;height:6px;border-radius:3px;background:#EEF2F4;overflow:hidden"><div style="width:{{ i.w }};height:100%;background:{{ i.bar }};border-radius:3px"></div></div>
+                    <span style="font-family:Manrope;font-size:10px;font-weight:800;color:#5A6E75;width:28px;text-align:right">{{ i.pct }}</span>
+                  </div>
+                  <div style="text-align:right;line-height:1.3">
+                    <div style="font-family:Manrope;font-size:9.5px;color:#9AABB1">{{ i.received }}</div>
+                    <div style="font-family:Manrope;font-size:9.5px;color:{{ i.dueC }};font-weight:600">{{ i.due }}</div>
+                  </div>
+                  <div style="display:flex;gap:4px;justify-content:flex-end">
+                    <button onClick="{{ i.dlRaw }}" style="font-size:9.5px;font-weight:700;padding:3px 7px;border-radius:5px;background:#fff;border:1px solid #D5DFE3;color:#5A6E75"><span class="zh">原件</span><span class="en">Raw</span></button>
+                    <button onClick="{{ i.dlFilled }}" style="font-size:9.5px;font-weight:700;padding:3px 7px;border-radius:5px;background:{{ i.dlBg }};border:1px solid {{ i.dlBd }};color:{{ i.dlFg }}"><span class="zh">已答</span><span class="en">Filled</span></button>
+                  </div>
                 </div>
               </sc-for>
-              <div style="font-size:10px;color:#9AABB1;line-height:1.5"><span class="zh">客户名已匿名。四类来源：客户自有指数问卷 / 行业 SAQ / 冲突矿产模板 / 自定义卷。</span><span class="en">Customer names anonymized. Four source types.</span></div>
+              <div style="display:flex;align-items:center;gap:10px;padding:10px 8px 13px;font-size:10px;color:#9AABB1;line-height:1.5">
+                <span style="flex:1"><span class="zh">按紧急度排序 · 剩余 ≤14 天描红。客户名可在顶栏切换真实名 / 匿名。四类来源：客户自有指数问卷 / 行业 SAQ / 冲突矿产模板 / 自定义卷。</span><span class="en b">Sorted by urgency; ≤14 days left is flagged red. Toggle real / anonymized names in the top bar. Four source types: customer index survey, industry SAQ, conflict-minerals template, custom form.</span></span>
+                <button onClick="{{ srvOpenCur }}" style="font-size:10.5px;font-weight:700;color:#0B3A82;white-space:nowrap;flex-shrink:0"><span class="zh">进入当前卷 · 从校卷开始 →</span><span class="en">Open the current survey →</span></button>
+              </div>
             </div>
           </div>
         </div>
@@ -1424,13 +1410,141 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
             </div>
 
       </div>
-      <div class="tabbar" style="display:flex;align-items:center;gap:4px;background:#fff;border:1px solid #E1E7EA;border-radius:11px;padding:5px 6px">
-        <button class="tabb" onClick="{{ srvTabAnswer }}" style="background:{{ tabAnsBg }};color:{{ tabAnsFg }};font-weight:{{ tabAnsFw }}"><span class="zh">作答</span><span class="en">Answer</span><span style="font-size:9.5px;font-weight:800;padding:1px 6px;border-radius:5px;background:{{ tabAnsBadgeBg }};color:{{ tabAnsBadgeFg }}">{{ srvManualN }}</span></button>
-        <button class="tabb" onClick="{{ srvTabScore }}" style="background:{{ tabScoBg }};color:{{ tabScoFg }};font-weight:{{ tabScoFw }}"><span class="zh">得分与传导</span><span class="en">Score & cascade</span><span style="font-size:9.5px;font-weight:800;padding:1px 6px;border-radius:5px;background:{{ tabScoBadgeBg }};color:{{ tabScoBadgeFg }}">26</span></button>
-        <span style="margin-left:auto;font-size:11px;color:#8397A0;padding-right:8px"><span class="zh">同一份卷的两个阶段：先答完，再看得分与传导</span><span class="en">Two stages of the same survey</span></span>
+      <div style="display:flex;align-items:stretch;gap:0;background:#fff;border:1px solid #E1E7EA;border-radius:12px;padding:6px">
+        <sc-for list="{{ srvPhases }}" as="ph" hint-placeholder-count="3">
+          <div style="display:flex;align-items:center;gap:0;flex:{{ ph.flex }};min-width:0">
+            <button onClick="{{ ph.go }}" style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;text-align:left;padding:8px 13px;border-radius:9px;background:{{ ph.bg }}">
+              <span style="width:24px;height:24px;border-radius:50%;background:{{ ph.dotBg }};color:{{ ph.dotFg }};border:1.5px solid {{ ph.dotBd }};display:flex;align-items:center;justify-content:center;font-family:Manrope;font-size:10.5px;font-weight:800;flex-shrink:0">{{ ph.mark }}</span>
+              <span style="min-width:0">
+                <span style="display:block;font-size:12.5px;font-weight:{{ ph.fw }};color:{{ ph.fg }};white-space:nowrap"><span class="zh">{{ ph.zh }}</span><span class="en">{{ ph.en }}</span></span>
+                <span style="display:block;font-size:10px;color:{{ ph.subFg }};white-space:nowrap;margin-top:1px"><span class="zh">{{ ph.subZh }}</span><span class="en">{{ ph.subEn }}</span></span>
+              </span>
+              <span style="display:{{ ph.badgeShow }};margin-left:auto;font-family:Manrope;font-size:10px;font-weight:800;padding:2px 8px;border-radius:5px;background:{{ ph.badgeBg }};color:{{ ph.badgeFg }};flex-shrink:0">{{ ph.badge }}</span>
+            </button>
+            <span style="display:{{ ph.arrowShow }};color:#C4D0D5;font-size:12px;flex-shrink:0;padding:0 2px">›</span>
+          </div>
+        </sc-for>
       </div>
 
+      <div class="srv-check" style="flex-direction:column;gap:14px;width:100%">
+        <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;background:#fff;border:1px solid #E1E7EA;border-radius:11px;padding:10px 14px;position:sticky;top:70px;z-index:30;box-shadow:0 -14px 0 0 #F5F7F8,0 10px 18px -14px rgba(15,30,36,.45)">
+          <span style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#9AABB1"><span class="zh">校卷操作</span><span class="en">Actions</span></span>
+          <button onClick="{{ srvLock }}" style="padding:8px 14px;border-radius:8px;background:{{ srvLockBg }};color:#fff;font-size:11.5px;font-weight:700;white-space:nowrap">{{ srvLockLabel }}</button>
+          <button onClick="{{ srvSkipCheck }}" style="padding:8px 13px;border-radius:8px;background:#fff;border:1px solid #D5DFE3;color:#5A6E75;font-size:11.5px;font-weight:600;white-space:nowrap"><span class="zh">题面无误，直接作答 →</span><span class="en">Looks right — skip to answering →</span></button>
+          <span style="width:1px;height:20px;background:#E6EBEE"></span>
+          <button onClick="{{ srvAllOK }}" style="padding:8px 13px;border-radius:8px;background:#F2F6FD;border:1px solid #D7E3F6;color:#0B3A82;font-size:11.5px;font-weight:700;white-space:nowrap"><span class="zh">把当前列表全部标为题面正确</span><span class="en">Mark everything shown as correct</span></button>
+          <span style="margin-left:auto;font-size:10.5px;color:#8397A0;white-space:nowrap"><span class="zh">已核对 {{ srvChkOK }} / 112 · 存疑 {{ srvChkIssue }}</span><span class="en">{{ srvChkOK }}/112 reviewed · {{ srvChkIssue }} flagged</span></span>
+        </div>
+
+        <div class="card">
+          <div class="chd"><h3><span class="zh">解析质检 · 这份卷读对了吗</span><span class="en">Parse QC</span></h3><span class="pill" style="background:#FFF7EC;color:#A3620F">{{ srvChkIssue }} <span class="zh">题存疑</span><span class="en">flagged</span></span><span style="margin-left:auto;font-size:11px;color:#8397A0"><span class="zh">这一步只看题目本身，不看答案</span><span class="en">This step is about the questions, not the answers</span></span></div>
+          <div style="padding:12px 16px 16px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+            <sc-for list="{{ srvQc }}" as="c" hint-placeholder-count="4">
+              <button onClick="{{ c.pick }}" style="text-align:left;padding:12px 13px;border-radius:11px;background:{{ c.bg }};border:1px solid {{ c.bd }}">
+                <div style="display:flex;align-items:baseline;gap:6px">
+                  <span style="font-family:Manrope;font-size:20px;font-weight:800;letter-spacing:-.02em;color:{{ c.c }}">{{ c.n }}</span>
+                  <span style="font-size:10px;font-weight:700;color:{{ c.c }}">{{ c.mark }}</span>
+                </div>
+                <div style="font-size:11px;font-weight:700;color:#33484F;margin-top:4px;line-height:1.35"><span class="zh">{{ c.zh }}</span><span class="en b">{{ c.en }}</span></div>
+                <div style="font-size:9.5px;color:#8397A0;margin-top:3px;line-height:1.4"><span class="zh">{{ c.noteZh }}</span><span class="en b">{{ c.noteEn }}</span></div>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="chd"><h3><span class="zh">题面核对</span><span class="en">Question review</span></h3><span class="pill" style="background:#F2F6FD;color:#0B3A82">{{ srvChkLabel }}</span><span style="margin-left:auto;font-size:11px;color:#8397A0">{{ srvChkCount }} <span class="zh">题</span><span class="en">items</span></span></div>
+          <div style="padding:11px 14px 14px;display:flex;flex-direction:column;gap:9px">
+            <sc-for list="{{ srvChkRows }}" as="r" hint-placeholder-count="6">
+              <div style="border:1px solid {{ r.bd }};border-left:3px solid {{ r.edge }};background:{{ r.bg }};border-radius:10px;padding:11px 13px">
+                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                  <b style="font-family:Manrope;font-size:11.5px;color:#0B3A82">{{ r.no }}</b>
+                  <span style="font-size:10px;font-weight:600;color:#5A6E75">{{ r.sub }}</span>
+                  <span style="font-size:9.5px;color:#9AABB1">{{ r.pillar }}</span>
+                  <sc-for list="{{ r.flags }}" as="fg" hint-placeholder-count="0">
+                    <span style="font-size:9.5px;font-weight:800;padding:2px 8px;border-radius:5px;background:{{ fg.bg }};color:{{ fg.fg }};border:1px solid {{ fg.bd }}"><span class="zh">{{ fg.zh }}</span><span class="en">{{ fg.en }}</span></span>
+                  </sc-for>
+                  <span style="margin-left:auto;font-size:9.5px;font-weight:800;padding:2px 9px;border-radius:5px;background:{{ r.stBg }};color:{{ r.stFg }};flex-shrink:0"><span class="zh">{{ r.stZh }}</span><span class="en">{{ r.stEn }}</span></span>
+                </div>
+                <div style="display:{{ r.readShow }};font-size:12.5px;color:#0F1E24;line-height:1.6;margin-top:7px">{{ r.text }}</div>
+                <div style="display:{{ r.editShow }};flex-direction:column;gap:5px;margin-top:8px">
+                  <span style="font-size:9.5px;font-weight:700;color:#5B3FA8"><span class="zh">修订后的题面（仅内部展示 · 导出给客户时仍用原文）</span><span class="en">Revised wording (internal only)</span></span>
+                  <textarea value="{{ r.draft }}" onChange="{{ r.onEdit }}" rows="2" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid #E3DAF7;background:#FCFBFE;font-size:12px;line-height:1.6;outline:none"></textarea>
+                </div>
+                <div style="display:{{ r.origShow }};margin-top:7px;padding:8px 11px;background:#FAFCFC;border:1px solid #EDF1F3;border-left:2px solid #C4D0D5;border-radius:0 8px 8px 0">
+                  <div style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#9AABB1"><span class="zh">客户原文</span><span class="en">Customer original</span></div>
+                  <div style="font-size:11px;color:#5A6E75;line-height:1.6;margin-top:3px">{{ r.orig }}</div>
+                  <div style="font-size:11px;color:#8397A0;line-height:1.6;margin-top:4px">{{ r.origEn }}</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:9px;padding-top:9px;border-top:1px dashed #EDF1F3">
+                  <button onClick="{{ r.ok }}" style="padding:5px 12px;border-radius:7px;font-size:11.5px;font-weight:700;background:{{ r.okBg }};border:1px solid {{ r.okBd }};color:{{ r.okFg }}"><span class="zh">题面正确</span><span class="en">Wording is right</span></button>
+                  <button onClick="{{ r.toggleEdit }}" style="padding:5px 12px;border-radius:7px;font-size:11.5px;font-weight:600;background:#fff;border:1px solid #D5DFE3;color:#5A6E75">{{ r.editLabel }}</button>
+                  <button onClick="{{ r.toggleOrig }}" style="font-size:10.5px;font-weight:600;color:#8397A0;padding:5px 4px">{{ r.origLabel }}</button>
+                  <span style="margin-left:auto;font-size:10px;color:#9AABB1">{{ r.hint }}</span>
+                </div>
+              </div>
+            </sc-for>
+            <div style="font-size:10.5px;color:#8397A0;text-align:center;padding:4px">{{ srvChkMore }}</div>
+          </div>
+        </div>
+      </div>
       <div class="srv-score" style="flex-direction:column;gap:14px;width:100%">
+        <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;background:#fff;border:1px solid #E1E7EA;border-radius:11px;padding:10px 14px;position:sticky;top:70px;z-index:30;box-shadow:0 -14px 0 0 #F5F7F8,0 10px 18px -14px rgba(15,30,36,.45)">
+          <span style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#9AABB1"><span class="zh">交卷操作</span><span class="en">Actions</span></span>
+          <button onClick="{{ subFull }}" style="padding:8px 15px;border-radius:8px;background:{{ subFullBg }};color:#fff;font-size:11.5px;font-weight:700;white-space:nowrap">{{ subFullLabel }}</button>
+          <button onClick="{{ subPartial }}" style="display:{{ subPartialShow }};padding:8px 13px;border-radius:8px;background:#fff;border:1px solid #F2D9AE;color:#A3620F;font-size:11.5px;font-weight:700;white-space:nowrap">{{ subPartialLabel }}</button>
+          <span style="width:1px;height:20px;background:#E6EBEE"></span>
+          <button onClick="{{ srvExportFilled }}" style="padding:8px 13px;border-radius:8px;background:#F2FAF7;border:1px solid #BFE3D6;color:#0B5B4A;font-size:11.5px;font-weight:700;white-space:nowrap">↓ <span class="zh">按客户模板导出（含作答）</span><span class="en">Export in customer template</span></button>
+          <button onClick="{{ srvExportRaw }}" style="padding:8px 13px;border-radius:8px;background:#fff;border:1px solid #D5DFE3;color:#5A6E75;font-size:11.5px;font-weight:600;white-space:nowrap">↓ <span class="zh">导出原始问卷</span><span class="en">Export the original</span></button>
+          <span style="margin-left:auto;font-size:10.5px;font-weight:700;color:{{ subGateFg }};white-space:nowrap"><span class="zh">{{ subGateZh }}</span><span class="en">{{ subGateEn }}</span></span>
+        </div>
+
+        <div class="card">
+          <div class="chd"><h3><span class="zh">提交前校验 · 还差什么才能交</span><span class="en">Pre-submission checks</span></h3><span class="pill" style="background:{{ subPillBg }};color:{{ subPillFg }}">{{ subBlockN }} <span class="zh">项阻塞</span><span class="en">blocking</span></span><span style="margin-left:auto;font-size:11px;color:#8397A0"><span class="zh">点任一项跳回作答处理</span><span class="en">Click any row to jump back and fix it</span></span></div>
+          <div style="padding:12px 16px 16px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+            <sc-for list="{{ subChecks }}" as="c" hint-placeholder-count="6">
+              <button onClick="{{ c.go }}" style="text-align:left;padding:12px 13px;border-radius:11px;background:{{ c.bg }};border:1px solid {{ c.bd }}">
+                <div style="display:flex;align-items:center;gap:7px">
+                  <span style="font-family:Manrope;font-size:20px;font-weight:800;letter-spacing:-.02em;color:{{ c.c }}">{{ c.n }}</span>
+                  <span style="font-size:11px;font-weight:800;color:{{ c.c }}">{{ c.mark }}</span>
+                  <span style="margin-left:auto;font-size:9px;font-weight:800;padding:2px 7px;border-radius:5px;background:{{ c.tagBg }};color:{{ c.tagFg }}"><span class="zh">{{ c.tagZh }}</span><span class="en">{{ c.tagEn }}</span></span>
+                </div>
+                <div style="font-size:11.5px;font-weight:700;color:#33484F;margin-top:5px;line-height:1.35"><span class="zh">{{ c.zh }}</span><span class="en b">{{ c.en }}</span></div>
+                <div style="font-size:9.5px;color:#8397A0;margin-top:3px;line-height:1.45"><span class="zh">{{ c.noteZh }}</span><span class="en b">{{ c.noteEn }}</span></div>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div class="card" style="display:{{ waitCardShow }}">
+          <div class="chd"><h3><span class="zh">等回明细 · 卡在别人手上的题</span><span class="en">Waiting on others</span></h3><span class="pill" style="background:#F3EFFC;color:#5B3FA8">{{ waitN }}</span><span style="margin-left:auto;font-size:11px;color:#8397A0"><span class="zh">两个出口：等得起就催，等不起就兜底作答</span><span class="en">Two exits: chase it, or answer with a fallback</span></span></div>
+          <div style="padding:6px 16px 14px">
+            <div style="display:grid;grid-template-columns:60px minmax(0,1fr) 150px 96px 108px 196px;gap:12px;align-items:center;padding:8px 6px;border-bottom:1px solid #E6EBEE;font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;font-weight:700;color:#9AABB1;white-space:nowrap">
+              <span>No.</span><span><span class="zh">题目</span><span class="en">Question</span></span><span><span class="zh">等谁</span><span class="en">Waiting on</span></span><span><span class="zh">承诺回期</span><span class="en">Promised</span></span><span><span class="zh">状态</span><span class="en">Status</span></span><span style="text-align:right"><span class="zh">出口</span><span class="en">Exit</span></span>
+            </div>
+            <sc-for list="{{ waitRows }}" as="w" hint-placeholder-count="2">
+              <div style="display:grid;grid-template-columns:60px minmax(0,1fr) 150px 96px 108px 196px;gap:12px;align-items:center;padding:10px 6px;border-bottom:1px dashed #E6EBEE">
+                <b style="font-family:Manrope;font-size:11.5px;color:#0B3A82">{{ w.no }}</b>
+                <span style="font-size:11.5px;color:#33484F;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ w.q }}</span>
+                <span style="font-size:11px;color:#5A6E75;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ w.to }}</span>
+                <span style="font-family:Manrope;font-size:11px;color:{{ w.dueC }};font-weight:700">{{ w.due }}</span>
+                <span style="font-size:9.5px;font-weight:800;padding:2px 8px;border-radius:5px;background:{{ w.stBg }};color:{{ w.stFg }};width:fit-content">{{ w.st }}</span>
+                <div style="display:flex;gap:6px;justify-content:flex-end">
+                  <button onClick="{{ w.chase }}" style="font-size:10.5px;font-weight:700;padding:5px 10px;border-radius:7px;background:#F3EFFC;border:1px solid #E3DAF7;color:#5B3FA8;white-space:nowrap"><span class="zh">催办 / 改期</span><span class="en">Chase</span></button>
+                  <button onClick="{{ w.fallback }}" style="font-size:10.5px;font-weight:700;padding:5px 10px;border-radius:7px;background:#FFF7EC;border:1px solid #F2D9AE;color:#A3620F;white-space:nowrap"><span class="zh">兜底作答</span><span class="en">Fallback</span></button>
+                </div>
+              </div>
+            </sc-for>
+            <div style="font-size:10px;color:#9AABB1;line-height:1.55;padding-top:10px"><span class="zh">兜底作答 = 以「暂无数据 / 部分数据」如实作答，并附行动计划与预计补交时间 —— 这是 SSI / SAQ 的标准做法，比空着或瞎填更能保住客户信任。</span><span class="en b">Fallback = answer honestly with “no data yet / partial”, plus an action plan and a promised date — standard practice in SSI/SAQ, and better than a blank or a guess.</span></div>
+          </div>
+        </div>
+
+        <div style="display:{{ receiptShow }};flex-direction:column;gap:0;background:#0B5B4A;border-radius:12px;padding:16px 18px;color:#fff">
+          <div style="font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#9BE3C8"><span class="zh">提交回执</span><span class="en">Submission receipt</span></div>
+          <div style="font-size:15px;font-weight:800;margin-top:5px">{{ receiptTitle }}</div>
+          <div style="font-size:11.5px;color:#CFE9DF;line-height:1.65;margin-top:6px">{{ receiptBody }}</div>
+        </div>
+
         <div style="background:#0F1E24;border-radius:12px;padding:14px 18px;color:#fff">
           <div style="font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#7ED0B4"><span class="zh">收口</span><span class="en">The point</span></div>
           <div style="font-size:13px;line-height:1.6;margin-top:5px;color:#E8EEF0"><span class="zh">答完之后：快速整改能到 <b style="color:#7ED0B4;font-family:Manrope">86.4</b>；多条缺口的根子在供应链——一键传导给供应商。</span><span class="en">Quick fixes take the score to <b style="color:#7ED0B4;font-family:Manrope">86.4</b>. Most remaining gaps sit in the supply chain — cascade them to suppliers in one click.</span></div>
@@ -1512,10 +1626,41 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
       </div>
 
       <div class="srv-answer" style="flex-direction:column;gap:14px;width:100%">
+      <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;background:#fff;border:1px solid #E1E7EA;border-radius:11px;padding:10px 14px;position:sticky;top:70px;z-index:30;box-shadow:0 -14px 0 0 #F5F7F8,0 10px 18px -14px rgba(15,30,36,.45)">
+        <span style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#9AABB1"><span class="zh">本卷操作</span><span class="en">Actions</span></span>
+        <button onClick="{{ srvSubmitReview }}" style="padding:8px 14px;border-radius:8px;background:#0B3A82;color:#fff;font-size:11.5px;font-weight:700;white-space:nowrap"><span class="zh">提交内部复核</span><span class="en">Submit for internal review</span></button>
+        <button onClick="{{ srvSaveDraft }}" style="padding:8px 13px;border-radius:8px;background:#fff;border:1px solid #D5DFE3;color:#33484F;font-size:11.5px;font-weight:600;white-space:nowrap"><span class="zh">保存草稿</span><span class="en">Save draft</span></button>
+        <span style="width:1px;height:20px;background:#E6EBEE"></span>
+        <button onClick="{{ srvExportFilled }}" style="display:flex;align-items:center;gap:6px;padding:8px 13px;border-radius:8px;background:#F2FAF7;border:1px solid #BFE3D6;color:#0B5B4A;font-size:11.5px;font-weight:700;white-space:nowrap">↓ <span class="zh">按客户模板导出（含作答）</span><span class="en">Export in customer template (answered)</span></button>
+        <button onClick="{{ srvExportRaw }}" style="display:flex;align-items:center;gap:6px;padding:8px 13px;border-radius:8px;background:#fff;border:1px solid #D5DFE3;color:#5A6E75;font-size:11.5px;font-weight:600;white-space:nowrap">↓ <span class="zh">导出原始问卷</span><span class="en">Export the original file</span></button>
+        <span style="margin-left:auto;font-size:10.5px;color:#8397A0;white-space:nowrap"><span class="zh">作答自动保存 · 最近 {{ srvSavedAt }}</span><span class="en">Auto-saved · {{ srvSavedAt }}</span></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #E1E7EA;border-radius:11px;padding:11px 15px">
+        <span style="font-size:11.5px;font-weight:700;color:#33484F;white-space:nowrap"><span class="zh">还需你处理 <b style="font-family:Manrope;font-size:15px;color:#A3620F">{{ srvOpenN }}</b> 题</span><span class="en">You still need to handle <b style="font-family:Manrope;font-size:15px;color:#A3620F">{{ srvOpenN }}</b></span></span>
+        <div style="flex:1;display:flex;height:9px;border-radius:5px;overflow:hidden;background:#EEF2F4;min-width:0">
+          <sc-for list="{{ srvBar }}" as="s" hint-placeholder-count="4">
+            <div onClick="{{ s.pick }}" style="width:{{ s.w }};background:{{ s.c }};cursor:pointer"></div>
+          </sc-for>
+        </div>
+        <span style="font-size:10.5px;color:#8397A0;white-space:nowrap"><span class="zh"><b style="font-family:Manrope;color:#1F6B32">{{ srvReadyN }}</b> 题 AI 已填且可信 · 不用你逐题看</span><span class="en"><b style="font-family:Manrope;color:#1F6B32">{{ srvReadyN }}</b> AI-filled and trusted — nothing to do</span></span>
+      </div>
       <div style="display:grid;grid-template-columns:236px 1fr 314px;gap:14px;width:100%;align-items:start">
-          <div class="card" style="position:sticky;top:66px">
-            <div class="chd" style="padding-bottom:11px"><h3 style="font-size:12.5px"><span class="zh">五大支柱</span><span class="en">Five pillars</span></h3></div>
-            <div style="padding:10px 12px 13px;display:flex;flex-direction:column;gap:7px">
+          <div class="card" style="position:sticky;top:136px">
+            <div class="chd" style="padding-bottom:11px"><h3 style="font-size:12.5px"><span class="zh">处理队列</span><span class="en">Work queue</span></h3><span style="margin-left:auto;font-size:10px;color:#8397A0"><span class="zh">每题只归一档</span><span class="en">one bucket each</span></span></div>
+            <div style="padding:10px 12px 4px;display:flex;flex-direction:column;gap:6px">
+              <sc-for list="{{ srvQueue }}" as="k" hint-placeholder-count="5">
+                <button onClick="{{ k.pick }}" style="display:flex;align-items:center;gap:9px;width:100%;text-align:left;border:1px solid {{ k.bd }};background:{{ k.bg }};border-radius:9px;padding:8px 10px;opacity:{{ k.dim }}">
+                  <span style="width:6px;height:6px;border-radius:50%;background:{{ k.c }};flex-shrink:0"></span>
+                  <span style="min-width:0;flex:1">
+                    <span style="display:block;font-size:11.5px;font-weight:{{ k.fw }};color:#0F1E24;line-height:1.3">{{ k.label }}</span>
+                    <span style="display:block;font-size:9.5px;color:#9AABB1;line-height:1.35;margin-top:1px">{{ k.sub }}</span>
+                  </span>
+                  <span style="font-family:Manrope;font-size:14px;font-weight:800;color:{{ k.c }};flex-shrink:0">{{ k.n }}</span>
+                </button>
+              </sc-for>
+            </div>
+            <div class="chd" style="padding-top:11px;padding-bottom:9px;border-top:1px dashed #EDF1F3"><h3 style="font-size:12.5px"><span class="zh">按支柱浏览</span><span class="en">Browse by pillar</span></h3></div>
+            <div style="padding:0 12px 13px;display:flex;flex-direction:column;gap:7px">
               <sc-for list="{{ srvPillars }}" as="p" hint-placeholder-count="6">
                 <div class="rowlink" onClick="{{ p.pick }}" style="border:1px solid {{ p.bd }};background:{{ p.bg }};border-radius:9px;padding:9px 11px">
                   <div style="display:flex;align-items:center;gap:6px">
@@ -1533,7 +1678,7 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
                   </div>
                 </div>
               </sc-for>
-              <div style="font-size:10px;color:#9AABB1;line-height:1.5;margin-top:2px"><span class="zh">红点 = 该支柱存在待处理题。默认只显示「需处理」，避免一次翻 112 题。</span><span class="en">Red dot = pillar has open items. Defaults to Needs action.</span></div>
+              <div style="font-size:10px;color:#9AABB1;line-height:1.5;margin-top:2px"><span class="zh">上面按「下一步该做什么」分档，每题只出现在一处；下面按支柱浏览，用于抽查而不是干活。</span><span class="en b">The queue groups by next action — each item appears once. Pillars are for spot-checking, not for working through.</span></div>
             </div>
           </div>
 
@@ -1555,18 +1700,54 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
                     <span style="display:{{ c.minShow }};font-size:9.5px;font-weight:800;padding:2px 8px;border-radius:5px;background:#FBE9E7;color:#B0291D"><span class="zh">最低要求</span><span class="en">Minimum req.</span></span>
                     <span style="display:{{ c.hollowShow }};align-items:center;gap:4px;font-size:9.5px;font-weight:800;padding:2px 8px;border-radius:5px;background:#FFF3E0;color:#A3620F;border:1px solid #F2D9AE"><span class="zh">空心的"是" · 缺支持信息</span><span class="en">Hollow "Yes" · no evidence</span></span>
                   </div>
-                  <div style="display:{{ c.supShow }};font-size:10.5px;color:#8397A0;line-height:1.5;margin-top:7px;padding-top:7px;border-top:1px dashed #EDF1F3"><b style="color:#5A6E75"><span class="zh">支持信息</span><span class="en">Support</span></b>：{{ c.support }}</div>
+                  <div style="display:{{ c.pendShow }};align-items:flex-start;gap:8px;margin-top:8px;padding:8px 11px;background:#FFF7EC;border:1px solid #F2D9AE;border-radius:8px">
+                    <span style="font-size:11px;color:#A3620F;flex-shrink:0">⚑</span>
+                    <span style="font-size:10.5px;color:#A3620F;line-height:1.5;flex:1"><span class="zh">{{ c.pendZh }}</span><span class="en b">{{ c.pendEn }}</span></span>
+                    <button onClick="{{ c.confirm }}" style="flex-shrink:0;font-size:10.5px;font-weight:800;padding:4px 11px;border-radius:6px;background:#A3620F;color:#fff;white-space:nowrap"><span class="zh">确认这一题</span><span class="en">Confirm</span></button>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:9px;padding-top:9px;border-top:1px dashed #EDF1F3">
+                    <span style="font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9AABB1"><span class="zh">作答</span><span class="en">Answer</span></span>
+                    <button onClick="{{ c.setYes }}" style="min-width:56px;padding:5px 12px;border-radius:7px;font-size:11.5px;font-weight:700;background:{{ c.yBg }};border:1px solid {{ c.yBd }};color:{{ c.yFg }}"><span class="zh">是</span><span class="en">Yes</span></button>
+                    <button onClick="{{ c.setNo }}" style="min-width:56px;padding:5px 12px;border-radius:7px;font-size:11.5px;font-weight:700;background:{{ c.nBg }};border:1px solid {{ c.nBd }};color:{{ c.nFg }}"><span class="zh">否</span><span class="en">No</span></button>
+                    <button onClick="{{ c.setNa }}" style="min-width:66px;padding:5px 12px;border-radius:7px;font-size:11.5px;font-weight:700;background:{{ c.aBg }};border:1px solid {{ c.aBd }};color:{{ c.aFg }}"><span class="zh">不适用</span><span class="en">N/A</span></button>
+                    <span style="display:{{ c.editedShow }};font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:5px;background:#EAF7EA;color:#1F6B32"><span class="zh">已人工修改</span><span class="en">Edited</span></span>
+                    <button onClick="{{ c.naToggle }}" style="display:{{ c.naBtnShow }};align-items:center;gap:5px;font-size:10.5px;font-weight:600;color:#5B3FA8;padding:5px 10px;border-radius:7px;border:1px solid #E3DAF7;background:#FCFBFE"><span class="zh">答不了？</span><span class="en">Can’t answer?</span></button>
+                    <label style="margin-left:auto;display:flex;align-items:center;gap:5px;font-size:10.5px;font-weight:600;color:#5A6E75;padding:5px 10px;border-radius:7px;border:1px dashed #C4D0D5;background:#FAFBFC;cursor:pointer">📎 <span class="zh">附证据</span><span class="en">Evidence</span><input type="file" multiple onChange="{{ c.onFile }}" style="display:none"/></label>
+                  </div>
+                  <div style="display:{{ c.naOpenShow }};flex-direction:column;gap:6px;margin-top:9px;padding:11px 13px;background:#FCFBFE;border:1px solid #E3DAF7;border-radius:9px">
+                    <span style="font-size:10.5px;font-weight:700;color:#5B3FA8"><span class="zh">这题答不了，是因为 —— 选一个，平台会自动分流</span><span class="en">Why can’t you answer it? Pick one and we route it</span></span>
+                    <sc-for list="{{ c.naReasons }}" as="r" hint-placeholder-count="3">
+                      <button onClick="{{ r.pick }}" style="text-align:left;padding:8px 11px;border-radius:8px;background:#fff;border:1px solid #E3DAF7">
+                        <span style="display:block;font-size:11.5px;font-weight:700;color:#3E2A73">{{ r.zh }}</span>
+                        <span style="display:block;font-size:10px;color:#8397A0;margin-top:2px">{{ r.note }}</span>
+                      </button>
+                    </sc-for>
+                  </div>
+                  <div style="display:{{ c.blockShow }};flex-direction:column;gap:7px;margin-top:9px;padding:11px 13px;background:{{ c.blockBg }};border:1px solid #E3DAF7;border-radius:9px">
+                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                      <span style="font-size:9.5px;font-weight:800;padding:2px 9px;border-radius:5px;background:#fff;color:{{ c.blockFg }};border:1px solid currentColor">{{ c.blockSt }}</span>
+                      <span style="display:{{ c.blockToShow }};font-size:10.5px;color:#5A6E75"><span class="zh">对象</span><span class="en">To</span> <b style="color:#33484F">{{ c.blockTo }}</b> · <span class="zh">截止</span><span class="en">due</span> {{ c.blockDue }}</span>
+                      <button onClick="{{ c.blockClear }}" style="margin-left:auto;font-size:10px;font-weight:600;color:#9AABB1"><span class="zh">撤销标记</span><span class="en">Undo</span></button>
+                    </div>
+                    <span style="font-size:11px;color:#4C6169;line-height:1.55"><span class="zh">{{ c.blockZh }}</span><span class="en b">{{ c.blockEn }}</span></span>
+                    <button onClick="{{ c.dispatch }}" style="display:{{ c.dispatchShow }};align-self:flex-start;padding:7px 13px;border-radius:8px;background:#5B3FA8;color:#fff;font-size:11.5px;font-weight:700"><span class="zh">立即下发给供应商 →</span><span class="en">Dispatch to the supplier now →</span></button>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:4px;margin-top:8px">
+                    <span style="font-size:9.5px;font-weight:700;color:#8397A0"><span class="zh">支持信息（客户复核依据）</span><span class="en">Supporting information</span></span>
+                    <textarea value="{{ c.sup }}" onChange="{{ c.onSup }}" rows="2" placeholder="{{ c.supPh }}" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid {{ c.supBd }};background:{{ c.supBg }};font-size:11.5px;line-height:1.55;outline:none"></textarea>
+                    <div style="display:{{ c.filesShow }};flex-wrap:wrap;gap:6px;margin-top:2px">
+                      <sc-for list="{{ c.files }}" as="f" hint-placeholder-count="0">
+                        <span style="display:inline-flex;align-items:center;gap:6px;padding:3px 8px;border-radius:6px;background:#F1F9FC;border:1px solid #CFE9F2;font-size:10px;color:#0B4A5E;max-width:220px"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ f.name }}</span><button onClick="{{ f.remove }}" style="color:#7FA3AE;font-size:11px;flex-shrink:0">✕</button></span>
+                      </sc-for>
+                    </div>
+                  </div>
                 </div>
               </sc-for>
               <div style="font-size:10.5px;color:#8397A0;text-align:center;padding:4px">{{ srvMore }}</div>
-              <div style="display:flex;align-items:center;gap:8px;margin-top:4px;padding-top:11px;border-top:1px dashed #E6EBEE">
-                <button onClick="{{ srvNextBatch }}" style="flex:1;padding:9px;border-radius:9px;background:#0B3A82;color:#fff;font-size:11.5px;font-weight:700"><span class="zh">提交内部复核</span><span class="en">Submit for internal review</span></button>
-                <button onClick="{{ srvNextBatch }}" style="flex:1;padding:9px;border-radius:9px;background:#fff;border:1px solid #D5DFE3;color:#33484F;font-size:11.5px;font-weight:600"><span class="zh">按客户模板导出</span><span class="en">Export in customer template</span></button>
-              </div>
             </div>
           </div>
 
-          <div class="card" style="border-top:2px solid #0B3A82;position:sticky;top:66px">
+          <div class="card" style="border-top:2px solid #0B3A82;position:sticky;top:136px">
             <div class="chd" style="padding-bottom:11px"><h3 style="font-size:12.5px"><span class="zh">AI 作答面板</span><span class="en">AI panel</span></h3><span class="pill" style="background:#F2F6FD;color:#0B3A82">{{ srvSelNo }}</span></div>
             <div style="padding:12px 15px 15px">
               <div style="font-size:11px;color:#0B3A82;font-weight:700;line-height:1.5"><span class="zh">AI 已为你预填并给出依据</span><span class="en">AI pre-filled this and shows why</span></div>
@@ -2146,6 +2327,108 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
         <button onClick="{{ closeDrawer }}" style="margin-left:auto;width:28px;height:28px;border-radius:7px;background:#F3F6F7;color:#4C6169;font-size:15px">✕</button>
       </div>
       <div style="flex:1;overflow-y:auto;padding:18px">
+        <div class="dwd si">
+          <div style="background:linear-gradient(150deg,#F2F6FD,#fff);border:1px solid #D7E3F6;border-radius:12px;padding:14px 16px">
+            <div style="font-size:16px;font-weight:800"><span class="zh">导入新问卷</span><span class="en">Import a new survey</span></div>
+            <div style="font-size:11.5px;color:#33484F;line-height:1.6;margin-top:6px"><span class="zh">把客户发来的原件（Excel / PDF / 邮件附件 / 门户链接）解析成可逐题作答、可计分的卷。全程四步，约 40 秒。</span><span class="en b">Turn the customer’s raw file (Excel, PDF, email attachment or portal link) into an answerable, scoreable survey. Four steps, about 40 seconds.</span></div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:0;margin-top:16px">
+            <sc-for list="{{ siSteps }}" as="p" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;gap:0;flex:{{ p.flex }};min-width:0">
+                <div style="display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0;width:{{ p.w }}">
+                  <span style="width:22px;height:22px;border-radius:50%;background:{{ p.dotBg }};color:{{ p.dotFg }};border:1.5px solid {{ p.dotBd }};display:flex;align-items:center;justify-content:center;font-family:Manrope;font-size:10px;font-weight:800">{{ p.mark }}</span>
+                  <span style="font-size:9.5px;font-weight:{{ p.fw }};color:{{ p.fg }};white-space:nowrap"><span class="zh">{{ p.zh }}</span><span class="en">{{ p.en }}</span></span>
+                </div>
+                <span style="display:{{ p.barShow }};flex:1;height:2px;background:{{ p.barBg }};margin:0 4px 16px;border-radius:2px"></span>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="display:{{ si1Show }};flex-direction:column;gap:14px;margin-top:18px">
+            <div>
+              <div style="font-size:11px;font-weight:700;color:#33484F;margin-bottom:7px"><span class="zh">1 · 这份卷来自哪家客户？</span><span class="en">1 · Which customer sent it?</span></div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px">
+                <sc-for list="{{ srvImpCusts }}" as="u" hint-placeholder-count="4">
+                  <button onClick="{{ u.pick }}" style="font-size:11.5px;font-weight:{{ u.fw }};padding:7px 13px;border-radius:8px;background:{{ u.bg }};border:1px solid {{ u.bd }};color:{{ u.fg }}">{{ u.label }}</button>
+                </sc-for>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:#33484F;margin-bottom:7px"><span class="zh">2 · 上传原件</span><span class="en">2 · Upload the source file</span></div>
+              <div onClick="{{ srvImpDrop }}" style="border:1.5px dashed {{ srvImpDropBd }};background:{{ srvImpDropBg }};border-radius:11px;padding:22px 16px;text-align:center;cursor:pointer">
+                <div style="font-size:20px;color:#0B3A82;line-height:1">⤓</div>
+                <div style="font-size:12px;font-weight:700;color:#0B3A82;margin-top:6px">{{ srvImpFileLabel }}</div>
+                <div style="font-size:10.5px;color:#8397A0;margin-top:3px">{{ srvImpFileSub }}</div>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:9px">
+                <span style="font-size:10px;font-weight:600;padding:3px 8px;border-radius:5px;background:#fff;border:1px solid #E1E7EA;color:#8397A0">Excel .xlsx</span>
+                <span style="font-size:10px;font-weight:600;padding:3px 8px;border-radius:5px;background:#fff;border:1px solid #E1E7EA;color:#8397A0">PDF</span>
+                <span style="font-size:10px;font-weight:600;padding:3px 8px;border-radius:5px;background:#fff;border:1px solid #E1E7EA;color:#8397A0"><span class="zh">邮件附件</span><span class="en">Email attachment</span></span>
+                <span style="font-size:10px;font-weight:600;padding:3px 8px;border-radius:5px;background:#fff;border:1px solid #E1E7EA;color:#8397A0"><span class="zh">客户门户链接</span><span class="en">Portal link</span></span>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:{{ si2Show }};flex-direction:column;gap:12px;margin-top:18px">
+            <div style="display:flex;align-items:center;gap:10px;background:#F7FAFD;border:1px solid #D7E3F6;border-radius:11px;padding:12px 14px">
+              <span style="width:26px;height:26px;border-radius:8px;background:#0B3A82;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">✦</span>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:11.5px;font-weight:700;color:#0B3A82"><span class="zh">AI 正在读原件并逐题结构化</span><span class="en">AI is reading and structuring the file</span></div>
+                <div style="font-size:10.5px;color:#5A6E75;margin-top:2px">{{ srvImpFileLabel }} · {{ siCustLabel }}</div>
+              </div>
+            </div>
+            <sc-for list="{{ siParse }}" as="p" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;gap:10px;padding:10px 13px;background:#fff;border:1px solid #E6EBEE;border-radius:10px">
+                <span style="width:18px;height:18px;border-radius:50%;background:{{ p.bg }};color:{{ p.fg }};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0">✓</span>
+                <span style="font-size:11.5px;color:#33484F;flex:1"><span class="zh">{{ p.zh }}</span><span class="en">{{ p.en }}</span></span>
+                <span style="font-family:Manrope;font-size:12.5px;font-weight:800;color:{{ p.numFg }}">{{ p.n }}</span>
+              </div>
+            </sc-for>
+            <div style="display:flex;align-items:flex-start;gap:9px;background:#FFF7EC;border:1px solid #F2D9AE;border-radius:10px;padding:11px 13px">
+              <span style="font-size:12px;color:#A3620F;flex-shrink:0">⚑</span>
+              <span style="font-size:11px;color:#A3620F;line-height:1.55"><span class="zh"><b>6 题</b>低置信或未能识别 —— 已挑出，进入作答后会排在最前，逐题人工确认后才计入得分。</span><span class="en b"><b>6 items</b> are low-confidence or unrecognised — they are flagged, sorted first in the answering view, and only count towards the score once confirmed.</span></span>
+            </div>
+          </div>
+
+          <div style="display:{{ si3Show }};flex-direction:column;gap:12px;margin-top:18px">
+            <div style="background:#fff;border:1px solid #E6EBEE;border-radius:11px;padding:14px 15px">
+              <div style="display:flex;align-items:baseline;gap:7px">
+                <span style="font-family:Manrope;font-size:30px;font-weight:800;letter-spacing:-.03em;color:#0B3A82;line-height:1">83</span>
+                <span style="font-size:12px;color:#5A6E75;font-weight:600">/ 112 <span class="zh">题已自动预填</span><span class="en">items pre-filled</span></span>
+                <span style="margin-left:auto;font-size:9.5px;font-weight:700;padding:3px 9px;border-radius:5px;background:#EAF7EA;color:#1F6B32">74%</span>
+              </div>
+              <div style="display:flex;height:8px;border-radius:4px;overflow:hidden;margin-top:11px;background:#EEF2F4">
+                <div style="width:32%;background:#045B75"></div><div style="width:24%;background:#0B3A82"></div><div style="width:18%;background:#5B3FA8"></div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:7px;margin-top:11px">
+                <sc-for list="{{ siFill }}" as="f" hint-placeholder-count="4">
+                  <div style="display:flex;align-items:center;gap:9px">
+                    <span style="width:8px;height:8px;border-radius:2px;background:{{ f.c }};flex-shrink:0"></span>
+                    <span style="font-size:11px;color:#33484F;flex:1;min-width:0"><span class="zh">{{ f.zh }}</span><span class="en b">{{ f.en }}</span></span>
+                    <span style="font-family:Manrope;font-size:12px;font-weight:800;color:{{ f.c }};flex-shrink:0">{{ f.n }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:9px;background:#FDF6F5;border:1px solid #E9C9C4;border-radius:10px;padding:11px 13px">
+              <span style="font-size:12px;color:#8A1E14;flex-shrink:0">⚠</span>
+              <span style="font-size:11px;color:#8A1E14;line-height:1.55"><span class="zh"><b>17 项</b>为该客户的最低要求（红线）—— 任一不达标即影响供货资格，作答时会单独标红并要求上传证据。</span><span class="en b"><b>17 items</b> are this customer’s minimum requirements — any miss affects sourcing eligibility; they are flagged and require evidence.</span></span>
+            </div>
+          </div>
+
+          <div style="display:{{ si4Show }};flex-direction:column;gap:12px;margin-top:18px">
+            <div style="background:#F2FAF7;border:1px solid #BFE3D6;border-radius:11px;padding:15px 16px">
+              <div style="font-size:13px;font-weight:800;color:#0B5B4A"><span class="zh">✓ 可答卷已生成</span><span class="en">✓ Answerable survey created</span></div>
+              <div style="font-size:11.5px;color:#33484F;line-height:1.6;margin-top:6px"><span class="zh">112 题已按 5 大支柱归类并进入收件箱；83 题预填、29 题待人工。现在可以直接开始逐题作答，答不了的会在「得分与传导」页汇成缺口传给采购。</span><span class="en b">112 items are classified into 5 pillars and added to the inbox; 83 pre-filled, 29 need a human. Whatever you cannot answer becomes a gap handed to sourcing on the “score &amp; cascade” tab.</span></div>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:9px;margin-top:20px;padding-top:14px;border-top:1px solid #E6EBEE">
+            <button onClick="{{ siBack }}" style="display:{{ siBackShow }};padding:10px 15px;border-radius:9px;background:#fff;border:1px solid #D5DFE3;color:#5A6E75;font-size:12px;font-weight:600"><span class="zh">← 上一步</span><span class="en">← Back</span></button>
+            <button onClick="{{ srvImportNext }}" style="flex:1;padding:11px;border-radius:9px;background:{{ srvImpBtnBg }};color:#fff;font-size:12.5px;font-weight:700">{{ srvImpBtn }}</button>
+          </div>
+        </div>
         <div class="dwd r3">
           <div style="display:flex;align-items:center;gap:8px">
             <span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#0B5B4A;background:#EDF9F4;border:1px solid #CFE8DE;border-radius:4px;padding:2px 7px">{{ dwr3.id }}</span>
@@ -2632,7 +2915,7 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1480,&quot;height&quot;:1020}}">
 class Component extends DCLogic {
-  state = { view:'v1', reflow:false, dispatched:false, supSubmitted:false, dispatchCtx:null, oem:'all', lang:'zh', anon:'0', matrixOpen:null, expandAll:false, repOem:'chery', repFw:'oem', repPeriod:'2025fy', drawer:null, dwKey:null, toast:null, sup:null, sdQ:'q9', m3sel:'COL-01', srvFilter:'todo', srvSel:null, srvOpen:'', srvImport:0, srvImpCust:'', srvImpFile:false, srvTab:'answer', reqs:[], dd:null, ddRun:true, m1cat:'act', m1open:null, srv:null, q:'', f3g:'all', f3c:'all', f3r:'all', f3b:'all', s3k:'', s3d:-1, focusSup:null, tour:0, repType:'survey', srvHead:false, casHi:null, supQ:false, supA:null, supEv:null, casMerged:null, r13Sel:null };
+  state = { view:'v1', reflow:false, dispatched:false, supSubmitted:false, dispatchCtx:null, oem:'all', lang:'zh', anon:'0', matrixOpen:null, expandAll:false, repOem:'chery', repFw:'oem', repPeriod:'2025fy', drawer:null, dwKey:null, toast:null, sup:null, sdQ:'q9', m3sel:'COL-01', srvFilter:'pend', srvSel:null, srvOpen:'', srvImport:0, srvImpCust:'', srvImpFile:false, srvTab:'answer', reqs:[], dd:null, ddRun:true, m1cat:'act', m1open:null, srv:null, q:'', f3g:'all', f3c:'all', f3r:'all', f3b:'all', s3k:'', s3d:-1, focusSup:null, tour:0, repType:'survey', srvHead:false, casHi:null, supQ:false, supA:null, supEv:null, casMerged:null, r13Sel:null };
   componentDidMount(){
     fetch('./data/supply_suppliers.json').then(r=>r.json()).then(sup=>{
       const ranked=[...sup].sort((a,b)=>b.s-a.s);
@@ -2682,7 +2965,7 @@ class Component extends DCLogic {
       ...this.v3Vals(s,zh,anon), ...this.searchVals(s,zh), ...this.glossVals(s,zh), ...this.tourVals(s,zh), ...this.supQVals(s,zh), ...this.addVals(s,zh), ...this.personaVals(s,zh), ...this.mainlineVals(s,zh),
       openReq:(k)=>this.setState({drawer:'requirement',dwKey:k}),
       openAction:(k)=>this.setState({drawer:'action',dwKey:k}),
-      closeDrawer:()=>this.setState({drawer:null,dwKey:null,casCtx:null}),
+      closeDrawer:()=>this.setState({drawer:null,dwKey:null,casCtx:null,srvImport:0,srvImpFile:false}),
       toastShow:!!s.toast, toastZh:s.toast?s.toast.zh:'', toastEn:s.toast?s.toast.en:'',
       dwsPlan:()=>this.showToast('已生成整改计划草稿 · 同步至任务中心','Plan drafted · synced to tasks'),
       actBrief:()=>this.showToast('管理层简报已生成（1 页 PDF：5 个 KPI + 缺口 Top5 + 本周变化）','Management brief generated · 1-page PDF'),
@@ -2743,7 +3026,7 @@ class Component extends DCLogic {
     const reqs=s.reqs||[], reqN=reqs.length||37, hardN=reqs.filter(x=>x.type==='req').length||18;
     const T={
       survey:{tzh:'客户问卷响应报告',ten:'Customer Questionnaire Response Report',
-        srczh:'数字取自「客户问卷 (v11)」当前这份卷：题数、AI 预填、需人工处理、支柱得分与潜在得分。',
+        srczh:'数字取自「客户问卷 (v11)」当前这份卷：题数、AI 预填、待人工处理的队列、支柱得分与潜在得分。',
         srcen:'Figures come live from the questionnaire screen (V11): item counts, AI pre-fill, human-needed items, pillar scores.',
         badge:todoN?String(todoN)+' TODO':'READY',badgeBg:'#FEECEA',badgeFg:'#B0291D',
         metrics:[['问卷题数','Items',String(st2.totalQ||112),'#0F1E24'],['需人工处理','Needs a human',String(todoN),'#B0291D'],['当前 / 潜在得分','Score now / potential',avgScore+' → '+potScore,'#1F6B32']],
@@ -3151,39 +3434,119 @@ class Component extends DCLogic {
     const todo=q=>q.answer==='no'||q.hollow===true;
     const fil=s.srvFilter;
     const manual=q=>q.prefill&&q.prefill.source==='manual';
-    let list=fil==='todo'?qs.filter(todo):(fil==='manual'?qs.filter(manual):qs.filter(q=>q.pillar===fil));
+    const NA=s.srvNA||{}, OK0=s.srvOK||{}, A0=s.srvA||{}, S0=s.srvS||{};
+    const ans0=q=>A0[q.no]||q.answer;
+    const sup0=q=>String(S0[q.no]!==undefined?S0[q.no]:(q.support||'')).trim();
+    // one bucket per question, by next action, in priority order
+    const bucketOf=q=>{
+      if(NA[q.no]) return 'block';
+      if(!OK0[q.no]&&q.prefill&&q.prefill.source==='manual') return 'pend';
+      if(ans0(q)==='yes'&&!sup0(q)) return 'evid';
+      if(ans0(q)==='no') return 'fail';
+      return 'ready';
+    };
+    const bk={pend:[],evid:[],fail:[],block:[],ready:[]};
+    qs.forEach(q=>bk[bucketOf(q)].push(q));
+    let list=bk[fil]?bk[fil]:qs.filter(q=>q.pillar===fil);
     const q11=(s.q||'').trim().toLowerCase();
     if(q11) list=list.filter(x=>['q'+x.no,x.subject,x.subZh,x.sub,x.q,x.qEn].join(' ').toLowerCase().indexOf(q11)>=0);
+    const A=s.srvA||{}, SP=s.srvS||{}, FZ=s.srvF||{}, OK=s.srvOK||{};
+    const ansOf=q=>A[q.no]||q.answer;
+    const supOf=q=>(SP[q.no]!==undefined?SP[q.no]:(q.support||''));
+    const pendingOf=q=>!OK[q.no]&&((q.prefill&&q.prefill.source==='manual')||q.hollow===true);
+    const setA=(no,v)=>()=>{const n=Object.assign({},A);n[no]=v;const k=Object.assign({},OK);k[no]=true;this.setState({srvA:n,srvOK:k,srvSel:no,srvSavedAt:new Date().toLocaleTimeString('zh-CN',{hour12:false})});};
     const sel=qs.find(q=>q.no===s.srvSel) || qs.find(q=>q.hollow) || qs.find(q=>q.answer==='no') || qs[0] || null;
     const srcCol={platform:['#ECFBFE','#045B75'],evidence:['#F2F6FD','#0B3A82'],history:['#F3EFFC','#5B3FA8'],manual:['#F0F3F5','#5A6E75']};
     const ansCol={yes:['#EAF7EA','#1F6B32',zh?'是':'Yes'],no:['#FBE9E7','#B0291D',zh?'否':'No'],na:['#F0F3F5','#8397A0',zh?'不适用':'N/A']};
     const gapOf=k=>qs.filter(q=>q.pillar===k&&todo(q)).length;
     return {
-      srvPillars:[{k:'todo',zh:'需处理',en:'Needs action',n:qs.filter(todo).length,score:'',gap:0}]
-        .concat(pil.map(x=>({k:x.key,zh:x.name,en:x.nameEn,n:x.nQ,score:String(x.scoreNow),gap:gapOf(x.key),pot:String(x.scorePotential)})))
-        .map(x=>{const on=fil===x.k, isTodo=x.k==='todo';
+      srvQueue:[
+        {k:'pend',zh:'待确认',en:'Confirm',sZh:'AI 填了，要你拍板',sEn:'AI filled it — you decide',c:'#A3620F',n:bk.pend.length},
+        {k:'evid',zh:'缺证据',en:'Add evidence',sZh:'答“是”但没有支持信息',sEn:'“Yes” with no support',c:'#C97D1C',n:bk.evid.length},
+        {k:'fail',zh:'未达标',en:'Not met',sZh:'答“否” —— 写整改或传导',sEn:'“No” — remediate or cascade',c:'#B0291D',n:bk.fail.length},
+        {k:'block',zh:'无法作答',en:'Blocked',sZh:'已标记，等供应商 / 客户',sEn:'Waiting on supplier / customer',c:'#5B3FA8',n:bk.block.length},
+        {k:'ready',zh:'已就绪',en:'Ready',sZh:'AI 已填且可信，可抽查',sEn:'AI-filled and trusted',c:'#1F6B32',n:bk.ready.length}
+      ].map(x=>{const on=fil===x.k;
+        return {label:zh?x.zh:x.en, sub:zh?x.sZh:x.sEn, n:String(x.n), c:x.c,
+          bg:on?'#F2F6FD':'#fff', bd:on?'#0B3A82':'#E6EBEE', fw:on?'800':'700',
+          dim:x.n?'1':'.5',
+          pick:()=>this.setState({srvFilter:x.k})};}),
+      srvBar:[['pend',bk.pend.length,'#A3620F'],['evid',bk.evid.length,'#C97D1C'],['fail',bk.fail.length,'#B0291D'],['block',bk.block.length,'#5B3FA8'],['ready',bk.ready.length,'#1F6B32']]
+        .filter(x=>x[1]).map(x=>({w:(x[1]/qs.length*100)+'%',c:x[2],pick:()=>this.setState({srvFilter:x[0]})})),
+      srvOpenN:String(bk.pend.length+bk.evid.length+bk.fail.length),
+      srvReadyN:String(bk.ready.length),
+      srvPillars:pil.map(x=>({k:x.key,zh:x.name,en:x.nameEn,n:x.nQ,score:String(x.scoreNow),gap:gapOf(x.key)}))
+        .map(x=>{const on=fil===x.k;
           return {label:zh?x.zh:x.en, n:String(x.n), score:x.score, scoreW:(x.score?x.score:0)+'%',
-            bg:on?(isTodo?'#FFF7EC':'#F2F6FD'):'#fff', bd:on?(isTodo?'#C97D1C':'#0B3A82'):'#E6EBEE',
-            fg:isTodo?'#A3620F':(on?'#0B3A82':'#0F1E24'), fw:on?'800':'700',
-            barBg:isTodo?'#C97D1C':'#0B3A82',
+            bg:on?'#F2F6FD':'#fff', bd:on?'#0B3A82':'#E6EBEE',
+            fg:on?'#0B3A82':'#0F1E24', fw:on?'800':'700', barBg:'#0B3A82',
             gapDot:x.gap?'#DC3A2C':'transparent', gapN:x.gap?String(x.gap):'',
-            scoreShow:x.score?'block':'none',
+            scoreShow:'block',
             pick:()=>this.setState({srvFilter:x.k})};}),
       srvCount:String(list.length),
-      srvFilterLabel:fil==='todo'?(zh?'需处理（答"否" + 空心的"是"）':'Needs action')
-        :(fil==='manual'?(zh?'待人工确认（叙述 / 判断类）':'Needs a human'):((pil.find(x=>x.key===fil)||{})[zh?'name':'nameEn']||'')),
-      srvManualN:String(qs.filter(manual).length),
-      srvShowManual:()=>this.setState({srvFilter:'manual'}),
+      srvFilterLabel:({pend:zh?'待确认 · AI 填了要你拍板':'Confirm',evid:zh?'缺证据 · 答“是”但没有支持信息':'Add evidence',
+        fail:zh?'未达标 · 答“否”':'Not met',block:zh?'无法作答 · 等供应商 / 客户':'Blocked',ready:zh?'已就绪 · 可抽查':'Ready'}[fil])
+        ||((pil.find(x=>x.key===fil)||{})[zh?'name':'nameEn']||''),
+      srvManualN:String(bk.pend.length),
+      srvShowManual:()=>this.setState({srvFilter:'pend'}),
       srvNextBatch:()=>this.showToast('下一批建','Next batch'),
       srvTab:s.srvTab, srvTabAnswer:()=>this.setState({srvTab:'answer'}), srvTabScore:()=>this.setState({srvTab:'score'}),
-      tabAnsBg:s.srvTab==='answer'?'#0B3A82':'transparent', tabAnsFg:s.srvTab==='answer'?'#fff':'#4C6169', tabAnsFw:s.srvTab==='answer'?'700':'600',
-      tabAnsBadgeBg:s.srvTab==='answer'?'rgba(255,255,255,.22)':'#F0F3F5', tabAnsBadgeFg:s.srvTab==='answer'?'#fff':'#8397A0',
+      ...this.srvCheckVals(s,zh,qs,pendingOf),
       tabScoBg:s.srvTab==='score'?'#0B3A82':'transparent', tabScoFg:s.srvTab==='score'?'#fff':'#4C6169', tabScoFw:s.srvTab==='score'?'700':'600',
       tabScoBadgeBg:s.srvTab==='score'?'rgba(255,255,255,.22)':'#FBE9E7', tabScoBadgeFg:s.srvTab==='score'?'#fff':'#B0291D',
       ...this.srvScoreVals(s,zh,p,qs,pil),
-      srvCards:list.slice(0,40).map(q=>{const a=ansCol[q.answer]||ansCol.na, pf=q.prefill||{}, sc=srcCol[pf.source]||srcCol.manual, on=sel&&sel.no===q.no;
+      srvCards:list.slice(0,40).map(q=>{const av=ansOf(q), a=ansCol[av]||ansCol.na, pf=q.prefill||{}, sc=srcCol[pf.source]||srcCol.manual, on=sel&&sel.no===q.no;
+        const pend=pendingOf(q), sup=supOf(q), fl=FZ[q.no]||[];
+        const pick3=(v,bg)=>av===v?{bg:bg,bd:bg,fg:'#fff'}:{bg:'#fff',bd:'#D5DFE3',fg:'#5A6E75'};
+        const y=pick3('yes','#1F6B32'), n2=pick3('no','#B0291D'), na2=pick3('na','#4C6169');
         return {no:'Q'+q.no, subject:q.subject, sub:zh?q.subZh:q.sub, q:zh?q.q:q.qEn,
           ansBg:a[0], ansFg:a[1], ansLabel:a[2],
+          yBg:y.bg,yBd:y.bd,yFg:y.fg, nBg:n2.bg,nBd:n2.bd,nFg:n2.fg, aBg:na2.bg,aBd:na2.bd,aFg:na2.fg,
+          setYes:setA(q.no,'yes'), setNo:setA(q.no,'no'), setNa:setA(q.no,'na'),
+          editedShow:(A[q.no]&&A[q.no]!==q.answer)?'inline-flex':'none',
+          pendShow:pend?'flex':'none',
+          pendZh:q.hollow?'低置信：AI 答了“是”，但证据库没有对应文件 —— 请补支持信息或改答案，确认后才计入得分。':'AI 未能可靠识别这题（叙述 / 判断类）—— 请人工选择答案并填写支持信息，确认后才计入得分。',
+          pendEn:q.hollow?'Low confidence: AI answered “Yes” but no matching evidence file — add support or change the answer, then confirm.':'AI could not read this item reliably — pick an answer and add support, then confirm.',
+          confirm:()=>{const k=Object.assign({},OK);k[q.no]=true;this.setState({srvOK:k,srvSel:q.no,srvSavedAt:new Date().toLocaleTimeString('zh-CN',{hour12:false})});this.showToast('Q'+q.no+' 已确认 · 计入得分与导出','Q'+q.no+' confirmed');},
+          sup:sup, supPh:zh?'写清依据：制度/证书编号、数据、链接、负责人…':'Policy or certificate ref., data, links, owner…',
+          supBd:(av==='yes'&&!String(sup).trim())?'#F2D9AE':'#D5DFE3', supBg:(av==='yes'&&!String(sup).trim())?'#FFFCF6':'#FCFDFD',
+          onSup:e=>{const n3=Object.assign({},SP);n3[q.no]=e.target.value;this.setState({srvS:n3,srvSavedAt:new Date().toLocaleTimeString('zh-CN',{hour12:false})});},
+          filesShow:fl.length?'flex':'none',
+          files:fl.map((f,i)=>({name:f,remove:()=>{const n4=Object.assign({},FZ);n4[q.no]=fl.filter((x,j)=>j!==i);this.setState({srvF:n4});}})),
+          onFile:e=>{const names=[].slice.call(e.target.files||[]).map(f=>f.name); if(!names.length) return; const n5=Object.assign({},FZ); n5[q.no]=fl.concat(names); e.target.value=''; this.setState({srvF:n5,srvSavedAt:new Date().toLocaleTimeString('zh-CN',{hour12:false})}); this.showToast('Q'+q.no+' 已附 '+names.length+' 个证据文件','Attached '+names.length+' file(s) to Q'+q.no);},
+          ...(()=>{
+            const rec=NA[q.no], open=(s.srvNAOpen||{})[q.no];
+            const reasons=[
+              ['supplier',zh?'数据不在我方 · 需上游供应商提供':'Data sits upstream — ask the supplier',zh?'加入传导单，下发给对应供应商':'Goes into the cascade list'],
+              ['customer',zh?'客户口径不明 · 需向客户澄清':'Customer definition unclear',zh?'生成澄清问询，状态转「待客户回复」':'Raises a clarification, waits on the customer'],
+              ['na',zh?'确实不适用本工厂':'Genuinely not applicable',zh?'作答转「不适用」，需写一句理由':'Sets N/A and asks for one line of reasoning']
+            ];
+            const stMap={pending:[zh?'待下发':'To dispatch','#FFF7EC','#A3620F'],sent:[zh?'已下发 · 等供应商回':'Dispatched — waiting','#F3EFFC','#5B3FA8'],
+              asked:[zh?'已问客户 · 等回复':'Asked the customer — waiting','#F2F6FD','#0B3A82'],na:[zh?'已转不适用':'Set to N/A','#F3F6F7','#5A6E75']};
+            const st=rec?(stMap[rec.status]||stMap.pending):null;
+            const setNA=(r)=>()=>{const n=Object.assign({},NA);
+              n[q.no]={reason:r,status:r==='supplier'?'pending':(r==='customer'?'asked':'na'),to:r==='supplier'?'ABC56 · 世达冲压（武汉）':'',due:'2026-08-20'};
+              const o=Object.assign({},s.srvNAOpen||{}); o[q.no]=false;
+              const st2={srvNA:n,srvNAOpen:o,srvSel:q.no,srvSavedAt:new Date().toLocaleTimeString('zh-CN',{hour12:false})};
+              if(r==='na'){const a2=Object.assign({},A);a2[q.no]='na';st2.srvA=a2;}
+              this.setState(st2);
+              this.showToast(r==='supplier'?('Q'+q.no+' 已加入传导单 —— 在题卡上点「下发给供应商」即可发出，不必等到交卷'):(r==='customer'?('Q'+q.no+' 已生成向客户的澄清问询，状态转「待客户回复」'):('Q'+q.no+' 已转「不适用」，请补一句理由')),'Q'+q.no+' marked');};
+            return {
+              naBtnShow:rec?'none':'inline-flex',
+              naOpenShow:open&&!rec?'flex':'none',
+              naToggle:()=>{const o=Object.assign({},s.srvNAOpen||{});o[q.no]=!open;this.setState({srvNAOpen:o});},
+              naReasons:reasons.map(r=>({zh:r[1],en:r[1],note:r[2],pick:setNA(r[0])})),
+              blockShow:rec?'flex':'none',
+              blockSt:st?st[0]:'', blockBg:st?st[1]:'#fff', blockFg:st?st[2]:'#5A6E75',
+              blockZh:rec?({supplier:'这题的数据在上游 —— 已归入传导单，收到供应商回填后再确认答案。',customer:'客户口径不明 —— 已生成澄清问询，等客户回复后再作答。',na:'已判定不适用本工厂 —— 请在支持信息里写清理由，客户抽查时要能解释。'})[rec.reason]:'',
+              blockEn:rec?({supplier:'Data sits upstream — cascaded; confirm once the supplier replies.',customer:'Customer definition unclear — clarification raised.',na:'Not applicable to this plant — state why in the support field.'})[rec.reason]:'',
+              blockTo:rec&&rec.to?rec.to:'', blockToShow:rec&&rec.to?'inline':'none',
+              blockDue:rec?rec.due:'',
+              dispatchShow:rec&&rec.status==='pending'?'inline-flex':'none',
+              dispatch:()=>{const n=Object.assign({},NA);n[q.no]=Object.assign({},rec,{status:'sent'});this.setState({srvNA:n});this.showToast('Q'+q.no+' 已下发给 '+rec.to+' · 截止 '+rec.due+'，同时并入「传导对齐」的下发批次','Dispatched to the supplier');},
+              blockClear:()=>{const n=Object.assign({},NA);delete n[q.no];this.setState({srvNA:n});this.showToast('Q'+q.no+' 已撤销「无法作答」标记','Unmarked')}
+            };
+          })(),
           pfShow:pf.matched?'inline-flex':'none', pfBg:sc[0], pfFg:sc[1], pfLabel:pf.sourceLabel||'', pfNote:pf.note||'',
           minShow:q.isMinimumReq?'inline-flex':'none', hollowShow:q.hollow?'inline-flex':'none',
           supShow:q.support?'block':'none', support:q.support||'',
@@ -3199,8 +3562,212 @@ class Component extends DCLogic {
       srvSelFix:sel&&sel.gap?({quick:zh?'快速整改':'Quick win',mid:zh?'中期':'Mid-term',long:zh?'长期':'Long-term'})[sel.gap.fix]:'',
       srvSelGuide:sel&&sel.guideline?sel.guideline.replace(/\n/g,' · ').slice(0,150):(zh?'该题无额外作答指引':'No extra guideline'),
       srvSelHollowShow:sel&&sel.hollow?'block':'none',
-      srvSelAsk:()=>this.showToast(zh?'已按本题生成数据请求单（发给对应供应商/内部部门）':'Data request created for this question','Data request created')
+      srvSelAsk:()=>this.showToast(zh?'已按本题生成数据请求单（发给对应供应商/内部部门）':'Data request created for this question','Data request created'),
+      srvSavedAt:s.srvSavedAt||(zh?'未改动':'no edits'),
+      srvSaveDraft:()=>{this.setState({srvSavedAt:new Date().toLocaleTimeString('zh-CN',{hour12:false})});this.showToast('草稿已保存 · 作答、支持信息与附件均已留存','Draft saved — answers, support text and attachments kept');},
+      srvSubmitReview:()=>{
+        const pend=qs.filter(q=>pendingOf(q)).length;
+        const hollow=qs.filter(q=>ansOf(q)==='yes'&&!String(supOf(q)).trim()).length;
+        if(pend){ this.setState({srvFilter:'manual'}); this.showToast('还有 '+pend+' 题待人工确认 —— 已切到「待人工确认」列表，逐题确认后再提交','+'+pend+' items still need confirmation — switched to that list'); return; }
+        this.showToast('已提交内部复核：'+qs.length+' 题全部确认，'+hollow+' 题答「是」但缺支持信息已标注','Submitted for internal review');
+      },
+      ...this.srvSubmitVals(s,zh,qs,bk,NA,ansOf,supOf),
+      srvExportFilled:()=>this.exportSurvey(qs,zh,true,ansOf,supOf,FZ,OK),
+      srvExportRaw:()=>this.exportSurvey(qs,zh,false,ansOf,supOf,FZ,OK)
     };
+  }
+  srvCheckVals(s,zh,qs,pendingOf){
+    const QOK=s.srvQOK||{}, QTXT=s.srvQTxt||{}, QED=s.srvQEd||{}, QOR=s.srvQOr||{};
+    const cnt={}; qs.forEach(q=>{cnt[q.q]=(cnt[q.q]||0)+1;});
+    const noGuide=q=>!q.guideline||!q.guideline.trim()||q.guideline.trim()==='—';
+    const isDup=q=>cnt[q.q]>1;
+    const isLow=q=>q.prefill&&q.prefill.source==='manual'&&noGuide(q);
+    const issue=q=>isDup(q)||isLow(q);
+    const issues=qs.filter(issue), noG=qs.filter(noGuide);
+    const openIssues=issues.filter(q=>!QOK[q.no]);
+    const okN=qs.filter(q=>QOK[q.no]).length;
+    const fil=s.srvChkFil||'issue';
+    let list=fil==='all'?qs:(fil==='dup'?qs.filter(isDup):(fil==='noguide'?noG:(fil==='low'?qs.filter(isLow):issues)));
+    const labels={issue:['存疑题（重复 + 低置信）','Flagged items'],all:['全部 112 题','All 112'],dup:['疑似重复题','Suspected duplicates'],noguide:['缺客户作答指引','No customer guideline'],low:['AI 未能可靠识别','Not read reliably']};
+    const qc=[
+      {k:'all',n:'112',mark:'✓',zh:'题号连续 · 无跳号漏题',en:'Numbering complete',noteZh:'1–112 全部读到，与原件行数一致',noteEn:'1–112 all present, matches the source rows',c:'#1F6B32',bg:'#F5FAF6',bd:'#D6E9D8'},
+      {k:'dup',n:String(qs.filter(isDup).length),mark:'⚠',zh:'疑似重复题',en:'Suspected duplicates',noteZh:'题干完全相同，可能是原件合并单元格串行',noteEn:'Identical wording — likely merged-cell bleed',c:'#B0291D',bg:'#FDF6F5',bd:'#E9C9C4'},
+      {k:'low',n:String(qs.filter(isLow).length),mark:'⚠',zh:'AI 未能可靠识别',en:'Not read reliably',noteZh:'无作答指引且无法归类，题面需人工确认',noteEn:'No guideline and unclassifiable — confirm the wording',c:'#A3620F',bg:'#FFF7EC',bd:'#F2D9AE'},
+      {k:'noguide',n:String(noG.length),mark:'ⓘ',zh:'缺客户作答指引',en:'No customer guideline',noteZh:'不阻塞提交；作答时无客户口径可依，建议问一次',noteEn:'Not blocking; no customer definition to rely on',c:'#5A6E75',bg:'#F7FAFB',bd:'#E1E7EA'}
+    ].map(x=>Object.assign(x,{pick:()=>this.setState({srvChkFil:x.k})}));
+    const rows=list.slice(0,40).map(q=>{
+      const ok=!!QOK[q.no], ed=!!QED[q.no], edited=QTXT[q.no]!==undefined&&QTXT[q.no]!==q.q, orig=!!QOR[q.no];
+      const flags=[];
+      if(isDup(q)) flags.push({zh:'疑似重复',en:'Duplicate?',bg:'#FDF6F5',fg:'#8A1E14',bd:'#E9C9C4'});
+      if(isLow(q)) flags.push({zh:'低置信',en:'Low confidence',bg:'#FFF7EC',fg:'#A3620F',bd:'#F2D9AE'});
+      if(noGuide(q)) flags.push({zh:'无客户指引',en:'No guideline',bg:'#F3F6F7',fg:'#5A6E75',bd:'#E1E7EA'});
+      if(edited) flags.push({zh:'题面已修订',en:'Wording revised',bg:'#F3EFFC',fg:'#5B3FA8',bd:'#E3DAF7'});
+      const st=ok?['#EAF7EA','#1F6B32','已核对','Reviewed']:(issue(q)?['#FFF7EC','#A3620F','待核对','To review']:['#F3F6F7','#8397A0','未核对','Not reviewed']);
+      return {no:'Q'+q.no, sub:zh?q.subZh:q.sub, pillar:zh?q.pillarZh:q.pillar,
+        flags:flags, stBg:st[0], stFg:st[1], stZh:st[2], stEn:st[3],
+        text:QTXT[q.no]!==undefined?QTXT[q.no]:(zh?q.q:q.qEn),
+        readShow:ed?'none':'block', editShow:ed?'flex':'none',
+        draft:QTXT[q.no]!==undefined?QTXT[q.no]:q.q,
+        onEdit:e=>{const n=Object.assign({},QTXT);n[q.no]=e.target.value;this.setState({srvQTxt:n});},
+        origShow:orig?'block':'none', orig:q.q, origEn:q.qEn,
+        bd:ok?'#D6E9D8':'#E6EBEE', bg:ok?'#FAFDFA':'#fff',
+        edge:ok?'#3FAE55':(issue(q)?'#C97D1C':'#E6EBEE'),
+        okBg:ok?'#1F6B32':'#fff', okBd:ok?'#1F6B32':'#D5DFE3', okFg:ok?'#fff':'#5A6E75',
+        ok:()=>{const n=Object.assign({},QOK);n[q.no]=!QOK[q.no];const e2=Object.assign({},QED);e2[q.no]=false;this.setState({srvQOK:n,srvQEd:e2});},
+        toggleEdit:()=>{const n=Object.assign({},QED);n[q.no]=!ed;this.setState({srvQEd:n});},
+        editLabel:ed?(zh?'收起修订':'Close editor'):(zh?'修订题面':'Edit wording'),
+        toggleOrig:()=>{const n=Object.assign({},QOR);n[q.no]=!orig;this.setState({srvQOr:n});},
+        origLabel:orig?(zh?'隐藏客户原文':'Hide original'):(zh?'对照客户原文':'Show original'),
+        hint:isDup(q)?(zh?'与另一题题干完全相同 —— 确认是客户重复提问，还是解析串行':'Identical to another item'):(isLow(q)?(zh?'原件此行无指引且无法归类':'No guideline in the source row'):'')};
+    });
+    const locked=!!s.srvLocked, skipped=!!s.srvSkipped;
+    // same bucket model the queue and the submit checks use, so badges cannot drift
+    const ans1=q=>(s.srvA||{})[q.no]||q.answer;
+    const sup1=q=>String(((s.srvS||{})[q.no])!==undefined?(s.srvS||{})[q.no]:(q.support||'')).trim();
+    const NAm=s.srvNA||{}, OKm=s.srvOK||{};
+    const bkt=q=>{
+      if(NAm[q.no]) return 'block';
+      if(!OKm[q.no]&&q.prefill&&q.prefill.source==='manual') return 'pend';
+      if(ans1(q)==='yes'&&!sup1(q)) return 'evid';
+      if(ans1(q)==='no') return 'fail';
+      return 'ready';
+    };
+    const bc={pend:0,evid:0,fail:0,block:0,ready:0};
+    qs.forEach(q=>{bc[bkt(q)]++;});
+    const openWork=bc.pend+bc.evid+bc.fail;
+    const blockN=(qs.filter(q=>!ans1(q)).length?1:0)+(bc.pend?1:0)+(bc.evid?1:0);
+    const ph=[
+      {k:'check', zh:'① 校卷', en:'① Verify', subZh:locked?'题面已锁定':(skipped?'已跳过复核 · 题面未确认':'确认题目读对了'), subEn:locked?'Wording locked':(skipped?'Skipped — wording unconfirmed':'Confirm the questions'),
+        mark:locked?'✓':(skipped?'⚑':'1'), badge:(locked||!openIssues.length)?'':String(openIssues.length), badgeBg:'#FBE9E7', badgeFg:'#B0291D'},
+      {k:'answer', zh:'② 作答', en:'② Answer', subZh:'AI 填，人确认', subEn:'AI fills, you confirm',
+        mark:'2', badge:String(openWork), badgeBg:'#FFF3E0', badgeFg:'#A3620F'},
+      {k:'score', zh:'③ 交卷', en:'③ Submit', subZh:'校验 · 传导归集 · 导出', subEn:'Checks, cascade, export',
+        mark:'3', badge:blockN?String(blockN):'', badgeBg:'#FBE9E7', badgeFg:'#B0291D'}
+    ].map((x,i)=>{
+      const on=s.srvTab===x.k;
+      return Object.assign(x,{
+        flex:'1', go:()=>this.setState({srvTab:x.k}),
+        bg:on?'#F2F6FD':'transparent', fg:on?'#0B3A82':'#33484F', fw:on?'800':'700',
+        subFg:on?'#5A7391':'#9AABB1',
+        dotBg:on?'#0B3A82':(i===0?(locked?'#3FAE55':(skipped?'#C97D1C':'#fff')):'#fff'),
+        dotFg:(on||(i===0&&(locked||skipped)))?'#fff':'#9AABB1',
+        dotBd:on?'#0B3A82':(i===0?(locked?'#3FAE55':(skipped?'#C97D1C':'#D5DFE3')):'#D5DFE3'),
+        badgeShow:x.badge?'inline-block':'none',
+        arrowShow:i===2?'none':'inline'});
+    });
+    return {
+      srvPhases:ph, srvQc:qc, srvChkRows:rows,
+      srvChkOK:String(okN), srvChkIssue:String(openIssues.length),
+      srvChkCount:String(list.length), srvChkLabel:labels[fil][zh?0:1],
+      srvChkMore:list.length>40?(zh?'另有 '+(list.length-40)+' 题，用上方质检卡切换范围':(list.length-40)+' more'):'',
+      srvLockBg:openIssues.length?'#B6C4C9':'#0B5B4A',
+      srvLockLabel:openIssues.length?(zh?('还有 '+openIssues.length+' 题存疑未核对'):(openIssues.length+' flagged items left')):(zh?'锁定题面，开始作答 →':'Lock wording, start answering →'),
+      srvLock:()=>{
+        if(openIssues.length){ this.setState({srvChkFil:'issue'}); this.showToast('还有 '+openIssues.length+' 题存疑未核对 —— 已切到存疑列表，逐题标「题面正确」或修订后再锁定','+'+openIssues.length+' flagged items still unreviewed'); return; }
+        this.setState({srvLocked:true,srvTab:'answer'});
+        this.showToast('题面已锁定 · 112 题确认无误，进入作答；后续再改题面会留痕','Wording locked — moving to answering');
+      },
+      srvSkipCheck:()=>{ this.setState({srvSkipped:true,srvTab:'answer'}); this.showToast('已跳过校卷 · 交卷校验里会挂一条「卷面未经复核」','Skipped verification — the submit checklist will flag it'); },
+      srvAllOK:()=>{ const n=Object.assign({},QOK); list.forEach(q=>{n[q.no]=true;}); this.setState({srvQOK:n}); this.showToast('已把当前列表 '+list.length+' 题标为题面正确','Marked '+list.length+' items as correct'); }
+    };
+  }
+  srvSubmitVals(s,zh,qs,bk,NA,ansOf,supOf){
+    const TODAY=new Date('2026-08-01');
+    const noAns=qs.filter(q=>!ansOf(q)).length;
+    const redline=qs.filter(q=>q.isMinimumReq&&ansOf(q)==='no').length;
+    const waiting=qs.filter(q=>NA[q.no]&&(NA[q.no].status==='pending'||NA[q.no].status==='sent'||NA[q.no].status==='asked'));
+    const naNoWhy=qs.filter(q=>NA[q.no]&&NA[q.no].status==='na'&&!String(supOf(q)).trim()).length;
+    const unreviewed=s.srvLocked?0:(s.srvSkipped?1:0);
+    const mk=(n,zh1,en1,nz,ne,hard,go)=>{
+      const bad=n>0;
+      return {n:String(n), mark:bad?(hard?'✕':'⚑'):'✓', zh:zh1, en:en1, noteZh:nz, noteEn:ne,
+        c:bad?(hard?'#B0291D':'#A3620F'):'#1F6B32',
+        bg:bad?(hard?'#FDF6F5':'#FFF7EC'):'#F5FAF6', bd:bad?(hard?'#E9C9C4':'#F2D9AE'):'#D6E9D8',
+        tagZh:bad?(hard?'阻塞提交':'需说明'):'已通过', tagEn:bad?(hard?'Blocking':'Explain'):'Pass',
+        tagBg:bad?(hard?'#FBE9E7':'#FFF3E0'):'#EAF7EA', tagFg:bad?(hard?'#B0291D':'#A3620F'):'#1F6B32',
+        hard:hard&&bad, go:go};
+    };
+    const checks=[
+      mk(noAns,'未作答','No answer','每题必须有 是 / 否 / 不适用','Every item needs an answer',true,()=>this.setState({srvTab:'answer',srvFilter:'pend'})),
+      mk(bk.pend.length,'未确认','Unconfirmed','AI 填的还没人拍板，不计入提交','AI answers not yet confirmed',true,()=>this.setState({srvTab:'answer',srvFilter:'pend'})),
+      mk(bk.evid.length,'空心的「是」','Hollow “Yes”','答是但无支持信息，客户抽查无法举证','“Yes” with no evidence to show',true,()=>this.setState({srvTab:'answer',srvFilter:'evid'})),
+      mk(redline,'红线未达标','Minimum req. missed','客户最低要求项答否，须附整改计划','Minimum requirements answered “No”',false,()=>this.setState({srvTab:'answer',srvFilter:'fail'})),
+      mk(waiting.length,'等供应商 / 客户回','Waiting on others','等得起就催，等不起走兜底作答','Chase it or use a fallback answer',false,()=>this.setState({srvTab:'answer',srvFilter:'block'})),
+      mk(unreviewed+naNoWhy,'卷面未复核 / 不适用未写理由','Unverified wording or N/A without reason','跳过了第 ① 步校卷，或不适用没写理由','Step ① was skipped, or an N/A has no reasoning',false,()=>this.setState({srvTab:unreviewed?'check':'answer',srvFilter:'block'}))
+    ];
+    const hardN=checks.filter(c=>c.hard).length;
+    const softN=checks.filter(c=>!c.hard&&+c.n>0).length;
+    const stMap={pending:[zh?'待下发':'To dispatch','#FFF7EC','#A3620F'],sent:[zh?'已下发 · 等回':'Dispatched','#F3EFFC','#5B3FA8'],asked:[zh?'已问客户 · 等回':'Asked customer','#F2F6FD','#0B3A82']};
+    const waitRows=waiting.map(q=>{
+      const rec=NA[q.no], st=stMap[rec.status]||stMap.pending;
+      const days=Math.round((new Date(rec.due)-TODAY)/86400000);
+      return {no:'Q'+q.no, q:zh?q.q:q.qEn, to:rec.to||(zh?'客户':'Customer'), due:rec.due,
+        dueC:days<=7?'#B0291D':(days<=14?'#A3620F':'#33484F'),
+        st:st[0], stBg:st[1], stFg:st[2],
+        chase:()=>{const n=Object.assign({},NA);n[q.no]=Object.assign({},rec,{due:'2026-08-25',status:rec.status==='pending'?'sent':rec.status});this.setState({srvNA:n});this.showToast('已催办 Q'+q.no+' 并把承诺回期改到 2026-08-25 · 提醒已发给 '+(rec.to||'客户'),'Chased Q'+q.no+' — promised date moved to 2026-08-25');},
+        fallback:()=>{const n=Object.assign({},NA);delete n[q.no];
+          const A2=Object.assign({},s.srvA||{}); A2[q.no]='no';
+          const S2=Object.assign({},s.srvS||{}); S2[q.no]=zh?'暂无数据：该项数据在上游供应商处，已于 2026-08-01 下发采集，预计 2026-08-25 补交。行动计划：由采购与可持续团队跟踪回收，回收后 3 个工作日内向客户补充说明。':'No data yet: the item sits with an upstream supplier; collection dispatched 2026-08-01, expected 2026-08-25.';
+          const OK2=Object.assign({},s.srvOK||{}); OK2[q.no]=true;
+          this.setState({srvNA:n,srvA:A2,srvS:S2,srvOK:OK2});
+          this.showToast('Q'+q.no+' 已按「暂无数据 + 行动计划 + 预计补交 2026-08-25」如实作答，不再阻塞提交','Q'+q.no+' answered with a documented fallback');}};
+    });
+    const sub=s.srvSubmitted;
+    return {
+      subChecks:checks, subBlockN:String(hardN),
+      subPillBg:hardN?'#FBE9E7':'#EAF7EA', subPillFg:hardN?'#B0291D':'#1F6B32',
+      waitRows:waitRows, waitN:String(waitRows.length), waitCardShow:waitRows.length?'block':'none',
+      subFullBg:hardN?'#B6C4C9':'#0B5B4A',
+      subFullLabel:hardN?(zh?('还有 '+hardN+' 项阻塞，不能提交'):(hardN+' blocking checks')):(zh?'提交给客户 →':'Submit to the customer →'),
+      subPartialShow:(hardN===0&&waitRows.length)?'inline-block':'none',
+      subPartialLabel:zh?('部分提交 · 先交 '+(qs.length-waitRows.length)+' 题，声明 '+waitRows.length+' 题待补'):('Partial: submit '+(qs.length-waitRows.length)+', declare '+waitRows.length),
+      subGateFg:hardN?'#B0291D':(softN?'#A3620F':'#1F6B32'),
+      subGateZh:hardN?('✕ '+hardN+' 项阻塞项清零后才允许提交（导出不受限）'):(softN?('⚑ 可提交 · 但有 '+softN+' 项需向客户说明'):'✓ 全部校验通过，可提交'),
+      subGateEn:hardN?('✕ '+hardN+' blocking checks must be cleared'):(softN?('⚑ Submittable — '+softN+' items need an explanation'):'✓ All checks passed'),
+      subFull:()=>{
+        if(hardN){ this.showToast('还有 '+hardN+' 项阻塞校验未清零 —— 点校验卡片可直接跳回对应队列处理','+'+hardN+' blocking checks remain'); return; }
+        this.setState({srvSubmitted:{at:new Date().toLocaleString('sv-SE'),kind:'full',n:qs.length}});
+        this.showToast('已提交给客户：'+qs.length+' 题全部作答并确认','Submitted — all '+qs.length+' items');
+      },
+      subPartial:()=>{
+        this.setState({srvSubmitted:{at:new Date().toLocaleString('sv-SE'),kind:'partial',n:qs.length-waitRows.length,m:waitRows.length}});
+        this.showToast('已部分提交：'+(qs.length-waitRows.length)+' 题交付，'+waitRows.length+' 题声明待供应商回填（预计 2026-08-25 补交）','Partial submission sent');
+      },
+      receiptShow:sub?'flex':'none',
+      receiptTitle:sub?(sub.kind==='full'?(zh?('已完整提交 · '+sub.n+' 题'):('Full submission · '+sub.n+' items')):(zh?('已部分提交 · '+sub.n+' 题交付 / '+sub.m+' 题待补'):('Partial · '+sub.n+' sent / '+sub.m+' pending'))):'',
+      receiptBody:sub?(zh?(sub.at+' 提交至客户门户。'+(sub.kind==='partial'?('待补的 '+sub.m+' 题已附预计补交时间与行动计划，回收后自动增量补交，无需重新填卷。'):'客户侧复核结果回来后会自动回填得分与差距。')):(sub.at+' submitted.')):''
+    };
+  }
+  exportSurvey(qs,zh,filled,ansOf,supOf,FZ,OK){
+    const P=this.cn('P');
+    const lab={yes:'Yes 是',no:'No 否',na:'N/A 不适用'};
+    const head=filled
+      ? ['No.','Pillar 支柱','Subcategory 二级目录','Subject 对象','Question (EN)','题目（中文）','Answer 作答','Supporting information 支持信息','Evidence files 佐证文件','Minimum req. 最低要求','Answer origin 作答来源','Confirmed 已确认']
+      : ['No.','Pillar 支柱','Subcategory 二级目录','Subject 对象','Question (EN)','题目（中文）','Answer 作答','Supporting information 支持信息'];
+    const rows=[head];
+    qs.forEach(q=>{
+      const base=[q.no,q.pillar,zh?q.subZh:q.sub,q.subject,q.qEn,q.q];
+      if(!filled){ rows.push(base.concat(['',''])); return; }
+      const pf=q.prefill||{};
+      rows.push(base.concat([lab[ansOf(q)]||'', supOf(q)||'', (FZ[q.no]||[]).join(' | '),
+        q.isMinimumReq?'Y':'', pf.sourceLabel||(zh?'人工填写':'Manual'), OK[q.no]?'Y':'']));
+    });
+    const name=(filled?'ASSI_Response_':'ASSI_Blank_')+P.replace(/[^\w\u4e00-\u9fa5]/g,'')+'_'+new Date().toISOString().slice(0,10);
+    if(window.XLSX){
+      const wb=window.XLSX.utils.book_new();
+      const ws=window.XLSX.utils.aoa_to_sheet(rows);
+      ws['!cols']=[{wch:6},{wch:16},{wch:26},{wch:12},{wch:64},{wch:56},{wch:14},{wch:44},{wch:28},{wch:14},{wch:20},{wch:12}];
+      window.XLSX.utils.book_append_sheet(wb,ws,filled?'Response':'Questionnaire');
+      window.XLSX.writeFile(wb,name+'.xlsx');
+      this.showToast('已导出 '+name+'.xlsx（'+qs.length+' 题，'+(filled?'含作答 / 支持信息 / 佐证文件清单':'客户原始题干与空白作答列')+'）','Exported '+name+'.xlsx');
+    } else {
+      const esc=v=>'"'+String(v==null?'':v).split('"').join('""')+'"';
+      const csv='\ufeff'+rows.map(r=>r.map(esc).join(',')).join('\n');
+      const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+      const a=document.createElement('a'); a.href=url; a.download=name+'.csv'; a.click();
+      setTimeout(()=>URL.revokeObjectURL(url),4000);
+      this.showToast('未能加载 Excel 组件，已改为导出等价 CSV。','Excel component unavailable — exported CSV instead.');
+    }
   }
   srvVals(s,zh){
     const p=s.srv, st=(p&&p.meta&&p.meta.stats)||{totalQ:112,aiMatched:83,aiMatchedPct:74,minReqTotal:17,minReqBreached:0,checks:{noAnswer:0,duplicate:0,noSupport:2,belowMinimum:0}};
@@ -3233,7 +3800,9 @@ class Component extends DCLogic {
       s2bg:s2.bg,s2bd:s2.bd,s2dot:s2.dot,s2mark:s2.mark,
       s3bg:s3.bg,s3bd:s3.bd,s3dot:s3.dot,s3mark:s3.mark,
       srvImpPct:(im>=4?100:im*28)+'%',
-      srvImpBtn:im<=1?(zh?(s.srvImpCust&&s.srvImpFile?'开始 AI 解析':'请先选客户并上传原件'):'Start parsing'):(im===2?(zh?'自动预填':'Auto pre-fill'):(zh?'生成可答卷 · 打开详情':'Generate & open')),
+      srvImpBtn2:im<=1?(zh?(s.srvImpCust&&s.srvImpFile?'开始 AI 解析':'请先选客户并上传原件'):'Start parsing'):(im===2?(zh?'自动预填':'Auto pre-fill'):(zh?'生成可答卷 · 打开详情':'Generate & open')),
+      srvImpBtn:im<=1?(zh?(s.srvImpCust&&s.srvImpFile?'开始 AI 解析 →':'请先选客户并上传原件'):(s.srvImpCust&&s.srvImpFile?'Start AI parsing →':'Pick a customer and upload first'))
+        :(im===2?(zh?'继续 · 看自动预填 →':'Continue · see pre-fill →'):(im===3?(zh?'生成可答卷 →':'Create the survey →'):(zh?'进入逐题作答 →':'Open and start answering →'))),
       srvImpBtnBg:im>=3?'#0B5B4A':((im<=1&&!(s.srvImpCust&&s.srvImpFile))?'#B6C4C9':'#0B3A82'),
       srvImpCusts:[['P',P,P],['M',M,M],['T',T,T],['new','+ 新客户','+ New']]
         .map(u=>{const on=s.srvImpCust===u[0], live=u[0]==='P';
@@ -3244,23 +3813,37 @@ class Component extends DCLogic {
       srvImpDropBd:s.srvImpFile?'#3FAE55':'#C4D0D5', srvImpDropBg:s.srvImpFile?'#F3FAF4':'#FAFBFC',
       srvImpDrop:()=>{ this.setState({srvImpFile:!s.srvImpFile});
         if(!s.srvImpFile) this.showToast('已上传 SSI_2026_supplier.xlsx（112 行）','Uploaded SSI_2026_supplier.xlsx'); },
-      srvImportOpen:()=>this.setState({srvImport:1,srvImpCust:'P'}),
-      srvImportClose:()=>this.setState({srvImport:0}),
+      srvImportOpen:()=>this.setState({drawer:'srvimp',srvImport:1,srvImpCust:'P',srvImpFile:false}),
+      srvImportClose:()=>this.setState({srvImport:0,drawer:null}),
+      siBackShow:im>1?'block':'none',
+      siBack:()=>this.setState({srvImport:Math.max(1,im-1)}),
+      si1Show:im<=1?'flex':'none', si2Show:im===2?'flex':'none', si3Show:im===3?'flex':'none', si4Show:im>=4?'flex':'none',
+      siCustLabel:P,
+      siSteps:[['1',zh?'选客户 + 上传':'Upload'],['2',zh?'AI 解析':'Parse'],['3',zh?'自动预填':'Pre-fill'],['4',zh?'生成可答卷':'Ready']].map((p,i)=>{
+        const n=i+1, done=im>n, act=im===n;
+        return {mark:done?'✓':p[0], zh:p[1], en:p[1], w:'74px', flex:i===3?'0 0 auto':'1',
+          dotBg:done?'#3FAE55':(act?'#0B3A82':'#fff'), dotFg:(done||act)?'#fff':'#9AABB1', dotBd:done?'#3FAE55':(act?'#0B3A82':'#D5DFE3'),
+          fg:act?'#0B3A82':(done?'#1F6B32':'#9AABB1'), fw:act?'800':'600',
+        // (import-drawer stepper — unrelated to the phase bar)
+          barShow:i===3?'none':'block', barBg:im>n?'#3FAE55':'#E1E7EA'};}),
+      siParse:[
+        {zh:'识别题目并逐题结构化',en:'Questions detected and structured',n:'112',bg:'#EAF7EA',fg:'#1F6B32',numFg:'#0F1E24'},
+        {zh:'归入 5 大支柱',en:'Mapped into 5 pillars',n:'5',bg:'#EAF7EA',fg:'#1F6B32',numFg:'#0F1E24'},
+        {zh:'识别最低要求（红线）',en:'Minimum requirements found',n:'17',bg:'#EAF7EA',fg:'#1F6B32',numFg:'#B0291D'},
+        {zh:'证据类型归类',en:'Evidence types classified',n:'3',bg:'#EAF7EA',fg:'#1F6B32',numFg:'#0F1E24'}
+      ],
+      siFill:[
+        {zh:'平台直出 · 取自本平台已有台账与核算结果',en:'Straight from platform ledgers and calculations',n:'36',c:'#045B75'},
+        {zh:'证据库引用 · 命中已归档的证书与报告',en:'Matched to filed certificates and reports',n:'27',c:'#0B3A82'},
+        {zh:'历史复用 · 沿用上年度同题作答',en:'Carried over from last year’s identical items',n:'20',c:'#5B3FA8'},
+        {zh:'待人工作答 · 无可靠来源',en:'Needs a human — no reliable source',n:'29',c:'#8397A0'}
+      ],
       srvImportNext:()=>{
         if(im<=1&&!(s.srvImpCust&&s.srvImpFile)){ this.showToast('请先选择所属客户并上传原始文件','Pick a customer and upload the file first'); return; }
-        if(im>=3){ this.setState({srvImport:0,srvImpCust:'P',srvImpFile:false,srvOpen:'srv-01',srvFilter:'todo',srvSel:null});
-          this.showToast('可答卷已生成 · 已打开问卷详情：112 题 · 预填 83 · 剩 29 需人工','Survey generated — detail view opened'); }
+        if(im>=4){ this.setState({drawer:null,srvImport:0,srvImpCust:'P',srvImpFile:false,srvOpen:'srv-01',srvTab:'check',srvChkFil:'issue',srvLocked:false,srvSkipped:false,srvFilter:'pend',srvSel:null});
+          this.showToast('可答卷已生成 · 先进入第 ① 步校卷：确认这 112 题读对了，再开始作答','Survey generated — step ① first: confirm the questions were read correctly'); }
         else this.setState({srvImport:im+1}); },
-      srvInbox:((p&&p.inbox)||[]).map(x=>{const cur=x.id==='srv-01', c=stCol[x.status]||['#F0F3F5','#5A6E75'];
-        const n=((p&&p.inbox)||[]).filter(y=>y.customerAnon===x.customerAnon).length;
-        return {id:x.id, cust:this.cn(this.custKeyOf(x.customerAnon)), type:x.type, due:x.due, received:x.received, status:x.status,
-          pct:Math.round((x.progress||0)*100)+'%', w:Math.round((x.progress||0)*100)+'%',
-          bg:cur?'#F2F6FD':'#fff', bd:cur?'#0B3A82':'#E6EBEE', bar:cur?'#0B3A82':'#B6C4C9',
-          stBg:c[0], stFg:c[1], curBg:cur?'#0B3A82':'transparent', curFg:cur?'#fff':'transparent',
-          curLabel:cur?(zh?'当前':'Current'):'',
-          ctaShow:cur?'flex':'none', src:(srcMap[x.id]||['',''])[zh?0:1],
-          grpShow:n>1?'inline-flex':'none', grpLabel:n>1?(zh?'该客户 '+n+' 份卷':n+' surveys'):'',
-          pick:cur?(()=>this.setState({srvOpen:'srv-01'})):(()=>this.showToast('该卷为演示陪衬，未接入数据','Filler survey — demo only'))};}),
+      ...this.srvInboxVals(s,zh,p,stCol,srcMap),
       srvQ:String(st.totalQ||112), srvAI:String(st.aiMatched||83), srvAIPct:(st.aiMatchedPct||74)+'%',
       srvManual:String((st.totalQ||112)-(st.aiMatched||83)), srvAIw:(st.aiMatchedPct||74)+'%',
       srvNoSupport:String(ck.noSupport||2),
@@ -3275,6 +3858,59 @@ class Component extends DCLogic {
       fEmp:String(f.employees||1309), fFemale:f.femalePct||'53.6%',
       fKwh:((f.electricityKwh||6500000)/10000).toFixed(0), fRe:String(f.renewableKwh||0),
       fCert:(f.certs&&f.certs[0])||'ISO 14001:2015（SGS 2022 外审）', fOther:f.otherCustomers||'北欧OEM集团V 等'
+    };
+  }
+  srvInboxVals(s,zh,p,stCol,srcMap){
+    const list=(p&&p.inbox)||[];
+    const TODAY=new Date('2026-08-01');
+    const qty={'srv-01':112,'srv-02':96,'srv-03':41,'srv-04':86};
+    const scoreOf=x=>{
+      if(typeof x.scoreNow==='number') return {t:x.scoreNow.toFixed(1),c:x.scoreNow>=80?'#1F6B32':(x.scoreNow>=60?'#A3620F':'#B0291D')};
+      if(x.scoreNow) return {t:String(x.scoreNow),c:'#33484F'};
+      return {t:zh?'未评':'n/a',c:'#9AABB1'};
+    };
+    const rows=list.map(x=>{
+      const cur=x.id==='srv-01', c=stCol[x.status]||['#F0F3F5','#5A6E75'];
+      const n=list.filter(y=>y.customerAnon===x.customerAnon).length;
+      const days=Math.round((new Date(x.due)-TODAY)/86400000);
+      const dueC=days<=14?'#B0291D':(days<=30?'#A3620F':'#33484F');
+      const nm=this.cn(this.custKeyOf(x.customerAnon));
+      const sc=scoreOf(x);
+      const pct=Math.round((x.progress||0)*100);
+      return {id:x.id, days, cust:nm, type:x.type, due:x.due, received:x.received, status:x.status,
+        avatar:(nm.match(/[A-Z]/)||[nm.slice(-1)])[0], avBg:cur?'#0B3A82':'#EEF2F7', avFg:cur?'#fff':'#5A7391',
+        qty:(qty[x.id]||'—')+(zh?' 题':''),
+        score:sc.t, scoreC:sc.c,
+        left:days<0?(zh?'已逾期':'overdue'):(days+(zh?' 天':'d')),
+        dueC, pct:pct+'%', w:pct+'%',
+        bg:cur?'#F7FAFD':'#fff', bd:cur?'#D7E3F6':'#E6EBEE', edge:cur?'#0B3A82':(days<=14?'#DC3A2C':'#DCE4E8'),
+        bar:cur?'#0B3A82':(pct>=60?'#7FA3C9':'#B6C4C9'),
+        stBg:c[0], stFg:c[1], curShow:cur?'inline-flex':'none',
+        ctaShow:cur?'inline':'none', src:(srcMap[x.id]||['',''])[zh?0:1],
+        grpShow:n>1?'inline-flex':'none', grpN:n, grpLabel:n>1?(zh?'该客户 '+n+' 份卷':n+' surveys'):'',
+        dlBg:cur?'#F2FAF7':'#fff', dlBd:cur?'#BFE3D6':'#D5DFE3', dlFg:cur?'#0B5B4A':'#9AABB1',
+        dlRaw:e=>{ if(e&&e.stopPropagation)e.stopPropagation();
+          if(!cur){ this.showToast('该卷为演示陪衬，未接入题库；本演示只有 '+nm+' 的 SSI 112 题可导出','Filler survey — only the SSI 112-item file is exportable in this demo'); return; }
+          const qs=(p&&p.questions)||[]; this.exportSurvey(qs,zh,false,q=>q.answer,q=>q.support||'',{},{}); },
+        dlFilled:e=>{ if(e&&e.stopPropagation)e.stopPropagation();
+          if(!cur){ this.showToast('该卷尚未作答，无可导出的答卷','Nothing answered yet on this survey'); return; }
+          const qs=(p&&p.questions)||[], A=s.srvA||{}, SP=s.srvS||{}, FZ=s.srvF||{}, OK=s.srvOK||{};
+          this.exportSurvey(qs,zh,true,q=>A[q.no]||q.answer,q=>(SP[q.no]!==undefined?SP[q.no]:(q.support||'')),FZ,OK); },
+        pick:cur?(()=>this.setState({srvOpen:'srv-01',srvTab:(s.srvLocked||s.srvSkipped)?'answer':'check'})):(()=>this.showToast('该卷为演示陪衬，未接入数据','Filler survey — demo only'))};
+    }).sort((a,b)=>a.days-b.days);
+    const soon=rows.filter(r=>r.days<=30).length;
+    const totalQ=list.reduce((a,x)=>a+(qty[x.id]||0),0);
+    const parsed=list.filter(x=>x.status!=='新收 · 待解析').length;
+    return {
+      srvInbox:rows,
+      srvTotalQ:String(totalQ),
+      srvOpenCur:()=>this.setState({srvOpen:'srv-01',srvTab:(s.srvLocked||s.srvSkipped)?'answer':'check'}),
+      srvKpis:[
+        {v:String(list.length), zh:'份问卷在办', en:'surveys open', c:'#0B3A82', bg:'#fff'},
+        {v:String(soon), zh:'30 天内到期', en:'due in 30 days', c:soon?'#B0291D':'#1F6B32', bg:soon?'#FDF6F5':'#fff'},
+        {v:String(totalQ), zh:'累计题量', en:'items in total', c:'#33484F', bg:'#fff'},
+        {v:parsed+'/'+list.length, zh:'已解析可作答', en:'parsed & answerable', c:'#0B5B4A', bg:'#fff'}
+      ]
     };
   }
   r13Detail(s){
@@ -3784,7 +4420,7 @@ class Component extends DCLogic {
     };
   }
   drawerVals(s,anon){
-    const kind={req13:['#0B5B4A','Autoliv 全量要求 · 单项','Requirement detail'],gloss:['#0B3A82','口径说明 · 数字词典','Definitions · number dictionary'],supplier:['#002D6B','供应商档案','Supplier Profile'],requirement:['#045B75','客户要求详情','OEM Requirement'],action:['#A3620F','待办事项','Action Item'],reg:['#0891B2','法规义务','Regulatory Obligation'],datareq:['#002D6B','数据请求单','Data Request'],cascade:['#0B5B4A','传导要求 · 回收追办','Cascade requirement · tracking'],abc:['#0B5B4A','供应商能力档案','Supplier Capability']};
+    const kind={srvimp:['#0B3A82','AI 解析 · 把原件变成能答的卷','AI parsing · raw file to answerable survey'],req13:['#0B5B4A','Autoliv 全量要求 · 单项','Requirement detail'],gloss:['#0B3A82','口径说明 · 数字词典','Definitions · number dictionary'],supplier:['#002D6B','供应商档案','Supplier Profile'],requirement:['#045B75','客户要求详情','OEM Requirement'],action:['#A3620F','待办事项','Action Item'],reg:['#0891B2','法规义务','Regulatory Obligation'],datareq:['#002D6B','数据请求单','Data Request'],cascade:['#0B5B4A','传导要求 · 回收追办','Cascade requirement · tracking'],abc:['#0B5B4A','供应商能力档案','Supplier Capability']};
     const k=kind[s.drawer]||kind.supplier;
     const out={drawer:s.drawer,dwKindColor:k[0],dwKindZh:k[1],dwKindEn:k[2]};
     out.dwr3=this.r13Detail(s);
@@ -3935,10 +4571,10 @@ class Component extends DCLogic {
        tzh:'第 1 步 · 导入客户问卷',ten:'Step 1 · Ingest the customer questionnaire',
        dzh:'客户 P 把 112 题的 Excel 发到邮箱。在这里选客户、上传原件，AI 解析成可作答的卷 —— 不用人工把题抄进系统。',
        den:'Customer P emails a 112-question Excel. Pick the customer, upload the file, and AI turns it into an answerable survey — no manual re-typing.'},
-      {set:{view:'v11',srvOpen:'srv-01',srvImport:0,srvTab:'answer',srvFilter:'todo',drawer:null},
-       tzh:'第 2 步 · 作答与得分：只看需要人处理的',ten:'Step 2 · Answer & score: only what needs a human',
-       dzh:'83 题由历史答卷与证据库自动预填，剩下的进「需处理」。切到「得分与传导」可看这份卷的得分、差距，以及哪些差距要往供应链传导。',
-       den:'83 items are pre-filled from history and the evidence library; the rest land in "needs action". The score tab shows gaps and which of them must be cascaded.'},
+      {set:{view:'v11',srvOpen:'srv-01',srvImport:0,srvTab:'check',srvChkFil:'issue',srvLocked:false,srvSkipped:false,drawer:null},
+       tzh:'第 2 步 · 一份卷走三段：① 校卷 → ② 作答 → ③ 交卷',ten:'Step 2 · Three phases: verify, answer, submit',
+       dzh:'先校卷：确认这 112 题读对了（2 题疑似重复、4 题低置信已挑出），锁定题面再作答 —— 题读错了，答得再对也没用。作答段 66 题 AI 已填且可信不用你看，其余按"下一步该做什么"分五档；答不了的点「答不了？」分流成传导或向客户澄清。交卷段先过校验再提交，等回的题可催办、可兜底作答，也可部分提交。',
+       den:'Verify first: confirm the 112 items were read correctly (2 suspected duplicates, 4 low-confidence), then lock the wording. In answering, 66 AI-filled items need no review; the rest are queued by next action, and "can\'t answer" routes to a cascade or a customer clarification. Submitting runs the checks first — waiting items can be chased, answered with a fallback, or partially submitted.'},
       {set:{view:'v12',srvOpen:'srv-01',focusSup:null,cs12Filter:'all',drawer:null},
        tzh:'第 3 步 · 传导对齐：把客户缺口翻译成供应商要求',ten:'Step 3 · Cascade alignment',
        dzh:'各客户答不了的缺口，按"同一件事"合并去重成 7 条，并入 Autoliv 37 项要求；下发不在这里做 —— 到「全量要求」勾选后按供应商聚合成一家一张任务单，供应商不会被一条一条打扰。',
@@ -4247,7 +4883,7 @@ class Component extends DCLogic {
       v8:[['管制实体 / 链路 / 政策','entity, link, policy'],['m3Feed','m3Rows','m3Trail']],
       v9:[['尽调步骤 / 红线项','DD step, red line'],['ddSteps','ddRedlines']],
       v10:[['任务 / 要求','task, requirement'],['m1Tasks']],
-      v11:[['问卷题号 / 题目关键字','question no., keyword'],[]],
+      v11:[['问卷题号 / 题目关键字 / 存疑题','question no., keyword, flagged'],[]],
       v12:[['传导要求 / 下发单号','cascade item, dispatch ID'],[]],
       v13:[['要求编号 / 标题 / 系统','requirement ID, title, system'],[]]
     };
