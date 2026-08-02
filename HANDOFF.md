@@ -1,12 +1,53 @@
 # Handoff — Autoliv ESG Cockpit
 
-供应链 ESG 合规工作台，服务外方管理层。单文件 DC：`Autoliv ESG Cockpit.dc.html`（模板 + 逻辑类 `Component`，~1300 行）。
+供应链 ESG 合规工作台，服务外方管理层。主体是单文件 DC：`Autoliv ESG Cockpit.dc.html`（模板 + 逻辑类 `Component`，**5482 行 / 629KB**）。
+
+同目录另有两个独立 DC 页，不共享 `Component`：
+- `ASSI 线上供应商可持续问卷.dc.html` —— 供应商视角的 133 题问卷，题库在 `assi-data.js`（`window.ASSI` 的 `QS/PIL/INFO/DEMO/HIST`）。**工作台用 iframe 内嵌它**（供应商问卷的 ASSI 标签页），所以这个文件名被硬编码在 cockpit 里，改名前先改那处 `<iframe src>`。
+- `Autoliv Demo 页面框架.dc.html` —— 信息架构梳理讲解页，纯静态。
+
+部署侧（三个入口页、`.vercelignore` 的坑、同步自检清单）见 `README.md`，本文只讲实现。
 
 ## 设计基准
 - 参考 ComplianceCenter（`/projects/5aede5ad-08ed-4ae4-98c2-2dcf61dbd7ed/docs/redesign/mockups/customer-demos/sdhi/07-compliance-center.html`）：224px 左侧边栏 + 顶栏面包屑 + 卡片语言 + water/leaf/earth/ink token。
 - Autoliv 海军蓝 `#002D6B` 作品牌层。绿=达标、橙=进行、红=缺口。
 - 字体：Plus Jakarta Sans / Manrope(数字) / Noto Sans SC / JetBrains Mono(编码)。
 - **全内联样式**；helmet `<style>` 仅放 reset + 属性选择器开关（view/oem/lang/anon/drawer 切换）。
+
+## 第六轮：供应商达标口径统一 + 引入中候选池（2026-08-02）
+这轮的主题是**把"供应商好不好"的口径收敛成一个函数**，别处一律引用，不再各屏各算。
+
+- **`reqCats()`** —— 五类要求的单一定义（英文 key ↔ 中文 ↔ 主题色）：治理框架 `#5B3FA8` · 气候与循环 `#0B5B4A` · 负责任经营 `#0B3A82` · 安全与包容职场 `#A3620F` · 道路安全 `#B0291D`。key 用英文，因为要和 `state.reqs` 里的 `r.category` 对上。
+- **`supCompliance(code)`** —— 唯一的评分口径：37 项要求逐项判定，**硬性/新增 ×3、期望 ×1 加权**，分数 = 加权通过率，分级 `A ≥85 / A− ≥76 / B ≥66 / B− ≥58 / C ≥44 / D`。返回 `{score,grade,pass,tot,hardMiss[],cats[]}`。达标与否由 `(code 哈希 ^ 要求号)` 对 `sup.cbase`（缺省取 `sup.score`）取模决定 —— 确定性，同一家每次刷新结果一致。
+  - **缓存键必须带 `reqs.length`**（`this._compCache[code+':'+reqs.length]`）：`state.reqs` 是异步 fetch 到的，要求集没到时函数返回 0 分，若按 code 单独缓存会把 0 分永久钉住。要求集为空时直接返回空壳且**不写缓存**。
+  - 三处调用（v3 列表行、供应商抽屉、候选抽屉）共用它，数字不会互相打架。
+- **`sd37Vals()`（v7）「37 项要求达标全景」** —— 把 37 项要求按**三态**分档，每项只出现在一处：
+  - `meas` 已测量：今年问卷收了逐题回答，能算达标率（家数 + 采购额加权双口径），行可点下钻缺口名单；
+  - `cov` 仅有回收：发下去也收到回执，但没设逐题判定，只有覆盖率没有达标率。判定"是否 cov"的阈值是回收 ≥200 家，回收数公式 `Math.max(96, 327-((no*37)%118)-(期望项再减42))`，**与要求抽屉同一公式**，改一处要改两处；
+  - `none` 本周期未发起：点击跳 v13 并提示"到全量要求里挂判定口径"。
+  - 文案上明确写了"这不是数据缺失，是管理上还没开始测" —— 演示时这条是口径诚实性的关键，别删。
+- **`cands()/candSeed()/candVals()` 引入中候选池** —— v3 新增分段控件 `state.v3Seg`（`active` 在册 / `cand` 引入中）。候选企业**已建档但未准入**：没有评分、没有分级，且**不计入 `supplierRaw()` 的在册家数、达标率分母与分级分布**（这条在 `candNote` 里对用户明写）。
+  - 三条 seed（SUP-1974/1977/1980）覆盖 stage 0/1/1 三种态：待发起自评 / 等回卷（含"已读未回填"与"未读"两种细分）/ 已回卷待准入。
+  - 新增第 11 类抽屉 `kind='cand'`（`.dwd.cd`）：5 步引入尽调时间轴，其中审核方式由 `supCompliance` 的分数决定（<58 现场审核 / <76 文件审核 / 否则免审）。准入后写入 `supplierRaw()` 并带 `isNew:true`、`cbase:60`。
+  - **`isNew` 的用途**：`supCasNos()` 见到 `isNew` 直接返回空数组 —— 刚准入的供应商没经历过任何一轮下发，不能凭分数编出"在办条目"。
+- **v3 卡头改名**：「供应商基准清单」→**「供应商主数据清单」**（第四轮的旧名已废）。分级分布卡加了「A/A− N 家 · 要求达标良好 / C/D N 家需介入」。
+
+## 第五轮：V11 客户问卷改三段式 校卷 → 作答 → 交卷（2026-08-02）
+`state.srvTab` 驱动三个阶段（`check` / `answer` / `score`），阶段条上的角标数字全部由下面同一套桶模型算，不会漂。
+
+- **① 校卷 `srvCheckVals()`** —— 解决"AI 把题读错了怎么办"。质检卡四类：题号连续（112 题无跳号）· 疑似重复（题干完全相同，多半是原件合并单元格串行）· AI 未能可靠识别（无指引且无法归类）· 缺客户作答指引（不阻塞，仅提示）。
+  - 逐题可「标题面正确」（`srvQOK`）/「修订题面」（`srvQTxt`，草稿态 `srvQEd`）/「对照客户原文」（`srvQOr`）。**修订后的题面仅内部展示，导出给客户时仍用原文** —— 这是刻意的，别在导出里换成修订版。
+  - 出口两个：`srvLock()` 锁定题面（存疑项未清零时不放行，会切到存疑列表并 toast）→ `srvLocked`；或 `srvSkipCheck()` 跳过 → `srvSkipped`，代价是第 ③ 步校验里会挂一条「卷面未经复核」。
+  - 列表**只渲染前 40 题**，超出提示"用上方质检卡切换范围"。
+- **② 作答** —— 沿用既有的 AI 预填 + 人工确认（`srvA` 答案 / `srvS` 支持信息 / `srvF` 佐证文件 / `srvOK` 已确认 / `srvNA` 不适用与等待记录）。
+- **③ 交卷 `srvSubmitVals()`** —— 六条校验，分**硬（阻塞提交）**与**软（需说明）**：
+  - 硬：未作答 · 未确认（AI 填的没人拍板）· 空心的「是」（答是但无支持信息，客户抽查无法举证）；
+  - 软：红线未达标（最低要求项答否，须附整改计划）· 等供应商/客户回 · 卷面未复核或不适用没写理由。
+  - 每张校验卡可点，直接跳回 ② 并预置 `srvFilter` 到对应队列。
+  - **「等别人回」给了两个出口**：`chase` 催办（把承诺回期改到 2026-08-25 并留痕）、`fallback` 兜底作答（以"暂无数据 + 行动计划 + 预计补交时间"如实答 `no` 并自动确认，从此不再阻塞提交）。这是这轮的设计要点——不让"等回复"变成死锁。
+  - 硬项清零后才出「提交给客户」；若仍有等待项，另给「部分提交」（先交 N 题、声明 M 题待补）。回执写在 `srvSubmitted`。**导出不受阻塞限制**（`subGateZh` 里明写"导出不受限"）。
+- **`exportSurvey(qs,zh,filled,…)`** —— 空白卷 8 列 / 答卷 12 列（多作答、支持信息、佐证文件、最低要求、作答来源、已确认）。走 SheetJS `writeFile`，**`window.XLSX` 不在时自动降级导出带 BOM 的等价 CSV**（`/assi` 页同样有降级），所以 CDN 挂了不会白屏，只是格式退化。
+- **`srvInboxVals()` 收件箱** —— 4 份卷按剩余天数排序，≤14 天描红；只有 `srv-01`（112 题）接了真题库，其余三份点击/导出都给"演示陪衬"toast，**别误以为是 bug**。
 
 ## 主线上下文条（2026-07-30 新增）
 每个视图容器的**第一个子元素**是一条 34px「主线条」：`圆点(角色色) + 徽章(步号/角色) ｜ ← 上一步 ｜ 这一步 ｜ 交给：跳转按钮`。
@@ -64,7 +105,8 @@
 - 旧导航类名 `n1–n10` 已废弃（改为 nOV/nCU/nSU/nRG/nRP）；`go1/go5/go7…` 等跳转函数全部保留，跨屏链不受影响。
 - **V4 删除了与 V2 重复的 8×6 热力图**，换为「按客户看满足率」（`oemScores`，满足率=(覆盖+0.5×进行)/已提要求，行可点→该客户聚焦视图）——新信息而非重复。`heatRows/heatOems/heatCols` 仍在 `radarData()` 里保留未用。
 
-## 已完成（6 视图 + 4 抽屉，双语中/EN + 真实名↔匿名 OEM-01… 全局开关）
+## 第一批 V1–V6（历史记录；当前已是 13 视图 + 11 抽屉）
+双语中/EN + 真实名↔匿名 OEM-01… 全局开关。以下是这六屏最初的形态，后续各轮的改动见上方分轮小节。
 - **Shell**：侧边栏（品牌 / 工作台导航 5 项 / 自身合规导航 1 项 / 客户范围 OEM 列表 / 底部审核卡）+ 顶栏。
 - **V1 总览**：Hub banner + 5 KPI + 双向传导图 + 减排进度 + 待办队列。选中 OEM 切「客户要求明细 + 档案 + 缺口整改」聚焦视图（`.only-all/.only-focus`）。聚焦视图「查看整改路径」按钮 → 要求抽屉。
 - **V2 矩阵**：**8 指标（E×4·S×3·G×1）× 6 OEM**（吉利/长城/长安/小米/蔚来/奇瑞）承诺/请求/缺口热力矩阵，行可展开显示真实条款/出处/当前vs目标/负责人/证据/关联供应商。数据源自 `uploads/matrix_cells_副本.csv` + `matrix_detail_副本.csv`（已回填）。
@@ -82,8 +124,25 @@
 - **V10 供应商门户**（M1，`nav .n10`，侧边栏「视角切换」组）：**独立外观**——CSS 将 aside + .topbar 隐去（`display:none !important`，内联样式必须用 important 才能盖）、根网格换单列，门户自带 #0E3B3A 深绿顶栏（标签页 + 「切回 Autoliv 采购侧」）。内容：你的 37 项 hero（四统计 + 完成度条 + 最近截止倒计）+ 分类筛选（默认「需你行动」5 项，避免 37 项长滚动；列表按 due/gap/todo/later/done 排序）+ 任务卡（三色 type 徐章 + aiCard 人话 + 交到哪个系统 + 点开看 definedZh/生效年份/平台服务 + 两按钮）+ 右栏 AI 助手/术语卡/你的缺口。persona = ABC56（amber），9 题映射到 REQ #7/6/5/8/34/19/16/2/3，其余标「待自评（演示）」。
 - 数据：`data/supply_suppliers.json`（317 家精简集，`componentDidMount` fetch，字段 n/s/p/t/f（9 位 0-1 串）/r/a）；聚合数字与 9 题统计内联在 `sdQStats()`，首屏不等 fetch。原包 `data/supply_demo.json`、`data/survey_demo.json` 已就位（M1/M4/V7 问卷线未建）。
 
-## 抽屉（右侧滑出，4 类，统一任务模型）
-`.dw-wrap[data-kind="…"]` 驱动显隐（kind ∈ supplier/requirement/action/reg/datareq/abc）。
+## 抽屉（右侧滑出，**11 类**，统一任务模型）
+`.dw-wrap[data-kind="…"]` 驱动显隐。当前全集（`state.drawer` 取值 ↔ 内容容器类名）：
+
+| kind | 类名 | 内容 | 加入 |
+|---|---|---|---|
+| `supplier` | `.dwd.s` | 供应商档案 | 首批 |
+| `requirement` | `.dwd.r` | 客户要求详情 | 首批 |
+| `action` | `.dwd.a` | 待办 | 首批 |
+| `reg` | `.dwd.rg` | 法规义务 | 首批 |
+| `datareq` | `.dwd.dr` | 数据请求单 | 首批 |
+| `abc` | `.dwd.ab` | 供应商能力档案（ABC 编号体系） | M2/M3 |
+| `gloss` | `.dwd.gl` | 口径说明（三组勾稽链） | P1-3 |
+| `req13` | `.dwd.r3` | 全量要求行详情 | P2-8 |
+| `cascade` | `.dwd.cs` | 传导批次 | 第三轮 |
+| `srvimp` | `.dwd.si` | 问卷导入 | 第五轮 |
+| `cand` | `.dwd.cd` | 引入中候选企业（5 步尽调） | 第六轮 |
+
+新增一类要同时改三处：`state.drawer` 取值、helmet 里的 `.dw-wrap[data-kind="x"]` 选择器、`drawerVals()` 分派。
+
 - **supplier**：评分拆解 + 关键事实 + 关联客户要求 + 近期动态 + 「发起数据请求」按钮 → datareq 抽屉。
 - **requirement**：原始条款 + 当前/目标 + 负责人/截止/证据 + 整改路径 steps + 关联供应商。有专属 `reqDetail()`，其余由 `reqFromMatrix()` 合成。
 - **action**：待办描述 + 处理清单 + 活动记录。
@@ -96,19 +155,30 @@
 3. **视图/OEM/抽屉切换靠根元素 `data-view/data-oem` + `.dw-wrap[data-kind]` + helmet 属性选择器 CSS**，非 JS 显隐。
 4. **抽屉显隐用 `.dw-wrap` 自身属性**，不能用 `[data-drawer="x"] .dw-wrap` 后代选择器 — 运行时把 fixed 定位层提出了根节点，后代选择器匹配不到（已踩坑修复）。
 5. **`str_replace_edit` / `dc_*` 的 old_string 里不能含 `</x-dc>`**（会被拒）；插入到 `</main>` / `</div>` 锚点前。
-6. state 关键字段：`view, oem, lang, anon, matrixOpen, expandAll, repOem/repFw/repPeriod, drawer, dwKey, toast, sup, sdQ, m3sel`。
+6. state 关键字段：
+   - 全局：`view, oem, lang, anon, drawer, dwKey, toast, tour`
+   - 矩阵/报告：`matrixOpen, expandAll, repOem/repFw/repPeriod, repType`
+   - 供应商：`sup, sdQ, m3sel, sd37, v3Seg, v3More, cands, addOpen/addF/addRan`
+   - 客户问卷 v11：`srvOpen, srvImport, srvTab, srvLocked, srvSkipped, srvChkFil, srvQOK/srvQTxt/srvQEd/srvQOr, srvA/srvS/srvF/srvOK/srvNA, srvFilter, srvSubmitted`
+   - 传导/要求：`casMerged, cs12Sent, casHi, focusSup, r13Sel, reqs, reflow`
 7. **新视图必须插入到 `<div class="padwrap" style="padding:16px 22px 30px…">` 容器内**（与 v1–v6 同级）。写在该容器之外、`</main>` 之前，运行时会把它提到根节点外（与 dw-wrap 同一踩坑），`[data-view]` 祖先选择器失效 → 永远 display:none。
 8. **SVG `<text>` 的文本不能用 `{{ }}` 洞**（属性洞可以）——运行时会包成 `<span class="sc-interp">`，SVG 不渲染 HTML 子节点，标签隐形。动态文字标签改用给 svg 套 `position:relative` 容器 + 绝对定位 HTML 层（百分比坐标，svg 需 `height:auto` 保证等比缩放）。V7 散点点名已按此实现（带同 y 防压字错位）。
 9. **内联 `display:flex` 的元素要隐去必须 `display:none !important`**（V10 隐 aside/topbar 踩过）。
-7. 逻辑 helper：`matrixData() / matrixDetail() / radarData() / supplierRaw() / supplierData() / drawerVals() / reqDetail() / reqFromMatrix() / actionDetail() / regVals() / regDetail() / dataReqFor() / reportVals() / focusProfile()`。
+10. **凡是缓存派生结果，缓存键必须带上依赖数据的规模**。`state.reqs` / `state.srv` / `state.sup` 都是 `componentDidMount` 里异步 fetch 的，首帧一定是空的；按 id 单独缓存会把首帧算出来的 0 值永久钉住。现成写法见 `supCompliance()` 的 `code+':'+reqs.length`，并且**数据没到时直接返回空壳、不写缓存**。
+11. **同一个数字只能有一个来源函数**。已经统一的：供应商达标 → `supCompliance()`（v3 行/供应商抽屉/候选抽屉三处共用）；客户名 → `cn()/custKeyOf()`；传导批次 → `casBatches()`；要求分类 → `reqCats()`。新增派生数字前先找有没有现成的，别在 vals 里就地再算一遍。
+12. **回收覆盖数公式在两处**（`sd37Vals()` 与要求抽屉）：`Math.max(96, 327-((no*37)%118)-(期望项再减 42))`，改一处必须同步另一处，否则同一要求在两屏显示不同覆盖数。
+13. 逻辑 helper：`matrixData() / matrixDetail() / radarData() / supplierRaw() / supplierData() / drawerVals() / reqDetail() / reqFromMatrix() / actionDetail() / regVals() / regDetail() / dataReqFor() / reportVals() / focusProfile() / reqCats() / supCompliance() / casBatches() / custDefs() / cn()`。
 
 ## 数据源（uploads/ 与 data/）
-- `data/supply_demo.json`（D0′ 包：37 项要求 / 317 家 / 聚合 / MOFCOM / 尽调）、`data/survey_demo.json`（D0 包：112 题客户问卷）——后者尚未接入 UI。
-- `data/supply_suppliers.json`（由 supply_demo 衍生的精简集，供 V7 散点/下钻/抽屉用；
-- `matrix_cells_副本.csv` / `matrix_detail_副本.csv`（8 指标×6 OEM，已回填 V2/V4）
+三个 JSON 都在 `componentDidMount` 里 fetch，**首帧一定拿不到**（见「关键实现注意」第 10 条）：
+
+- `data/supply_demo.json` → `state.reqs` 等（D0′ 包：37 项要求 / 317 家 / 聚合 / MOFCOM / 尽调）。**37 项要求是 `supCompliance()` 与 v13 的底座**，没到之前评分全是 0。
+- `data/survey_demo.json` → `state.srv`（D0 包：112 题客户问卷 + `inbox` + `factoryProfile`）。**第五轮起已全面接入 v11**（收件箱 / 校卷 / 作答 / 交卷 / 导出都读它），不再是"未接入"。
+- `data/supply_suppliers.json` → `state.sup`（317 家精简集，字段 `n/s/p/t/f/r/a`，`f` 是 9 位 0/1 串 = 一个供应商的 9 题达标）。供 V7 散点 / 下钻 / abc 抽屉用；聚合数字与 9 题统计内联在 `sdQStats()`，首屏不等 fetch。
+- `matrix_cells_副本.csv` / `matrix_detail_副本.csv`（8 指标×6 OEM，已回填 V2/V4，代码里是内联值，运行时不读 CSV）
 - `OEM可持续供应链要求_调研详情.md`、`OEM_S维度要求专题_人权劳工与负责任采购.md`（条款出处底稿）
 
-一个供应商 = 一行 9 位 0/1 串）。
+注意 317（问卷回收子集）↔ 327（供应商基准/主数据）↔ 引入中候选（不计入任何分母）三个口径的关系，`gloss` 抽屉里有完整勾稽链。
 
 ## 跨屏联动（新屏不是孤岛 —— 从旧屏进入）
 新模块除侧边栏入口外，均在现有屏的卡头（`.chd`）右侧挂了文字链跳转，不新增导航层级：
@@ -127,4 +197,19 @@
 - 已用 **mock 数据补全**：`supplierRaw()` 每家新增 `biz/riskK/site/contact`（年供货额/风险等级/生产基地/对接人），供应商档案抽屉 6 张 fact + 数据请求单抬头(对接人/基地)均取真值；anon 模式下基地/对接人隐去为「—」。
 - 已用 **toast 补全交互**：`showToast(zh,en)` + state.toast；抽屉所有静态按钮（整改计划 / 标记完成·指派 / 生成整改任务·订阅触发流 / 发送请求单·PDF·存草稿）均 onClick 弹出确认 toast（2.8s 自动消失，底部居中）。如需真实动作再接后端。
 - **仍需用户提供以贴近真实**：Autoliv 实际发给供应商的数据清单字段/填报周期/可接受证据类型（现为 7 项 mock）；矩阵 Autoliv 侧真实当前值（CMRT 覆盖率、SAQ 等级等，现为演示占位）。
-- **未建（已确认的下一批）**：v11 客户问卷（7a/7b/7c 三步合在一个 tab 内）、v12 传导对齐（三列：客户条款 ↔ Autoliv 目标/37 项 ↔ 发给供应商的 10 题）、datareq 抬头 `sourceSurveyQ`、V2 三处来源徽章、V3 换装 317 家、**供应商抽屉合并为 4 tab**（档案/碳数据/问卷能力/关联客户要求）、**总览驾驶舱根据新增内容更新（最后做）**。
+
+### 旧待办的当前状态（2026-08-02 复核）
+- ✅ **v11 客户问卷**：已建，且从"三步合在一个 tab"演进成 `srvTab` 三段式（校卷/作答/交卷），见第五轮。
+- ✅ **v12 传导对齐**：已建，并在第三轮改成「先并入全量要求 → 按供应商聚合下发」。
+- ✅ **V3 换装**：已从 7 家扩到 327 家主数据清单，并在第六轮加了「引入中」分段。
+- ⬜ **datareq 抬头 `sourceSurveyQ`**：仍未做。
+- ⬜ **V2 三处来源徽章**：仍未做。
+- ⬜ **供应商抽屉合并为 4 tab**（档案/碳数据/问卷能力/关联客户要求）：仍未做；第六轮只是给它接了 `supCompliance()`，结构没动。
+- ⬜ **总览驾驶舱随新增内容更新**：第四轮做过一次（5 格主线流水线），但第五/六轮新增的**校卷阻塞项、引入中候选**尚未反映到 v1 的"今天该做什么"里。
+
+### 已知遗留（不是 bug，别去"修"）
+- `r13Dispatch` 的 148 家为演示定值，不随勾选变化。
+- v7 散点仍来自 `s.sup`（317 条 ABC 数据），与 327 家主数据是「问卷回收子集 ⊂ 主数据」的关系，`gloss` 抽屉已解释。
+- v11 收件箱 4 份卷里只有 `srv-01` 接了真题库，其余三份点击/导出均给"演示陪衬"toast。
+- `_supAll` / `_compCache` 挂在实例上，热重载后会重算，正常。
+- 第三轮的 v12→v13 链路当时未点验（eval 超时，页面节点多）；如需验证请拆成多次小 eval，别一次跑全量。

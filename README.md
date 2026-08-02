@@ -57,6 +57,12 @@ for d in data uploads screenshots; do rsync -a "$DESIGN/$d/" "$d/"; done
 git add -A && git commit -m "..." && git push
 ```
 
+⚠️ 第 2 步是**从设计文件夹往仓库单向覆盖**。`HANDOFF.md`、`.dc.html`、`assi-data.js`
+在两边各有一份，**只改仓库这边会在下次同步时被静默盖掉**。要改这些文件，
+改完记得回写设计文件夹（`cp HANDOFF.md "$DESIGN"/`），或者干脆在设计文件夹里改。
+只属于仓库、设计文件夹没有的文件（`README.md` / `sync.sh` / `vercel.json` /
+`.vercelignore` / 三个入口页）不受影响。
+
 ### ⚠️ 提交邮箱必须是 charlielamplit
 
 Vercel 会校验 commit 作者邮箱对应的 GitHub 账号是否有本项目权限，**不匹配的提交会被拦下**
@@ -134,6 +140,10 @@ python3 -m http.server 8080
 - Framework Preset: **Other**
 - Build Command / Output Directory / Install Command：均留空（根目录直出）
 
-运行时需联网加载：React 18.3.1 UMD（`unpkg.com`）、Google Fonts，
-以及 SheetJS 0.20.3（`cdn.sheetjs.com`）——`/` 和 `/assi` **两个页面都要**：
-`/` 用它按客户模板导出问卷（`exportSurvey()`），`/assi` 用它做问卷 Excel 导入导出。
+运行时需联网加载：
+
+- **React 18.3.1 UMD（`unpkg.com`）** —— 硬依赖，拿不到就白屏。
+- **Google Fonts** —— 掉了只是回落系统字体。
+- **SheetJS 0.20.3（`cdn.sheetjs.com`）** —— `/` 和 `/assi` 都用（前者按客户模板导出问卷
+  `exportSurvey()`，后者做问卷 Excel 导入导出）。**两个页面都做了降级**：`window.XLSX`
+  不在时自动改导出带 BOM 的等价 CSV 并 toast 说明，所以 CDN 挂了不影响演示，只是格式退化。
