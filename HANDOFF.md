@@ -1,6 +1,6 @@
 # Handoff — Autoliv ESG Cockpit
 
-供应链 ESG 合规工作台，服务外方管理层。主体是单文件 DC：`Autoliv ESG Cockpit.dc.html`（模板 + 逻辑类 `Component`，**6671 行 / 750KB**）。
+供应链 ESG 合规工作台，服务外方管理层。主体是单文件 DC：`Autoliv ESG Cockpit.dc.html`（模板 + 逻辑类 `Component`，**6889 行 / 768KB**）。
 
 同目录另有两个独立 DC 页，不共享 `Component`：
 - `ASSI 线上供应商可持续问卷.dc.html` —— 供应商视角的 133 题问卷，题库在 `assi-data.js`（`window.ASSI` 的 `QS/PIL/INFO/DEMO/HIST`）。**工作台用 iframe 内嵌它**（供应商问卷的 ASSI 标签页），所以这个文件名被硬编码在 cockpit 里，改名前先改那处 `<iframe src>`。
@@ -13,6 +13,29 @@
 - Autoliv 海军蓝 `#002D6B` 作品牌层。绿=达标、橙=进行、红=缺口。
 - 字体：Plus Jakarta Sans / Manrope(数字) / Noto Sans SC / JetBrains Mono(编码)。
 - **全内联样式**；helmet `<style>` 仅放 reset + 属性选择器开关（view/oem/lang/anon/drawer 切换）。
+
+## 第八轮：V1 总览驾驶舱重做（2026-08-03）
+新增 `v1Vals(s,zh)` 一个方法（+218 行），V1 整屏换掉。**这是清掉了「总览驾驶舱随新增内容更新」那条老待办。** 无新视图 / 抽屉 / 资源引用。
+
+### 屏结构（自上而下）
+1. **价值链合规达成度**：`vcPct = selfPct×0.4 + chainPct×0.6`。`selfPct` = 客户问卷已自答比例（`(112-todoN)/112`），`chainPct` = 全链达标比例（`chainOk/chainTot`）。整屏状态灯 `overall`：稀土窗口 ≤120 天 → `bad`，否则有待补项 → `warn`，全清 → `ok`。
+2. **三条紧急事项**（`v1Urgent`）：稀土敞口倒计时 → v8 · 47 家高风险待帮扶 → v7 · 67 家未回传导 → v12。
+3. **两个需求来源**（`v1Src`）：客户要求（4 份在办）→ v2 · 法规与管制（16 条义务）→ v6。**并列呈现是刻意的** —— 文案写明「两条都是必须响应的来源」。
+4. **五段主线**（`v1SpineRest`，第 1 段"需求来源"由上面的卡承担，模板只渲染 2–5 段）：自身响应 → 向上游传导 → 监督上游回填 → 达成。每段带指标行 + 直达按钮。
+5. **管理 KPI · 汇报口径**（新卡）：`v1Mgmt` 五个率（接入 / 填报 / 证据完整 / 准时 / 采购额碳覆盖）· `v1Deliv` 四类交付物 · `v1Risk` 四个风险计数 · `v1Drill` 五个下钻维度（客户 / 零件 / 材料 / 工厂 / 区域）。
+
+### 要注意的点
+- **稀土倒计时读的是 `reg_demo.json`**：`regulations` 里 id 为 `RARE` 的那条 + `calendar['2026']` 里含"稀土"的条目，正则取 `MM-DD` 拼成 `2026-MM-DD`，取不到时兜底 `11-10`。**`regPack` 没到时用的就是兜底值**，首帧倒计时可能与稳态不一致。
+- **`rareDays` 用 `new Date()` 实时算**，所以这个数字**每天都在变**，演示截图对不上是正常的。
+- **`s.v1Base` 是个只读的覆盖钩子**：`const B=s.v1Base||{}` 提供了 `srvPacks/packs/tasks/back/chainOk/late/notCascaded/highRisk/registered/evOk/onTime/spendCov/spend/capLate/certDue/anomaly` 等十几个基数的默认值，但**全库没有任何地方给 `v1Base` 赋值**。要接真实数据，往 state 里塞 `v1Base` 即可，不必改 `v1Vals`。
+- 回流态 `s.reflow` 会微调数字（已回 +1、逾期 −4、未回传导 −7、全链达标 +1），保持与导览故事一致。
+
+### 本轮留下的死代码（**不要当 bug 修，但也别再往上加东西**）
+V1 换屏后，旧屏的几处计算还留着，只是没有模板在渲染：
+- `mainlineVals(s,zh)` 仍在 `renderVals()` 里被展开，但 `mlStages` / `mlLoopZh` / `mlLoopCta` / `mlLoopGo` 在模板中**引用次数均为 0** —— 第四轮那条「5 格主线流水线」已被本轮的 spine 取代。
+- `kpis:this.kpiData(s.oem)` 仍在算，`{{ kpis }}` 模板中已无引用（旧 5 KPI 行）。`kpiData()` 本身还被别处用，别删函数。
+- `go11` 仍有定义，模板引用为 0。
+清理它们是安全的，但属于独立的一次瘦身，别混在同步里做。
 
 ## 第七轮：法规包外置 + V14 单项要求管理（2026-08-03）
 两件事：法规内容从硬编码搬进数据包；给"一条要求"开了独立的执行台账屏。
@@ -245,7 +268,7 @@
 - ⬜ **datareq 抬头 `sourceSurveyQ`**：仍未做。
 - ⬜ **V2 三处来源徽章**：仍未做。
 - ⬜ **供应商抽屉合并为 4 tab**（档案/碳数据/问卷能力/关联客户要求）：仍未做；第六轮只是给它接了 `supCompliance()`，结构没动。
-- ⬜ **总览驾驶舱随新增内容更新**：第四轮做过一次（5 格主线流水线），但第五/六轮新增的**校卷阻塞项、引入中候选**尚未反映到 v1 的"今天该做什么"里。
+- ✅ **总览驾驶舱随新增内容更新**：第八轮整屏重做（`v1Vals`），价值链合规达成度 + 三条紧急事项 + 两个需求来源 + 五段主线 + 管理 KPI 卡。第四轮的 5 格主线流水线已被取代（残留死代码见第八轮小节）。
 
 ### 已知遗留（不是 bug，别去"修"）
 - **v14 不在顶栏搜索范围内**：`searchScope()` 仍只定义了 v1–v13 的占位与过滤键，v14 会落到「该视图暂不支持搜索」的 disabled 分支。名单筛选用屏内的 `r14Fil` 即可；要接搜索得往 `searchScope()` 加一条。

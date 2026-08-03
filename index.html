@@ -206,7 +206,7 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
       <button onClick="{{ go6 }}" style="font-size:11px;font-weight:700;color:#045B75;white-space:nowrap"><span class="zh">法规线 →</span><span class="en">Regulatory →</span></button>
     </span>
   </div>
-  <div style="border:1px solid #CDE0F2;border-left:3px solid #002D6B;border-radius:14px;padding:15px 18px;background:linear-gradient(135deg,#EBF2FA,#F0FAF0 90%);margin-bottom:14px">
+  <div style="border:1px solid #CDE0F2;border-radius:14px;padding:15px 18px;background:linear-gradient(135deg,#EBF2FA,#F0FAF0 90%);margin-bottom:14px">
     <div style="font-size:9.5px;letter-spacing:.2em;color:#003A7A;font-weight:700;text-transform:uppercase"><span class="zh">集团供应链 ESG 合规态势</span><span class="en">Group Supply-Chain ESG Posture</span></div>
     <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-top:5px">
       <div style="flex:1">
@@ -218,50 +218,148 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
         <button onClick="{{ go5 }}" style="padding:7px 13px;border-radius:8px;font-size:12px;font-weight:700;background:#002D6B;color:#fff"><span class="zh">生成客户报告</span><span class="en">OEM report</span></button>
       </div>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:13px">
-      <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="5">
-        <div style="background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.9);border-radius:9px;padding:9px 12px">
-          <div style="font-size:10px;color:#5A6E75;font-weight:600;display:flex;align-items:center;gap:5px"><span class="zh">{{ k.lzh }}</span><span class="en">{{ k.len }}</span><span class="itip" style="display:{{ k.tipShow }}">ⓘ<span class="tp"><span class="zh">{{ k.tipZh }}</span><span class="en b">{{ k.tipEn }}</span></span></span></div>
-          <div style="font-family:Manrope;font-size:23px;font-weight:800;letter-spacing:-.02em;color:{{ k.color }};margin-top:1px">{{ k.v }}</div>
-          <div style="font-size:10px;color:{{ k.subColor }};font-family:Manrope;margin-top:1px;font-weight:600"><span class="zh">{{ k.szh }}</span><span class="en">{{ k.sen }}</span></div>
+    <div style="display:grid;grid-template-columns:396px 1fr;gap:14px;margin-top:13px;align-items:stretch">
+      <div style="background:rgba(255,255,255,.82);border:1px solid rgba(255,255,255,.95);border-radius:11px;padding:13px 15px">
+        <div style="display:flex;align-items:center;gap:9px">
+          <span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#003A7A"><span class="zh">价值链合规达成度</span><span class="en">Value-chain compliance</span></span>
+          <span style="margin-left:auto;display:flex;align-items:center;gap:6px;font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:6px;background:{{ v1StBg }};color:{{ v1StFg }}"><span style="width:7px;height:7px;border-radius:50%;background:{{ v1StDot }}"></span>{{ v1StLabel }}</span>
         </div>
-      </sc-for>
+        <div style="display:flex;align-items:flex-end;gap:5px;margin-top:6px">
+          <span style="font-family:Manrope;font-size:46px;font-weight:800;letter-spacing:-.045em;line-height:.9;color:#002D6B">{{ v1Pct }}</span>
+          <span style="font-family:Manrope;font-size:17px;font-weight:800;color:#002D6B;padding-bottom:3px">%</span>
+          <span style="margin-left:auto;font-size:10.5px;color:#5A6E75;text-align:right;line-height:1.45;padding-bottom:2px"><span class="zh">{{ v1StNoteZh }}</span><span class="en b">{{ v1StNoteEn }}</span></span>
+        </div>
+        <div style="height:9px;background:#E1E9F2;border-radius:999px;margin-top:9px;overflow:hidden"><div style="width:{{ v1PctW }};height:100%;background:linear-gradient(90deg,#002D6B,#0891B2);border-radius:999px"></div></div>
+        <div style="display:flex;gap:9px;margin-top:9px">
+          <div style="flex:1;border-top:2px solid #D7E3F6;padding-top:6px">
+            <div style="font-size:9.5px;color:#8397A0;font-weight:600"><span class="zh">自身合规度</span><span class="en">Own compliance</span></div>
+            <div style="font-family:Manrope;font-size:15px;font-weight:800;color:#0B3A82">{{ v1SelfPct }}</div>
+          </div>
+          <div style="flex:1;border-top:2px solid #CFE8DE;padding-top:6px">
+            <div style="font-size:9.5px;color:#8397A0;font-weight:600"><span class="zh">全链达标</span><span class="en">Chain met</span></div>
+            <div style="font-family:Manrope;font-size:15px;font-weight:800;color:#0B5B4A">{{ v1ChainOk }} <span style="font-size:11px;color:#8397A0">/ {{ v1ChainTot }}</span></div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:7px">
+        <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#003A7A"><span class="zh">今天最紧急 · 三项</span><span class="en">Most urgent today · three</span></div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:9px;flex:1">
+          <sc-for list="{{ v1Urgent }}" as="u" hint-placeholder-count="3">
+            <div class="rowlink" onClick="{{ u.go }}" style="display:flex;flex-direction:column;gap:5px;background:rgba(255,255,255,.82);border:1px solid rgba(255,255,255,.95);border-radius:10px;padding:10px 12px">
+              <div style="display:flex;align-items:center;gap:6px">
+                <span style="font-size:9.5px;font-weight:800;padding:2px 8px;border-radius:5px;background:{{ u.solid }};color:#fff">{{ u.label }}</span>
+                <span style="font-family:Manrope;font-size:10px;font-weight:700;color:{{ u.fg }}"><span class="zh">{{ u.mZh }}</span><span class="en">{{ u.mEn }}</span></span>
+              </div>
+              <div style="font-size:12px;font-weight:700;color:#0F1E24;line-height:1.35"><span class="zh">{{ u.kZh }}</span><span class="en">{{ u.kEn }}</span></div>
+              <div style="font-size:10px;color:#5A6E75;line-height:1.45;flex:1"><span class="zh">{{ u.sZh }}</span><span class="en b">{{ u.sEn }}</span></div>
+              <div style="font-size:10.5px;font-weight:800;color:#003A7A">{{ u.cta }} →</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
     </div>
   </div>
   <div class="only-all">
     <div class="card" style="margin-bottom:14px">
-      <div class="chd"><h3><span class="zh">主线 · 这一轮走到哪了</span><span class="en">Main line · where this round stands</span></h3><span class="pill"><span class="zh">客户问卷 → 缺口 → 并入要求 → 聚合下发 → 回流</span><span class="en">survey → gaps → merge → dispatch → reflow</span></span><span style="margin-left:auto;font-size:11px;color:#8397A0"><span class="zh">每一格都是入口，点进去就是那一步的操作屏</span><span class="en">Every tile is an entry point</span></span></div>
-      <div style="display:flex;align-items:center;gap:8px;padding:11px 16px 0;flex-wrap:wrap">
-        <span style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#9AABB1"><span class="zh">三个入口</span><span class="en">Three entry points</span></span>
-        <button onClick="{{ go11 }}" style="display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:600;padding:6px 12px;border-radius:8px;background:#F2F6FD;border:1px solid #D7E3F6;color:#0B3A82" style-hover="background:#E6EEFA;border-color:#0B3A82"><span style="width:6px;height:6px;border-radius:50%;background:#0B3A82"></span><span class="zh">计划拉动 · 客户年度问卷</span><span class="en">Planned · annual OEM survey</span><span style="font-weight:700">→</span></button>
-        <button onClick="{{ go8 }}" style="display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:600;padding:6px 12px;border-radius:8px;background:#F2FAFC;border:1px solid #CFE9F2;color:#045B75" style-hover="background:#E4F4F9;border-color:#045B75"><span style="width:6px;height:6px;border-radius:50%;background:#045B75"></span><span class="zh">事件推动 · 法规 / 管制名单</span><span class="en">Event · regulation / control list</span><span style="font-weight:700">→</span></button>
-        <button onClick="{{ go9 }}" style="display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:600;padding:6px 12px;border-radius:8px;background:#F8F6FD;border:1px solid #E3DAF7;color:#5B3FA8" style-hover="background:#F0EBFB;border-color:#5B3FA8"><span style="width:6px;height:6px;border-radius:50%;background:#5B3FA8"></span><span class="zh">入口闸 · 新供应商尽调</span><span class="en">Gate · new-supplier DD</span><span style="font-weight:700">→</span></button>
-        <span style="font-size:10px;color:#9AABB1;margin-left:2px"><span class="zh">完整 7a/b/c 问卷线第 4 步接入</span><span class="en">Full questionnaire flow lands in step 4</span></span>
+      <div class="chd" style="flex-wrap:wrap"><h3><span class="zh">价值链合规主线 · 地图与实时状态</span><span class="en">Value-chain compliance line · map & live status</span></h3><span class="pill"><span class="zh">需求来源 → 自身响应 → 向上游传导 → 监督回填 → 达成</span><span class="en">sources → own response → cascade → supervise → achieved</span></span><span style="margin-left:auto;display:flex;align-items:center;gap:9px"><span style="font-size:11px;color:#8397A0"><span class="zh">每段可点进对应操作屏</span><span class="en">Each segment opens its screen</span></span><button onClick="{{ v1Tour }}" style="font-size:11px;font-weight:800;color:#0B5B4A;white-space:nowrap"><span class="zh">用导览走一遍 →</span><span class="en">Run the tour →</span></button></span></div>
+      <div style="padding:14px 16px 17px;display:grid;grid-template-columns:1.5fr 14px 1fr 14px 1fr 14px 1.15fr 14px 1fr;gap:0;align-items:stretch">
+        <div style="display:flex;flex-direction:column;gap:7px;border:1px solid #E1E7EA;border-radius:12px;padding:11px 12px;background:#FBFCFD">
+          <div style="display:flex;align-items:center;gap:7px">
+            <span style="width:18px;height:18px;border-radius:50%;background:#002D6B;color:#fff;font-family:Manrope;font-size:9.5px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</span>
+            <span style="font-size:11.5px;font-weight:800;color:#0F1E24"><span class="zh">需求来源</span><span class="en">Demand sources</span></span>
+            <span style="margin-left:auto;font-size:9.5px;font-weight:700;color:#8397A0"><span class="zh">两者并列</span><span class="en">Side by side</span></span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;flex:1">
+            <sc-for list="{{ v1Src }}" as="c" hint-placeholder-count="2">
+              <div class="rowlink" onClick="{{ c.go }}" style="display:flex;flex-direction:column;gap:4px;border:1px solid #E6EBEE;border-radius:9px;padding:9px 10px;background:#fff">
+                <div style="font-size:11px;font-weight:800;color:#0F1E24"><span class="zh">{{ c.kZh }}</span><span class="en">{{ c.kEn }}</span></div>
+                <div style="display:flex;align-items:baseline;gap:4px">
+                  <span style="font-family:Manrope;font-size:22px;font-weight:800;letter-spacing:-.03em;line-height:1;color:{{ c.fg }}">{{ c.v }}</span>
+                  <span style="font-size:10px;font-weight:700;color:#5A6E75"><span class="zh">{{ c.uZh }}</span><span class="en">{{ c.uEn }}</span></span>
+                </div>
+                <div style="font-size:9.5px;color:#5A6E75;line-height:1.45;flex:1"><span class="zh">{{ c.sZh }}</span><span class="en b">{{ c.sEn }}</span></div>
+                <div style="display:flex;align-items:center;gap:5px">
+                  <span style="font-size:9px;font-weight:800;padding:2px 7px;border-radius:5px;background:{{ c.solid }};color:#fff">{{ c.label }}</span>
+                  <span style="margin-left:auto;font-size:9.5px;font-weight:800;color:#003A7A;white-space:nowrap">{{ c.cta }}</span>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:center;color:#C4D0D5;font-size:13px;font-weight:800">›</div>
+        <sc-for list="{{ v1SpineRest }}" as="m" hint-placeholder-count="4">
+          <div class="rowlink" onClick="{{ m.go }}" style="display:flex;flex-direction:column;gap:7px;border:1px solid #E1E7EA;border-radius:12px;padding:11px 12px;background:#fff">
+            <div style="display:flex;align-items:center;gap:7px">
+              <span style="width:18px;height:18px;border-radius:50%;background:{{ m.dot }};color:#fff;font-family:Manrope;font-size:9.5px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">{{ m.no }}</span>
+              <span style="font-size:11.5px;font-weight:800;color:#0F1E24;line-height:1.25"><span class="zh">{{ m.zh }}</span><span class="en">{{ m.en }}</span></span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:4px;flex:1">
+              <sc-for list="{{ m.rows }}" as="r" hint-placeholder-count="2">
+                <div style="display:flex;align-items:baseline;gap:6px">
+                  <span style="font-size:10px;color:#5A6E75;font-weight:600"><span class="zh">{{ r.lZh }}</span><span class="en">{{ r.lEn }}</span></span>
+                  <span style="margin-left:auto;font-family:Manrope;font-size:17px;font-weight:800;letter-spacing:-.03em;line-height:1;color:#0F1E24">{{ r.v }}</span>
+                  <span style="font-size:9.5px;font-weight:700;color:#8397A0"><span class="zh">{{ r.uZh }}</span><span class="en">{{ r.uEn }}</span></span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="font-size:9.5px;color:#8397A0;line-height:1.45"><span class="zh">{{ m.noteZh }}</span><span class="en b">{{ m.noteEn }}</span></div>
+            <div style="display:flex;align-items:center;gap:6px;padding-top:7px;border-top:1px dashed #E6EBEE">
+              <span style="display:flex;align-items:center;gap:5px;font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:5px;background:{{ m.bg }};color:{{ m.fg }}"><span style="width:6px;height:6px;border-radius:50%;background:{{ m.dot }}"></span>{{ m.label }}</span>
+              <span style="margin-left:auto;font-size:10px;font-weight:800;color:#003A7A;white-space:nowrap">{{ m.cta }} →</span>
+            </div>
+          </div>
+          <div style="display:{{ m.arrowShow }};align-items:center;justify-content:center;color:#C4D0D5;font-size:13px;font-weight:800">›</div>
+        </sc-for>
       </div>
-      <div style="padding:14px 16px 18px">
-        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:9px;align-items:stretch">
-          <sc-for list="{{ mlStages }}" as="m" hint-placeholder-count="5">
-            <div onClick="{{ m.go }}" style="position:relative;display:flex;flex-direction:column;gap:7px;padding:13px 14px;border-radius:12px;background:{{ m.bg }};border:1px solid {{ m.bd }};border-top:3px solid {{ m.accent }};cursor:pointer;transition:.14s" style-hover="box-shadow:0 12px 28px -14px rgba(15,30,36,.45)">
-              <div style="display:flex;align-items:center;gap:7px">
-                <span style="width:18px;height:18px;border-radius:50%;background:{{ m.accent }};color:#fff;font-family:Manrope;font-size:9.5px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">{{ m.no }}</span>
-                <span style="font-size:11.5px;font-weight:800;color:{{ m.titleFg }};line-height:1.25"><span class="zh">{{ m.zh }}</span><span class="en">{{ m.en }}</span></span>
+    </div>
+    <div class="card" style="margin-bottom:14px">
+      <div class="chd" style="flex-wrap:wrap"><h3><span class="zh">管理 KPI · 汇报口径</span><span class="en">Management KPIs</span></h3><span class="pill"><span class="zh">状态一律文字 + 色块</span><span class="en">Text + colour, no icons</span></span><span style="margin-left:auto;font-size:11px;color:#8397A0"><span class="zh">分母口径：本年度纳入的 {{ v1ChainTot }} 家直接材料供应商</span><span class="en">Denominator: {{ v1ChainTot }} direct-material suppliers</span></span></div>
+      <div style="padding:12px 16px 15px;display:flex;flex-direction:column;gap:12px">
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px">
+          <sc-for list="{{ v1Mgmt }}" as="k" hint-placeholder-count="5">
+            <div style="border:1px solid #E6EBEE;border-radius:10px;padding:10px 12px">
+              <div style="display:flex;align-items:center;gap:6px">
+                <span style="font-size:10.5px;font-weight:700;color:#33484F"><span class="zh">{{ k.lZh }}</span><span class="en">{{ k.lEn }}</span></span>
+                <span style="margin-left:auto;font-size:9px;font-weight:800;padding:1px 6px;border-radius:4px;background:{{ k.bg }};color:{{ k.fg }}">{{ k.label }}</span>
               </div>
-              <div style="display:flex;align-items:baseline;gap:5px">
-                <span style="font-family:Manrope;font-size:26px;font-weight:800;letter-spacing:-.03em;color:{{ m.accent }};line-height:1">{{ m.v }}</span>
-                <span style="font-size:10.5px;font-weight:700;color:#5A6E75">{{ m.unit }}</span>
-              </div>
-              <div style="font-size:10.5px;color:#5A6E75;line-height:1.5;flex:1"><span class="zh">{{ m.szh }}</span><span class="en b">{{ m.sen }}</span></div>
-              <div style="display:flex;align-items:center;gap:6px;padding-top:7px;border-top:1px dashed {{ m.bd }}">
-                <span style="font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:5px;background:{{ m.stBg }};color:{{ m.stFg }};white-space:nowrap">{{ m.stLabel }}</span>
-                <span style="margin-left:auto;font-size:10.5px;font-weight:800;color:{{ m.accent }};white-space:nowrap">{{ m.cta }} →</span>
-              </div>
+              <div style="font-family:Manrope;font-size:21px;font-weight:800;letter-spacing:-.03em;color:#0F1E24;margin-top:3px">{{ k.val }}</div>
+              <div style="height:4px;background:#EDF1F3;border-radius:2px;margin-top:5px;overflow:hidden"><div style="width:{{ k.w }};height:100%;background:{{ k.dot }}"></div></div>
+              <div style="font-family:Manrope;font-size:9.5px;color:#8397A0;margin-top:4px;font-weight:600">{{ k.sub }}</div>
             </div>
           </sc-for>
         </div>
-        <div style="display:flex;align-items:center;gap:10px;margin-top:11px;padding:10px 13px;border-radius:10px;background:#F7FAFB;border:1px solid #E6EBEE">
-          <span style="font-size:9.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#0B5B4A;flex-shrink:0"><span class="zh">回流</span><span class="en">Reflow</span></span>
-          <span style="font-size:11px;color:#5A6E75;line-height:1.5;flex:1"><span class="zh">{{ mlLoopZh }}</span><span class="en b">{{ mlLoopEn }}</span></span>
-          <button onClick="{{ mlLoopGo }}" style="font-size:11px;font-weight:800;color:#0B5B4A;white-space:nowrap;flex-shrink:0">{{ mlLoopCta }}</button>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;border-top:1px solid #EDF1F3;padding-top:12px">
+          <div>
+            <div style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:#8397A0;margin-bottom:7px"><span class="zh">交付状态</span><span class="en">Deliverable status</span></div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <sc-for list="{{ v1Deliv }}" as="d" hint-placeholder-count="4">
+                <div style="display:flex;align-items:center;gap:9px;border:1px solid #E6EBEE;border-radius:8px;padding:7px 10px">
+                  <span style="width:7px;height:7px;border-radius:50%;background:{{ d.dot }};flex-shrink:0"></span>
+                  <span style="font-size:11px;font-weight:700;color:#0F1E24;white-space:nowrap"><span class="zh">{{ d.zh }}</span><span class="en">{{ d.en }}</span></span>
+                  <span style="font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:5px;background:{{ d.bg }};color:{{ d.fg }};flex-shrink:0">{{ d.label }}</span>
+                  <span style="margin-left:auto;font-size:10px;color:#5A6E75;text-align:right">{{ d.note }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:#8397A0;margin-bottom:7px"><span class="zh">风险与例外</span><span class="en">Risks & exceptions</span></div>
+            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:7px">
+              <sc-for list="{{ v1Risk }}" as="r" hint-placeholder-count="4">
+                <div class="rowlink" onClick="{{ r.go }}" style="display:flex;align-items:center;gap:9px;border:1px solid #E6EBEE;border-radius:8px;padding:8px 11px;background:{{ r.bg }}">
+                  <span style="font-family:Manrope;font-size:19px;font-weight:800;letter-spacing:-.03em;color:{{ r.fg }};line-height:1">{{ r.v }}</span>
+                  <span style="font-size:10.5px;font-weight:700;color:#33484F;line-height:1.35">{{ r.label }}</span>
+                  <span style="margin-left:auto;color:#B6C4C9;font-size:12px">›</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;border-top:1px solid #EDF1F3;padding-top:11px">
+          <span style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:#8397A0;margin-right:2px"><span class="zh">合规档案下钻</span><span class="en">Drill into records</span></span>
+          <sc-for list="{{ v1Drill }}" as="d" hint-placeholder-count="5">
+            <button onClick="{{ d.go }}" style="display:flex;align-items:center;gap:7px;font-size:11px;font-weight:700;padding:5px 11px;border-radius:7px;background:#fff;border:1px solid #E1E7EA;color:#33484F" style-hover="border-color:#002D6B;color:#002D6B"><span class="zh">按{{ d.zh }}</span><span class="en">By {{ d.en }}</span><span style="font-family:Manrope;font-size:9.5px;font-weight:800;color:#9AABB1">{{ d.n }}</span></button>
+          </sc-for>
         </div>
       </div>
     </div>
@@ -3492,7 +3590,7 @@ class Component extends DCLogic {
       go9:()=>this.setState({view:'v9'}),go10:()=>this.setState({view:'v10'}),
       goCU:()=>this.setState({view:'v2'}),go11:()=>this.setState({view:'v11',srvOpen:'',srvImport:0}),go12:()=>this.setState({view:'v12'}),go13:()=>this.setState({view:'v13'}),goSU:()=>this.setState({view:'v3'}),goRG:()=>this.setState({view:'v6'}),
       ...this.shellVals(s,zh), ...this.srvVals(s,zh), ...this.cas12Vals(s,zh),
-      ...this.r13Vals(s,zh), ...this.sdVals(s), ...this.m3Vals(s), ...this.ddVals(s), ...this.m1Vals(s),
+      ...this.r13Vals(s,zh), ...this.sdVals(s), ...this.m3Vals(s), ...this.ddVals(s), ...this.m1Vals(s), ...this.v1Vals(s,zh),
       selAll:()=>this.setState({oem:'all'}),selChery:()=>this.setState({oem:'chery'}),selNio:()=>this.setState({oem:'nio'}),selGeely:()=>this.setState({oem:'geely'}),selGwm:()=>this.setState({oem:'gwm'}),
       setZh:()=>this.setState({lang:'zh'}),setEn:()=>this.setState({lang:'en'}),zhSt:seg(zh),enSt:seg(!zh),
       toggleAnon:()=>this.setState({anon:anon?'0':'1'}),
@@ -3519,7 +3617,10 @@ class Component extends DCLogic {
       closeDrawer:()=>this.setState({drawer:null,dwKey:null,casCtx:null,srvImport:0,srvImpFile:false}),
       toastShow:!!s.toast, toastZh:s.toast?s.toast.zh:'', toastEn:s.toast?s.toast.en:'',
       dwsPlan:()=>this.showToast('已生成整改计划草稿 · 同步至任务中心','Plan drafted · synced to tasks'),
-      actBrief:()=>this.showToast('管理层简报已生成（1 页 PDF：5 个 KPI + 缺口 Top5 + 本周变化）','Management brief generated · 1-page PDF'),
+      actBrief:()=>{const v=this.v1Vals(this.state,this.state.lang==='zh');
+        this.setState({view:'v5',repType:'full'});
+        this.showToast('管理层简报已生成：价值链合规达成度 '+v.v1Pct+'% · 自身 '+v.v1SelfPct+' · 全链 '+v.v1ChainOk+'/'+v.v1ChainTot,
+          'Management brief generated · '+v.v1Pct+'% value-chain compliance');},
       repPdf:()=>this.showToast('报告 PDF 已生成并开始下载（含数字口径脚注）','Report PDF generated · downloading'),
       repXlsx:()=>this.showToast('数据附录已导出 XLSX（逐题 / 逐要求 / 逐供应商三张表）','Data appendix exported as XLSX'),
       repSend:()=>this.showToast('已通过客户门户发送 · 回执与阅读状态在报告库跟踪','Sent via the customer portal · receipt tracked in the archive'),
@@ -5890,9 +5991,9 @@ class Component extends DCLogic {
        dzh:'切到供应商 ABC56 的视角：它只看到「需你行动」的几项、每项用人话解释要什么、交到哪，填完提交即回执。',
        den:'From supplier ABC56\'s side: only the items needing action, each explained in plain words with where it goes; submit and get a receipt.'},
       {set:{view:'v1',reflow:true,drawer:null,oem:'all'},
-       tzh:'第 5 步 · 回流：供应商一次填报，四处更新',ten:'Step 5 · Reflow: one submission updates everything',
-       dzh:'供应商提交后，总览的缺口数、达标全景的"未传导 67→60"、传导对齐的回收进度、客户问卷的得分同时变化 —— 这就是闭环。可再去达标全景看变化。',
-       den:'After submission the overview gaps, V7\'s "not cascaded 67→60", the cascade returns and the questionnaire score all move together — that is the loop.'}
+       tzh:'第 5 步 · 回流：供应商一次填报，全链同时更新',ten:'Step 5 · Reflow: one submission moves the whole chain',
+       dzh:'回到驾驶舱看这条主线的收口：达成度与全链达标上移、监督段「已回 470→471 / 逾期 62→58」、最紧急里「未回传导 67→60」，客户问卷得分同时变化 —— 五段首尾相接，这就是闭环。',
+       den:'Back on the cockpit: the achievement figure and chain-met count rise, supervision moves to 471 returned / 58 overdue, the urgent card drops to 60 not cascaded, and the questionnaire score moves with them — the five segments close the loop.'}
     ];
   }
   tourVals(s,zh){
@@ -6122,6 +6223,123 @@ class Component extends DCLogic {
           newSups:[rec].concat(st.newSups||[])}));
         this.showToast('已加入供应商主数据清单：'+(name||'新供应商')+'（'+code+'）· 分级 B− · 观察期 6 个月 —— 已排在列表首位，2 项硬性待补要求进入下一轮聚合下发',
           'Added to supplier master data — '+code+', grade B−, 6-month watch; listed first, 2 open mandatory items queued'); }
+    };
+  }
+  v1Vals(s,zh){
+    const rf=!!s.reflow, anon=s.anon==='1';
+    const qs=(s.srv&&s.srv.questions)||[];
+    const todoN=qs.filter(q=>q.answer==='no'||q.hollow===true).length||29;
+    const totalQ=qs.length||112;
+    const gapN=(this.casReqNos()||[]).length||7;
+    const merged=Object.keys(s.casMerged||{}).length, sent=Object.keys(s.cs12Sent||{}).length;
+    const B=s.v1Base||{};
+    const srvPacks=B.srvPacks||4, srvKpiN=B.srvKpiN||8, packs=B.packs||148;
+    const tasks=B.tasks||703, backBase=B.back||470, okBase=B.chainOk||214, lateBase=B.late||62;
+    const back=backBase+(rf?1:0), late=Math.max(0,lateBase-(rf?4:0));
+    const chainTot=((s.sup||[]).length)||B.supN||317;
+    const chainOk=Math.min(chainTot,okBase+(rf?1:0));
+    const notCascaded=(B.notCascaded||67)-(rf?7:0);
+    const highRisk=B.highRisk||47;
+    const selfPct=Math.round((totalQ-todoN)/totalQ*100);
+    const chainPct=Math.round(chainOk/chainTot*100);
+    const vcPct=Math.round(selfPct*0.4+chainPct*0.6);
+    // 稀土窗口：来自 reg_demo
+    const P=s.regPack||{};
+    const rare=((P.regulations||[]).find(r=>r.id==='RARE')||{});
+    const rareDate=(String((P.calendar&&P.calendar['2026']||[]).find(t=>/稀土/.test(t))||'').match(/\d\d-\d\d/)||['11-10'])[0];
+    const rareIso='2026-'+rareDate;
+    const rareDays=Math.max(0,Math.ceil((new Date(rareIso)-new Date())/86400000));
+    const regN=(P.regulations||[]).length||16;
+    const ST={ok:['#3FAE55','#EAF7EA','#1F6B32',zh?'就绪':'Ready'],
+      warn:['#E2A85C','#FDF3E7','#A3620F',zh?'待补':'To complete'],
+      bad:['#DC3A2C','#FEECEA','#B0291D',zh?'告警':'Alert']};
+    const chip=k=>({dot:ST[k][0],bg:ST[k][1],fg:ST[k][2],solid:ST[k][2],label:ST[k][3]});
+    const overall=rareDays<=120?'bad':(todoN||notCascaded?'warn':'ok');
+    const go=(v,extra)=>()=>this.setState({view:v,...(extra||{})});
+    const urgent=[
+      {...chip('bad'), kZh:'稀土敞口未收口',kEn:'Rare-earth exposure open',
+       mZh:'距 '+rareIso+' 剩 '+rareDays+' 天',mEn:rareDays+' days to '+rareIso,
+       sZh:(rare.deliverable||'磁材 BOM 溯源 + 双源认证')+' 未完成',sEn:'BOM tracing & dual sourcing incomplete',
+       cta:zh?'去监控墙':'Watch wall',go:go('v8')},
+      {...chip('warn'), kZh:highRisk+' 家高风险供应商待帮扶',kEn:highRisk+' high-risk suppliers need support',
+       mZh:'达标 ≤2 项 · 占 35% 采购额',mEn:'≤2 items met · 35% of spend',
+       sZh:'需指派帮扶并下发整改计划',sEn:'Assign support and issue CAPs',
+       cta:zh?'去采购视图':'Sourcing',go:go('v7')},
+      {...chip('warn'), kZh:notCascaded+' 家未回传导',kEn:notCascaded+' not cascaded back',
+       mZh:'要求 #34 缺口 · 占 13% 采购额',mEn:'Requirement #34 · 13% of spend',
+       sZh:rf?'已有 7 家由供应商回填':'尚未向其 Tier-2 传导',sEn:rf?'7 back-filled by suppliers':'Not yet cascaded to their Tier-2',
+       cta:zh?'去传导对齐':'Cascade',go:go('v12')}];
+    const seg=(no,zhT,enT,k,rows,cta,goFn,noteZh,noteEn)=>({no,zh:zhT,en:enT,...chip(k),rows,cta,go:goFn,noteZh,noteEn});
+    const spine=[
+      seg('1',zh?'需求来源':'Demand sources',zh?'需求来源':'Demand sources','bad',[],'','',
+        zh?'客户要求与法规管制并列 —— 两条都是必须响应的来源':'Customer asks and regulation sit side by side'),
+      seg('2','Autoliv 自身响应','Our own response',todoN?'warn':'ok',
+        [{lZh:'已自答',lEn:'Answered',v:String(totalQ-todoN),uZh:'题',uEn:'items'},
+         {lZh:'答不了的缺口',lEn:'Gaps',v:String(gapN),uZh:'条',uEn:'items'}],
+        zh?'去作答':'Answer',go('v11',{srvOpen:'',srvImport:0}),
+        zh?'用自有 37 项与行业标准先答，答不了的才向上游要':'Answer from our own 37 items first; only true gaps go upstream',
+        'Answer from our own 37 items first; only true gaps go upstream'),
+      seg('3',zh?'向上游传导':'Cascade upstream',zh?'向上游传导':'Cascade upstream',sent?'ok':'warn',
+        [{lZh:'下发单',lEn:'Packs',v:String(packs),uZh:'张',uEn:''},
+         {lZh:'涉及供应商',lEn:'Suppliers',v:String(packs),uZh:'家',uEn:''}],
+        zh?'去下发':'Dispatch',()=>{const sel={};this.casReqNos().forEach(n=>{sel[n]=1;});this.setState({view:'v13',r13Sel:sel});},
+        zh?'一家一张聚合任务单，不按条打扰':'One aggregated pack per supplier'),
+      seg('4',zh?'监督上游回填':'Supervise returns',zh?'监督上游回填':'Supervise returns',late?'warn':'ok',
+        [{lZh:'已回',lEn:'Returned',v:String(back),uZh:'/'+tasks,uEn:'/'+tasks},
+         {lZh:'达标',lEn:'Met',v:String(chainOk),uZh:'家',uEn:''},
+         {lZh:'逾期',lEn:'Overdue',v:String(late),uZh:'家',uEn:''}],
+        zh?'去跟踪':'Track',go('v12'),
+        zh?'回填质量与逾期一并跟踪，逾期进催办与 CAP':'Quality and overdue tracked together'),
+      seg('5',zh?'达成':'Achieved',zh?'达成':'Achieved',chainPct>=70?'ok':'warn',
+        [{lZh:'自身合规度',lEn:'Own compliance',v:selfPct+'%',uZh:'',uEn:''},
+         {lZh:'全链达标',lEn:'Chain met',v:String(chainOk),uZh:'/'+chainTot,uEn:'/'+chainTot}],
+        zh?'看全量要求':'Full set',go('v13'),
+        zh?'自身合规 + 全价值链达标，收口成对外可提交口径':'Own plus chain compliance — the reportable figure')];
+    const src=[
+      {...chip('warn'),kZh:'客户要求',kEn:'Customer asks',
+       v:String(srvPacks),uZh:'份在办',uEn:'open',
+       sZh:srvKpiN+' 个指标 · '+todoN+' 题需人处理',sEn:srvKpiN+' metrics · '+todoN+' need a human',
+       cta:zh?'客户要求 →':'Asks →',go:go('v2')},
+      {...chip('bad'),kZh:'法规与管制',kEn:'Regulation & controls',
+       v:String(regN),uZh:'条义务',uEn:'items',
+       sZh:'稀土窗口剩 '+rareDays+' 天 · 出口管制 3 条在监控墙',sEn:rareDays+' days to the rare-earth window',
+       cta:zh?'义务图谱 →':'Obligations →',go:go('v6')}];
+    const pctRow=(lZh,lEn,n,d,k)=>({lZh,lEn,val:Math.round(n/d*100)+'%',sub:n+' / '+d,...chip(k),w:Math.round(n/d*100)+'%'});
+    const mgmt=[
+      pctRow('接入率','Onboarded',chainTot,B.registered||327,'ok'),
+      pctRow('填报率','Filed',chainTot,chainTot,'ok'),
+      pctRow('证据完整率','Evidence complete',B.evOk||247,chainTot,'warn'),
+      pctRow('准时率','On time',B.onTime||273,chainTot,'warn'),
+      pctRow('采购额碳覆盖率','Spend carbon coverage',B.spendCov||636,B.spend||776,'warn')];
+    const deliv=[['PCF 产品碳足迹','PCF','ok',zh?'317 家已交 · 可直接进报告':'317 filed'],
+      ['绿电与证书','RE & certificates','warn',zh?'23 张证书 90 天内到期':'23 certificates expiring'],
+      ['矿产申报 CMRT/EMRT','Minerals filing','ok',zh?'311 家有效 · 6 家补件':'311 valid · 6 amending'],
+      ['第三方审核','Third-party audit','warn',zh?'41 家在排期 · 9 家待确认':'41 scheduled · 9 to confirm']]
+      .map(x=>({zh:x[0],en:x[1],...chip(x[2]),note:x[3]}));
+    const risk=[[zh?'高风险供应商':'High risk',String(highRisk),'bad',go('v7')],
+      [zh?'逾期 CAP':'Overdue CAP',String(B.capLate||12),'bad',go('v12')],
+      [zh?'证书 90 天内到期':'Certificates expiring',String(B.certDue||23),'warn',go('v13')],
+      [zh?'数据异常待复核':'Data anomalies',String(B.anomaly||9),'warn',go('v4')]]
+      .map(x=>({label:x[0],v:x[1],...chip(x[2]),go:x[3]}));
+    const drill=[['客户','Customer','14 '+(zh?'家':''),go('v2')],['零件','Part','2,140 '+(zh?'件':''),go('v13')],
+      ['材料','Material','86 '+(zh?'种':''),go('v14')],['工厂','Plant','19 '+(zh?'座':''),go('v3')],
+      ['区域','Region','7 '+(zh?'区':''),go('v7')]]
+      .map(x=>({zh:x[0],en:x[1],n:x[2],go:x[3]}));
+    return {
+      v1Pct:String(vcPct), v1PctW:vcPct+'%',
+      v1SelfPct:selfPct+'%', v1ChainPct:chainPct+'%',
+      v1ChainOk:String(chainOk), v1ChainTot:String(chainTot),
+      v1StDot:ST[overall][0], v1StBg:ST[overall][1], v1StFg:ST[overall][2], v1StLabel:ST[overall][3],
+      v1StNoteZh:overall==='bad'?'有硬窗口在倒计时，需要今天处理':'仍有待补项，按最紧急顺序处理',
+      v1StNoteEn:overall==='bad'?'A hard deadline is counting down':'Open items remain',
+      v1Urgent:urgent, v1Src:src,
+      v1SpineRest:spine.slice(1).map((x,i)=>({...x,arrowShow:i<3?'flex':'none'})),
+      v1Mgmt:mgmt, v1Deliv:deliv, v1Risk:risk, v1Drill:drill,
+      v1RareDays:String(rareDays), v1RareIso:rareIso,
+      v1Tour:()=>this.setState({view:'v11',srvOpen:'',srvImport:1,srvImpCust:'P',tour:1}),
+      v1Brief:()=>{this.setState({view:'v5',repType:'full'});
+        this.showToast('管理层简报：价值链合规达成度 '+vcPct+'% · 自身 '+selfPct+'% · 全链 '+chainOk+'/'+chainTot,
+          'Management brief · '+vcPct+'% value-chain compliance');}
     };
   }
   mainlineVals(s,zh){
