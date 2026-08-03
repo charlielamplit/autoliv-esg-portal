@@ -30,12 +30,18 @@
 - **`s.v1Base` 是个只读的覆盖钩子**：`const B=s.v1Base||{}` 提供了 `srvPacks/packs/tasks/back/chainOk/late/notCascaded/highRisk/registered/evOk/onTime/spendCov/spend/capLate/certDue/anomaly` 等十几个基数的默认值，但**全库没有任何地方给 `v1Base` 赋值**。要接真实数据，往 state 里塞 `v1Base` 即可，不必改 `v1Vals`。
 - 回流态 `s.reflow` 会微调数字（已回 +1、逾期 −4、未回传导 −7、全链达标 +1），保持与导览故事一致。
 
-### 本轮留下的死代码（**不要当 bug 修，但也别再往上加东西**）
+### 本轮留下的死代码（已核实是死的，但**不必删** —— 删了没收益）
 V1 换屏后，旧屏的几处计算还留着，只是没有模板在渲染：
-- `mainlineVals(s,zh)` 仍在 `renderVals()` 里被展开，但 `mlStages` / `mlLoopZh` / `mlLoopCta` / `mlLoopGo` 在模板中**引用次数均为 0** —— 第四轮那条「5 格主线流水线」已被本轮的 spine 取代。
-- `kpis:this.kpiData(s.oem)` 仍在算，`{{ kpis }}` 模板中已无引用（旧 5 KPI 行）。`kpiData()` 本身还被别处用，别删函数。
-- `go11` 仍有定义，模板引用为 0。
-清理它们是安全的，但属于独立的一次瘦身，别混在同步里做。
+- `mainlineVals(s,zh)` 仍在 `renderVals()` 里被展开，但 `mlStages` / `mlLoopZh` / `mlLoopEn` / `mlLoopCta` / `mlLoopGo` **在全文各只出现 1 次**（即定义处本身）—— 第四轮那条「5 格主线流水线」已被本轮的 spine 取代。方法内那 4 个 `setState` 都在 `pick:()=>…` 闭包里，不渲染就永不触发，**计算时无副作用**。
+- `kpis:this.kpiData(s.oem)`（renderVals 内）仍在算，`{{ kpis }}` 模板已无引用。注意 `kpis` 全文有 3 处，另两处是 `r14Vals()` 里的同名局部变量，**不能一起删**；`kpiData()` 函数本身也还被别处用。
+- `go11` 有定义，模板引用为 0。
+
+**2026-08-03 实测过删除收益，结论是不值得动**：三者合计约 4.4KB 原始 ≈ 1KB 压缩，
+而首屏阻塞传输实测 548KB（index.html brotli 152KB + support.js 16KB + React 47KB +
+SheetJS 334KB），占比 **0.18%**。且全文没有任何动态模板洞（含 `[`/`(` 的 `{{ }}` 为 0），
+所以上面的"引用次数"判定是可靠的，不是漏判。
+真正的首屏成本是 SheetJS 那 61%，已在 `sync.sh` 里用 defer 处理（见 README），
+**与这些死代码无关**。要删可以，但纯属整洁，别指望性能。
 
 ## 第七轮：法规包外置 + V14 单项要求管理（2026-08-03）
 两件事：法规内容从硬编码搬进数据包；给"一条要求"开了独立的执行台账屏。

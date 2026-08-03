@@ -19,7 +19,7 @@
 | 文件 | 作用 | 是否部署 |
 |---|---|---|
 | `*.dc.html` | **编辑源文件**（DC 模板 + `Component` 逻辑类） | ✕ |
-| `index.html` / `assi.html` / `ia.html` | 部署入口，源文件的副本，由 `sync.sh` 生成 | ✓ |
+| `index.html` / `assi.html` / `ia.html` | 部署入口，由 `sync.sh` 生成 = 源文件副本 **+ defer 补丁**（见下） | ✓ |
 | `support.js` | DC 运行时（运行时从 CDN 加载 React UMD） | ✓ |
 | `assi-data.js` | `/assi` 的题库与演示数据，挂 `window.ASSI`（`QS`/`PIL`/`INFO`/`DEMO`/`HIST`） | ✓ |
 | `data/*.json` | **`index.html` 运行时 fetch 的四个数据包**，见下方 ⚠️ | ✓ |
@@ -41,6 +41,33 @@
 四个 fetch 都是 `.catch(()=>{})` —— **拿不到数据不会报错，只会静默降级**，页面看着正常但列表是空的。
 所以 `.vercelignore` 不能再整目录排除 `data/`（旧版工作台数据全内联、没有 fetch，那时可以排）。
 现在改成逐个排除底稿文件，新增数据包默认会被部署。
+
+## sync.sh 的 defer 补丁（入口页与源文件唯一的差异）
+
+`sync.sh` 生成 `index.html` / `assi.html` 时，会把 SheetJS 的 script 标签改成 `defer`：
+
+```diff
+- <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
++ <script defer src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+```
+
+**为什么**：它在 `<helmet>` 里是普通 `<script src>`，**阻塞解析**，但只在用户点导出时才用得上。
+实测首屏阻塞传输 548KB，它一个就占 **334KB（61%）**——解压后 952KB，比整个
+index.html（brotli 后 152KB）还大一倍多。加 `defer` 后不再挡首屏渲染，而 DOMContentLoaded
+前必定加载完，`window.XLSX` 在用户点导出时必然就绪，**行为零变化**。
+（想进一步把这 334KB 也移出首屏，得改成点击时动态加载 + await，会动到 `exportSurvey`
+和 ASSI 页的导入导出，风险是改错会静默退成 CSV，当前没做。）
+
+**为什么打在 sync.sh 而不是 `.dc.html`**：源文件每轮都被设计文件夹整份覆盖，改那边会丢
+（`HANDOFF.md` 已经这样丢过一次）。`sync.sh` 是仓库独有文件，改这里每轮自动生效。
+
+**补丁匹配不到时 `sync.sh` 直接退出 1**，不会静默 no-op。所以哪天 DC 源换了 CDN 或加载方式，
+你会立刻在同步这一步看到报错，而不是上线后才发现优化没了。
+
+> 因此**入口页不再与 `.dc.html` 字节相同**。校验时别再比 md5，改成"差异必须只有 defer 这一行"：
+> ```bash
+> diff "Autoliv ESG Cockpit.dc.html" index.html | grep -E '^[<>]' | grep -vc sheetjs   # 必须是 0
+> ```
 
 ## 改动流程
 
@@ -103,8 +130,15 @@ git config user.email charlielamplit@gmail.com
 
 这几条都是真踩过的坑，且**共同点是不报错**——页面照常打开，只是内容不对，很容易一路带到线上。
 
-**1. 新增的 `.dc.html` 是否已加进 `sync.sh`**
+**1. 新增的 `.dc.html` 是否已加进 `sync.sh`，以及入口页差异是否只有 defer**
 漏加 = 源文件进了仓库但没有对应入口页，线上访问 404 或停在旧版。
+`sync.sh` 跑完必须退出 0（`defer` 补丁匹配不到会退出 1，见上节），再确认差异只有那一行：
+
+```bash
+for p in "Autoliv ESG Cockpit.dc.html:index.html" "ASSI 线上供应商可持续问卷.dc.html:assi.html"; do
+  diff "${p%%:*}" "${p##*:}" | grep -E '^[<>]' | grep -vc sheetjs    # 两个都必须是 0
+done
+```
 
 **2. 新出现的运行时依赖是否被 `.vercelignore` 挡住**（本轮就栽在这条）
 每次同步后跑一遍，把结果和 `.vercelignore` 对一遍：
