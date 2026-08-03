@@ -1,6 +1,6 @@
 # Handoff — Autoliv ESG Cockpit
 
-供应链 ESG 合规工作台，服务外方管理层。主体是单文件 DC：`Autoliv ESG Cockpit.dc.html`（模板 + 逻辑类 `Component`，**5482 行 / 629KB**）。
+供应链 ESG 合规工作台，服务外方管理层。主体是单文件 DC：`Autoliv ESG Cockpit.dc.html`（模板 + 逻辑类 `Component`，**6689 行 / 752KB**）。
 
 同目录另有两个独立 DC 页，不共享 `Component`：
 - `ASSI 线上供应商可持续问卷.dc.html` —— 供应商视角的 133 题问卷，题库在 `assi-data.js`（`window.ASSI` 的 `QS/PIL/INFO/DEMO/HIST`）。**工作台用 iframe 内嵌它**（供应商问卷的 ASSI 标签页），所以这个文件名被硬编码在 cockpit 里，改名前先改那处 `<iframe src>`。
@@ -14,6 +14,34 @@
 - 字体：Plus Jakarta Sans / Manrope(数字) / Noto Sans SC / JetBrains Mono(编码)。
 - **全内联样式**；helmet `<style>` 仅放 reset + 属性选择器开关（view/oem/lang/anon/drawer 切换）。
 
+## 第七轮：法规包外置 + V14 单项要求管理（2026-08-03）
+两件事：法规内容从硬编码搬进数据包；给"一条要求"开了独立的执行台账屏。
+
+### 新数据包 `data/reg_demo.json` → `state.regPack`
+第四个运行时 fetch（`meta` / `regulations[16]` / `businessNodes[7]` / `calendar` / `exportControl`）。
+单条 regulation 的字段：`id, name, nameEn, category(C1/C2/C3), view, inPlatform, impactStar, urgency, statusColor, autolivStatus, coreRequirement, impactAutoliv, supplierRequirement, deliverable, agent, collectedBy, keyDates, relatedReq37, businessNodes`。
+
+- **`regFromPack(r,zh)`** 把一条 pack 记录适配成 reg 抽屉的形状：紧迫度 / 入库状态（新增·部分覆盖·已在库）/ 星级 / 红黄绿状态语义 / 市场标签（按正则从文案里认 欧盟·美国·德国·中国出口管制）/ C1-C3 的判定依据（规模门槛 · CN-HS 编码逐零件 · 物项归类逐交易）。
+- **抽屉是"包优先、旧表兜底"**：`kind='reg'` 先按 `id`/`name` 在 pack 里找，找不到才回落到硬编码的 `regDetail()`（`regFromPack(pk) : regDetail()[dwKey] || regDetail()['CBAM']`）。所以 **`regDetail()` 不能删** —— 它既是兜底，也仍被 `reqOrigin()` 用来反查"哪条法规引用了这条要求"。
+- **`dimsOf(r)`** 按正则给法规打 5 个维度标签：`reg` 罚则/禁令类 · `oem` 客户传导类 · `std` 标准与数据载体（IMDS/CMRT/SCIP/EcoVadis…）· `own` 能映射到自有 37 项的 · `geo` 地缘与出口管制（含 `category==='C3'`）。v6 的筛选就是按它切的（`regDim`，另有 `regCat/regSt/regStar/regNew`）。
+- **`reqNosOf(list)`** 解析 `relatedReq37` 里的 `#5–#8` / `#12` 这类写法（支持 `–`/`-`/`~`/`至` 四种连接符）成要求号数组并去重。法规 ↔ 37 项要求的关联全走它。
+
+### V14 单项要求管理（`data-screen-label="V14 单项要求管理"`）
+**一条要求 × 327 家的执行台账**。入口只有一个：要求详情里的 `toManage`（`setState({view:'v14',r14No:x.no,r14Fil:'all',r14Sel:{}})`），面包屑显示 `单项要求 · REQ-xx`。
+
+- 名单构成刻意写死为 327：`s.sup` 的 317 家问卷在册 + 从 `supplierRaw()` 里补未被本年度问卷覆盖的 10 家（**跳过 `isNew`**，刚准入的不算）。按采购额降序。
+- 九种行状态 `S{}`：达标分 证据齐全/证据将过期/复核中，未达标分 部分达标/整改中/无计划，另有 未回收/已交待判定/未发起。
+- 支持筛选（`r14Fil`）+ 多选（`r14Sel`，全选 `r14ToggleAll`）后批量催办 / 帮扶 / 整改 / 豁免，以及导出。
+
+### 口径收敛（延续第六轮的思路）
+- **`reqCov(x)` 成了覆盖数的唯一定义** —— 上一轮记的"公式散在两处"隐患已消除（见「关键实现注意」第 12 条已改写）。规则：**由本年度气候问卷承接或判定的要求（`no===1` 或命中 `measMap()`）一律返回 317**，与 V7 的 317 家同源；其余才走 `Math.max(96,327-((no*37)%118)-(期望项再减42))`。
+- **`measMap()`** 缓存"要求号 → 9 道已测量问卷题"的映射（从 `sdQStats()` 的 `'REQ #7'` / `'REQ #19/20'` 文案里解析）。注意它缓存在 `this._measMap` 上，且**不依赖异步数据**（`sdQStats()` 是内联的），所以这里按实例缓存是安全的 —— 与 `supCompliance()` 必须带 `reqs.length` 的情况不同。
+- **`reqCompliance(s,zh,x,cov)`** 单项要求的达标详情，注释写明「与达标全景(v7)同一份数据与同一套映射，保证两处口径一致」。有判定的给出判定来源/证据要求/复核方式；没判定的三行全部标红或灰，并给「到全量要求里挂上判定规则」的跳转。
+- **`reqOrigin(x,zh)`** 要求来源：先按硬编码的 `oemNos` 判断是"客户要求归并"还是"Autoliv 自有承诺"，再追加引用了它的法规名（取前 2 条）。
+
+### ASSI 页（`assi.html`）本轮唯一改动：切换支柱后回到顶部
+`toTop()` + `topRef`。除了 `window.scrollTo` 与 `documentElement/body.scrollTop`，还**沿 `parentElement` 向上找所有 `overflow-y:auto|scroll` 且真的溢出的祖先并逐个归零** —— 因为这个页面会被工作台用 iframe 内嵌，滚动容器可能在外层。整段包在 `try/catch` 里。
+
 ## 第六轮：供应商达标口径统一 + 引入中候选池（2026-08-02）
 这轮的主题是**把"供应商好不好"的口径收敛成一个函数**，别处一律引用，不再各屏各算。
 
@@ -23,7 +51,7 @@
   - 三处调用（v3 列表行、供应商抽屉、候选抽屉）共用它，数字不会互相打架。
 - **`sd37Vals()`（v7）「37 项要求达标全景」** —— 把 37 项要求按**三态**分档，每项只出现在一处：
   - `meas` 已测量：今年问卷收了逐题回答，能算达标率（家数 + 采购额加权双口径），行可点下钻缺口名单；
-  - `cov` 仅有回收：发下去也收到回执，但没设逐题判定，只有覆盖率没有达标率。判定"是否 cov"的阈值是回收 ≥200 家，回收数公式 `Math.max(96, 327-((no*37)%118)-(期望项再减42))`，**与要求抽屉同一公式**，改一处要改两处；
+  - `cov` 仅有回收：发下去也收到回执，但没设逐题判定，只有覆盖率没有达标率。判定"是否 cov"的阈值是回收 ≥200 家。（回收数当时在 `sd37Vals` 与要求抽屉各写了一遍，**第七轮已提取成 `reqCov()` 单一定义**，以那个为准。）
   - `none` 本周期未发起：点击跳 v13 并提示"到全量要求里挂判定口径"。
   - 文案上明确写了"这不是数据缺失，是管理上还没开始测" —— 演示时这条是口径诚实性的关键，别删。
 - **`cands()/candSeed()/candVals()` 引入中候选池** —— v3 新增分段控件 `state.v3Seg`（`active` 在册 / `cand` 引入中）。候选企业**已建档但未准入**：没有评分、没有分级，且**不计入 `supplierRaw()` 的在册家数、达标率分母与分级分布**（这条在 `candNote` 里对用户明写）。
@@ -105,7 +133,7 @@
 - 旧导航类名 `n1–n10` 已废弃（改为 nOV/nCU/nSU/nRG/nRP）；`go1/go5/go7…` 等跳转函数全部保留，跨屏链不受影响。
 - **V4 删除了与 V2 重复的 8×6 热力图**，换为「按客户看满足率」（`oemScores`，满足率=(覆盖+0.5×进行)/已提要求，行可点→该客户聚焦视图）——新信息而非重复。`heatRows/heatOems/heatCols` 仍在 `radarData()` 里保留未用。
 
-## 第一批 V1–V6（历史记录；当前已是 13 视图 + 11 抽屉）
+## 第一批 V1–V6（历史记录；当前已是 14 视图 + 11 抽屉）
 双语中/EN + 真实名↔匿名 OEM-01… 全局开关。以下是这六屏最初的形态，后续各轮的改动见上方分轮小节。
 - **Shell**：侧边栏（品牌 / 工作台导航 5 项 / 自身合规导航 1 项 / 客户范围 OEM 列表 / 底部审核卡）+ 顶栏。
 - **V1 总览**：Hub banner + 5 KPI + 双向传导图 + 减排进度 + 待办队列。选中 OEM 切「客户要求明细 + 档案 + 缺口整改」聚焦视图（`.only-all/.only-focus`）。聚焦视图「查看整改路径」按钮 → 要求抽屉。
@@ -159,18 +187,22 @@
    - 全局：`view, oem, lang, anon, drawer, dwKey, toast, tour`
    - 矩阵/报告：`matrixOpen, expandAll, repOem/repFw/repPeriod, repType`
    - 供应商：`sup, sdQ, m3sel, sd37, v3Seg, v3More, cands, addOpen/addF/addRan`
+   - 法规 v6/v8：`regPack, regCat, regDim, regSt, regStar, regNew, regOpen, regExOpen, polSrc, ecScen`
+   - 单项要求 v14：`r14No, r14Fil, r14Sel`
    - 客户问卷 v11：`srvOpen, srvImport, srvTab, srvLocked, srvSkipped, srvChkFil, srvQOK/srvQTxt/srvQEd/srvQOr, srvA/srvS/srvF/srvOK/srvNA, srvFilter, srvSubmitted`
    - 传导/要求：`casMerged, cs12Sent, casHi, focusSup, r13Sel, reqs, reflow`
 7. **新视图必须插入到 `<div class="padwrap" style="padding:16px 22px 30px…">` 容器内**（与 v1–v6 同级）。写在该容器之外、`</main>` 之前，运行时会把它提到根节点外（与 dw-wrap 同一踩坑），`[data-view]` 祖先选择器失效 → 永远 display:none。
 8. **SVG `<text>` 的文本不能用 `{{ }}` 洞**（属性洞可以）——运行时会包成 `<span class="sc-interp">`，SVG 不渲染 HTML 子节点，标签隐形。动态文字标签改用给 svg 套 `position:relative` 容器 + 绝对定位 HTML 层（百分比坐标，svg 需 `height:auto` 保证等比缩放）。V7 散点点名已按此实现（带同 y 防压字错位）。
 9. **内联 `display:flex` 的元素要隐去必须 `display:none !important`**（V10 隐 aside/topbar 踩过）。
 10. **凡是缓存派生结果，缓存键必须带上依赖数据的规模**。`state.reqs` / `state.srv` / `state.sup` 都是 `componentDidMount` 里异步 fetch 的，首帧一定是空的；按 id 单独缓存会把首帧算出来的 0 值永久钉住。现成写法见 `supCompliance()` 的 `code+':'+reqs.length`，并且**数据没到时直接返回空壳、不写缓存**。
-11. **同一个数字只能有一个来源函数**。已经统一的：供应商达标 → `supCompliance()`（v3 行/供应商抽屉/候选抽屉三处共用）；客户名 → `cn()/custKeyOf()`；传导批次 → `casBatches()`；要求分类 → `reqCats()`。新增派生数字前先找有没有现成的，别在 vals 里就地再算一遍。
-12. **回收覆盖数公式在两处**（`sd37Vals()` 与要求抽屉）：`Math.max(96, 327-((no*37)%118)-(期望项再减 42))`，改一处必须同步另一处，否则同一要求在两屏显示不同覆盖数。
+11. **同一个数字只能有一个来源函数**。已经统一的：供应商达标 → `supCompliance()`（v3 行/供应商抽屉/候选抽屉三处共用）；单项要求达标 → `reqCompliance()`（与 v7 达标全景同源）；回收覆盖 → `reqCov()`；要求号解析 → `reqNosOf()`；已测量映射 → `measMap()`；客户名 → `cn()/custKeyOf()`；传导批次 → `casBatches()`；要求分类 → `reqCats()`。新增派生数字前先找有没有现成的，别在 vals 里就地再算一遍。
+12. ~~回收覆盖数公式在两处~~ **第七轮已收敛成 `reqCov(x)` 单一定义**（5 处调用）。要改覆盖口径只动这一个函数。注意它有个前置分支：命中 `measMap()` 的要求直接返回 317，走的是 V7 那批问卷回收的同源数字，不套公式。
 13. 逻辑 helper：`matrixData() / matrixDetail() / radarData() / supplierRaw() / supplierData() / drawerVals() / reqDetail() / reqFromMatrix() / actionDetail() / regVals() / regDetail() / dataReqFor() / reportVals() / focusProfile() / reqCats() / supCompliance() / casBatches() / custDefs() / cn()`。
 
 ## 数据源（uploads/ 与 data/）
-三个 JSON 都在 `componentDidMount` 里 fetch，**首帧一定拿不到**（见「关键实现注意」第 10 条）：
+四个 JSON 都在 `componentDidMount` 里 fetch，**首帧一定拿不到**（见「关键实现注意」第 10 条）：
+
+- `data/reg_demo.json` → `state.regPack`（第七轮新增：16 条法规 / 7 个业务节点 / 合规日历 / 出口管制）。驱动 v6 法规图谱与 reg 抽屉；**没到时 v6 列表为空**，抽屉会回落到硬编码的 `regDetail()`。
 
 - `data/supply_demo.json` → `state.reqs` 等（D0′ 包：37 项要求 / 317 家 / 聚合 / MOFCOM / 尽调）。**37 项要求是 `supCompliance()` 与 v13 的底座**，没到之前评分全是 0。
 - `data/survey_demo.json` → `state.srv`（D0 包：112 题客户问卷 + `inbox` + `factoryProfile`）。**第五轮起已全面接入 v11**（收件箱 / 校卷 / 作答 / 交卷 / 导出都读它），不再是"未接入"。
@@ -208,6 +240,8 @@
 - ⬜ **总览驾驶舱随新增内容更新**：第四轮做过一次（5 格主线流水线），但第五/六轮新增的**校卷阻塞项、引入中候选**尚未反映到 v1 的"今天该做什么"里。
 
 ### 已知遗留（不是 bug，别去"修"）
+- **v14 不在顶栏搜索范围内**：`searchScope()` 仍只定义了 v1–v13 的占位与过滤键，v14 会落到「该视图暂不支持搜索」的 disabled 分支。名单筛选用屏内的 `r14Fil` 即可；要接搜索得往 `searchScope()` 加一条。
+- **`regDetail()` 是活代码，别当死表删**：法规内容虽已外置到 `reg_demo.json`，但它仍是 reg 抽屉的兜底，且 `reqOrigin()` 靠它反查法规 ↔ 要求关联。
 - `r13Dispatch` 的 148 家为演示定值，不随勾选变化。
 - v7 散点仍来自 `s.sup`（317 条 ABC 数据），与 327 家主数据是「问卷回收子集 ⊂ 主数据」的关系，`gloss` 抽屉已解释。
 - v11 收件箱 4 份卷里只有 `srv-01` 接了真题库，其余三份点击/导出均给"演示陪衬"toast。

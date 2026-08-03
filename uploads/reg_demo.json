@@ -1,0 +1,643 @@
+{
+ "meta": {
+  "name": "法规与管制合规数据包 reg_demo",
+  "source": "Autoliv 与汽车产业链 ESG 合规分析研究报告 V1.0 (2026-07-31, 48p)",
+  "generated": "Cowork, 2026-08-03",
+  "targets": [
+   "V6 法规义务图谱",
+   "V8 供应链合规监控墙"
+  ],
+  "counts": {
+   "regulations": 16,
+   "new": 10,
+   "v6": 13,
+   "v8": 5
+  },
+  "disclaimer": "法规时间表与适用范围可能变动（稀土等条目尤甚），引用前复核最新公告；具体合规义务以官方文本及专业法律意见为准。"
+ },
+ "regulations": [
+  {
+   "id": "CBAM",
+   "name": "欧盟碳边境调节机制 CBAM",
+   "nameEn": "EU CBAM",
+   "category": "C1",
+   "view": "V6",
+   "inPlatform": "已有",
+   "impactStar": 5,
+   "urgency": "高",
+   "autolivStatus": "已自评为重大转型风险；申报已嵌入供应商数据流",
+   "coreRequirement": "正式期自 2026-01-01；达门槛欧盟进口商/间接海关代表须成为授权申报人，申报清单内含商品嵌入排放并购买 CBAM 证书；覆盖水泥/钢铁/铝/化肥/电力/氢，是否适用取决于 CN 编码。",
+   "impactAutoliv": "进口钢/铝或清单内半成品时可能直接承担义务；普通安全系统成品不因含钢铝就被认定为 CBAM 商品，但材料成本与客户碳数据会间接传导。",
+   "supplierRequirement": "CN 编码、生产设施、生产路线、直接/间接排放、前体材料、碳价与验证所需底稿；数据须按批次/期间/工厂可追溯。",
+   "keyDates": [
+    "2026-01-01 正式期",
+    "2026-03-31 授权申报人申请截止",
+    "2027-09-30 首次年度申报"
+   ],
+   "relatedReq37": [
+    "#3 PCF",
+    "#8 GHG追踪"
+   ],
+   "businessNodes": [
+    "RFQ/报价",
+    "出口/进口"
+   ]
+  },
+  {
+   "id": "CSRD",
+   "name": "CSRD / ESRS（企业可持续报告指令）",
+   "nameEn": "CSRD / ESRS",
+   "category": "C1",
+   "view": "V6",
+   "inPlatform": "新增",
+   "impactStar": 4,
+   "urgency": "中",
+   "autolivStatus": "双重重要性评估已完成并对齐 CSRD",
+   "coreRequirement": "2026 修订后一般门槛为平均员工>1,000 且净营业额>4.5 亿欧元；第三方集团触发门槛提高；须按双重重要性披露并接受鉴证。",
+   "impactAutoliv": "集团规模较大，须按具体欧盟法人/第三方集团结构确认范围；即使个别实体退出法定范围，OEM 与资本市场仍可能要求近似 ESRS 数据。",
+   "supplierRequirement": "价值链排放、水、污染、资源循环、生物多样性、劳工、人权和商业道德数据；统一口径、期间、边界、估算方法和证据。",
+   "keyDates": [
+    "2027-01-01 新范围财年起点"
+   ],
+   "relatedReq37": [
+    "#8 GHG追踪"
+   ],
+   "businessNodes": [
+    "RFQ/报价",
+    "采购订单"
+   ]
+  },
+  {
+   "id": "CSDDD",
+   "name": "CSDDD（企业可持续尽职调查指令）",
+   "nameEn": "EU CSDDD",
+   "category": "C1",
+   "view": "V6",
+   "inPlatform": "已有",
+   "impactStar": 4,
+   "urgency": "中",
+   "autolivStatus": "第三方尽调标准已建立；供应商行为准则已更新",
+   "coreRequirement": "2026 修订后一般适用于>5,000 员工且全球净营业额>15 亿欧元的欧盟公司及达门槛第三方公司；转期延至 2028-07-26，适用自 2029-07-26。",
+   "impactAutoliv": "需按法人和营业额确认直接范围，并准备风险型人权与环境尽调；客户也会通过合同把尽调和信息权传递给 Autoliv。",
+   "supplierRequirement": "接受风险分级、信息请求、审计、预防/纠正和补救；建立申诉机制；把条款传导到高风险上游并报告严重事件。",
+   "keyDates": [
+    "2028-07-26 成员国转化截止",
+    "2029-07-26 企业适用"
+   ],
+   "relatedReq37": [
+    "#27 OECD尽调",
+    "#29 申诉机制",
+    "#34 传导"
+   ],
+   "businessNodes": [
+    "供应商准入",
+    "采购订单"
+   ]
+  },
+  {
+   "id": "LkSG",
+   "name": "德国供应链尽调法 LkSG",
+   "nameEn": "German LkSG",
+   "category": "C1",
+   "view": "V6",
+   "inPlatform": "已有",
+   "impactStar": 3,
+   "urgency": "中",
+   "autolivStatus": "供应商行为准则已按其原则更新",
+   "coreRequirement": "自 2023 年起按规模分阶段适用，要求风险管理、负责人、定期风险分析、政策声明、预防/纠正、申诉程序和记录报告。",
+   "impactAutoliv": "德国客户或 Autoliv 德国实体可能向供应商索取数据和合同保证；与 CSDDD 要求将逐步协调。",
+   "supplierRequirement": "不接受只签声明：须提供风险评估、工时工资、强迫/童工、结社、OHS、环境危害和整改证据。",
+   "keyDates": [],
+   "relatedReq37": [
+    "#28 职业健康安全",
+    "#29 申诉机制"
+   ],
+   "businessNodes": [
+    "供应商准入"
+   ]
+  },
+  {
+   "id": "FLR",
+   "name": "欧盟强迫劳动产品禁令 FLR 2024/3015",
+   "nameEn": "EU Forced Labour Regulation 2024/3015",
+   "category": "C1",
+   "view": "V6+V8",
+   "inPlatform": "新增",
+   "impactStar": 4,
+   "urgency": "高",
+   "autolivStatus": "需强化溯源与举证能力",
+   "coreRequirement": "禁止任何全部或部分由强迫劳动生产的产品在欧盟销售或从欧盟出口；主要禁令自 2027-12-14 适用；无企业规模门槛，覆盖任何行业和原产地；可下架、召回、销毁。",
+   "impactAutoliv": "风险不只在 Autoliv 工厂，而在棉/纺织、金属矿产、电子、劳务派遣和外包环节；被调查时须快速重建链路。",
+   "supplierRequirement": "提供工厂、劳务、原料和次级供应商映射；保留工资、工时、招聘费、身份证件、访谈、申诉和补救证据。",
+   "keyDates": [
+    "2027-12-14 主要禁令适用"
+   ],
+   "relatedReq37": [
+    "#29 申诉机制"
+   ],
+   "businessNodes": [
+    "供应商准入",
+    "出口/进口"
+   ]
+  },
+  {
+   "id": "UFLPA",
+   "name": "美国 UFLPA 及 19 U.S.C. §1307",
+   "nameEn": "US UFLPA & 19 U.S.C. §1307",
+   "category": "C1",
+   "view": "V6+V8",
+   "inPlatform": "新增",
+   "impactStar": 4,
+   "urgency": "高",
+   "autolivStatus": "需强化筛查与溯源能力",
+   "coreRequirement": "对全部或部分在新疆生产、或由清单实体生产的货物适用可反驳推定，并执行更广泛的强迫劳动进口禁令；须提供清晰且令人信服的证据。",
+   "impactAutoliv": "进入美国的零部件可能因纺织、铝、电子、化学品或其他上游投入被扣留；进口商需在短时间内提供完整追溯。",
+   "supplierRequirement": "建立从原料到成品的交易链和物流链；发票、订单、付款、产能、生产记录和运输记录相互匹配；对高风险地区和实体设置禁用/升级。",
+   "keyDates": [],
+   "relatedReq37": [],
+   "businessNodes": [
+    "出口/进口"
+   ]
+  },
+  {
+   "id": "BATT",
+   "name": "欧盟电池法规 2023/1542",
+   "nameEn": "EU Battery Regulation 2023/1542",
+   "category": "C2",
+   "view": "V6",
+   "inPlatform": "新增",
+   "impactStar": 3,
+   "urgency": "中",
+   "autolivStatus": "多数情况由整车厂下传字段",
+   "coreRequirement": "对电池碳足迹、性能、耐久、再生含量、尽调、标签、二维码和电池护照分阶段实施；矿产尽调适用日已推迟到 2027-08-18。",
+   "impactAutoliv": "若供应含电池的安全电子产品或作为车辆系统数据提供方，可能直接/间接参与；更多情况下由整车厂把材料、碳和尽调字段下传。",
+   "supplierRequirement": "电芯/电池类别、重量、化学体系、碳足迹、钴/锂/镍/石墨来源、再生含量、合规文件和护照字段。",
+   "keyDates": [
+    "2027-08-18 矿产尽调适用"
+   ],
+   "relatedReq37": [
+    "#3 PCF",
+    "#22–#26 矿产"
+   ],
+   "businessNodes": [
+    "APQP/PPAP",
+    "售后/报废"
+   ]
+  },
+  {
+   "id": "PPWR",
+   "name": "欧盟包装及包装废弃物法规 PPWR 2025/40",
+   "nameEn": "EU PPWR 2025/40",
+   "category": "C2",
+   "view": "V6",
+   "inPlatform": "新增",
+   "impactStar": 3,
+   "urgency": "中高",
+   "autolivStatus": "已制定物流与包装供应商要求",
+   "coreRequirement": "2025-02-11 生效，通常自 2026-08-12 适用；按现行文本「其他塑料包装」2030 年再生塑料最低比例为 35%，运输包装 2030 重复使用目标通常为 40%，须核对包装类别、角色、计算规则和豁免。",
+   "impactAutoliv": "周转箱、托盘、薄膜、泡棉、内衬、纸箱和一次性运输包装均按角色和豁免判断；客户会要求包装路线图。",
+   "supplierRequirement": "每个包装组件的材料、重量、再生含量、可回收等级、重复使用次数、损耗率和有害物质声明；设计变更须与质量/防护验证联动。",
+   "keyDates": [
+    "2026-08-12 全面适用",
+    "2030 再生塑料/重复使用目标生效"
+   ],
+   "relatedReq37": [
+    "#15 包装路线图"
+   ],
+   "businessNodes": [
+    "收货/生产"
+   ]
+  },
+  {
+   "id": "ESPR",
+   "name": "ESPR 与数字产品护照 DPP 2024/1781",
+   "nameEn": "ESPR & Digital Product Passport 2024/1781",
+   "category": "C2",
+   "view": "V6",
+   "inPlatform": "新增",
+   "impactStar": 4,
+   "urgency": "中",
+   "autolivStatus": "已对齐 Catena-X",
+   "coreRequirement": "建立生态设计和数字产品护照框架，具体义务需由产品组授权法案落地；车辆已被行业法规充分覆盖的方面存在排除，但零部件、中间产品、钢铝等仍可能纳入。",
+   "impactAutoliv": "不能简单宣称「所有 Autoliv 零件已强制 DPP」；应建设可复用的数据底座。",
+   "supplierRequirement": "持久唯一标识、产品/材料/工厂/制造商数据、合规文件、碳循环属性；数据须准确、完整、更新且机器可读。",
+   "keyDates": [
+    "2026-07-19 ESPR 适用 / DPP 中央注册库上线"
+   ],
+   "relatedReq37": [
+    "#4 IMDS"
+   ],
+   "businessNodes": [
+    "APQP/PPAP",
+    "售后/报废"
+   ]
+  },
+  {
+   "id": "ELV",
+   "name": "欧盟汽车循环经济法规 2026/1738",
+   "nameEn": "EU Circular Economy for Vehicles 2026/1738",
+   "category": "C2",
+   "view": "V6",
+   "inPlatform": "新增",
+   "impactStar": 4,
+   "urgency": "高",
+   "autolivStatus": "作为安全系统供应商将被 OEM 要求提供材料和拆解信息",
+   "coreRequirement": "2026-07-24 正式公布，涵盖车辆设计、可用/可回收、再生材料、零部件信息、数字循环车辆护照和报废管理；多数规定在生效后 24 个月适用。新车塑料再生含量在生效 6 年后≥15%、10 年后≥25%，且至少 20% 来自报废车辆闭环来源。",
+   "impactAutoliv": "材料替换必须兼顾安全法规、质量和型式批准；将被 OEM 要求提供材料和拆解信息。",
+   "supplierRequirement": "准确 IMDS、材料标识、再生含量、受限物质、紧固/拆解信息、再制造/回收可行性、供应商证明；支持车辆护照。",
+   "keyDates": [
+    "生效后 24 个月适用"
+   ],
+   "relatedReq37": [
+    "#4 IMDS"
+   ],
+   "businessNodes": [
+    "APQP/PPAP",
+    "售后/报废"
+   ]
+  },
+  {
+   "id": "EUDR",
+   "name": "欧盟零毁林法规 EUDR",
+   "nameEn": "EU Deforestation Regulation",
+   "category": "C2",
+   "view": "V6",
+   "inPlatform": "已有",
+   "impactStar": 3,
+   "urgency": "高",
+   "autolivStatus": "已与皮革供应商启动准备",
+   "coreRequirement": "覆盖牛、可可、咖啡、油棕、橡胶、大豆、木材及列明衍生产品；当前适用日为大中型经营者 2026-12-30，微型/小型通常 2027-06-30。",
+   "impactAutoliv": "汽车链重点关注天然橡胶、皮革/牛源材料、木/纸包装；织带、方向盘包覆、包装或橡胶件可能被客户追问。",
+   "supplierRequirement": "商品种类、科学名、数量、原产国、地块地理定位、生产日期、无毁林和合法性证据、尽调声明参考号；严禁与未知来源混料。",
+   "keyDates": [
+    "2026-12-30 大中型适用",
+    "2027-06-30 微小型适用"
+   ],
+   "relatedReq37": [
+    "#21 零毁林"
+   ],
+   "businessNodes": [
+    "供应商准入",
+    "收货/生产"
+   ]
+  },
+  {
+   "id": "CMEU",
+   "name": "欧盟冲突矿产法规 2017/821",
+   "nameEn": "EU Conflict Minerals Reg 2017/821",
+   "category": "C2",
+   "view": "V6",
+   "inPlatform": "部分",
+   "impactStar": 4,
+   "urgency": "已生效",
+   "autolivStatus": "回复率 99%，接近满分",
+   "coreRequirement": "对达到门槛的欧盟 3TG 矿石/金属进口商实施基于 OECD 五步框架的尽调；下游零部件企业并非一概直接受同样进口义务，但客户会传导。",
+   "impactAutoliv": "还同时受美国 SEC 冲突矿产披露、OEM 合同和自身采购标准驱动，实际范围往往比欧盟法规直接范围更广。",
+   "supplierRequirement": "CMRT、冶炼厂清单、RMI 状态、原产国查询、风险缓解、回复覆盖率和零部件映射；不得以「无刚果来源」替代尽调。",
+   "keyDates": [],
+   "relatedReq37": [
+    "#22–#26 矿产"
+   ],
+   "businessNodes": [
+    "供应商准入"
+   ]
+  },
+  {
+   "id": "REACH",
+   "name": "REACH / SCIP / POPs 和 GADSL",
+   "nameEn": "REACH / SCIP / POPs / GADSL",
+   "category": "C2",
+   "view": "V6",
+   "inPlatform": "新增",
+   "impactStar": 3,
+   "urgency": "中",
+   "autolivStatus": "PFAS 等新限制趋势需提前做替代评估",
+   "coreRequirement": "对高度关注物质、限制物质、持久性有机污染物及汽车行业申报物质实施物质管理；具体阈值和清单持续更新。",
+   "impactAutoliv": "物质不合规可导致停产、召回、市场禁入和客户扣分；PFAS 等新限制趋势需提前做替代评估。",
+   "supplierRequirement": "全物质声明、IMDS 提交、CAS/材料组成、SVHC/SCIP 信息、实验室报告、变更通知和替代验证。",
+   "keyDates": [],
+   "relatedReq37": [
+    "#4 IMDS / 受限物质"
+   ],
+   "businessNodes": [
+    "APQP/PPAP",
+    "收货/生产"
+   ]
+  },
+  {
+   "id": "MOFCOM",
+   "name": "中国出口管制体系 + 2026-06-29 公告（20 家日本实体）",
+   "nameEn": "China Export Control + 2026-06-29 Notice",
+   "category": "C3",
+   "view": "V8",
+   "inPlatform": "已有",
+   "impactStar": 4,
+   "urgency": "高",
+   "autolivStatus": "监控墙已呈现该案例；需补法律框架与再转移域外效力",
+   "coreRequirement": "法律框架：《出口管制法》(2020-12-01)、《两用物项出口管制条例》(2024-12-01)、两用物项管制清单+管控名单+最终用户/用途管理。2026-06-29 公告将 20 家日本实体（防卫研究机构4+三菱电机系3+三菱重工系5+三菱精密1+日钢系2+航空制造2+其他精密3）列入管控名单：禁止直接出口、禁止再转移（境外组织/个人将中国原产两用物项转移或提供给上述实体）、立即停止、例外申请，自公布日实施。",
+   "impactAutoliv": "火工品与含能材料（气囊气体发生器硝酸胍等含能材料与点火药剂）、特种传感器与电子件（惯性传感器、加速度计）可能落入两用物项清单；再转移条款有域外效力；中国 Tier-2 若同时向三菱重工/川崎等日本客户供货须自查是否触及名单实体。",
+   "supplierRequirement": "订单/发货/技术服务前实时筛查；ERP 中保留中国原产属性；获取最终用户与最终用途声明、禁止转供条款；命中即冻结并由出口管制负责人审查。",
+   "keyDates": [
+    "2026-06-29 公布即实施"
+   ],
+   "relatedReq37": [],
+   "businessNodes": [
+    "出口/进口",
+    "供应商准入"
+   ]
+  },
+  {
+   "id": "RARE",
+   "name": "中国稀土出口管制（2025-10-09 第 61/62 号公告）",
+   "nameEn": "China Rare-Earth Export Control (2025-10-09 No.61/62)",
+   "category": "C3",
+   "view": "V8",
+   "inPlatform": "新增",
+   "impactStar": 5,
+   "urgency": "高",
+   "autolivStatus": "需在 2026-11-10 前完成磁材供应链中国成分测算与替代评估",
+   "coreRequirement": "据公开报道，第 61/62 号公告将稀土管制延伸至域外管辖：境外组织向第三国出口含中国成分（价值占比 0.1% 及以上）的稀土物项、或使用中国技术在境外生产的稀土物项，须获商务部许可；覆盖开采、冶炼分离、金属冶炼、磁材制造、二次资源回收全链条。据中美经贸磋商共识，相关措施暂停实施至 2026-11-10。",
+   "impactAutoliv": "受影响部件：安全带预紧器/卷收器电机（钕铁硼永磁）、方向盘转向助力与力反馈电机（钕铁硼永磁）、各类安全传感器（稀土磁材）、气囊控制单元 ACU 内小型电机（稀土永磁）。中国供全球约 60% 稀土产量与约 90% 加工能力，短期无完全替代路径。",
+   "supplierRequirement": "磁材牌号、稀土成分与中国成分占比测算、原产地与加工链、许可状态；配合替代方案评估与台账。",
+   "keyDates": [
+    "2026-11-10 暂停窗口届满"
+   ],
+   "relatedReq37": [],
+   "businessNodes": [
+    "出口/进口",
+    "APQP/PPAP"
+   ]
+  },
+  {
+   "id": "FLDUAL",
+   "name": "强迫劳动双重禁令（美国 UFLPA + 欧盟 2024/3015）",
+   "nameEn": "Forced-Labour Dual Ban (UFLPA + EU 2024/3015)",
+   "category": "C3",
+   "view": "V8",
+   "inPlatform": "新增",
+   "impactStar": 4,
+   "urgency": "高",
+   "autolivStatus": "需强化高风险原料溯源；与 V6 的 FLR/UFLPA 联动",
+   "coreRequirement": "美国 UFLPA 对新疆产品可反驳推定为强迫劳动、禁止进口（clear and convincing evidence）；欧盟禁令 2024/3015 自 2027-12-14 起适用、无企业规模门槛、可令下架/召回/销毁。Omnibus 对 CSDDD 的减负不会削弱这方面的压力。",
+   "impactAutoliv": "对汽车链：铝、多晶硅、棉纺、钢材、锂电材料需溯源至原料；进入美/欧市场的相关件面临扣货/下架风险。",
+   "supplierRequirement": "原料级交易链与物流链、工厂/劳务/次级供应商映射、工时工资访谈与招聘机构尽调证据。",
+   "keyDates": [
+    "2027-12-14 欧盟禁令适用"
+   ],
+   "relatedReq37": [
+    "#29 申诉机制"
+   ],
+   "businessNodes": [
+    "出口/进口",
+    "供应商准入"
+   ]
+  }
+ ],
+ "businessNodes": [
+  {
+   "node": "RFQ / 报价",
+   "newThreshold": "需识别 CBAM 成本、PCF、再生含量、EUDR、矿产和出口管制要求",
+   "failureConsequence": "报价失真、无法响应客户字段、失去定点",
+   "highStakes": true
+  },
+  {
+   "node": "供应商准入",
+   "newThreshold": "不能只做质量/财务审核；需 ESG 风险、制裁/出口管制、Tier-N 透明度",
+   "failureConsequence": "新供应商批准失败或后续停供",
+   "highStakes": false
+  },
+  {
+   "node": "APQP / PPAP",
+   "newThreshold": "材料与工艺变更必须同步更新 PCF、IMDS、受限物质、再生含量和原产地",
+   "failureConsequence": "变更未经批准、客户索赔、合规数据失真",
+   "highStakes": false
+  },
+  {
+   "node": "采购订单",
+   "newThreshold": "合同中需明确数据、审计、传导、事件报告、保留期限和终止权",
+   "failureConsequence": "无法向上游追责或在监管时快速取证",
+   "highStakes": false
+  },
+  {
+   "node": "收货 / 生产",
+   "newThreshold": "批次、工厂、原产地和质量证据需可关联",
+   "failureConsequence": "证据无法对应实际交付批次",
+   "highStakes": false
+  },
+  {
+   "node": "出口 / 进口",
+   "newThreshold": "产品分类、原产地、最终用户、CN/HS 编码和证书缺一不可",
+   "failureConsequence": "扣货、罚款、许可证风险、声誉损害",
+   "highStakes": true
+  },
+  {
+   "node": "售后 / 报废",
+   "newThreshold": "需支持拆解、回收、材料和护照数据",
+   "failureConsequence": "OEM 无法完成车辆循环合规",
+   "highStakes": false
+  }
+ ],
+ "calendar": {
+  "2026": [
+   "03-31 CBAM 授权申报人申请截止",
+   "07-19 ESPR 适用 / DPP 中央注册库上线",
+   "08-12 PPWR 全面适用",
+   "11-10 中国稀土管制暂停期届满",
+   "12-30 EUDR 对大中型企业强制适用"
+  ],
+  "2027": [
+   "01-01 CSRD 新范围财年起点",
+   "02-01 CBAM 证书开始销售",
+   "02-18 电池数字护照",
+   "06-30 EUDR 对微小企业适用",
+   "09-30 CBAM 首次年度申报",
+   "12-14 欧盟强迫劳动产品禁令适用"
+  ],
+  "2028–2040": [
+   "2028 Autoliv 期望供应商获批 SBTi",
+   "2028-07-26 CSDDD 成员国转化截止",
+   "2029-07-26 CSDDD 企业适用",
+   "2030-01 PPWR 塑料包装再生成分生效",
+   "2030 Autoliv 碳中和 / 供应商 100% 绿电",
+   "2040 Autoliv 供应链净零"
+  ]
+ },
+ "exportControl": {
+  "legalFramework": [
+   {
+    "level": "法律",
+    "name": "《中华人民共和国出口管制法》",
+    "status": "2020-12-01 施行"
+   },
+   {
+    "level": "行政法规",
+    "name": "《中华人民共和国两用物项出口管制条例》",
+    "status": "2024-12-01 施行"
+   },
+   {
+    "level": "配套",
+    "name": "《两用物项出口管制清单》、管控名单、最终用户与最终用途管理",
+    "status": "持续更新"
+   }
+  ],
+  "entities20": {
+   "date": "2026-06-29",
+   "total": 20,
+   "groups": [
+    {
+     "cat": "防卫研究机构",
+     "n": 4,
+     "entities": [
+      "防卫研究所",
+      "陆上装备研究所",
+      "舰艇装备研究所",
+      "航空装备研究所"
+     ]
+    },
+    {
+     "cat": "三菱电机系",
+     "n": 3,
+     "entities": [
+      "三菱电机防卫与空间技术",
+      "三菱电机软件",
+      "三菱电机工程"
+     ]
+    },
+    {
+     "cat": "三菱重工系",
+     "n": 5,
+     "entities": [
+      "三菱重工海洋技术",
+      "三菱重工相模高科技",
+      "三菱重工物流技术",
+      "三菱重工海事技术",
+      "菱重特殊车辆服务"
+     ]
+    },
+    {
+     "cat": "三菱精密",
+     "n": 1,
+     "entities": [
+      "三菱精密株式会社"
+     ]
+    },
+    {
+     "cat": "日钢系",
+     "n": 2,
+     "entities": [
+      "日钢特机",
+      "日钢YPK商事"
+     ]
+    },
+    {
+     "cat": "航空制造",
+     "n": 2,
+     "entities": [
+      "KGM（川崎岐阜制造）",
+      "日本飞机株式会社（NIPPI）"
+     ]
+    },
+    {
+     "cat": "其他精密制造",
+     "n": 3,
+     "entities": [
+      "光和兴业",
+      "福图尼奥",
+      "青木精密工业"
+     ]
+    }
+   ],
+   "measures": [
+    "禁止直接出口",
+    "禁止再转移（境外组织/个人将中国原产两用物项转移或提供给名单实体）",
+    "立即停止相关出口活动",
+    "例外须单独申请获批"
+   ]
+  },
+  "rareEarth": {
+   "notice": "2025-10-09 商务部第 61/62 号公告",
+   "window": "2026-11-10 暂停实施届满",
+   "scope": "境外含中国成分(价值占比≥0.1%)稀土物项或使用中国技术境外生产的稀土物项须获许可；覆盖开采/冶炼分离/金属冶炼/磁材制造/二次资源回收全链条",
+   "chinaShare": "约 60% 稀土产量、约 90% 加工能力",
+   "affectedParts": [
+    {
+     "part": "安全带预紧器 / 卷收器电机",
+     "use": "钕铁硼永磁"
+    },
+    {
+     "part": "方向盘转向助力与力反馈电机",
+     "use": "钕铁硼永磁"
+    },
+    {
+     "part": "各类安全传感器",
+     "use": "稀土磁性材料"
+    },
+    {
+     "part": "气囊控制单元（ACU）内小型电机",
+     "use": "稀土永磁"
+    }
+   ]
+  },
+  "forcedLabor": {
+   "us": "UFLPA & 19 U.S.C. §1307（新疆可反驳推定，禁止进口，clear and convincing evidence）",
+   "eu": "欧盟禁令 2024/3015（2027-12-14 适用，无规模门槛，可下架/召回/销毁）",
+   "materials": [
+    "铝",
+    "多晶硅",
+    "棉纺",
+    "钢材",
+    "锂电材料"
+   ]
+  },
+  "energetics": {
+   "risk": "气囊气体发生器使用硝酸胍等含能材料与点火药剂；部分含能材料及生产设备/技术可能落入两用物项清单",
+   "sensors": "惯性传感器、加速度计在特定精度阈值以上属管制范畴"
+  },
+  "scenarios7": [
+   {
+    "scenario": "中国工厂直接出口",
+    "risk": "收货方、最终用户或中间商可能与名单实体相关",
+    "control": "订单、发货、技术服务前实时筛查；命中即冻结并由出口管制负责人审查"
+   },
+   {
+    "scenario": "海外 Autoliv 实体转售",
+    "risk": "公告覆盖境外组织/个人向名单实体转移中国原产两用物项",
+    "control": "在 ERP 中保留中国原产属性；海外再出口/转让也触发筛查"
+   },
+   {
+    "scenario": "通过贸易商/分销商供货",
+    "risk": "直接买方不在名单，但存在转售或最终用户风险",
+    "control": "获取最终用户与最终用途声明、禁止转供条款、审查异常路线和付款方"
+   },
+   {
+    "scenario": "样品、维修件、设备和备件",
+    "risk": "非量产物料容易绕过常规订单流程",
+    "control": "把免费样品、退换货、维修、模具、设备备件纳入同一审批"
+   },
+   {
+    "scenario": "软件、图纸、工艺或远程支持",
+    "risk": "受控技术/数据可能通过邮件、云盘或远程服务提供",
+    "control": "技术分类、访问控制、下载日志、人员和国家权限；不得只管实物"
+   },
+   {
+    "scenario": "供应商代发或三角贸易",
+    "risk": "Autoliv 看不到实际物流或最终用户",
+    "control": "合同要求供应商提供路线、承运人、收货人和最终用户；保留审计权"
+   },
+   {
+    "scenario": "与日本大型集团的交易",
+    "risk": "名单内实体名称可能与集团内其他法人相近",
+    "control": "按「精确法人+地址+别名+所有权/控制关系」审查，既避免漏筛也避免误伤非名单法人"
+   }
+  ],
+  "vetoConditions7": [
+   "命中出口管制/制裁名单且无合法许可",
+   "故意伪造 PCF、绿电、原产地、再生含量、矿产或审计证据",
+   "拒绝提供最终用户、Tier-N、审计或纠正措施信息",
+   "重大安全事故或环境违法后未立即控制和报告",
+   "使用童工、强迫劳动或扣押证件等重大人权问题",
+   "含禁止物质或未履行重大化学品合规要求",
+   "发现受制裁/高风险冶炼厂后拒绝移除或缓解"
+  ]
+ }
+}

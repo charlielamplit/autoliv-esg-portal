@@ -8,7 +8,7 @@
 
 | 路径 | 入口页 | 源文件 | 内容 |
 |---|---|---|---|
-| `/` | `index.html` | `Autoliv ESG Cockpit.dc.html` | 工作台主体，13 个视图（v1–v13）。加载后默认 `state.view='v1'` 总览驾驶舱 |
+| `/` | `index.html` | `Autoliv ESG Cockpit.dc.html` | 工作台主体，14 个视图（v1–v14）。加载后默认 `state.view='v1'` 总览驾驶舱 |
 | `/assi` | `assi.html` | `ASSI 线上供应商可持续问卷.dc.html` | 供应商视角的线上可持续问卷（133 题 / 6 支柱），带 Excel 导入导出 |
 | `/ia` | `ia.html` | `Autoliv Demo 页面框架.dc.html` | 信息架构梳理讲解页（一级栏目 10 → 5 的现状与建议） |
 
@@ -22,12 +22,12 @@
 | `index.html` / `assi.html` / `ia.html` | 部署入口，源文件的副本，由 `sync.sh` 生成 | ✓ |
 | `support.js` | DC 运行时（运行时从 CDN 加载 React UMD） | ✓ |
 | `assi-data.js` | `/assi` 的题库与演示数据，挂 `window.ASSI`（`QS`/`PIL`/`INFO`/`DEMO`/`HIST`） | ✓ |
-| `data/*.json` | **`index.html` 运行时 fetch 的三个数据包**，见下方 ⚠️ | ✓ |
+| `data/*.json` | **`index.html` 运行时 fetch 的四个数据包**，见下方 ⚠️ | ✓ |
 | `data/*.csv`、`data/*.md`、`uploads/` | 调研底稿（已回填进代码） | ✕ |
 | `screenshots/` | 开发截图 | ✕ |
 | `HANDOFF.md` | 实现细节与踩坑记录，**改代码前必读** | ✕ |
 
-### ⚠️ `data/` 下的三个 JSON 必须部署
+### ⚠️ `data/` 下的四个 JSON 必须部署
 
 `index.html` 在 `componentDidMount` 里 fetch：
 
@@ -35,9 +35,10 @@
 ./data/supply_suppliers.json   317 家供应商精简集（V7 散点/下钻/抽屉）
 ./data/survey_demo.json        112 题客户问卷包（V11 客户问卷线）
 ./data/supply_demo.json        37 项要求 / 317 家 / 聚合 / MOFCOM / 尽调
+./data/reg_demo.json           16 条法规 / 7 个业务节点 / 合规日历 / 出口管制（V6·V8）
 ```
 
-三个 fetch 都是 `.catch(()=>{})` —— **拿不到数据不会报错，只会静默降级**，页面看着正常但列表是空的。
+四个 fetch 都是 `.catch(()=>{})` —— **拿不到数据不会报错，只会静默降级**，页面看着正常但列表是空的。
 所以 `.vercelignore` 不能再整目录排除 `data/`（旧版工作台数据全内联、没有 fetch，那时可以排）。
 现在改成逐个排除底稿文件，新增数据包默认会被部署。
 
@@ -49,7 +50,7 @@ DC 编辑器的工作目录是 `…/ESGManagement/Autoliv ESG工作台设计/`�
 # 1. 在设计文件夹里用 DC 编辑器改 .dc.html
 # 2. 拉回本仓库
 DESIGN="../Autoliv ESG工作台设计"
-cp "$DESIGN"/*.dc.html "$DESIGN"/assi-data.js "$DESIGN"/support.js "$DESIGN"/HANDOFF.md .
+cp "$DESIGN"/*.dc.html "$DESIGN"/assi-data.js "$DESIGN"/support.js .   # 注意：不含 HANDOFF.md
 for d in data uploads screenshots; do rsync -a "$DESIGN/$d/" "$d/"; done
 # 3. 同步入口页（必须，否则线上不会变）
 ./sync.sh
@@ -57,9 +58,18 @@ for d in data uploads screenshots; do rsync -a "$DESIGN/$d/" "$d/"; done
 git add -A && git commit -m "..." && git push
 ```
 
-⚠️ 第 2 步是**从设计文件夹往仓库单向覆盖**。`HANDOFF.md`、`.dc.html`、`assi-data.js`
-在两边各有一份，**只改仓库这边会在下次同步时被静默盖掉**。要改这些文件，
-改完记得回写设计文件夹（`cp HANDOFF.md "$DESIGN"/`），或者干脆在设计文件夹里改。
+#### ⚠️ `HANDOFF.md` 以本仓库为准，不要从设计文件夹覆盖
+
+第 2 步是**从设计文件夹往仓库单向覆盖**，`.dc.html` / `assi-data.js` / `support.js`
+都该这么拷。但 **`HANDOFF.md` 是例外**：
+
+2026-08-02 补完 HANDOFF 后回写了设计文件夹，两边 md5 一致；到 08-03 那份又变回了
+**补写之前的旧版本**（26729 bytes，字节级相同）—— DC 编辑器重建工作目录时会拿自己那份
+覆盖掉。回写上游拦不住它，所以别再试。
+
+结论：**`HANDOFF.md` 的权威副本在本仓库**，同步命令里已经把它排除。若哪天设计文件夹里
+那份确实有人工新增内容，先 `diff` 再手工合并，不要整份 `cp`。
+
 只属于仓库、设计文件夹没有的文件（`README.md` / `sync.sh` / `vercel.json` /
 `.vercelignore` / 三个入口页）不受影响。
 

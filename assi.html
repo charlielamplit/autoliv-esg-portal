@@ -30,7 +30,7 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 </helmet>
 
-<div data-lang="{{ lang }}" data-anon="{{ anon }}" style="min-height:100vh">
+<div ref="{{ topRef }}" data-lang="{{ lang }}" data-anon="{{ anon }}" style="min-height:100vh">
 
   <div style="position:sticky;top:0;z-index:40;background:#0E3B3A;color:#fff;padding:0 20px;box-shadow:0 1px 0 rgba(255,255,255,.06),0 10px 30px -20px rgba(15,30,36,.6)">
     <div style="display:flex;align-items:center;gap:18px;height:66px">
@@ -407,6 +407,7 @@ class Component extends DCLogic {
     ans: {}, info: {}, ev: {}, files: {}, modal: '', toast: '', submitted: null,
     histDone: false, savedAt: ''
   };
+  topRef = React.createRef();
 
   componentDidMount() {
     const boot = () => {
@@ -449,7 +450,25 @@ class Component extends DCLogic {
         submitted: s.submitted, files: s.files, histDone: s.histDone, savedAt: stamp
       }));
     } catch (e) {}
-    this.setState(Object.assign({}, next, { savedAt: stamp }));
+    const secChanged = next && next.sec && next.sec !== this.state.sec;
+    this.setState(Object.assign({}, next, { savedAt: stamp }), () => { if (secChanged) this.toTop(); });
+  }
+  toTop() {
+    const el = this.topRef && this.topRef.current;
+    try {
+      if (el && el.scrollIntoViewIfNeeded) { el.scrollIntoViewIfNeeded(true); }
+      const doc = (el && el.ownerDocument) || document;
+      const win = doc.defaultView || window;
+      win.scrollTo({ top: 0, behavior: 'smooth' });
+      doc.documentElement.scrollTop = 0; doc.body.scrollTop = 0;
+      // 若外层是可滚动容器（被嵌入时），一并回到顶部
+      let p = el && el.parentElement;
+      while (p) {
+        const st = win.getComputedStyle(p).overflowY;
+        if ((st === 'auto' || st === 'scroll') && p.scrollHeight > p.clientHeight) p.scrollTop = 0;
+        p = p.parentElement;
+      }
+    } catch (e) {}
   }
   fmtSize(b) {
     if (b < 1024) return b + ' B';
@@ -642,6 +661,7 @@ class Component extends DCLogic {
       anonFg: s.anon === '1' ? '#0E3B3A' : '#C9DED8',
       anonDotBg: s.anon === '1' ? 'rgba(14,59,58,.35)' : 'rgba(255,255,255,.3)',
       anonDotX: s.anon === '1' ? '12px' : '2px',
+      topRef: this.topRef,
       closeModal: () => this.setState({ modal: '' }),
       dlFilled: () => this.download(true), dlBlank: () => this.download(false)
     };
