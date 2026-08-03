@@ -1,6 +1,6 @@
 # Handoff — Autoliv ESG Cockpit
 
-供应链 ESG 合规工作台，服务外方管理层。主体是单文件 DC：`Autoliv ESG Cockpit.dc.html`（模板 + 逻辑类 `Component`，**6689 行 / 752KB**）。
+供应链 ESG 合规工作台，服务外方管理层。主体是单文件 DC：`Autoliv ESG Cockpit.dc.html`（模板 + 逻辑类 `Component`，**6671 行 / 750KB**）。
 
 同目录另有两个独立 DC 页，不共享 `Component`：
 - `ASSI 线上供应商可持续问卷.dc.html` —— 供应商视角的 133 题问卷，题库在 `assi-data.js`（`window.ASSI` 的 `QS/PIL/INFO/DEMO/HIST`）。**工作台用 iframe 内嵌它**（供应商问卷的 ASSI 标签页），所以这个文件名被硬编码在 cockpit 里，改名前先改那处 `<iframe src>`。
@@ -39,7 +39,15 @@
 - **`reqCompliance(s,zh,x,cov)`** 单项要求的达标详情，注释写明「与达标全景(v7)同一份数据与同一套映射，保证两处口径一致」。有判定的给出判定来源/证据要求/复核方式；没判定的三行全部标红或灰，并给「到全量要求里挂上判定规则」的跳转。
 - **`reqOrigin(x,zh)`** 要求来源：先按硬编码的 `oemNos` 判断是"客户要求归并"还是"Autoliv 自有承诺"，再追加引用了它的法规名（取前 2 条）。
 
-### ASSI 页（`assi.html`）本轮唯一改动：切换支柱后回到顶部
+### 第七轮补丁（同日）：V6 卡片合并 + 筛选项加悬停释义
+接上条法规包外置之后的一次纯布局收敛，无新方法、无新资源引用（6689 → 6671 行）。
+
+- **卡片从 6 张减到 4 张**：「影响强度矩阵 · 压力从哪来」不再是独立卡，**并入「法规义务库」的筛选条**，变成一排「压力来源」chip（`regDims`）；「合规时间日历」提到 V6 最上方并改名「合规时间日历 · 什么时候到」，加了「最近三个硬节点」（`regCalNext`）。日历没被删，`regCal*` 仍在用，`reg_demo.json` 的 `calendar` 键照旧。
+- **筛选条现在一处集齐**：类别 `regCatChips` · 状态 `regStChips` · 压力来源 `regDims` · 清空筛选 / 全部收起 / 全部展开。
+- **状态与维度都加了悬停释义**：`stTip{}` 解释红黄绿的处置含义（红=触发采购与合规升级 · 黄=可暂用但自动生成整改任务 · 绿=可直接提交），每个维度 chip 的 `tip` 拼出「影响强度 x/5 · 紧迫 y · 只看这类压力驱动的 N 条义务」。卡上留了一行「状态含义见筛选项悬停说明」作指引。
+- 选中态样式改用 class `dimsel` + helmet 新增 `.rowlink.dimsel:hover{background:#1E3340 !important}` —— 内联样式盖不住 hover，必须走 helmet（同「关键实现注意」第 9 条的道理）。
+
+### ASSI 页（`assi.html`）第七轮改动：切换支柱后回到顶部
 `toTop()` + `topRef`。除了 `window.scrollTo` 与 `documentElement/body.scrollTop`，还**沿 `parentElement` 向上找所有 `overflow-y:auto|scroll` 且真的溢出的祖先并逐个归零** —— 因为这个页面会被工作台用 iframe 内嵌，滚动容器可能在外层。整段包在 `try/catch` 里。
 
 ## 第六轮：供应商达标口径统一 + 引入中候选池（2026-08-02）

@@ -26,6 +26,7 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
 .view{display:none}
 [data-view="v1"] .v1,[data-view="v2"] .v2,[data-view="v3"] .v3,[data-view="v4"] .v4,[data-view="v5"] .v5{display:block}
 .rowlink{cursor:pointer;transition:.12s}.rowlink:hover{background:#F7FAFB !important}
+.rowlink.dimsel:hover{background:#1E3340 !important}
 .scoretip{position:relative;cursor:help}
 .scoretip .tip{display:none;position:absolute;right:0;top:130%;z-index:60;width:214px;background:#0F1E24;color:#fff;border-radius:9px;padding:11px 12px;box-shadow:0 14px 34px -12px rgba(15,30,36,.5);font-weight:400;text-align:left}
 .scoretip:hover .tip{display:block}
@@ -817,63 +818,88 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
           </div>
         </div>
         <div class="card">
-          <div class="chd" style="padding-bottom:11px"><h3 style="font-size:12.5px"><span class="zh">影响强度矩阵 · 压力从哪来</span><span class="en">Where the pressure comes from</span></h3><span class="pill"><span class="zh">五个来源 · 即筛选器</span><span class="en">Five sources · doubles as filter</span></span><span style="margin-left:auto;font-size:10.5px;color:#8397A0">{{ regDimNote }}</span></div>
-          <div style="padding:0 15px 14px;display:grid;grid-template-columns:repeat(5,1fr);gap:10px">
-            <sc-for list="{{ regDims }}" as="d" hint-placeholder-count="5">
-              <div class="rowlink" onClick="{{ d.pick }}" style="border:1px solid {{ d.bd }};border-radius:10px;padding:10px 12px;background:{{ d.bg }}">
-                <div style="display:flex;align-items:flex-start;gap:8px">
-                  <div style="font-size:11.5px;font-weight:700;color:{{ d.fg }};line-height:1.35"><span class="zh">{{ d.zh }}</span><span class="en">{{ d.en }}</span></div>
-                  <div style="margin-left:auto;text-align:right;flex-shrink:0">
-                    <div style="font-family:Manrope;font-size:17px;font-weight:800;letter-spacing:-.03em;line-height:1;color:{{ d.nFg }}">{{ d.n }}</div>
-                    <div style="font-size:8.5px;font-weight:600;color:{{ d.nSub }}"><span class="zh">条义务</span><span class="en">items</span></div>
+          <div class="chd" style="flex-wrap:wrap"><span style="width:8px;height:8px;border-radius:50%;background:#A3620F;box-shadow:0 0 0 3px #FAE7CC"></span><h3 style="font-size:12.5px"><span class="zh">合规时间日历 · 什么时候到</span><span class="en">Compliance calendar · when it lands</span></h3><span class="pill" style="background:#FDF3E7;color:#A3620F">2026 → 2040</span><span style="margin-left:auto;font-size:10.5px;color:#8397A0"><span class="zh">按月落位 · 灰色为已生效 · 点节点打开对应法规</span><span class="en">Placed by month · grey = already in force · click a node to open its regulation</span></span></div>
+          <div style="padding:12px 15px 14px;display:grid;grid-template-columns:288px 1fr;gap:16px;align-items:start">
+            <div style="display:flex;flex-direction:column;gap:7px">
+              <div style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">最近三个硬节点</span><span class="en">Next three hard dates</span></div>
+              <sc-for list="{{ regCalNext }}" as="n" hint-placeholder-count="3">
+                <div class="rowlink" onClick="{{ n.open }}" style="display:flex;align-items:center;gap:11px;border:1px solid {{ n.nbd }};background:{{ n.nbg }};border-radius:10px;padding:8px 11px">
+                  <div style="display:flex;flex-direction:column;align-items:center;min-width:40px;flex-shrink:0">
+                    <span style="font-family:Manrope;font-size:22px;font-weight:800;letter-spacing:-.04em;line-height:1;color:{{ n.nfg }}">{{ n.dayN }}</span>
+                    <span style="font-size:9px;font-weight:700;color:{{ n.nfg }};margin-top:1px">{{ n.unit }}</span>
+                  </div>
+                  <div style="min-width:0">
+                    <div style="display:flex;align-items:center;gap:6px">
+                      <span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:{{ n.nfg }};background:rgba(255,255,255,.75);padding:1px 5px;border-radius:3px">{{ n.code }}</span>
+                      <span style="font-family:Manrope;font-size:10px;font-weight:700;color:#5A6E75">{{ n.date }}</span>
+                    </div>
+                    <div style="font-size:11px;color:#33484F;line-height:1.4;margin-top:3px">{{ n.short }}</div>
                   </div>
                 </div>
-                <div style="height:4px;border-radius:2px;background:{{ d.barBg }};margin-top:8px;overflow:hidden"><div style="width:{{ d.barFill }};height:100%;background:{{ d.barFg }}"></div></div>
-                <div style="display:flex;align-items:center;gap:7px;margin-top:6px">
-                  <span style="font-family:Manrope;font-size:11px;font-weight:800;letter-spacing:-.04em;color:{{ d.starFg }}">{{ d.stars }}</span>
-                  <span style="font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:5px;background:{{ d.urgBg }};color:{{ d.urgFg }}">{{ d.urg }}</span>
+              </sc-for>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:11px;border-left:1px solid #EDF1F3;padding-left:16px">
+              <sc-for list="{{ regCalRails }}" as="y" hint-placeholder-count="2">
+                <div style="display:grid;grid-template-columns:36px repeat(12,1fr);gap:5px 4px;align-items:start">
+                  <span style="grid-column:1;grid-row:1;font-family:Manrope;font-size:11.5px;font-weight:800;color:#0F1E24;letter-spacing:.02em">{{ y.year }}</span>
+                  <sc-for list="{{ y.months }}" as="m" hint-placeholder-count="12">
+                    <span style="grid-row:1;text-align:center;font-family:Manrope;font-size:9px;font-weight:{{ m.fw }};color:{{ m.fg }};background:{{ m.bg }};border-radius:4px;padding:2px 0">{{ m.label }}</span>
+                  </sc-for>
+                  <sc-for list="{{ y.items }}" as="i" hint-placeholder-count="4">
+                    <div class="rowlink" onClick="{{ i.open }}" title="{{ i.full }}" style="grid-column:{{ i.gcol }};border:1px solid {{ i.bd }};background:{{ i.bg }};border-radius:8px;padding:5px 8px">
+                      <div style="display:flex;align-items:center;gap:5px">
+                        <span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;font-weight:700;color:{{ i.cfg }};background:{{ i.cbg }};padding:1px 5px;border-radius:3px">{{ i.code }}</span>
+                        <span style="font-family:Manrope;font-size:9.5px;font-weight:700;color:{{ i.fg }}">{{ i.date }}</span>
+                        <span style="margin-left:auto;font-family:Manrope;font-size:8.5px;font-weight:800;padding:1px 6px;border-radius:4px;background:{{ i.cdBg }};color:{{ i.cdFg }};white-space:nowrap">{{ i.cd }}</span>
+                      </div>
+                      <div style="font-size:10px;color:{{ i.fg }};line-height:1.35;margin-top:3px">{{ i.short }}</div>
+                    </div>
+                  </sc-for>
                 </div>
-                <div style="font-size:10px;color:{{ d.nSub }};line-height:1.45;margin-top:6px"><span class="zh">{{ d.subZh }}</span><span class="en b">{{ d.subEn }}</span></div>
-                <div style="font-size:9.5px;font-weight:700;color:{{ d.hintFg }};margin-top:7px"><span class="zh">{{ d.hintZh }}</span><span class="en">{{ d.hintEn }}</span></div>
+              </sc-for>
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;border-top:1px solid #EDF1F3;padding-top:9px">
+                <span style="font-family:Manrope;font-size:11px;font-weight:800;color:#0F1E24;flex-shrink:0">2028 → 2040</span>
+                <sc-for list="{{ regCalFar }}" as="f" hint-placeholder-count="6">
+                  <span class="rowlink" onClick="{{ f.open }}" style="display:inline-flex;align-items:center;gap:6px;font-size:10.5px;padding:3px 9px;border-radius:7px;background:{{ f.bg }};border:1px solid {{ f.bd }};color:{{ f.fg }}"><b style="font-family:Manrope;font-weight:800">{{ f.yr }}</b>{{ f.label }}</span>
+                </sc-for>
               </div>
-            </sc-for>
+            </div>
           </div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 320px;gap:14px;align-items:start">
           <div style="display:flex;flex-direction:column;gap:12px">
-            <div class="card">
-              <div class="chd" style="padding-bottom:11px;flex-wrap:wrap">
-                <span style="width:8px;height:8px;border-radius:50%;background:#002D6B;box-shadow:0 0 0 3px #D7E3F6"></span>
-                <h3 style="font-size:12.5px"><span class="zh">法规义务库 · 按类别聚类</span><span class="en">Obligation library · clustered by class</span></h3>
-                <span class="pill" style="background:#F2F6FD;color:#0B3A82"><span class="zh">显示 {{ regShownN }} / 16 条</span><span class="en">{{ regShownN }} / 16 shown</span></span>
-                <span style="margin-left:auto;display:flex;align-items:center;gap:7px">
-                  <button onClick="{{ regClear }}" style="display:{{ regFilterShow }};align-items:center;gap:5px;font-size:10.5px;font-weight:700;color:#B0291D;background:#FEECEA;border:1px solid #E9C9C4;border-radius:6px;padding:4px 9px"><span class="zh">清空筛选</span><span class="en">Clear filters</span></button>
-                  <button onClick="{{ regFoldAll }}" style="font-size:10.5px;font-weight:700;color:#4C6169;background:#fff;border:1px solid #E1E7EA;border-radius:6px;padding:4px 9px"><span class="zh">全部收起</span><span class="en">Collapse all</span></button>
-                  <button onClick="{{ regUnfoldAll }}" style="font-size:10.5px;font-weight:700;color:#4C6169;background:#fff;border:1px solid #E1E7EA;border-radius:6px;padding:4px 9px"><span class="zh">全部展开</span><span class="en">Expand all</span></button>
+            <div style="display:flex;flex-direction:column;gap:7px">
+              <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+                <span style="font-size:12.5px;font-weight:800;color:#0F1E24;white-space:nowrap"><span class="zh">法规义务库</span><span class="en">Obligation library</span></span>
+                <span style="font-family:Manrope;font-size:11px;font-weight:700;color:#0B3A82;background:#F2F6FD;padding:3px 8px;border-radius:6px;white-space:nowrap">{{ regShownN }} / 16</span>
+                <span style="width:1px;height:16px;background:#DDE4E7;margin:0 1px"></span>
+                <sc-for list="{{ regCatChips }}" as="c" hint-placeholder-count="4">
+                  <button onClick="{{ c.pick }}" style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:{{ c.fw }};padding:4px 10px;border-radius:7px;background:{{ c.bg }};border:1px solid {{ c.bd }};color:{{ c.fg }}">{{ c.label }}<span style="font-family:Manrope;font-size:9.5px;font-weight:800;color:{{ c.nFg }}">{{ c.n }}</span></button>
+                </sc-for>
+                <span style="margin-left:auto;display:flex;align-items:center;gap:6px;flex-shrink:0">
+                  <button onClick="{{ regClear }}" style="display:{{ regFilterShow }};align-items:center;gap:5px;font-size:10.5px;font-weight:700;color:#B0291D;background:#FEECEA;border:1px solid #E9C9C4;border-radius:6px;padding:4px 9px"><span class="zh">清空筛选</span><span class="en">Clear</span></button>
+                  <button onClick="{{ regFoldAll }}" style="font-size:10.5px;font-weight:700;color:#4C6169;background:#fff;border:1px solid #E1E7EA;border-radius:6px;padding:4px 9px"><span class="zh">全部收起</span><span class="en">Collapse</span></button>
+                  <button onClick="{{ regUnfoldAll }}" style="font-size:10.5px;font-weight:700;color:#4C6169;background:#fff;border:1px solid #E1E7EA;border-radius:6px;padding:4px 9px"><span class="zh">全部展开</span><span class="en">Expand</span></button>
                 </span>
               </div>
-              <div style="padding:11px 16px 13px;display:flex;flex-direction:column;gap:9px">
-                <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
-                  <span style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:#8397A0;width:52px;flex-shrink:0"><span class="zh">类别</span><span class="en">Class</span></span>
-                  <sc-for list="{{ regCatChips }}" as="c" hint-placeholder-count="4">
-                    <button onClick="{{ c.pick }}" style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:{{ c.fw }};padding:5px 11px;border-radius:7px;background:{{ c.bg }};border:1px solid {{ c.bd }};color:{{ c.fg }}">{{ c.label }}<span style="font-family:Manrope;font-size:9.5px;font-weight:800;color:{{ c.nFg }}">{{ c.n }}</span></button>
-                  </sc-for>
-                </div>
-                <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
-                  <span style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:#8397A0;width:52px;flex-shrink:0"><span class="zh">状态</span><span class="en">State</span></span>
-                  <sc-for list="{{ regStChips }}" as="c" hint-placeholder-count="4">
-                    <button onClick="{{ c.pick }}" style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:{{ c.fw }};padding:5px 11px;border-radius:7px;background:{{ c.bg }};border:1px solid {{ c.bd }};color:{{ c.fg }}"><span style="display:{{ c.dotShow }};width:7px;height:7px;border-radius:50%;background:{{ c.dot }};flex-shrink:0"></span>{{ c.label }}<span style="font-family:Manrope;font-size:9.5px;font-weight:800;color:{{ c.nFg }}">{{ c.n }}</span></button>
-                  </sc-for>
-                  <span style="width:1px;height:18px;background:#E6EBEE;margin:0 2px"></span>
-                  <sc-for list="{{ regTogChips }}" as="c" hint-placeholder-count="2">
-                    <button onClick="{{ c.pick }}" style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:{{ c.fw }};padding:5px 11px;border-radius:7px;background:{{ c.bg }};border:1px solid {{ c.bd }};color:{{ c.fg }}">{{ c.label }}<span style="font-family:Manrope;font-size:9.5px;font-weight:800;color:{{ c.nFg }}">{{ c.n }}</span></button>
-                  </sc-for>
-                </div>
-                <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding-top:2px;font-size:10px;color:#8397A0">
-                  <span style="display:flex;align-items:center;gap:5px"><span style="width:7px;height:7px;border-radius:50%;background:#3FAE55"></span><span class="zh">数据与证据齐全，可直接提交</span><span class="en">Complete — ready to submit</span></span>
-                  <span style="display:flex;align-items:center;gap:5px"><span style="width:7px;height:7px;border-radius:50%;background:#E2A85C"></span><span class="zh">可暂用但需补验证，自动生成整改任务</span><span class="en">Needs verification — auto CAP</span></span>
-                  <span style="display:flex;align-items:center;gap:5px"><span style="width:7px;height:7px;border-radius:50%;background:#DC3A2C"></span><span class="zh">重大缺口或高风险，触发采购 / 合规升级</span><span class="en">Major gap — escalate</span></span>
-                </div>
+              <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+                <sc-for list="{{ regStChips }}" as="c" hint-placeholder-count="4">
+                  <button onClick="{{ c.pick }}" title="{{ c.tip }}" style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:{{ c.fw }};padding:4px 10px;border-radius:7px;background:{{ c.bg }};border:1px solid {{ c.bd }};color:{{ c.fg }}"><span style="display:{{ c.dotShow }};width:7px;height:7px;border-radius:50%;background:{{ c.dot }};flex-shrink:0"></span>{{ c.label }}<span style="font-family:Manrope;font-size:9.5px;font-weight:800;color:{{ c.nFg }}">{{ c.n }}</span></button>
+                </sc-for>
+                <span style="width:1px;height:16px;background:#DDE4E7;margin:0 1px"></span>
+                <sc-for list="{{ regTogChips }}" as="c" hint-placeholder-count="2">
+                  <button onClick="{{ c.pick }}" style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:{{ c.fw }};padding:4px 10px;border-radius:7px;background:{{ c.bg }};border:1px solid {{ c.bd }};color:{{ c.fg }}">{{ c.label }}<span style="font-family:Manrope;font-size:9.5px;font-weight:800;color:{{ c.nFg }}">{{ c.n }}</span></button>
+                </sc-for>
+                <span style="margin-left:auto;font-size:10px;color:#8397A0;flex-shrink:0"><span class="zh">状态含义见筛选项悬停说明</span><span class="en">Hover a state chip for its meaning</span></span>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+                <span style="font-size:10px;font-weight:700;color:#8397A0;white-space:nowrap"><span class="zh">压力来源</span><span class="en">Pressure</span></span>
+                <sc-for list="{{ regDims }}" as="d" hint-placeholder-count="5">
+                  <button onClick="{{ d.pick }}" title="{{ d.tip }}" style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:{{ d.fw }};padding:4px 10px;border-radius:7px;background:{{ d.bg }};border:1px solid {{ d.bd }};color:{{ d.fg }}">
+                    <span class="zh">{{ d.zh }}</span><span class="en">{{ d.en }}</span>
+                    <span style="font-family:Manrope;font-size:9.5px;font-weight:800;color:{{ d.nFg }}">{{ d.n }}</span>
+                  </button>
+                </sc-for>
               </div>
             </div>
             <sc-for list="{{ regGroups }}" as="g" hint-placeholder-count="3">
@@ -937,57 +963,6 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
                     <div style="font-size:11px;color:{{ n.failFg }};line-height:1.5">{{ n.fail }}</div>
                   </div>
                 </sc-for>
-              </div>
-            </div>
-            <div class="card">
-              <div class="chd" style="flex-wrap:wrap"><span style="width:8px;height:8px;border-radius:50%;background:#A3620F;box-shadow:0 0 0 3px #FAE7CC"></span><h3><span class="zh">合规时间日历</span><span class="en">Compliance calendar</span></h3><span class="pill" style="background:#FDF3E7;color:#A3620F">2026 → 2040</span><span style="margin-left:auto;font-size:10.5px;color:#8397A0"><span class="zh">按月落位 · 灰色为已生效 · 点节点打开对应法规</span><span class="en">Placed by month · grey = already in force · click to open the regulation</span></span></div>
-              <div style="padding:12px 16px 15px;display:flex;flex-direction:column;gap:14px">
-                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:9px">
-                  <sc-for list="{{ regCalNext }}" as="n" hint-placeholder-count="3">
-                    <div class="rowlink" onClick="{{ n.open }}" style="display:flex;align-items:center;gap:11px;border:1px solid {{ n.nbd }};background:{{ n.nbg }};border-radius:10px;padding:9px 12px">
-                      <div style="display:flex;flex-direction:column;align-items:center;min-width:42px;flex-shrink:0">
-                        <span style="font-family:Manrope;font-size:23px;font-weight:800;letter-spacing:-.04em;line-height:1;color:{{ n.nfg }}">{{ n.dayN }}</span>
-                        <span style="font-size:9px;font-weight:700;color:{{ n.nfg }};margin-top:1px">{{ n.unit }}</span>
-                      </div>
-                      <div style="min-width:0">
-                        <div style="display:flex;align-items:center;gap:6px">
-                          <span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:{{ n.nfg }};background:rgba(255,255,255,.75);padding:1px 5px;border-radius:3px">{{ n.code }}</span>
-                          <span style="font-family:Manrope;font-size:10px;font-weight:700;color:#5A6E75">{{ n.date }}</span>
-                        </div>
-                        <div style="font-size:11px;color:#33484F;line-height:1.4;margin-top:3px">{{ n.short }}</div>
-                      </div>
-                    </div>
-                  </sc-for>
-                </div>
-                <sc-for list="{{ regCalRails }}" as="y" hint-placeholder-count="2">
-                  <div style="display:grid;grid-template-columns:34px repeat(12,1fr);gap:5px 4px;align-items:start;border-top:1px solid #EDF1F3;padding-top:9px">
-                    <span style="grid-column:1;grid-row:1;font-family:Manrope;font-size:11.5px;font-weight:800;color:#0F1E24;letter-spacing:.02em">{{ y.year }}</span>
-                    <sc-for list="{{ y.months }}" as="m" hint-placeholder-count="12">
-                      <span style="grid-row:1;text-align:center;font-family:Manrope;font-size:9px;font-weight:{{ m.fw }};color:{{ m.fg }};background:{{ m.bg }};border-radius:4px;padding:2px 0">{{ m.label }}</span>
-                    </sc-for>
-                    <sc-for list="{{ y.items }}" as="i" hint-placeholder-count="4">
-                      <div class="rowlink" onClick="{{ i.open }}" title="{{ i.full }}" style="grid-column:{{ i.gcol }};border:1px solid {{ i.bd }};background:{{ i.bg }};border-radius:8px;padding:5px 8px">
-                        <div style="display:flex;align-items:center;gap:5px">
-                          <span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;font-weight:700;color:{{ i.cfg }};background:{{ i.cbg }};padding:1px 5px;border-radius:3px">{{ i.code }}</span>
-                          <span style="font-family:Manrope;font-size:9.5px;font-weight:700;color:{{ i.fg }}">{{ i.date }}</span>
-                          <span style="margin-left:auto;font-family:Manrope;font-size:8.5px;font-weight:800;padding:1px 6px;border-radius:4px;background:{{ i.cdBg }};color:{{ i.cdFg }};white-space:nowrap">{{ i.cd }}</span>
-                        </div>
-                        <div style="font-size:10px;color:{{ i.fg }};line-height:1.35;margin-top:3px">{{ i.short }}</div>
-                      </div>
-                    </sc-for>
-                  </div>
-                </sc-for>
-                <div style="border-top:1px solid #EDF1F3;padding-top:10px">
-                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:7px">
-                    <span style="font-family:Manrope;font-size:11.5px;font-weight:800;color:#0F1E24">2028 → 2040</span>
-                    <span style="font-size:10px;color:#8397A0"><span class="zh">远期承诺与生效点 —— 决定今年的方法学怎么建</span><span class="en">Long-range commitments — they decide how the methodology is built today</span></span>
-                  </div>
-                  <div style="display:flex;flex-wrap:wrap;gap:6px">
-                    <sc-for list="{{ regCalFar }}" as="f" hint-placeholder-count="6">
-                      <span class="rowlink" onClick="{{ f.open }}" style="display:inline-flex;align-items:center;gap:6px;font-size:10.5px;padding:4px 9px;border-radius:7px;background:{{ f.bg }};border:1px solid {{ f.bd }};color:{{ f.fg }}"><b style="font-family:Manrope;font-weight:800">{{ f.yr }}</b>{{ f.label }}</span>
-                    </sc-for>
-                  </div>
-                </div>
               </div>
             </div>
             <div class="card" style="border-left:3px solid #B6C4C9">
@@ -3886,9 +3861,13 @@ class Component extends DCLogic {
     const catChips=[['all',zh?'全部 16 条':'All 16','#0F1E24'],['C1',zh?'C1 气候 · 披露 · 尽调':'C1 Climate & diligence','#0B3A82'],
       ['C2',zh?'C2 产品 · 材料 · 循环':'C2 Product & materials','#0B5B4A'],['C3',zh?'C3 出口管制与地缘':'C3 Export control','#B0291D']]
       .map(x=>({label:x[0]==='all'?x[1]:x[1],n:String(nCat(x[0])),...chip(fCat===x[0],x[2]),pick:()=>this.setState({regCat:x[0]})}));
+    const stTip={'all':zh?'不限状态':'Any state',
+      '红':zh?'重大缺口或高风险：数据/证据缺失或命中高风险，触发采购与合规升级':'Major gap or high risk — escalates to purchasing & compliance',
+      '黄':zh?'可暂用但需补验证：先用现有数据出结果，同时自动生成整改任务':'Usable but needs verification — auto-creates a CAP',
+      '绿':zh?'数据与证据齐全，可直接提交客户 / 报告':'Data & evidence complete — ready to submit'};
     const stChips=[['all',zh?'全部状态':'All states','#0F1E24',''],['红',zh?'重大缺口 · 升级':'Major gap','#B0291D','#DC3A2C'],
       ['黄',zh?'需补验证 · 自动整改':'Needs verification','#A3620F','#E2A85C'],['绿',zh?'齐全可提交':'Ready to submit','#1F6B32','#3FAE55']]
-      .map(x=>({label:x[1],n:String(nSt(x[0])),dot:x[3],dotShow:x[3]?'inline-block':'none',
+      .map(x=>({label:x[1],n:String(nSt(x[0])),dot:x[3],dotShow:x[3]?'inline-block':'none',tip:stTip[x[0]]||'',
         ...chip(fSt===x[0],x[2]),pick:()=>this.setState({regSt:x[0]})}));
     const togChips=[
       {label:zh?'仅 ★4 以上':'★4+ only',n:String(all.filter(r=>r.impactStar>=4).length),...chip(fStar,'#8A1E14'),pick:()=>this.setState({regStar:!fStar})},
@@ -3992,11 +3971,14 @@ class Component extends DCLogic {
       regDims:dim.map(d=>{const n2=all.filter(r=>DIMOF(r).indexOf(d.k)>=0).length, on=fDim===d.k;
         const ac=d.star>=5?'#B0291D':'#A3620F';
         return {zh:d.zh,en:d.en,stars:star(d.star),
-          starFg:on?'#fff':ac,
+          cls:on?'dimsel':'', fw:on?'800':'600', dot:on?'rgba(255,255,255,.75)':ac,
+          tip:(zh?d.zh+'：影响强度 '+d.star+'/5 · 紧迫 '+d.urg+' · '+d.subZh+' —— 点击只看这类压力驱动的 '+n2+' 条义务'
+            :d.en+': impact '+d.star+'/5 · '+d.urg+' urgency · '+d.subEn),
+          starFg:on?'rgba(255,255,255,.8)':ac,
           urg:(zh?'紧迫 ':'')+d.urg, urgBg:on?'rgba(255,255,255,.16)':urgC(d.urg)[0], urgFg:on?'#fff':urgC(d.urg)[1],
           subZh:d.subZh, subEn:d.subEn,
           n:String(n2), nFg:on?'#fff':'#0F1E24', nSub:on?'rgba(255,255,255,.6)':'#8397A0',
-          bg:on?'#0F1E24':'#fff', bd:on?'#0F1E24':'#E6EBEE', fg:on?'#fff':'#0F1E24',
+          bg:on?'#0F1E24':'#fff', bd:on?'#0F1E24':'#E1E7EA', fg:on?'#fff':'#4C6169',
           barBg:on?'rgba(255,255,255,.22)':'#EDF1F3', barFill:(d.star*20)+'%', barFg:on?'#fff':ac,
           hintZh:on?'点击取消筛选':'点击只看这类压力', hintEn:on?'Click to clear':'Filter by this source',
           hintFg:on?'rgba(255,255,255,.66)':'#9AABB1',
