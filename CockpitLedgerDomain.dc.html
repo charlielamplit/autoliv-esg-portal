@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+      <sc-if value="{{ vOn.v12 }}" hint-placeholder-val="{{ false }}">
+      <div class="m2 v12" data-screen-label="V12 传导对齐 · 客户缺口传导" style="flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:center;gap:9px;height:34px;padding:0 13px;background:#F2F6FD;border:1px solid #D7E3F6;border-radius:9px;font-size:11px;color:#5A6E75;overflow:hidden;flex-shrink:0">
+          <span style="width:7px;height:7px;border-radius:50%;background:#0B3A82;flex-shrink:0"></span>
+          <b style="font-size:10px;font-weight:800;letter-spacing:.04em;color:#0B3A82;white-space:nowrap"><span class="zh">主线 · 第 1 步 · 来源归一</span><span class="en">Step 1 · Merge from sources</span></b>
+          <span style="color:#C4D0D5">｜</span>
+          <span style="white-space:nowrap"><span class="zh">← 上一步：<b style="color:#33484F">客户问卷答不了的缺口 ＋ 法规新增义务</b></span><span class="en">← From: <b style="color:#33484F">Gaps we cannot answer in OEM surveys</b></span></span>
+          <span style="color:#C4D0D5">｜</span>
+          <span style="white-space:nowrap"><span class="zh">这一步：<b style="color:#0F1E24">两个来源合并去重 → 并入全量要求台账</b></span><span class="en">Now: <b style="color:#0F1E24">merge, align to source, dispatch</b></span></span>
+          <span style="margin-left:auto;display:flex;align-items:center;gap:9px;flex-shrink:0">
+            <span style="color:#8397A0"><span class="zh">交给</span><span class="en">Hand to</span></span>
+            <button onClick="{{ go13 }}" style="font-size:11px;font-weight:700;color:#0B5B4A;white-space:nowrap"><span class="zh">要求台账 · 分派与下发（第 2 步）→</span><span class="en">Ledger · assign &amp; dispatch →</span></button>
+          </span>
+        </div>
+
+        <div class="card">
+          <div style="padding:15px 17px 13px;border-bottom:1px solid #EDF1F3">
+            <div style="font-size:9.5px;letter-spacing:.2em;color:#0B3A82;font-weight:700;text-transform:uppercase"><span class="zh">客户缺口驱动</span><span class="en">Customer-gap driven</span></div>
+            <h1 style="margin:5px 0 0;font-size:20px;font-weight:800;letter-spacing:-.02em"><span class="zh">客户缺口并集 · 待传导供应商要求</span><span class="en">Customer Gap Union · Supplier Requirements to Cascade</span></h1>
+            <p style="font-size:12.5px;color:#33484F;margin:6px 0 0;line-height:1.55;max-width:900px"><span class="zh">把各客户问卷答不了的缺口，按“同一件事”合并去重、标明每条来自哪些客户；一次下发，回流可同时回填多家客户的卷。</span><span class="en">Gaps from every OEM survey are merged by substance and tagged with their source customers; dispatch once, and the returning data back-fills several customers' surveys at the same time.</span></p>
+            <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:13px">
+              <sc-for list="{{ cs12Kpis }}" as="k" hint-placeholder-count="3">
+                <div style="display:flex;align-items:baseline;gap:6px;padding:8px 13px;border:1px solid #E1E7EA;background:#F9FBFC;border-radius:9px">
+                  <span style="font-family:Manrope;font-size:19px;font-weight:800;letter-spacing:-.03em;color:{{ k.fg }}">{{ k.val }}</span>
+                  <span style="font-size:11px;color:#5A6E75;font-weight:600">{{ k.unit }}</span>
+                  <span style="font-size:11px;color:#8397A0">{{ k.label }}</span>
+                </div>
+              </sc-for>
+              <button onClick="{{ rfOn }}" style="margin-left:auto;align-self:center;font-size:11.5px;font-weight:700;padding:8px 13px;border-radius:8px;background:#0F1E24;color:#fff;white-space:nowrap"><span class="zh">▶ 模拟供应商回填（演示）</span><span class="en">▶ Simulate supplier return (demo)</span></button>
+              <button onClick="{{ rfOff }}" style="align-self:center;font-size:11.5px;font-weight:600;padding:8px 11px;border-radius:8px;background:#fff;border:1px solid #D5DFE3;color:#43585F;white-space:nowrap"><span class="zh">重置</span><span class="en">Reset</span></button>
+              <button onClick="{{ cs12SendAll }}" style="align-self:center;font-size:11.5px;font-weight:700;padding:8px 14px;border-radius:8px;background:#0B5B4A;color:#fff;white-space:nowrap"><span class="zh">一键并入全量要求（{{ cs12PendN }} 项）→</span><span class="en">Merge all pending ({{ cs12PendN }}) →</span></button>
+            </div>
+            <div style="display:{{ rfShow }};align-items:center;flex-wrap:wrap;gap:9px;margin-top:12px;background:#EDF9F4;border:1px solid #A9D9C4;border-left:3px solid #0B5B4A;border-radius:9px;padding:10px 13px">
+              <b style="font-size:12px;color:#0B5B4A;white-space:nowrap"><span class="zh">供应商已回填 · 回流联动</span><span class="en">Suppliers returned · linked back</span></b>
+              <span style="font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:6px;background:#fff;border:1px solid #A9D9C4;color:#0B5B4A;white-space:nowrap">{{ rfScoreLabel }}</span>
+              <span style="font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:6px;background:#fff;border:1px solid #A9D9C4;color:#0B5B4A;white-space:nowrap"><span class="zh">未传导 67 → 60 家</span><span class="en">Not cascaded 67 → 60</span></span>
+              <span style="font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:6px;background:#fff;border:1px solid #A9D9C4;color:#0B5B4A;white-space:nowrap"><span class="zh">3 家状态位转绿</span><span class="en">3 suppliers turned green</span></span>
+              <span style="font-size:10px;color:#5A6E75;line-height:1.45;flex:1;min-width:220px">{{ rfUnionNote }}</span>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:7px;padding:11px 17px;border-bottom:1px solid #EDF1F3;flex-wrap:wrap">
+            <span style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#8397A0;margin-right:3px"><span class="zh">筛选</span><span class="en">Filter</span></span>
+            <sc-for list="{{ cs12Filters }}" as="f" hint-placeholder-count="4">
+              <button onClick="{{ f.pick }}" style="font-size:11px;font-weight:{{ f.fw }};padding:5px 11px;border-radius:7px;background:{{ f.bg }};border:1px solid {{ f.bd }};color:{{ f.fg }};white-space:nowrap">{{ f.label }}</button>
+            </sc-for>
+            <span style="margin-left:auto;font-size:10.5px;color:#8397A0"><span class="zh">两步走：① 在此并入 Autoliv 全量要求 → ② 到「供应商 › 全量要求」按供应商聚合统一下发（一家一张任务单，不逐条打扰供应商）。</span><span class="en">Two steps: ① merge into the Autoliv requirement set here → ② dispatch in the full set, aggregated per supplier (one pack per supplier).</span></span>
+          </div>
+          <div style="display:{{ cs12FocusShow }};align-items:center;gap:9px;padding:9px 17px;background:#F3FAF7;border-bottom:1px solid #CFE8DE">
+            <span style="width:20px;height:20px;border-radius:6px;background:#0B5B4A;color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">↧</span>
+            <span style="font-size:11.5px;font-weight:700;color:#0B5B4A">{{ cs12FocusLabel }}</span>
+            <button onClick="{{ cs12ClearFocus }}" style="margin-left:auto;font-size:10.5px;font-weight:700;color:#0B5B4A"><span class="zh">清除高亮 ✕</span><span class="en">Clear highlight ✕</span></button>
+          </div>
+
+          <div style="display:grid;grid-template-columns:2.1fr 1.55fr 1.35fr 1fr .82fr;gap:10px;padding:10px 17px;background:#F7FAFB;border-bottom:1px solid #EDF1F3;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#8397A0">
+            <div><span class="zh">① 编号 / 发给供应商的要求</span><span class="en">① ID / requirement to suppliers</span></div>
+            <div><span class="zh">② 缺口来源（并集 · 标源）</span><span class="en">② Gap sources (union)</span></div>
+            <div><span class="zh">③ 对齐到 Autoliv 37 项 / 目标</span><span class="en">③ Aligned to the 37 asks</span></div>
+            <div><span class="zh">④ 涉及供应商</span><span class="en">④ Suppliers affected</span></div>
+            <div><span class="zh">⑤ 状态</span><span class="en">⑤ Status</span></div>
+          </div>
+
+          <div style="display:flex;flex-direction:column">
+            <sc-for list="{{ cs12Rows }}" as="r" hint-placeholder-count="7">
+              <div class="reqrow" onClick="{{ r.open }}" style="display:grid;grid-template-columns:2.1fr 1.55fr 1.35fr 1fr .82fr;gap:10px;padding:13px 17px;border-bottom:1px solid #F1F5F6;align-items:start;cursor:pointer;background:{{ r.hiBg }};box-shadow:inset 3px 0 0 {{ r.hiBar }}">
+                <div>
+                  <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;color:#0B3A82;background:#F2F6FD;border:1px solid #D7E3F6;border-radius:4px;padding:1px 5px">{{ r.id }}</span>
+                    <span style="font-size:9.5px;color:#9AABB1">{{ r.cycLabel }}</span>
+                    <span style="display:{{ r.hiShow }};font-size:9px;font-weight:800;padding:1px 6px;border-radius:4px;background:#0B5B4A;color:#fff;white-space:nowrap">{{ r.hiLabel }}</span>
+                  </div>
+                  <b style="font-size:12.5px;font-weight:700;line-height:1.35;color:#0F1E24">{{ r.req }}</b>
+                  <div style="font-size:10.5px;color:#8397A0;line-height:1.5;margin-top:4px">{{ r.note }}</div>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:4px">
+                  <sc-for list="{{ r.srcs }}" as="c" hint-placeholder-count="2">
+                    <span style="font-size:10px;font-weight:{{ c.fw }};padding:3px 7px;border-radius:5px;background:{{ c.bg }};border:1px solid {{ c.bd }};color:{{ c.fg }};white-space:nowrap">{{ c.label }}</span>
+                  </sc-for>
+                  <div style="display:{{ r.mockShow }};font-size:9.5px;color:#9AABB1;width:100%;line-height:1.45;margin-top:2px"><span class="zh">虚线徽章为演示 mock（多客户并集）</span><span class="en">Dashed badges are demo mock (multi-customer union)</span></div>
+                </div>
+                <div>
+                  <div style="display:flex;align-items:center;gap:5px">
+                    <span style="font-family:Manrope;font-size:10.5px;font-weight:800;color:#0B5B4A;background:#EDF9F4;border:1px solid #CFE8DE;border-radius:5px;padding:2px 6px">{{ r.alignNo }}</span>
+                    <span style="font-size:9px;font-weight:800;padding:2px 6px;border-radius:5px;background:{{ r.exBg }};color:{{ r.exFg }};white-space:nowrap">{{ r.exLabel }}</span>
+                  </div>
+                  <div style="font-size:11px;color:#33484F;line-height:1.45;margin-top:4px">{{ r.alignZh }}</div>
+                  <button onClick="{{ r.toggleExec }}" style="display:{{ r.exBtnShow }};font-size:10px;font-weight:700;color:#0B3A82;margin-top:5px;text-align:left;white-space:nowrap">{{ r.exBtnLabel }}</button>
+                </div>
+                <div>
+                  <div style="display:flex;align-items:baseline;gap:4px"><span style="font-family:Manrope;font-size:16px;font-weight:800;letter-spacing:-.03em;color:#0F1E24">{{ r.supN }}</span><span style="font-size:10.5px;color:#5A6E75"><span class="zh">家</span><span class="en">sup.</span></span></div>
+                  <div style="font-size:10px;color:#8397A0;line-height:1.45;margin-top:2px">{{ r.supNote }}</div>
+                  <div style="display:{{ r.bkShow }};flex-direction:column;gap:3px;margin-top:6px">
+                    <div style="display:flex;align-items:center;gap:5px">
+                      <span style="font-size:10px;font-weight:700;color:#0B5B4A;white-space:nowrap">{{ r.bkText }}</span>
+                      <span style="display:{{ r.rfBadgeShow }};font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px;background:#0B5B4A;color:#fff;white-space:nowrap"><span class="zh">ABC56 刚回填</span><span class="en">ABC56 just returned</span></span>
+                    </div>
+                    <div style="height:4px;border-radius:2px;background:#EEF2F4;overflow:hidden"><div style="width:{{ r.bkPct }};height:100%;background:#0B5B4A;border-radius:2px"></div></div>
+                    <button onClick="{{ r.chase }}" style="display:{{ r.chaseShow }};font-size:10px;font-weight:700;color:#A3620F;text-align:left;white-space:nowrap">{{ r.chaseLabel }}</button>
+                  </div>
+                  <div style="display:{{ r.bkNoneShow }};font-size:10px;color:#C4D0D5;margin-top:6px">—</div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-start">
+                  <span style="font-size:10px;font-weight:700;padding:3px 8px;border-radius:5px;background:{{ r.stBg }};color:{{ r.stFg }};white-space:nowrap">{{ r.stLabel }}</span>
+                  <button onClick="{{ r.act }}" style="display:{{ r.actShow }};font-size:11px;font-weight:700;color:{{ r.actFg }};white-space:nowrap;text-align:left">{{ r.actLabel }}</button>
+                  <span style="font-size:9.5px;color:#9AABB1;line-height:1.4">{{ r.nextLabel }}</span>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="padding:12px 17px;font-size:10.5px;color:#8397A0;line-height:1.55"><span class="zh">本屏只做“客户缺口驱动”这一面：全量 37 项对齐与回流回填是后两步。客户名在数据内匿名。</span><span class="en">This screen covers the customer-gap driven side only; full 37-ask alignment and return-flow back-fill are the next two steps. Customer names are anonymised in data.</span></div>
+        </div>
+      </div>
+      </sc-if>
+      <sc-if value="{{ vOn.v13 }}" hint-placeholder-val="{{ false }}">
+
+      <div class="m2 v13" data-screen-label="V13 全量供应商要求" style="flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:center;gap:9px;height:34px;padding:0 13px;background:#F3FAF7;border:1px solid #CFE8DE;border-radius:9px;font-size:11px;color:#5A6E75;overflow:hidden;flex-shrink:0">
+          <span style="width:7px;height:7px;border-radius:50%;background:#0B5B4A;flex-shrink:0"></span>
+          <b style="font-size:10px;font-weight:800;letter-spacing:.04em;color:#0B5B4A;white-space:nowrap"><span class="zh">主线 · 第 2 步 · 台账 · 分派与下发</span><span class="en">Step 2 · Ledger · assign &amp; dispatch</span></b>
+          <span style="color:#C4D0D5">｜</span>
+          <span style="white-space:nowrap"><span class="zh">这一屏：<b style="color:#0F1E24">每条要求判定自答还是传导，按供应商聚合下发</b></span><span class="en">Here: <b style="color:#0F1E24">judge self-answer vs cascade, then dispatch</b></span></span>
+          <span style="margin-left:auto;display:flex;align-items:center;gap:9px;flex-shrink:0">
+            <span style="color:#8397A0"><span class="zh">活跃切片</span><span class="en">Active slice</span></span>
+            <button onClick="{{ go12 }}" style="font-size:11px;font-weight:700;color:#0B3A82;white-space:nowrap"><span class="zh">客户缺口逼出来的 7 项 → 传导对齐</span><span class="en">7 customer-driven items → Cascade alignment</span></button>
+          </span>
+        </div>
+
+        <div class="card">
+          <div style="padding:14px 17px 12px;border-bottom:1px solid #EDF1F3">
+            <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
+              <h1 style="margin:0;font-size:19px;font-weight:800;letter-spacing:-.02em"><span class="zh">要求台账</span><span class="en">Requirement Ledger</span></h1>
+              <span style="font-size:11.5px;color:#5A6E75;line-height:1.5"><span class="zh">两个来源合并去重，每条再判定执行方：传导类可勾选下发，自答类只挂内部责任人。</span><span class="en b">Both sources merge here; each row gets an owner — cascaded rows dispatch, we-answer rows carry an internal owner.</span></span>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:12px">
+              <sc-for list="{{ r13Chips }}" as="k" hint-placeholder-count="6">
+                <button onClick="{{ k.pick }}" style="display:flex;align-items:baseline;gap:6px;padding:7px 12px;border:1px solid {{ k.bd }};background:{{ k.bg }};border-radius:9px">
+                  <span style="font-family:Manrope;font-size:17px;font-weight:800;letter-spacing:-.03em;color:{{ k.fg }}">{{ k.val }}</span>
+                  <span style="font-size:11px;font-weight:{{ k.fw }};color:{{ k.lfg }};white-space:nowrap">{{ k.label }}</span>
+                  <span class="itip" style="display:{{ k.tipShow }}">ⓘ<span class="tp"><span class="zh">{{ k.tipZh }}</span><span class="en b">{{ k.tipEn }}</span></span></span>
+                </button>
+              </sc-for>
+            </div>
+            <div style="display:flex;align-items:center;gap:7px;margin-top:12px;padding-top:11px;border-top:1px dashed #E6EBEE">
+              <span style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#8397A0"><span class="zh">视图</span><span class="en">View</span></span>
+              <sc-for list="{{ r13ModeTabs }}" as="m" hint-placeholder-count="2">
+                <button onClick="{{ m.pick }}" style="font-size:11.5px;font-weight:{{ m.fw }};padding:6px 13px;border-radius:8px;background:{{ m.bg }};border:1px solid {{ m.bd }};color:{{ m.fg }};white-space:nowrap">{{ m.label }}</button>
+              </sc-for>
+              <span style="font-size:10.5px;color:#8397A0;line-height:1.5;margin-left:4px">{{ r13ModeNote }}</span>
+            </div>
+          </div>
+
+          <div style="display:{{ r13ListShow }};flex-direction:column">
+          <div style="padding:11px 17px;border-bottom:1px solid #EDF1F3;display:flex;flex-direction:column;gap:7px">
+            <sc-for list="{{ r13Groups }}" as="grp" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+                <span style="width:52px;flex-shrink:0;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#8397A0">{{ grp.label }}</span>
+                <sc-for list="{{ grp.opts }}" as="o" hint-placeholder-count="4">
+                  <button onClick="{{ o.pick }}" style="font-size:10.5px;font-weight:{{ o.fw }};padding:4px 10px;border-radius:6px;background:{{ o.bg }};border:1px solid {{ o.bd }};color:{{ o.fg }};white-space:nowrap">{{ o.label }}</button>
+                </sc-for>
+              </div>
+            </sc-for>
+          </div>
+
+            <div style="display:{{ r13BarShow }};position:sticky;top:0;z-index:24;align-items:center;gap:13px;padding:12px 17px;background:#F3FAF7;border-top:1px solid #CFE8DE;border-bottom:1px solid #CFE8DE;box-shadow:0 8px 18px -14px rgba(11,91,74,.55);flex-wrap:wrap">
+              <div style="display:flex;align-items:baseline;gap:6px;flex-shrink:0">
+                <span style="font-family:Manrope;font-size:20px;font-weight:800;color:#0B5B4A">{{ r13SelN }}</span>
+                <span style="font-size:11px;color:#5A6E75;font-weight:600"><span class="zh">项要求已选</span><span class="en">selected</span></span>
+                <span style="color:#C4D0D5">·</span>
+                <span style="font-family:Manrope;font-size:20px;font-weight:800;color:#002D6B">{{ r13SupN }}</span>
+                <span style="font-size:11px;color:#5A6E75;font-weight:600"><span class="zh">张任务单（一家一张）</span><span class="en">packs · one per supplier</span></span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:3px;min-width:220px;flex:1">
+                <span style="font-size:10.5px;color:#33484F;line-height:1.5">{{ r13BarNote }}</span>
+                <div style="display:flex;flex-wrap:wrap;gap:5px">
+                  <sc-for list="{{ r13Packs }}" as="p" hint-placeholder-count="3">
+                    <span style="font-size:9.5px;font-weight:600;padding:2px 7px;border-radius:5px;background:#fff;border:1px solid #CFE8DE;color:#0B5B4A;white-space:nowrap">{{ p.label }} · {{ p.n }}</span>
+                  </sc-for>
+                  <span style="font-size:9.5px;color:#8397A0;align-self:center">{{ r13PackMore }}</span>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+                <button onClick="{{ r13SelAllCas }}" style="font-size:11px;font-weight:700;color:#0B5B4A;white-space:nowrap"><span class="zh">只选本轮传导 9 项</span><span class="en">Only this round\u2019s 9</span></button>
+                <button onClick="{{ r13ClearSel }}" style="font-size:11px;font-weight:600;color:#5A6E75"><span class="zh">清空选择</span><span class="en">Clear</span></button>
+                <button onClick="{{ r13Dispatch }}" style="font-size:12px;font-weight:800;padding:9px 15px;border-radius:9px;background:#0B5B4A;color:#fff;white-space:nowrap"><span class="zh">按供应商聚合统一下发 →</span><span class="en">Dispatch per supplier →</span></button>
+              </div>
+            </div>
+          <div style="display:grid;grid-template-columns:26px 70px 1.7fr .78fr 72px 88px .8fr .82fr .8fr .92fr;gap:9px;padding:10px 17px;background:#F7FAFB;border-bottom:1px solid #EDF1F3;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#8397A0">
+            <div><button onClick="{{ r13SelAll }}" style="width:15px;height:15px;border-radius:4px;background:{{ r13AllBg }};border:1px solid {{ r13AllBd }};color:#fff;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center">{{ r13AllMark }}</button></div>
+            <div><span class="zh">编号</span><span class="en">ID</span></div>
+            <div><span class="zh">要求</span><span class="en">Requirement</span></div>
+            <div><span class="zh">类别</span><span class="en">Category</span></div>
+            <div><span class="zh">类型</span><span class="en">Type</span></div>
+            <div><span class="zh">执行方</span><span class="en">Owner</span></div>
+            <div><span class="zh">周期</span><span class="en">Cycle</span></div>
+            <div><span class="zh">来源</span><span class="en">Source</span></div>
+            <div><span class="zh">达标覆盖 / 责任人</span><span class="en">Coverage / owner</span></div>
+            <div><span class="zh">帮扶服务 / 状态</span><span class="en">Service / status</span></div>
+          </div>
+
+          <div style="display:flex;flex-direction:column">
+            <sc-for list="{{ r13Rows }}" as="r" hint-placeholder-count="12">
+              <div class="reqrow" onClick="{{ r.open }}" style="display:grid;grid-template-columns:26px 70px 1.7fr .78fr 72px 88px .8fr .82fr .8fr .92fr;gap:9px;padding:11px 17px;border-bottom:1px solid #F1F5F6;align-items:start;cursor:pointer">
+                <button onClick="{{ r.toggleSel }}" style="width:15px;height:15px;border-radius:4px;background:{{ r.selBg }};border:1px solid {{ r.selBd }};color:#fff;font-size:9px;font-weight:800;display:flex;visibility:{{ r.selVis }};align-items:center;justify-content:center;margin-top:2px">{{ r.selMark }}</button>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;color:#0B5B4A;background:#EDF9F4;border:1px solid #CFE8DE;border-radius:4px;padding:2px 5px;width:fit-content">{{ r.id }}</div>
+                <div>
+                  <b style="font-size:12px;font-weight:700;line-height:1.35;color:#0F1E24">{{ r.title }}</b>
+                  <div style="display:flex;align-items:center;gap:6px;margin-top:4px">
+                    <span style="font-size:10px;color:#8397A0">{{ r.system }}</span>
+                    <button onClick="{{ r.toCas }}" style="display:{{ r.casShow }};font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;background:#0B3A82;color:#fff;white-space:nowrap">{{ r.casLabel }} →</button>
+                  </div>
+                </div>
+                <div style="font-size:10.5px;color:#33484F;line-height:1.4">{{ r.cat }}</div>
+                <div><span style="font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:5px;background:{{ r.tBg }};color:{{ r.tFg }};white-space:nowrap">{{ r.tLabel }}</span></div>
+                <div><span style="font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:5px;background:{{ r.exBg }};color:{{ r.exFg }};white-space:nowrap">{{ r.exLabel }}</span></div>
+                <div style="font-size:10.5px;color:#33484F;line-height:1.4">{{ r.freq }}</div>
+                <div style="font-size:10.5px;color:#33484F;line-height:1.4">
+                  <div>{{ r.src }}</div>
+                  <span style="display:{{ r.oemShow }};font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px;background:#F2F6FD;border:1px solid #D7E3F6;color:#0B3A82;margin-top:3px"><span class="zh">客户也要</span><span class="en">OEM too</span></span>
+                </div>
+                <div>
+                  <div style="display:{{ r.covShow }}">
+                    <div style="font-family:Manrope;font-size:12.5px;font-weight:800;color:{{ r.covFg }}">{{ r.cov }}</div>
+                    <div style="height:4px;border-radius:2px;background:#EEF2F4;overflow:hidden;margin-top:4px"><div style="width:{{ r.covPct }};height:100%;background:{{ r.covFg }};border-radius:2px"></div></div>
+                  </div>
+                  <div style="display:{{ r.ownShow }}">
+                    <div style="font-size:10.5px;font-weight:700;color:#0B3A82;line-height:1.35">{{ r.ownMain }}</div>
+                    <div style="font-size:9.5px;color:#8397A0;line-height:1.4;margin-top:2px">{{ r.ownSub }}</div>
+                  </div>
+                </div>
+                <div>
+                  <div style="font-size:10.5px;color:#33484F;line-height:1.4">{{ r.svc }}</div>
+                  <span style="font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:5px;background:{{ r.stBg }};color:{{ r.stFg }};white-space:nowrap;display:inline-block;margin-top:4px">{{ r.stLabel }}</span>
+                </div>
+              </div>
+            </sc-for>
+            <div style="padding:12px 17px;font-size:10.5px;color:#8397A0;line-height:1.55">{{ r13Foot }}</div>
+          </div>
+          </div>
+        </div>
+
+        <div style="display:{{ r13AnaShow }};flex-direction:column;gap:14px">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+            <sc-for list="{{ r13Dist }}" as="d" hint-placeholder-count="3">
+              <div class="card" style="padding:15px 17px 16px;display:flex;flex-direction:column">
+                <div style="font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#0B5B4A">{{ d.kicker }}</div>
+                <h3 style="margin:5px 0 0;font-size:14px;font-weight:800;letter-spacing:-.01em;min-height:20px">{{ d.title }}</h3>
+                <div style="display:flex;flex-direction:column;gap:10px;margin-top:13px">
+                  <sc-for list="{{ d.items }}" as="i" hint-placeholder-count="3">
+                    <div style="display:flex;flex-direction:column;min-height:62px">
+                      <div style="display:flex;align-items:baseline;gap:6px">
+                        <span style="font-family:Manrope;font-size:16px;font-weight:800;letter-spacing:-.03em;color:{{ i.fg }}">{{ i.n }}</span>
+                        <span style="font-size:11px;color:#33484F;font-weight:600">{{ i.label }}</span>
+                        <span style="margin-left:auto;font-family:Manrope;font-size:10.5px;color:#9AABB1">{{ i.pct }}</span>
+                      </div>
+                      <div style="height:5px;border-radius:3px;background:#EEF2F4;overflow:hidden;margin-top:5px"><div style="width:{{ i.pct }};height:100%;background:{{ i.fg }};border-radius:3px"></div></div>
+                      <div style="font-size:10px;color:#8397A0;line-height:1.45;margin-top:4px">{{ i.note }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+                <button onClick="{{ d.go }}" style="margin-top:auto;padding-top:13px;font-size:11px;font-weight:700;color:#0B5B4A;text-align:left">{{ d.goLabel }}</button>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1.75fr 1fr;gap:14px;align-items:start">
+            <div class="card">
+              <div class="chd" style="padding-bottom:11px">
+                <h3 style="font-size:13px"><span class="zh">拖累面最大的要求</span><span class="en">Requirements dragging the most weight</span></h3>
+                <span class="pill" style="background:#FBE9E7;color:#B0291D">{{ r13TopBadge }}</span>
+                <span style="margin-left:16px;font-size:11px;color:#8397A0;line-height:1.5"><span class="zh">以要求为对象排序 · 不是以供应商为对象（那是达标全景的活）</span><span class="en">Ranked by requirement, not by supplier — that is what the compliance overview does</span></span>
+              </div>
+              <div style="display:grid;grid-template-columns:66px 1.6fr 88px .72fr .78fr 76px;gap:10px;padding:9px 16px;background:#F7FAFB;border-top:1px solid #EDF1F3;border-bottom:1px solid #EDF1F3;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#8397A0">
+                <div><span class="zh">编号</span><span class="en">ID</span></div>
+                <div><span class="zh">要求</span><span class="en">Requirement</span></div>
+                <div><span class="zh">执行方</span><span class="en">Owner</span></div>
+                <div><span class="zh">未达标供应商</span><span class="en">Suppliers short</span></div>
+                <div><span class="zh">客户牵连（本轮）</span><span class="en">Customers tied in</span></div>
+                <div></div>
+              </div>
+              <sc-for list="{{ r13Top }}" as="t" hint-placeholder-count="6">
+                <div class="reqrow" onClick="{{ t.go }}" style="display:grid;grid-template-columns:66px 1.6fr 88px .72fr .78fr 76px;gap:10px;padding:11px 16px;border-bottom:1px solid #F1F5F6;align-items:center;cursor:pointer">
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;color:#0B5B4A;background:#EDF9F4;border:1px solid #CFE8DE;border-radius:4px;padding:2px 5px;width:fit-content">{{ t.id }}</div>
+                  <div>
+                    <b style="font-size:12px;font-weight:700;line-height:1.35;color:#0F1E24">{{ t.title }}</b>
+                    <div style="font-size:10px;color:#8397A0;margin-top:3px">{{ t.sub }}</div>
+                  </div>
+                  <div><span style="font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:5px;background:{{ t.exBg }};color:{{ t.exFg }};white-space:nowrap">{{ t.exLabel }}</span></div>
+                  <div>
+                    <div style="font-family:Manrope;font-size:15px;font-weight:800;letter-spacing:-.03em;color:{{ t.gapFg }}">{{ t.gapN }}</div>
+                    <div style="height:4px;border-radius:2px;background:#EEF2F4;overflow:hidden;margin-top:4px"><div style="width:{{ t.gapPct }};height:100%;background:{{ t.gapFg }};border-radius:2px"></div></div>
+                  </div>
+                  <div style="font-size:11px;color:#33484F;line-height:1.4">{{ t.cust }}</div>
+                  <div style="font-size:10.5px;font-weight:700;color:#0B5B4A;text-align:right">{{ t.goLabel }}</div>
+                </div>
+              </sc-for>
+              <div style="padding:12px 16px;font-size:10.5px;color:#8397A0;line-height:1.55">{{ r13TopFoot }}</div>
+            </div>
+
+            <div class="card" style="padding:15px 17px 16px">
+              <div style="font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#A3620F"><span class="zh">台账健康度</span><span class="en">Ledger health</span></div>
+              <h3 style="margin:5px 0 0;font-size:14px;font-weight:800;letter-spacing:-.01em"><span class="zh">这三件事会让台账算不准</span><span class="en">Three things that make the ledger lie</span></h3>
+              <div style="display:flex;flex-direction:column;gap:9px;margin-top:13px">
+                <sc-for list="{{ r13Watch }}" as="w" hint-placeholder-count="3">
+                  <button onClick="{{ w.go }}" style="text-align:left;display:flex;align-items:flex-start;gap:10px;padding:11px 12px;border-radius:10px;background:{{ w.bg }};border:1px solid {{ w.bd }}">
+                    <span style="font-family:Manrope;font-size:17px;font-weight:800;letter-spacing:-.03em;color:{{ w.fg }};flex-shrink:0">{{ w.n }}</span>
+                    <span style="display:flex;flex-direction:column;gap:3px;min-width:0">
+                      <b style="font-size:11.5px;font-weight:700;color:#0F1E24;line-height:1.35">{{ w.title }}</b>
+                      <span style="font-size:10.5px;color:#5A6E75;line-height:1.5">{{ w.note }}</span>
+                      <span style="font-size:10.5px;font-weight:700;color:{{ w.fg }}">{{ w.cta }}</span>
+                    </span>
+                  </button>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+      <sc-if value="{{ vOn.v14 }}" hint-placeholder-val="{{ false }}">
+
+      <div class="m2 v14" data-screen-label="V14 单项要求管理" style="flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:center;gap:9px;height:34px;padding:0 13px;background:#F3FAF7;border:1px solid #CFE8DE;border-radius:9px;font-size:11px;color:#5A6E75;overflow:hidden;flex-shrink:0">
+          <span style="width:7px;height:7px;border-radius:50%;background:#0B5B4A;flex-shrink:0"></span>
+          <b style="font-size:10px;font-weight:800;letter-spacing:.04em;color:#0B5B4A;white-space:nowrap"><span class="zh">主线 · 第 2 步 · 单项要求</span><span class="en">Step 2 · One requirement</span></b>
+          <span style="color:#C4D0D5">｜</span>
+          <span style="white-space:nowrap"><span class="zh">这一屏：<b style="color:#0F1E24">一条要求 × 327 家的执行与收口</b></span><span class="en">Now: <b style="color:#0F1E24">one requirement across 327 suppliers</b></span></span>
+          <span style="margin-left:auto;display:flex;align-items:center;gap:9px;flex-shrink:0">
+            <button onClick="{{ r14Back }}" style="font-size:11px;font-weight:700;color:#0B5B4A;white-space:nowrap"><span class="zh">← 返回达标全景</span><span class="en">← Compliance overview</span></button>
+            <button onClick="{{ r14ToLedger }}" style="font-size:11px;font-weight:700;color:#0B5B4A;white-space:nowrap"><span class="zh">全量要求台账 →</span><span class="en">Requirement ledger →</span></button>
+          </span>
+        </div>
+
+        <div style="border:1px solid #BFE3D6;border-left:3px solid #0B5B4A;border-radius:14px;padding:15px 18px;background:linear-gradient(135deg,#EDF9F4,#F7FAF3 90%)">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:18px">
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+                <span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#0B5B4A;background:#fff;border:1px solid #CFE8DE;border-radius:4px;padding:2px 7px">{{ r14Id }}</span>
+                <span style="font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:5px;background:{{ r14TBg }};color:{{ r14TFg }}">{{ r14TLabel }}</span>
+                <span style="font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:5px;background:#fff;color:#5A6E75;border:1px solid #E1E7EA">{{ r14Cat }}</span>
+              </div>
+              <h1 style="margin:7px 0 0;font-size:20px;font-weight:800;letter-spacing:-.02em">{{ r14Title }}</h1>
+              <div style="font-size:11.5px;color:#5A6E75;margin-top:2px">{{ r14TitleAlt }}</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:11px">
+                <sc-for list="{{ r14States }}" as="st" hint-placeholder-count="4">
+                  <div style="background:rgba(255,255,255,.8);border:1px solid {{ st.bd }};border-radius:9px;padding:7px 11px;min-width:150px">
+                    <div style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">{{ st.kZh }}</span><span class="en">{{ st.kEn }}</span></div>
+                    <div style="display:flex;align-items:center;gap:6px;margin-top:3px"><span style="width:7px;height:7px;border-radius:50%;background:{{ st.dot }}"></span><span style="font-size:12px;font-weight:700;color:{{ st.fg }}">{{ st.v }}</span></div>
+                    <div style="font-size:9.5px;color:#8397A0;margin-top:2px">{{ st.sub }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="flex-shrink:0;display:flex;flex-direction:column;gap:7px;width:196px">
+              <button onClick="{{ r14Primary }}" style="padding:9px 13px;border-radius:9px;font-size:12px;font-weight:700;background:#0B5B4A;color:#fff">{{ r14PrimaryLabel }}</button>
+              <button onClick="{{ r14Chase }}" style="padding:9px 13px;border-radius:9px;font-size:12px;font-weight:700;background:#fff;border:1px solid #BFE3D6;color:#0B5B4A">{{ r14ChaseLabel }}</button>
+              <button onClick="{{ r14Export }}" style="padding:9px 13px;border-radius:9px;font-size:11.5px;font-weight:600;background:transparent;border:1px solid #D5DFE3;color:#4C6169"><span class="zh">导出本项达标分析</span><span class="en">Export analysis</span></button>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:13px">
+            <sc-for list="{{ r14Kpis }}" as="k" hint-placeholder-count="5">
+              <div style="background:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.9);border-radius:9px;padding:9px 12px">
+                <div style="font-size:10px;color:#5A6E75;font-weight:600">{{ k.label }}</div>
+                <div style="font-family:Manrope;font-size:23px;font-weight:800;letter-spacing:-.02em;color:{{ k.fg }};margin-top:1px">{{ k.v }}</div>
+                <div style="font-size:10px;color:#8397A0;margin-top:1px">{{ k.sub }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 322px;gap:14px;width:100%;align-items:start">
+          <div class="card">
+            <div class="chd"><h3><span class="zh">供应商执行名单</span><span class="en">Supplier worklist</span></h3><span class="pill">{{ r14ListCount }}</span><span style="margin-left:auto;font-size:10.5px;color:#8397A0"><span class="zh">按年采购额降序 · 点行看该家在本项的答卷与证据</span><span class="en">By spend · click a row for its answer & evidence</span></span></div>
+            <div style="padding:10px 16px 4px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;border-bottom:1px solid #EDF1F3">
+              <sc-for list="{{ r14Tabs }}" as="t" hint-placeholder-count="5">
+                <button onClick="{{ t.pick }}" style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:{{ t.fw }};padding:5px 11px;border-radius:7px;background:{{ t.bg }};border:1px solid {{ t.bd }};color:{{ t.fg }};margin-bottom:10px;white-space:nowrap">{{ t.label }}<span style="font-family:Manrope;font-size:11px;font-weight:800;color:{{ t.nFg }}">{{ t.n }}</span></button>
+              </sc-for>
+            </div>
+            <div style="display:{{ r14BatchShow }};align-items:center;gap:8px;padding:9px 16px;background:#EDF9F4;border-bottom:1px solid #CFE8DE;flex-wrap:wrap">
+              <b style="font-size:11.5px;color:#0B5B4A">{{ r14SelLabel }}</b>
+              <sc-for list="{{ r14Batch }}" as="b" hint-placeholder-count="4">
+                <button onClick="{{ b.run }}" style="font-size:11px;font-weight:700;padding:5px 10px;border-radius:7px;background:{{ b.bg }};border:1px solid {{ b.bd }};color:{{ b.fg }};white-space:nowrap">{{ b.label }}</button>
+              </sc-for>
+              <button onClick="{{ r14ClearSel }}" style="margin-left:auto;font-size:11px;font-weight:600;color:#5A6E75"><span class="zh">取消选择</span><span class="en">Clear</span></button>
+            </div>
+            <div style="display:grid;grid-template-columns:26px 84px 1fr 132px 96px 88px 14px;gap:9px;padding:8px 16px;background:#F5F7F8;border-bottom:1px solid #EDF1F3;font-size:9px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:#7A8B92">
+              <button onClick="{{ r14ToggleAll }}" style="width:15px;height:15px;border-radius:4px;background:{{ r14AllBg }};border:1px solid {{ r14AllBd }};color:#fff;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center">{{ r14AllMark }}</button>
+              <span><span class="zh">供应商</span><span class="en">Supplier</span></span>
+              <span><span class="zh">本项状态</span><span class="en">Status on this requirement</span></span>
+              <span><span class="zh">证据 / 有效期</span><span class="en">Evidence</span></span>
+              <span style="text-align:right"><span class="zh">年采购额</span><span class="en">Spend</span></span>
+              <span style="text-align:right"><span class="zh">最近动作</span><span class="en">Last action</span></span>
+              <span></span>
+            </div>
+            <div style="display:flex;flex-direction:column;max-height:436px;overflow-y:auto">
+              <sc-for list="{{ r14Rows }}" as="r" hint-placeholder-count="10">
+                <div class="rowlink" onClick="{{ r.open }}" style="display:grid;grid-template-columns:26px 84px 1fr 132px 96px 88px 14px;gap:9px;align-items:center;padding:9px 16px;border-bottom:1px solid #F1F4F5;background:{{ r.rowbg }}">
+                  <button onClick="{{ r.toggle }}" style="width:15px;height:15px;border-radius:4px;background:{{ r.selBg }};border:1px solid {{ r.selBd }};color:#fff;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center">{{ r.selMark }}</button>
+                  <div style="min-width:0">
+                    <b style="font-family:Manrope;font-size:11.5px">{{ r.code }}</b>
+                    <div style="font-size:9px;color:#9AABB1">{{ r.cat }}</div>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:7px;min-width:0">
+                    <span style="font-size:9.5px;font-weight:800;padding:2px 8px;border-radius:5px;background:{{ r.stBg }};color:{{ r.stFg }};white-space:nowrap">{{ r.stLabel }}</span>
+                    <span style="font-size:10.5px;color:#5A6E75;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ r.note }}</span>
+                  </div>
+                  <span style="font-size:10.5px;color:{{ r.eviFg }};font-weight:{{ r.eviFw }}">{{ r.evi }}</span>
+                  <span style="font-family:Manrope;font-size:11.5px;font-weight:700;text-align:right">{{ r.spend }}</span>
+                  <span style="font-family:Manrope;font-size:10px;color:#8397A0;text-align:right">{{ r.last }}</span>
+                  <span style="color:#C4D0D5;font-size:11px">›</span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="padding:9px 16px;font-size:10px;color:#9AABB1;line-height:1.5">{{ r14ListNote }}</div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div class="card">
+              <div class="chd" style="padding-bottom:11px"><h3 style="font-size:12.5px"><span class="zh">判定口径</span><span class="en">Verdict basis</span></h3><button onClick="{{ r14EditRule }}" style="margin-left:auto;font-size:10.5px;font-weight:700;color:#0B5B4A"><span class="zh">编辑 →</span><span class="en">Edit →</span></button></div>
+              <div style="padding:0 15px 13px">
+                <sc-for list="{{ r14Rules }}" as="r" hint-placeholder-count="5">
+                  <div style="display:grid;grid-template-columns:74px 1fr;gap:9px;padding:7px 0;border-bottom:1px dashed #EDF1F3;font-size:11px;align-items:baseline">
+                    <span style="color:#8397A0;font-weight:600">{{ r.k }}</span>
+                    <span style="color:{{ r.fg }};font-weight:{{ r.fw }};line-height:1.5">{{ r.v }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div class="card">
+              <div class="chd" style="padding-bottom:11px"><h3 style="font-size:12.5px"><span class="zh">本轮周期</span><span class="en">This cycle</span></h3><span class="pill" style="background:{{ r14CycleBg }};color:{{ r14CycleFg }}">{{ r14CycleTag }}</span></div>
+              <div style="padding:0 15px 13px;display:flex;flex-direction:column;gap:9px">
+                <sc-for list="{{ r14Timeline }}" as="t" hint-placeholder-count="4">
+                  <div style="display:flex;gap:9px;align-items:flex-start">
+                    <span style="width:11px;height:11px;border-radius:50%;background:{{ t.dotBg }};border:2px solid {{ t.dotBd }};flex-shrink:0;margin-top:2px"></span>
+                    <div style="min-width:0">
+                      <div style="font-size:11.5px;font-weight:700;color:{{ t.fg }}">{{ t.label }}</div>
+                      <div style="font-size:10px;color:#8397A0;font-family:Manrope">{{ t.date }}</div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div class="card" style="border-left:3px solid #0B5B4A">
+              <div class="chd" style="padding-bottom:11px"><h3 style="font-size:12.5px"><span class="zh">平台帮扶服务</span><span class="en">Platform service</span></h3></div>
+              <div style="padding:0 15px 13px">
+                <div style="font-size:12px;font-weight:700">{{ r14Svc }}</div>
+                <div style="font-size:10.5px;color:#5A6E75;line-height:1.55;margin-top:5px">{{ r14SvcNote }}</div>
+                <button onClick="{{ r14Service }}" style="width:100%;margin-top:10px;padding:9px;border-radius:9px;background:#0B5B4A;color:#fff;font-size:11.5px;font-weight:700">{{ r14SvcBtn }}</button>
+              </div>
+            </div>
+            <div class="card">
+              <div class="chd" style="padding-bottom:11px"><h3 style="font-size:12.5px"><span class="zh">要求级动作</span><span class="en">Requirement actions</span></h3></div>
+              <div style="padding:0 15px 13px;display:flex;flex-direction:column;gap:7px">
+                <sc-for list="{{ r14Actions }}" as="a" hint-placeholder-count="4">
+                  <button onClick="{{ a.run }}" style="display:flex;align-items:center;gap:8px;padding:8px 11px;border-radius:8px;background:#fff;border:1px solid #E1E7EA;text-align:left">
+                    <span style="font-size:11.5px;font-weight:600;color:{{ a.fg }}">{{ a.label }}</span>
+                    <span style="margin-left:auto;color:#C4D0D5;font-size:11px">›</span>
+                  </button>
+                </sc-for>
+                <div style="font-size:10px;color:#9AABB1;line-height:1.5;margin-top:3px"><span class="zh">豁免会改变达标率分母，需采购经理审批后生效；停用与新版本会保留历史周期的判定记录。</span><span class="en b">Exemptions change the pass-rate denominator and need sourcing-manager approval; retiring or versioning keeps past-cycle verdicts.</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script></script>
+</body>
+</html>

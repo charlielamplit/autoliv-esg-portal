@@ -1,10 +1,21 @@
 # Handoff — Autoliv ESG Cockpit
 
-供应链 ESG 合规工作台，服务外方管理层。主体是单文件 DC：`Autoliv ESG Cockpit.dc.html`（模板 + 逻辑类 `Component`，**6889 行 / 768KB**）。
+供应链 ESG 合规工作台，服务外方管理层。
 
-同目录另有两个独立 DC 页，不共享 `Component`：
-- `ASSI 线上供应商可持续问卷.dc.html` —— 供应商视角的 133 题问卷，题库在 `assi-data.js`（`window.ASSI` 的 `QS/PIL/INFO/DEMO/HIST`）。**工作台用 iframe 内嵌它**（供应商问卷的 ASSI 标签页），所以这个文件名被硬编码在 cockpit 里，改名前先改那处 `<iframe src>`。
-- `Autoliv Demo 页面框架.dc.html` —— 信息架构梳理讲解页，纯静态。
+**2026-08-05 起工作台已拆成多文件**，线上入口是 `Autoliv ESG Cockpit v2.dc.html`（根 DC，4390 行 / 450KB）+ 7 个按需挂载的子 DC，详见下一节。
+
+根目录 12 个 `.dc.html` 的定位（**其中 8 个是运行时依赖，必须部署**）：
+
+| 文件 | 定位 | 部署 |
+|---|---|---|
+| `Autoliv ESG Cockpit v2.dc.html` | **根 DC**（shell + 全局 state + 路由），`index.html` 由它生成 | 源文件不上线 |
+| `CockpitCustomerDomain` / `CockpitSupplierDomain` / `CockpitPortal` / `CockpitReportDomain` / `CockpitRegulatoryDomain` / `CockpitLedgerDomain` / `CockpitDrawers` | 7 个子 DC，根 DC 用 `<dc-import name="X">` 加载 | **✓ 必须** |
+| `ASSI 线上供应商可持续问卷.dc.html` | 供应商 133 题问卷，题库在 `assi-data.js`（`window.ASSI` 的 `QS/PIL/INFO/DEMO/HIST`）。既是 `/assi` 的源，**也被根 DC 用 iframe 内嵌** | **✓ 必须** |
+| `Autoliv ESG Cockpit v2 (单文件备份).dc.html` | v2 合并成单文件的存档，无 `dc-import` | 不上线 |
+| `Autoliv ESG Cockpit.dc.html` | 拆分前的老版（6889 行 / 768KB），留作对照 | 不上线 |
+| `Autoliv Demo 页面框架.dc.html` | 信息架构讲解页，纯静态，`/ia` 的源 | 源文件不上线 |
+
+**`dc-import` 的路径是写死的**：`support.js` 里 `COMPONENT_DIR="."`，解析成 `"./" + encodeURIComponent(name) + ".dc.html"`。所以 7 个模块必须以原名躺在站点根目录，改名 = 对应域整块空白且不报错。同理 iframe 那个中文文件名也不能改（改前先改根 DC 里的 `<iframe src>`）。
 
 部署侧（三个入口页、`.vercelignore` 的坑、同步自检清单）见 `README.md`，本文只讲实现。
 
@@ -13,6 +24,46 @@
 - Autoliv 海军蓝 `#002D6B` 作品牌层。绿=达标、橙=进行、红=缺口。
 - 字体：Plus Jakarta Sans / Manrope(数字) / Noto Sans SC / JetBrains Mono(编码)。
 - **全内联样式**；helmet `<style>` 仅放 reset + 属性选择器开关（view/oem/lang/anon/drawer 切换）。
+
+## 第九轮：页面拆分 / 按需挂载（2026-08-05）
+> 本节来自设计文件夹的 HANDOFF，原文保留。目标：浏览体验。**不拆成多个网址**（会打断 `go1/go7/casHi/focusSup/r13Sel` 那套跨屏预置状态跳转），只拆「同时挂在 DOM 里的东西」。
+
+- **文件结构**：根 DC = shell（侧边栏 / 顶栏 / V1 / supQ 全屏层 / toast）+ 全局 state + 路由；其余全是按需挂载的子 DC，统一靠 `dc-props="{{ domProps }}"` 拿整个 `R`。
+  - `CockpitPortal.dc.html` — **本轮新拆**，V10 供应商门户（原在 CockpitSupplierDomain 尾部）。开关 `R.domPortal = view==='v10'`；`R.domSup` 相应改为 `['v3','v7','v9']`。
+  - `CockpitDrawers.dc.html` — **本轮新拆**，11 类抽屉整块（原在根 `</main>` 之后）。外层开关 `R.drawerOn = !!s.drawer`。
+  - 其余 5 个 domain 子 DC 不变。
+- **抽屉逐类 sc-if**：`CockpitDrawers` 里每个 `.dwd` 都包了 `<sc-if value="{{ dwOn.X }}">`，X ∈ cd/si/r3/gl/ab/s/r/a/rg/cs/dr（对应 cand/srvimp/req13/gloss/abc/supplier/requirement/action/reg/cascade/datareq）。`R.dwOn` 在 renderVals 里按 `s.drawer` 算。**原来的 `.dw-wrap[data-kind] .dwd.x` CSS 保留**（双保险），但真正决定渲染量的是 sc-if：打开时只渲 1 个 kind 而不是 11 个。
+- **抽屉子 DC「懒挂载但永不卸载」**：外层开关是 `R.drawerOn = !!this._dwMounted`（`s.drawer` 一为真就把实例字段 `_dwMounted` 置 true，之后再不回退）。**不要改回 `!!s.drawer`** —— 每次关闭都卸载，下次打开要重新编译 656 行模板。挂上以后关闭态只剩 `.dw-wrap` 空壳（+24 节点，CSS `display:none`），渲染量由内层逐类 sc-if 控制。
+- **首开骨架屏**：根模板里 `display:{{ dwSkelShow }}` 的 `z-index:89` 固定层（半透明遮罩 + 右侧 520/580/680px 骨架面板，宽度由 `R.dwSkelW` 按 kind 给）。真抽屉是 z-index 90 的不透明面板，挂上来就把它整个盖住，不需要额外的"加载完成"信号。首开点击后 ~20ms 就有视觉反馈，不再是死点击。
+- **只预热抽屉一个文件**：`componentDidMount` 里 `requestIdleCallback(fetch('./CockpitDrawers.dc.html'), {timeout:6000})`。抽屉 94KB，沙箱下载就要 2.3s，占首开 4s 的一大半；预热后首开 ~1.9s。
+- **不要做多文件预热**：试过在 `componentDidMount` 里批量 `fetch()` 7 个子 DC 文件（想省掉首开的文件加载）。`requestIdleCallback` 版勉强能用，改成 `setTimeout(warm,0)` 后**整页卡在加载态、随后黑屏**，截图工具也 7s 超时——首屏渲染期并发 7 个大文件请求会把主线程/沙箱连接拖死。**已整段删除**。而且实测预热只省网络那段，子 DC 首次挂载的模板编译成本还在（门户 ~1.5s），收益本来就很小。
+- **域内逐屏 sc-if（第二轮）**：4 个 domain 子 DC 里每个视图容器都包了 `<sc-if value="{{ vOn.vN }}">`，`R.vOn` 在 renderVals 里按 `s.view` 生成（v2/v3/v4/v6/v7/v8/v9/v11/v12/v13/v14）。CockpitReportDomain 只有 v5，域开关已够，没加。
+- **实测节点数**（1480px 视口，任意时刻只挂 V1 + 当前屏）：
+
+| 屏 | 节点 | 屏 | 节点 |
+|---|---|---|---|
+| 总览 v1（首屏） | **1158** | 传导对齐 v12 | 1726 |
+| 供应商主数据 v3 | 5743 | 全量要求 v13 | 4147 |
+| 达标全景 v7 | 2386 | 法规图谱 v6 | 2516 |
+| 新供应商引入 v9 | 1452 | 监控墙 v8 | 2021 |
+| 客户列表 v11 | 7039 | 报告中心 v5 | 1737 |
+| 要求矩阵 v2 | 1806 | 供应商门户 v10 | 1574 |
+| 合规雷达 v4 | 1605 | 抽屉（单类） | +231 |
+
+  对比：拆分前首屏 2728、供应商域一次挂 7129（v3+v7+v9 同时在）。
+- **v11 屏内互斥 + 分页（第三轮）**：v11 原来 7039 节点，其中 4727 是**始终渲染但 CSS 隐藏**的 `.srv-open`（单卷视图）。现在：
+  - `.srv-list`（收件箱）与 `.srv-open`（单卷）由 `R.srvIsList` 互斥；单卷内的三个 tab `.srv-check / .srv-score / .srv-answer` 由 `R.srvTabCheck/Score/Answer` 互斥（都在 renderVals 里按 `s.srvOpen` / `s.srvTab` 算）。
+  - 逐题作答列表原来硬编码 `list.slice(0,40)`，且下面挂了个死文案 `{{ srvMore }}`「另有 N 题，按支柱筛选查看」。改成真分页：`s.srvMore`（默认 18，每次 +24）+ `srvMoreShow / srvMoreLabel / srvMoreGo / srvShownLabel`，模板里换成真按钮。**注意 `srvMore` 这个键名原来是字符串文案**，新的点击函数必须叫 `srvMoreGo`，否则会被后面的同名键覆盖掉。
+  - 实测：收件箱 1427 → 校卷 683 → 作答 2191（18 题）/ 3368（全部 29 题）→ 交卷 677。整屏峰值从 7039 降到 ~2200。
+- **剩下最重的一屏**：v3 供应商主数据 5743（40 行分页已有，行本身重）。再往下就是单行 DOM 瘦身，收益递减，建议先停。
+- **测性能时的重要前提**：本目录的 `support.js` 是旧版运行时，**重渲染走 ~1s 的轮询节拍**——同一个操作实测会在 16ms 和 1000ms 之间跳（语言切换这种零计算量的 setState 也稳定 ~1000ms）。所以单次计时没有意义，要么多测几次取最小值，要么只比节点数。这不是本次拆分引入的，升级 support.js 有改变现有组件渲染的风险，暂不动。
+- **踩坑**：切块时 `\n  </div>\n</div>\n` 这个 END 锚点会把**根 wrapper 的 `</div>`** 一起带走，导致根 DC 少一个闭合、整页白屏。拆块后务必核对根模板 `</x-dc>` 前的收尾层级。
+- **下一步（未做）**：v3/v7/v9 在 CockpitSupplierDomain 内部再上 sc-if（同域三屏互斥）；同理 v2/v4/v11、v12/v13/v14。做完后量一次 `domProps` 的重渲开销——所有子 DC 共享同一个 R，任何 setState 都会让已挂载的子 DC 全量重渲，必要时按域切 props。
+
+### 部署侧的连带影响（同步时补，原文没写）
+- **7 个子 DC 从"编辑源"变成了"运行时依赖"**，必须部署。`.vercelignore` 里 DC 源文件本来就是逐个排除（不能写 `*.dc.html`），这次把 v2 源 / 单文件备份 / 老版 / IA 源四个加进排除列表，7 个模块与 ASSI 源留在部署集里。部署集 13 → 20 个文件。
+- **`sync.sh` 的入口来源改成 v2**，并加了一道校验：7 个模块文件缺任何一个直接 exit 1。因为模块缺失的表现是"对应域整块空白、控制台干净"，属于最难发现的那类。
+- 老版 `Autoliv ESG Cockpit.dc.html` 仍留在仓库作对照，但**不再是线上入口**，改它不会影响线上。
 
 ## 第八轮：V1 总览驾驶舱重做（2026-08-03）
 新增 `v1Vals(s,zh)` 一个方法（+218 行），V1 整屏换掉。**这是清掉了「总览驾驶舱随新增内容更新」那条老待办。** 无新视图 / 抽屉 / 资源引用。

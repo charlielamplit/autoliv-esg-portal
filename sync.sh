@@ -36,8 +36,22 @@ sync() {  # sync <源 .dc.html> <入口页> [defer]
   return 0
 }
 
-sync "Autoliv ESG Cockpit.dc.html"      index.html defer  # /      总览驾驶舱（工作台主入口）
+# 2026-08-05 起工作台入口改用拆分版 v2：根 DC 只装 shell + 全局 state + 路由，
+# 其余按 <dc-import name="X"> 从同目录的 X.dc.html 按需挂载（首屏节点 2728 → 1158）。
+# 那 7 个模块**不经 sync.sh 处理**，以原名原样部署 —— support.js 写死了
+# COMPONENT_DIR="." + name + ".dc.html"，路径必须逐字对上，改名即 404。
+sync "Autoliv ESG Cockpit v2.dc.html"   index.html defer  # /      总览驾驶舱（工作台主入口）
 sync "ASSI 线上供应商可持续问卷.dc.html"  assi.html  defer  # /assi  供应商可持续问卷（供应商视角独立页）
 sync "Autoliv Demo 页面框架.dc.html"     ia.html           # /ia    信息架构梳理（不加载 SheetJS）
 
-echo "✓ 3 个入口页已同步"
+# 子 DC 模块必须存在且能被 index.html 找到，否则对应域整块空白（无报错）。
+missing=0
+for m in CockpitCustomerDomain CockpitSupplierDomain CockpitPortal \
+         CockpitReportDomain CockpitRegulatoryDomain CockpitLedgerDomain CockpitDrawers; do
+  if ! grep -q "dc-import name=\"$m\"" index.html; then
+    echo "  ⚠ index.html 不再引用模块 $m —— 若已废弃，记得同时从 .vercelignore 的说明里去掉"; fi
+  [ -f "$m.dc.html" ] || { echo "  ✗ 缺少模块文件 $m.dc.html"; missing=1; }
+done
+[ "$missing" = "0" ] || { echo "    子 DC 缺失会让对应域整块空白且不报错，已中止。"; exit 1; }
+
+echo "✓ 3 个入口页 + 7 个子 DC 模块已就位"

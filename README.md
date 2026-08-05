@@ -8,7 +8,7 @@
 
 | 路径 | 入口页 | 源文件 | 内容 |
 |---|---|---|---|
-| `/` | `index.html` | `Autoliv ESG Cockpit.dc.html` | 工作台主体，14 个视图（v1–v14）。加载后默认 `state.view='v1'` 总览驾驶舱 |
+| `/` | `index.html` | `Autoliv ESG Cockpit v2.dc.html` **+ 7 个子 DC** | 工作台主体，14 个视图（v1–v14）。加载后默认 `state.view='v1'` 总览驾驶舱。**根 DC 只装 shell + 全局 state + 路由，其余按需挂载**，见下方 ⚠️ |
 | `/assi` | `assi.html` | `ASSI 线上供应商可持续问卷.dc.html` | 供应商视角的线上可持续问卷（133 题 / 6 支柱），带 Excel 导入导出 |
 | `/ia` | `ia.html` | `Autoliv Demo 页面框架.dc.html` | 信息架构梳理讲解页（一级栏目 10 → 5 的现状与建议） |
 
@@ -18,7 +18,9 @@
 
 | 文件 | 作用 | 是否部署 |
 |---|---|---|
-| `*.dc.html` | **编辑源文件**（DC 模板 + `Component` 逻辑类） | ✕ |
+| `Cockpit*Domain.dc.html` / `CockpitDrawers.dc.html` | **7 个子 DC，运行时依赖**，根 DC 用 `<dc-import>` 加载 | ✓ |
+| `ASSI 线上供应商可持续问卷.dc.html` | `/assi` 的源，**同时被根 DC 用 iframe 内嵌** | ✓ |
+| 其余 `*.dc.html`（v2 根 DC / 单文件备份 / 拆分前老版 / IA 源） | 纯编辑源与存档 | ✕ |
 | `index.html` / `assi.html` / `ia.html` | 部署入口，由 `sync.sh` 生成 = 源文件副本 **+ defer 补丁**（见下） | ✓ |
 | `support.js` | DC 运行时（运行时从 CDN 加载 React UMD） | ✓ |
 | `assi-data.js` | `/assi` 的题库与演示数据，挂 `window.ASSI`（`QS`/`PIL`/`INFO`/`DEMO`/`HIST`） | ✓ |
@@ -26,6 +28,30 @@
 | `data/*.csv`、`data/*.md`、`uploads/` | 调研底稿（已回填进代码） | ✕ |
 | `screenshots/` | 开发截图 | ✕ |
 | `HANDOFF.md` | 实现细节与踩坑记录，**改代码前必读** | ✕ |
+
+### ⚠️ 7 个子 DC 模块必须部署，且不能改名
+
+2026-08-05 起工作台拆成了「根 DC + 按需挂载子 DC」（首屏节点 2728 → 1158）。
+根 DC 里是 `<dc-import name="CockpitDrawers">` 这样按**名字**引用，
+`support.js` 把它解析成固定路径：
+
+```js
+COMPONENT_DIR = "."                                   // support.js:1552
+url = COMPONENT_DIR + "/" + encodeURIComponent(name) + ".dc.html"   // :1576
+```
+
+所以这 7 个文件必须以**原名躺在站点根目录**：
+
+```
+CockpitCustomerDomain  CockpitSupplierDomain  CockpitPortal  CockpitReportDomain
+CockpitRegulatoryDomain  CockpitLedgerDomain  CockpitDrawers
+```
+
+**漏部署或改名的表现是对应域整块空白**——不是报错、不是白屏，是那一块什么都没有，
+控制台干净。所以 `.vercelignore` 里 DC 源文件只能逐个排除，**写 `*.dc.html` 会一次性
+干掉这 7 个 + iframe 用的 ASSI 源**，而本地和设计文件夹里文件都在，测不出来。
+
+`sync.sh` 已加一道校验：7 个模块文件缺任一个直接 `exit 1`。
 
 ### ⚠️ `data/` 下的四个 JSON 必须部署
 
@@ -66,7 +92,7 @@ index.html（brotli 后 152KB）还大一倍多。加 `defer` 后不再挡首屏
 
 > 因此**入口页不再与 `.dc.html` 字节相同**。校验时别再比 md5，改成"差异必须只有 defer 这一行"：
 > ```bash
-> diff "Autoliv ESG Cockpit.dc.html" index.html | grep -E '^[<>]' | grep -vc sheetjs   # 必须是 0
+> diff "Autoliv ESG Cockpit v2.dc.html" index.html | grep -E '^[<>]' | grep -vc sheetjs   # 必须是 0
 > ```
 
 ## 改动流程
@@ -135,16 +161,22 @@ git config user.email charlielamplit@gmail.com
 `sync.sh` 跑完必须退出 0（`defer` 补丁匹配不到会退出 1，见上节），再确认差异只有那一行：
 
 ```bash
-for p in "Autoliv ESG Cockpit.dc.html:index.html" "ASSI 线上供应商可持续问卷.dc.html:assi.html"; do
+for p in "Autoliv ESG Cockpit v2.dc.html:index.html" "ASSI 线上供应商可持续问卷.dc.html:assi.html"; do
   diff "${p%%:*}" "${p##*:}" | grep -E '^[<>]' | grep -vc sheetjs    # 两个都必须是 0
 done
 ```
 
 **2. 新出现的运行时依赖是否被 `.vercelignore` 挡住**（本轮就栽在这条）
-每次同步后跑一遍，把结果和 `.vercelignore` 对一遍：
+每次同步后跑一遍，把结果和 `.vercelignore` 对一遍。注意 `dc-import` 是按**名字**引用、
+不带 `./`，所以要单独扫一次：
 
 ```bash
+# 相对路径依赖（script src / fetch / iframe）
 grep -ohE 'src="\./[^"]+"|fetch\('"'"'\./[^'"'"']+' *.dc.html | grep -oE '\./[^"'"'"']+' | sort -u
+# 子 DC 模块依赖 → 每个都必须有同名 .dc.html 且在部署集里
+grep -ohE '<dc-import name="[^"]+"' index.html | sed 's/.*name="//;s/"$//' | sort -u
+# 反推真实部署集，逐个核对上面两组
+comm -23 <(git ls-files|sort) <(git ls-files -c -i --exclude-from=.vercelignore|sort)
 ```
 
 工作台的三个 `fetch` 全是 `.catch(()=>{})`，`assi.html` 的 `window.ASSI` 拿不到也只是空题库——

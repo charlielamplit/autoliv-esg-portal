@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+      <div class="m2 v10" data-screen-label="V10 供应商门户 · 37 项任务包" style="flex-direction:column;background:#F4F7F6;min-height:1020px">
+        <div style="background:#0E3B3A;padding:0 22px;height:58px;display:flex;align-items:center;gap:14px;flex-shrink:0">
+          <div style="width:30px;height:30px;border-radius:9px;background:#7ED0B4;color:#0E3B3A;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;font-family:Manrope">56</div>
+          <div style="line-height:1.25">
+            <div style="font-size:13.5px;font-weight:700;color:#fff"><span class="zh">供应商可持续门户</span><span class="en">Supplier Sustainability Portal</span></div>
+            <div style="font-size:9.5px;color:#8FB8AE;letter-spacing:.06em">{{ supPersona }}</div>
+          </div>
+          <div style="margin-left:26px;display:flex;gap:4px">
+            <span style="font-size:11.5px;font-weight:700;color:#0E3B3A;background:#7ED0B4;padding:5px 12px;border-radius:7px"><span class="zh">我的任务</span><span class="en">My tasks</span></span>
+            <span style="font-size:11.5px;font-weight:500;color:#8FB8AE;padding:5px 12px"><span class="zh">证据库</span><span class="en">Evidence</span></span>
+            <span style="font-size:11.5px;font-weight:500;color:#8FB8AE;padding:5px 12px"><span class="zh">培训</span><span class="en">Training</span></span>
+            <span style="font-size:11.5px;font-weight:500;color:#8FB8AE;padding:5px 12px"><span class="zh">排放因子库</span><span class="en">Factors</span></span>
+          </div>
+          <button onClick="{{ go7 }}" style="margin-left:auto;font-size:11px;font-weight:600;color:#CFE6DF;border:1px solid #2E5D57;padding:6px 11px;border-radius:8px"><span class="zh">← 切回 Autoliv 采购侧</span><span class="en">← Back to sourcing view</span></button>
+          <div style="width:28px;height:28px;border-radius:50%;background:#2E5D57;color:#CFE6DF;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">王</div>
+        </div>
+
+        <div style="padding:16px 22px 30px;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:center;gap:9px;height:34px;padding:0 13px;background:#F8F6FD;border:1px solid #E3DAF7;border-radius:9px;font-size:11px;color:#5A6E75;overflow:hidden;flex-shrink:0">
+            <span style="width:7px;height:7px;border-radius:50%;background:#5B3FA8;flex-shrink:0"></span>
+            <b style="font-size:10px;font-weight:800;letter-spacing:.04em;color:#5B3FA8;white-space:nowrap"><span class="zh">主线 · 第 3 步 · 供应商填报</span><span class="en">Step 3 · Supplier fills in</span></b>
+            <span style="color:#C4D0D5">｜</span>
+            <span style="white-space:nowrap"><span class="zh">← 上一步：<b style="color:#33484F">Autoliv 采购下发 37 项任务包</b></span><span class="en">← From: <b style="color:#33484F">Autoliv dispatched the 37-item task pack</b></span></span>
+            <span style="color:#C4D0D5">｜</span>
+            <span style="white-space:nowrap"><span class="zh">这一步：<b style="color:#0F1E24">AI 引导作答、上传证据并提交</b></span><span class="en">Now: <b style="color:#0F1E24">answer with AI guidance and submit</b></span></span>
+            <span style="margin-left:auto;display:flex;align-items:center;gap:9px;flex-shrink:0">
+              <span style="color:#8397A0"><span class="zh">交给</span><span class="en">Hand to</span></span>
+              <button onClick="{{ go7 }}" style="font-size:11px;font-weight:700;color:#0B5B4A;white-space:nowrap"><span class="zh">回流 → 刷新 Autoliv 端三个状态位（第 4 步）</span><span class="en">Back to Autoliv · refresh 3 status flags →</span></button>
+            </span>
+          </div>
+          <div style="display:{{ m1RxEmptyShow }};background:#fff;border:1px dashed #D5DFE3;border-radius:12px;padding:12px 16px;font-size:11.5px;color:#9AABB1"><span class="zh">暂无来自采购的下发 —— Autoliv 在「传导对齐」下发数据请求单后，会出现在这里。</span><span class="en">No new dispatch from sourcing — requests sent from Cascade alignment land here.</span></div>
+
+          <div style="display:{{ m1RxShow }};flex-direction:column;background:#fff;border:1px solid #A9D9C4;border-left:3px solid #0B5B4A;border-radius:13px;padding:15px 18px">
+            <div style="display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap">
+              <div style="flex:1;min-width:240px">
+                <div style="font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#0B5B4A"><span class="zh">收到 · 来自 Autoliv 采购的下发</span><span class="en">Received · dispatched by Autoliv sourcing</span></div>
+                <div style="font-size:16px;font-weight:800;letter-spacing:-.01em;margin-top:4px;line-height:1.35">{{ m1RxTitle }}</div>
+                <div style="font-size:11px;color:#5A6E75;margin-top:3px"><span class="zh">来自 Autoliv 采购 · 截止 </span><span class="en">From Autoliv sourcing · due </span>2026-08-15 · <span style="font-family:Manrope">{{ m1RxNo }}</span></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:9px;flex-shrink:0">
+                <span style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;background:{{ m1RxStBg }};color:{{ m1RxStFg }};white-space:nowrap">{{ m1RxStLabel }}</span>
+                <button onClick="{{ m1RxSubmit }}" style="display:{{ m1RxBtnShow }};font-size:11.5px;font-weight:700;padding:8px 14px;border-radius:8px;background:#0B5B4A;color:#fff;white-space:nowrap"><span class="zh">AI 辅助作答 → 提交</span><span class="en">AI-assisted answer → submit</span></button>
+              </div>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:12px">
+              <sc-for list="{{ m1RxItems }}" as="i" hint-placeholder-count="4">
+                <span style="font-size:10.5px;font-weight:600;padding:4px 9px;border-radius:6px;background:#F3FAF7;border:1px solid #CFE8DE;color:#0B5B4A">{{ i.label }}</span>
+              </sc-for>
+            </div>
+            <div style="font-size:10px;color:#8397A0;margin-top:9px;line-height:1.5">{{ m1RxNote }}</div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #DCE7E3;border-radius:14px;padding:17px 20px">
+            <div style="display:flex;align-items:flex-start;gap:22px">
+              <div style="flex:1">
+                <div style="font-size:9.5px;letter-spacing:.2em;color:#0B5B4A;font-weight:700;text-transform:uppercase"><span class="zh">来自客户 Autoliv · 2025 可持续采购要求</span><span class="en">From Autoliv · 2025 Sustainable Sourcing Requirements</span></div>
+                <div style="font-size:20px;font-weight:800;letter-spacing:-.02em;margin-top:4px"><span class="zh">你的 37 项要求</span><span class="en">Your 37 requirements</span></div>
+                <div style="font-size:12px;color:#33484F;margin-top:5px;line-height:1.6;max-width:700px"><span class="zh">客户的可持续采购要求已逐条拆解为可执行任务：每条写清「这是什么、为什么要、怎么准备、交到哪个系统、什么时候截止」。按「需你行动」优先处理，其余按生效年份排队。</span><span class="en">Your customer's sustainable-sourcing requirements are broken down into actionable tasks — what it is, why it matters, how to prepare, which system to submit to, and when it is due. Start with "needs action"; the rest are queued by effective year.</span></div>
+                <div style="display:flex;align-items:center;gap:9px;margin-top:12px;flex-wrap:wrap">
+                  <button onClick="{{ supQOpen }}" style="display:flex;align-items:center;gap:8px;padding:9px 15px;border-radius:9px;background:#0B5B4A;color:#fff;font-size:12.5px;font-weight:700"><span style="font-size:11px">▤</span><span class="zh">打开 ASSI 年度可持续自评（133 题）→</span><span class="en">Open the ASSI annual self-assessment (133 items) →</span></button>
+                  <span style="font-size:10.5px;color:#5A6E75"><span class="zh">6 大支柱 · 对齐采购要求 #36（100% 响应）· 截止 2026-09-15；REQ-01 年度气候问卷（9 题）在同一屏切页作答，已填 {{ supQDone }}/9</span><span class="en">6 pillars · sourcing requirement #36 (100% response) · due 2026-09-15; the 9-item REQ-01 climate survey sits on the second tab, {{ supQDone }}/9 answered</span></span>
+                </div>
+              </div>
+              <div style="display:flex;gap:10px;flex-shrink:0">
+                <sc-for list="{{ m1Stats }}" as="t" hint-placeholder-count="4">
+                  <div style="background:{{ t.bg }};border:1px solid {{ t.bd }};border-radius:11px;padding:11px 14px;min-width:96px">
+                    <div style="font-family:Manrope;font-size:23px;font-weight:800;color:{{ t.fg }};letter-spacing:-.03em">{{ t.n }}</div>
+                    <div style="font-size:10.5px;font-weight:600;color:#4C6169;margin-top:1px">{{ t.label }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;margin-top:15px;padding-top:13px;border-top:1px dashed #DCE7E3">
+              <div style="flex:1">
+                <div style="display:flex;justify-content:space-between;font-size:10.5px;font-weight:600;color:#4C6169"><span><span class="zh">整体完成度</span><span class="en">Overall progress</span></span><span style="font-family:Manrope;color:#0B5B4A;font-weight:800">{{ m1Pct }}</span></div>
+                <div style="height:9px;border-radius:4px;background:#EDF1F0;margin-top:5px;overflow:hidden"><div style="width:{{ m1Pct }};height:100%;background:linear-gradient(90deg,#0B5B4A,#7ED0B4);border-radius:4px"></div></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:9px;background:#FDF6F5;border:1px solid #E9C9C4;border-radius:10px;padding:8px 13px">
+                <div>
+                  <div style="font-size:10px;color:#8A1E14;font-weight:700"><span class="zh">最近截止 · 要求 #1 年度气候问卷</span><span class="en">Next due · Req #1 Annual Climate Survey</span></div>
+                  <div style="font-size:10.5px;color:#5A6E75;margin-top:1px"><span class="zh">提交至 Autoliv Partner Portal</span><span class="en">Submit via Autoliv Partner Portal</span></div>
+                </div>
+                <div style="text-align:center;padding-left:11px;border-left:1px dashed #E9C9C4"><div style="font-family:Manrope;font-size:19px;font-weight:800;color:#B0291D;line-height:1">21</div><div style="font-size:9px;color:#8397A0"><span class="zh">天</span><span class="en">days</span></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 330px;gap:14px;align-items:start">
+            <div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:11px">
+                <sc-for list="{{ m1Cats }}" as="c" hint-placeholder-count="6">
+                  <button onClick="{{ c.pick }}" style="font-size:11.5px;font-weight:{{ c.fw }};padding:6px 12px;border-radius:8px;background:{{ c.bg }};color:{{ c.fg }};border:1px solid {{ c.bd }}">{{ c.label }} <span style="font-family:Manrope;opacity:.7">{{ c.n }}</span></button>
+                </sc-for>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:9px">
+                <sc-for list="{{ m1Tasks }}" as="t" hint-placeholder-count="8">
+                  <div style="background:#fff;border:1px solid {{ t.bd }};border-left:3px solid {{ t.accent }};border-radius:11px overflow:hidden">
+                    <div class="rowlink" onClick="{{ t.toggle }}" style="padding:12px 15px;display:flex;gap:13px;align-items:flex-start;border-radius:9px">
+                      <div style="width:30px;text-align:center;flex-shrink:0">
+                        <div style="font-family:Manrope;font-size:14px;font-weight:800;color:#B6C4C9">{{ t.no }}</div>
+                      </div>
+                      <div style="flex:1;min-width:0">
+                        <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+                          <span style="font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:5px;background:{{ t.tpBg }};color:{{ t.tpFg }}">{{ t.tpLabel }}</span>
+                          <b style="font-size:13.5px;letter-spacing:-.01em">{{ t.zh }}</b>
+                          <span style="font-size:10px;color:#9AABB1;font-family:Manrope">{{ t.en }}</span>
+                        </div>
+                        <div style="font-size:12px;color:#33484F;line-height:1.6;margin-top:5px">{{ t.ai }}</div>
+                        <div style="display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap">
+                          <span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:5px;background:#F0F3F5;color:#5A6E75"><span class="zh">交到</span><span class="en">Submit to</span>：{{ t.sys }}</span>
+                          <span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:5px;background:#F0F3F5;color:#5A6E75">{{ t.freq }}</span>
+                          <span style="font-size:10px;font-weight:700;color:{{ t.yearFg }};font-family:Manrope">{{ t.yearLabel }}</span>
+                        </div>
+                      </div>
+                      <div style="text-align:right;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:7px">
+                        <span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:6px;background:{{ t.stBg }};color:{{ t.stFg }}">{{ t.stLabel }}</span>
+                        <button onClick="{{ t.ctaGo }}" style="font-size:11px;font-weight:700;color:#0B5B4A">{{ t.cta }}</button>
+                      </div>
+                    </div>
+                    <sc-if value="{{ t.open }}" hint-placeholder-val="{{ false }}">
+                      <div style="padding:0 15px 14px 58px">
+                        <div style="background:#F7FAF9;border:1px solid #DCE7E3;border-radius:10px;padding:12px 14px">
+                          <div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">条款原意（AI 译写）</span><span class="en">Clause meaning</span></div>
+                          <div style="font-size:11.5px;color:#33484F;line-height:1.6;margin-top:4px">{{ t.def }}</div>
+                          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:11px">
+                            <div style="background:#fff;border:1px solid #E1E7EA;border-radius:8px;padding:9px 11px"><div style="font-size:9.5px;color:#8397A0;font-weight:600"><span class="zh">生效年份</span><span class="en">Effective</span></div><div style="font-size:12.5px;font-weight:700;font-family:Manrope;margin-top:2px">{{ t.year }}</div></div>
+                            <div style="background:#fff;border:1px solid #E1E7EA;border-radius:8px;padding:9px 11px"><div style="font-size:9.5px;color:#8397A0;font-weight:600"><span class="zh">平台可提供</span><span class="en">Platform service</span></div><div style="font-size:11.5px;font-weight:700;color:#0B5B4A;margin-top:2px">{{ t.svc }}</div></div>
+                          </div>
+                          <div style="display:flex;gap:8px;margin-top:11px">
+                            <button onClick="{{ t.start }}" style="padding:8px 13px;border-radius:8px;background:#0B5B4A;color:#fff;font-size:11.5px;font-weight:700"><span class="zh">开始引导填报</span><span class="en">Start guided filing</span></button>
+                            <button onClick="{{ t.help }}" style="padding:8px 13px;border-radius:8px;background:#fff;border:1px solid #D5DFE3;color:#33484F;font-size:11.5px;font-weight:600"><span class="zh">申请帮扶服务</span><span class="en">Request support</span></button>
+                          </div>
+                        </div>
+                      </div>
+                    </sc-if>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:14px">
+              <div style="background:#0E3B3A;border-radius:12px;padding:15px 16px;color:#fff">
+                <div style="font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#7ED0B4"><span class="zh">AI 助手</span><span class="en">AI assistant</span></div>
+                <div style="font-size:12.5px;line-height:1.65;margin-top:7px;color:#E4EFEC"><span class="zh">你今年最该先做的是 <b style="color:#7ED0B4">要求 #1 年度气候问卷</b>（21 天后截止）。平台已从你去年的答卷和证据库预填 7/10 题，你只需确认绿电数据。</span><span class="en">Start with <b style="color:#7ED0B4">Req #1, the Annual Climate Survey</b> — due in 21 days. 7 of 10 answers are pre-filled from last year.</span></div>
+                <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border-radius:999px;padding:6px 7px 6px 13px;margin-top:12px">
+                  <span style="flex:1;font-size:11.5px;color:#8FB8AE"><span class="zh">问我：PCF 是什么？怎么算？</span><span class="en">Ask: what is PCF?</span></span>
+                  <span style="width:26px;height:26px;border-radius:50%;background:#7ED0B4;color:#0E3B3A;display:flex;align-items:center;justify-content:center;font-weight:700">→</span>
+                </div>
+              </div>
+
+              <div style="background:#fff;border:1px solid #DCE7E3;border-radius:12px;padding:14px 16px">
+                <div style="font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">术语卡 · 看不懂就点</span><span class="en">Glossary</span></div>
+                <div style="display:flex;flex-direction:column;gap:8px;margin-top:11px">
+                  <sc-for list="{{ m1Terms }}" as="g" hint-placeholder-count="5">
+                    <div style="padding:9px 11px;background:#F7FAF9;border:1px solid #E4EDEA;border-radius:9px">
+                      <div style="font-size:11.5px;font-weight:800;color:#0B5B4A;font-family:Manrope">{{ g.k }}</div>
+                      <div style="font-size:11px;color:#33484F;line-height:1.55;margin-top:2px">{{ g.v }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+
+              <div style="background:#fff;border:1px solid #DCE7E3;border-radius:12px;padding:14px 16px">
+                <div style="font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">你的缺口 · 可申请帮扶</span><span class="en">Your gaps · support available</span></div>
+                <div style="display:flex;flex-direction:column;gap:8px;margin-top:11px">
+                  <sc-for list="{{ m1Gaps }}" as="g" hint-placeholder-count="3">
+                    <div style="display:flex;gap:9px;align-items:center;padding:9px 11px;background:#FDF6F5;border:1px solid #EFD8D4;border-radius:9px">
+                      <div style="flex:1"><div style="font-size:11.5px;font-weight:700">{{ g.zh }}</div><div style="font-size:10.5px;color:#0B5B4A;font-weight:600;margin-top:1px">→ {{ g.svc }}</div></div>
+                      <span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;color:#8A1E14;background:#FBE9E7;padding:2px 6px;border-radius:4px">#{{ g.no }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+                <button onClick="{{ m1Apply }}" style="width:100%;margin-top:11px;padding:9px;border-radius:9px;background:#0B5B4A;color:#fff;font-size:11.5px;font-weight:700"><span class="zh">一次性申请全部帮扶</span><span class="en">Request all support</span></button>
+                <div style="font-size:10px;color:#9AABB1;margin-top:9px;line-height:1.5"><span class="zh">提交后 Autoliv 采购侧的三个状态位（气候与环境 / 冲突矿产 / 社会责任）会自动刷新。</span><span class="en">On submission, Autoliv's three status flags refresh automatically.</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+</x-dc>
+<script type="text/x-dc" data-dc-script></script>
+</body>
+</html>

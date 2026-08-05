@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+      <sc-if value="{{ vOn.v3 }}" hint-placeholder-val="{{ false }}">
+      <div class="view v3" data-screen-label="V3 供应商管理">
+  <div style="display:flex;align-items:center;gap:9px;height:34px;padding:0 13px;background:#F3FAF7;border:1px solid #CFE8DE;border-radius:9px;margin-bottom:14px;font-size:11px;color:#5A6E75;overflow:hidden">
+    <span style="width:7px;height:7px;border-radius:50%;background:#0B5B4A;flex-shrink:0"></span>
+    <b style="font-size:10px;font-weight:800;letter-spacing:.04em;color:#0B5B4A;white-space:nowrap"><span class="zh">传导对象 · 不占主线步号</span><span class="en">Cascade target · no step no.</span></b>
+    <span style="color:#C4D0D5">｜</span>
+    <span style="white-space:nowrap"><span class="zh"><b style="color:#33484F">供应商域的入口</b></span><span class="en"><b style="color:#33484F">Entry to the supplier domain</b></span></span>
+    <span style="color:#C4D0D5">｜</span>
+    <span style="white-space:nowrap"><span class="zh">这一步：<b style="color:#0F1E24">有谁、是谁、当前表现如何</b> —— 新增供应商的引入尽调也从这里走</span><span class="en">Now: <b style="color:#0F1E24">who they are and how they perform</b> — onboarding starts here too</span></span>
+    <span style="margin-left:auto;display:flex;align-items:center;gap:9px;flex-shrink:0">
+      <span style="color:#8397A0"><span class="zh">交给</span><span class="en">Hand to</span></span>
+      <button onClick="{{ go9 }}" style="font-size:11px;font-weight:700;color:#0B5B4A;white-space:nowrap"><span class="zh">新供应商尽调 →</span><span class="en">Onboarding DD →</span></button>
+      <button onClick="{{ go10 }}" style="font-size:11px;font-weight:700;color:#5B3FA8;white-space:nowrap"><span class="zh">供应商门户（第 3 步）→</span><span class="en">Supplier portal →</span></button>
+    </span>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px">
+    <sc-for list="{{ pipeline }}" as="p" hint-placeholder-count="5">
+      <div style="background:#fff;border:1px solid #E1E7EA;border-radius:10px;padding:11px 13px;border-top:3px solid #3FAE55"><div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#1F6B32;font-weight:600">{{ p.no }}</div><div style="font-size:12px;font-weight:700;margin-top:3px;line-height:1.25"><span class="zh">{{ p.zh }}</span><span class="en">{{ p.en }}</span></div><div style="font-size:9.5px;color:#8397A0;font-family:Manrope;margin-top:2px">{{ p.sub }}</div></div>
+    </sc-for>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1.25fr;gap:14px;margin-bottom:14px">
+    <div class="card">
+      <div class="chd"><h3><span class="zh">范围三排放结构</span><span class="en">Scope 3 Breakdown</span></h3><span style="margin-left:auto;font-size:11px;color:#8397A0">1.28M tCO₂e</span></div>
+      <div style="padding:16px;display:flex;gap:18px;align-items:center">
+        <svg viewBox="0 0 180 180" style="width:164px;height:164px;flex-shrink:0">
+          <circle cx="90" cy="90" r="60" fill="none" stroke="#1F6B32" stroke-width="28" stroke-dasharray="229.97 376.99" transform="rotate(-90 90 90)"></circle>
+          <circle cx="90" cy="90" r="60" fill="none" stroke="#3FAE55" stroke-width="28" stroke-dasharray="30.16 376.99" stroke-dashoffset="-229.97" transform="rotate(-90 90 90)"></circle>
+          <circle cx="90" cy="90" r="60" fill="none" stroke="#86CD8A" stroke-width="28" stroke-dasharray="33.93 376.99" stroke-dashoffset="-260.13" transform="rotate(-90 90 90)"></circle>
+          <circle cx="90" cy="90" r="60" fill="none" stroke="#B8E3B9" stroke-width="28" stroke-dasharray="45.24 376.99" stroke-dashoffset="-294.06" transform="rotate(-90 90 90)"></circle>
+          <circle cx="90" cy="90" r="60" fill="none" stroke="#E2A85C" stroke-width="28" stroke-dasharray="15.08 376.99" stroke-dashoffset="-339.3" transform="rotate(-90 90 90)"></circle>
+          <circle cx="90" cy="90" r="60" fill="none" stroke="#D5DFE3" stroke-width="28" stroke-dasharray="22.62 376.99" stroke-dashoffset="-354.38" transform="rotate(-90 90 90)"></circle>
+          <text x="90" y="86" text-anchor="middle" font-size="17" font-weight="800" fill="#0F1E24" font-family="Manrope">1.28M</text><text x="90" y="103" text-anchor="middle" font-size="9" fill="#8397A0" font-family="Manrope">tCO₂e</text>
+        </svg>
+        <div style="display:flex;flex-direction:column;gap:7px;font-size:11px;flex:1">
+          <div style="display:flex;align-items:center;gap:7px"><span style="width:9px;height:9px;border-radius:2px;background:#1F6B32"></span><span class="zh">类别1 采购商品</span><span class="en">Cat.1 Purchased</span><b style="margin-left:auto;font-family:Manrope">61%</b></div>
+          <div style="display:flex;align-items:center;gap:7px"><span style="width:9px;height:9px;border-radius:2px;background:#3FAE55"></span><span class="zh">类别2 资本商品</span><span class="en">Cat.2 Capital</span><b style="margin-left:auto;font-family:Manrope">8%</b></div>
+          <div style="display:flex;align-items:center;gap:7px"><span style="width:9px;height:9px;border-radius:2px;background:#86CD8A"></span><span class="zh">类别3 燃料能源</span><span class="en">Cat.3 Fuel</span><b style="margin-left:auto;font-family:Manrope">9%</b></div>
+          <div style="display:flex;align-items:center;gap:7px"><span style="width:9px;height:9px;border-radius:2px;background:#B8E3B9"></span><span class="zh">类别4 上游运输</span><span class="en">Cat.4 Transport</span><b style="margin-left:auto;font-family:Manrope">12%</b></div>
+          <div style="display:flex;align-items:center;gap:7px"><span style="width:9px;height:9px;border-radius:2px;background:#E2A85C"></span><span class="zh">类别5 废弃物</span><span class="en">Cat.5 Waste</span><b style="margin-left:auto;font-family:Manrope">4%</b></div>
+          <div style="display:flex;align-items:center;gap:7px"><span style="width:9px;height:9px;border-radius:2px;background:#D5DFE3"></span><span class="zh">其他</span><span class="en">Other</span><b style="margin-left:auto;font-family:Manrope">6%</b></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="chd"><h3><span class="zh">供应商分级分布</span><span class="en">Grade Distribution</span></h3><span style="margin-left:auto;font-size:11px;color:#8397A0">{{ supN }} <span class="zh">家</span><span class="en">suppliers</span></span><button onClick="{{ go7 }}" style="font-size:11px;font-weight:700;color:#0B5B4A"><span class="zh">按问卷能力看 →</span><span class="en">By capability →</span></button></div>
+      <div style="padding:18px 16px 16px">
+        <div style="display:flex;align-items:flex-end;gap:14px;height:140px;padding:0 10px">
+          <sc-for list="{{ v3Grades }}" as="g" hint-placeholder-count="6">
+            <div onClick="{{ g.pick }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer">
+              <span style="font-family:Manrope;font-size:12px;font-weight:800;color:{{ g.numFg }}">{{ g.n }}</span>
+              <div style="width:100%;height:{{ g.h }};background:{{ g.bar }};border-radius:6px 6px 0 0"></div>
+              <span style="font-size:11px;font-weight:{{ g.fw }};color:{{ g.labelFg }}">{{ g.label }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:10.5px;color:#8397A0;padding-top:12px;border-top:1px dashed #E6EBEE;margin-top:8px"><span><span class="zh">A/A− {{ v3GradeTop }} 家 · 要求达标良好</span><span class="en">{{ v3GradeTop }} at A/A−</span></span><span style="color:#B0291D;font-weight:600"><span class="zh">C/D {{ v3GradeBad }} 家需介入</span><span class="en">{{ v3GradeBad }} C/D need action</span></span></div>
+        <div style="font-size:10px;color:#9AABB1;line-height:1.55;margin-top:7px"><span class="zh">评级口径：分数 = 37 项要求达标情况加权（硬性/新增 ×3 · 期望 ×1）。A ≥85 · A− ≥76 · B ≥66 · B− ≥58 · C ≥44 · D &lt;44。点柱子筛选该等级。</span><span class="en b">Grading: score = weighted compliance across the 37 requirements (mandatory/new ×3, expected ×1). A ≥85 · A− ≥76 · B ≥66 · B− ≥58 · C ≥44 · D &lt;44. Click a bar to filter.</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="chd"><h3><span class="zh">供应商主数据清单</span><span class="en">Supplier Master Data</span></h3><span class="pill">{{ v3CountLabel }}</span><button onClick="{{ addOpen }}" style="margin-left:auto;font-size:11px;font-weight:700;padding:6px 13px;border-radius:7px;background:#0B5B4A;color:#fff;white-space:nowrap"><span class="zh">+ 添加供应商 · 走引入尽调</span><span class="en">+ Add supplier · run onboarding DD</span></button></div>
+    <div style="padding:11px 16px 0;display:flex;align-items:center;gap:7px">
+      <sc-for list="{{ v3SegBtns }}" as="sg" hint-placeholder-count="2">
+        <button onClick="{{ sg.pick }}" style="display:flex;align-items:center;gap:7px;font-size:12px;font-weight:{{ sg.fw }};padding:7px 14px;border-radius:9px;background:{{ sg.bg }};color:{{ sg.fg }};border:1px solid {{ sg.bd }}">{{ sg.label }}<span style="font-family:Manrope;font-size:11px;font-weight:800">{{ sg.n }}</span></button>
+      </sc-for>
+      <span style="margin-left:auto;font-size:10.5px;color:#9AABB1;display:{{ candHas }}"><span class="zh">引入中的企业已建档但未准入 —— 不计入在册统计</span><span class="en">Onboarding records are excluded from the active stats</span></span>
+    </div>
+    <div class="v3-cand" style="flex-direction:column;padding:12px 16px 16px">
+      <div style="display:{{ candHas }};font-size:11px;color:#5A6E75;line-height:1.6;background:#FBFAFE;border:1px solid #E3DAF7;border-radius:9px;padding:10px 13px"><span class="zh">{{ candNote }}</span><span class="en b">{{ candNote }}</span></div>
+      <div style="display:{{ candEmpty }};flex-direction:column;align-items:center;gap:5px;padding:34px 24px 32px;background:#FBFCFD;border:1px dashed #DDE5E8;border-radius:11px">
+        <span style="width:34px;height:34px;border-radius:10px;background:#F1F5F7;border:1px solid #E1E7EA;display:flex;align-items:center;justify-content:center;font-size:15px;color:#9AABB1">◈</span>
+        <b style="font-size:12.5px;font-weight:700;color:#43585F;margin-top:5px"><span class="zh">当前没有引入中的企业</span><span class="en">No suppliers in onboarding</span></b>
+        <span style="font-size:11px;color:#8397A0;line-height:1.55;text-align:center;max-width:420px"><span class="zh">新供方建档后先在这里跑完引入尽调，准入后才进入在册清单与达标分母。</span><span class="en b">New suppliers run onboarding DD here first; only once approved do they join the active register and the compliance denominator.</span></span>
+        <button onClick="{{ addOpen }}" style="margin-top:9px;font-size:11.5px;font-weight:700;padding:7px 15px;border-radius:8px;background:#0B5B4A;color:#fff"><span class="zh">+ 添加供应商 · 走引入尽调</span><span class="en">+ Add supplier</span></button>
+      </div>
+      <div style="display:{{ candGrid }};grid-template-columns:1.7fr 116px 150px 1fr 132px 18px;gap:11px;padding:11px 4px 8px;border-bottom:1px solid #E1E7EA;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:#7A8B92">
+        <span><span class="zh">企业</span><span class="en">Company</span></span>
+        <span><span class="zh">尽调进度</span><span class="en">DD progress</span></span>
+        <span><span class="zh">阶段</span><span class="en">Stage</span></span>
+        <span><span class="zh">回卷状态</span><span class="en">Reply status</span></span>
+        <span><span class="zh">截止</span><span class="en">Due</span></span><span></span>
+      </div>
+      <sc-for list="{{ candRows }}" as="c" hint-placeholder-count="3">
+        <div class="rowlink" onClick="{{ c.open }}" style="display:grid;grid-template-columns:1.7fr 116px 150px 1fr 132px 18px;gap:11px;align-items:center;padding:11px 4px;border-bottom:1px dashed #E6EBEE;font-size:11.5px">
+          <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+            <b style="font-size:12.5px">{{ c.name }}</b>
+            <span style="font-size:10px;color:#8397A0;font-family:Manrope">{{ c.code }} · {{ c.cat }}</span>
+          </span>
+          <span style="display:flex;flex-direction:column;gap:4px">
+            <span style="font-family:Manrope;font-size:10.5px;font-weight:700;color:#5A6E75">{{ c.step }}</span>
+            <span style="height:5px;background:#EEF2F4;border-radius:3px;overflow:hidden"><span style="display:block;width:{{ c.barW }};height:100%;background:{{ c.barC }};border-radius:3px"></span></span>
+          </span>
+          <span style="font-size:9.5px;font-weight:800;padding:3px 9px;border-radius:5px;background:{{ c.stBg }};color:{{ c.stFg }};width:fit-content">{{ c.stZh }}</span>
+          <span style="font-size:11px;font-weight:600;color:{{ c.replyFg }}">{{ c.reply }}</span>
+          <span style="display:flex;flex-direction:column;gap:1px">
+            <span style="font-family:Manrope;font-size:11px;font-weight:700;color:{{ c.dueFg }}">{{ c.due }}</span>
+            <span style="font-size:9.5px;color:{{ c.dueFg }}">{{ c.dueNote }}</span>
+          </span>
+          <span style="color:#C4D0D5;font-size:12px">›</span>
+        </div>
+      </sc-for>
+    </div>
+    <div class="v3-active" style="padding:11px 16px 0;flex-direction:column;gap:7px;border-bottom:1px solid #EDF1F3;padding-bottom:11px">
+      <sc-for list="{{ v3Groups }}" as="grp" hint-placeholder-count="4">
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+          <span style="width:44px;flex-shrink:0;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#8397A0">{{ grp.label }}</span>
+          <sc-for list="{{ grp.opts }}" as="o" hint-placeholder-count="4">
+            <button onClick="{{ o.pick }}" style="font-size:10.5px;font-weight:{{ o.fw }};padding:4px 10px;border-radius:6px;background:{{ o.bg }};border:1px solid {{ o.bd }};color:{{ o.fg }};white-space:nowrap">{{ o.label }}</button>
+          </sc-for>
+        </div>
+      </sc-for>
+      <div style="display:flex;align-items:center;gap:10px;font-size:10.5px;color:#8397A0;padding-top:2px">
+        <span style="font-weight:700;color:#0B5B4A">{{ v3CountLabel }}</span><span>{{ v3Note }}</span>
+        <button onClick="{{ v3Reset }}" style="margin-left:auto;font-size:10.5px;font-weight:700;color:#0B5B4A;white-space:nowrap">{{ v3ResetLabel }}</button>
+      </div>
+    </div>
+    <div class="v3-active" style="padding:6px 16px 14px;flex-direction:column">
+      <div style="display:grid;grid-template-columns:1.8fr 92px 104px 74px 124px 54px 88px 18px;gap:10px;padding:9px 0;border-bottom:1px solid #E1E7EA;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:#7A8B92"><span><span class="zh">供应商</span><span class="en">Supplier</span></span><button onClick="{{ sortBiz }}" style="display:flex;align-items:center;gap:3px;font-family:inherit;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:{{ srtBizFg }}"><span class="zh">年供货额</span><span class="en">Spend</span><span style="font-size:8px">{{ srtBiz }}</span></button><span><span class="zh">碳数据</span><span class="en">Data</span></span><button onClick="{{ sortRe }}" style="display:flex;align-items:center;gap:3px;font-family:inherit;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:{{ srtReFg }}"><span class="zh">绿电</span><span class="en">RE%</span><span style="font-size:8px">{{ srtRe }}</span></button><button onClick="{{ sortScore }}" style="display:flex;align-items:center;gap:3px;font-family:inherit;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:{{ srtScoreFg }}"><span class="zh">可持续综合评分</span><span class="en">Score</span><span style="font-size:8px">{{ srtScore }}</span></button><span><span class="zh">等级</span><span class="en">Grade</span></span><span><span class="zh">要求达标</span><span class="en">Passed</span></span><span></span></div>
+      <sc-if value="{{ v3Empty }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:26px 0;text-align:center;font-size:11.5px;color:#8397A0"><span class="zh">没有匹配的供应商 —— 试试放宽筛选或清空搜索词。</span><span class="en">No supplier matches — relax the filters or clear the search.</span></div>
+      </sc-if>
+      <sc-for list="{{ suppliers }}" as="s" hint-placeholder-count="7">
+        <div class="rowlink" onClick="{{ s.open }}" style="display:grid;grid-template-columns:1.8fr 92px 104px 74px 124px 54px 88px 18px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px dashed #E6EBEE;font-size:11.5px">
+          <span style="display:flex;align-items:center;gap:10px">
+            <span style="width:30px;height:30px;border-radius:8px;background:{{ s.avBg }};color:{{ s.avFg }};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0">{{ s.avatar }}</span>
+            <span style="display:flex;flex-direction:column;gap:1px">
+              <span style="font-weight:700"><span class="nr">{{ s.nameNr }}</span><span class="na">{{ s.nameNa }}</span></span>
+              <span style="font-size:9.5px;color:#8397A0;font-family:Manrope"><span style="display:{{ s.codeShow }}">{{ s.code }} · </span><span class="zh">{{ s.czh }}</span><span class="en">{{ s.cen }}</span></span>
+            </span>
+          </span>
+          <span style="display:flex;flex-direction:column;gap:1px"><span style="font-family:Manrope;font-weight:700;font-size:11.5px">{{ s.bizLabel }}</span><span style="font-size:9px;font-weight:700;color:{{ s.riskFg }}"><span class="zh">{{ s.riskZh }}</span><span class="en">{{ s.riskEn }}</span></span></span>
+          <span style="font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;background:{{ s.dbg }};color:{{ s.dfg }};width:fit-content"><span class="zh">{{ s.dzh }}</span><span class="en">{{ s.den }}</span></span>
+          <span style="font-family:Manrope;font-weight:600;color:{{ s.reFg }}">{{ s.re }}</span>
+          <span class="scoretip" onClick="{{ s.stop }}" style="display:flex;align-items:center;gap:7px">
+            <span style="flex:1;height:6px;background:#E6EBEE;border-radius:999px;overflow:hidden"><span style="display:block;width:{{ s.scorePct }};height:100%;background:{{ s.gFg }};border-radius:999px"></span></span>
+            <span style="font-family:Manrope;font-weight:800;color:{{ s.gFg }};font-size:12px">{{ s.score }}</span>
+            <span style="width:13px;height:13px;border-radius:50%;background:#E6EBEE;color:#7A8B92;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">?</span>
+            <span class="tip" style="font-size:10.5px;line-height:1.5">
+              <span style="font-weight:700;font-size:11px;display:block;margin-bottom:5px">{{ s.score }}/100 · <span class="zh">按五类要求拆解</span><span class="en">by requirement category</span></span>
+              <sc-for list="{{ s.tipRows }}" as="t" hint-placeholder-count="4"><span style="display:flex;justify-content:space-between;gap:8px;padding:1px 0"><span style="opacity:.8"><span class="zh">{{ t.zh }}</span><span class="en">{{ t.en }}</span> <span style="opacity:.6">{{ t.w }}</span></span><span style="font-family:Manrope;font-weight:700;color:{{ t.c }}">{{ t.v }}</span></span></sc-for>
+              <span style="display:block;margin-top:6px;padding-top:5px;border-top:1px solid rgba(255,255,255,.2);opacity:.75"><span class="zh">= 37 项要求达标情况加权（硬性/新增 ×3 · 期望 ×1）</span><span class="en">= weighted compliance across the 37 requirements (mandatory/new ×3 · expected ×1)</span></span>
+            </span>
+          </span>
+          <span style="font-family:Manrope;font-size:12px;font-weight:800;color:{{ s.gFg }}">{{ s.grade }}</span>
+          <span style="display:flex;flex-direction:column;gap:1px">
+            <span style="font-size:10.5px;font-weight:700;color:{{ s.passFg }}"><span class="zh">要求达标</span><span class="en">Passed</span> {{ s.pass9 }}</span>
+            <span style="font-size:9px;color:{{ s.taskFg }};font-weight:600">{{ s.taskLabel }}</span>
+          </span>
+          <span style="color:#B6C4C9;font-size:13px;text-align:right">›</span>
+        </div>
+      </sc-for>
+      <div style="display:{{ v3MoreShow }};justify-content:center;padding:12px 0 2px">
+        <button onClick="{{ v3More }}" style="font-size:11.5px;font-weight:700;color:#0B5B4A;padding:7px 16px;border-radius:8px;border:1px solid #BFE3D6;background:#F3FAF7">{{ v3MoreLabel }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+      </sc-if>
+      <sc-if value="{{ vOn.v7 }}" hint-placeholder-val="{{ false }}">
+
+      <div class="m2 v7" data-screen-label="V7 供应链达标全景" style="flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:center;gap:9px;height:34px;padding:0 13px;background:#F3FAF7;border:1px solid #CFE8DE;border-radius:9px;font-size:11px;color:#5A6E75;overflow:hidden;flex-shrink:0">
+          <span style="width:7px;height:7px;border-radius:50%;background:#0B5B4A;flex-shrink:0"></span>
+          <b style="font-size:10px;font-weight:800;letter-spacing:.04em;color:#0B5B4A;white-space:nowrap"><span class="zh">主线 · 第 4 步 · 回收与达标</span><span class="en">Step 4 · Returns &amp; status</span></b>
+          <span style="color:#C4D0D5">｜</span>
+          <span style="white-space:nowrap"><span class="zh">← 上一步：<b style="color:#33484F">台账已按供应商聚合下发</b></span><span class="en">← From: <b style="color:#33484F">the ledger dispatched packs per supplier</b></span></span>
+          <span style="color:#C4D0D5">｜</span>
+          <span style="white-space:nowrap"><span class="zh">这一步：<b style="color:#0F1E24">看回收结果与能力缺口，判断哪些要求还没达标</b></span><span class="en">Now: <b style="color:#0F1E24">read returns and gaps, see which asks are unmet</b></span></span>
+          <span style="margin-left:auto;display:flex;align-items:center;gap:9px;flex-shrink:0">
+            <span style="color:#8397A0"><span class="zh">交给</span><span class="en">Hand to</span></span>
+            <button onClick="{{ go10 }}" style="font-size:11px;font-weight:700;color:#5B3FA8;white-space:nowrap"><span class="zh">供应商门户下发（第 3 步）→</span><span class="en">Dispatch to portal →</span></button>
+            <button onClick="{{ go3 }}" style="font-size:11px;font-weight:700;color:#0B5B4A;white-space:nowrap"><span class="zh">主数据下钻 →</span><span class="en">Master data →</span></button>
+          </span>
+        </div>
+        <div style="border:1px solid #BFE3D6;border-left:3px solid #0B5B4A;border-radius:14px;padding:15px 18px;background:linear-gradient(135deg,#EDF9F4,#F7FAF3 90%)">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:18px">
+            <div style="flex:1">
+              <div style="font-size:9.5px;letter-spacing:.2em;color:#0B5B4A;font-weight:700;text-transform:uppercase"><span class="zh">Autoliv 采购侧 · 链主视角</span><span class="en">Sourcing · Chain-lead view</span></div>
+              <div style="font-size:19px;font-weight:800;letter-spacing:-.02em;margin-top:3px"><span class="zh">供应商达标全景 · 拿 37 项要求量供应链</span><span class="en">Compliance Overview · the chain against all 37 requirements</span></div>
+              <div style="font-size:12px;color:#33484F;margin-top:5px;line-height:1.55;max-width:880px"><span class="zh">上一屏「供应商主数据」回答"有谁"，这一屏回答"拿 37 项要求量下去，差距在哪一项、集中在谁身上"。<b>一行一项要求</b>（不是一行一家）。37 项里 <b>9 项已通过问卷测出达标率</b>，<b>其余只有回收覆盖率或本周期未发起</b> —— 三种状态都摊开写明，没测的不假装测了。达标率分母 317 家（本年度已回卷 · $776M），主数据在册 327 家，差 10 家本年度未回卷。</span><span class="en b">The previous screen answers "who"; this one answers "measured against all 37 requirements, which requirement is short and whose fault". One row per requirement. 9 of the 37 have a measured pass rate; the rest show only response coverage, or nothing this cycle — all three states are stated plainly. Pass rates are over the 317 suppliers that returned this year's survey; 327 are in master data.</span></div>
+            </div>
+            <div style="display:flex;gap:8px;flex-shrink:0">
+              <button onClick="{{ sdExec }}" style="padding:7px 13px;border-radius:8px;font-size:12px;font-weight:600;background:#fff;border:1px solid #BFE3D6;color:#0B5B4A"><span class="zh">导出要求达标分析</span><span class="en">Exec summary</span></button>
+              <button onClick="{{ sdPrio }}" style="padding:7px 13px;border-radius:8px;font-size:12px;font-weight:700;background:#0B5B4A;color:#fff"><span class="zh">把缺口带入全量要求下发 →</span><span class="en">Export priority list</span></button>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:11px;width:100%">
+          <sc-for list="{{ sdKpis }}" as="k" hint-placeholder-count="5">
+            <div class="card" style="padding:13px 15px;border-top:2px solid {{ k.accent }}">
+              <div style="font-size:10.5px;font-weight:700;color:#8397A0;letter-spacing:.04em;display:flex;align-items:center;gap:5px"><span class="zh">{{ k.zh }}</span><span class="en">{{ k.en }}</span><span class="itip" style="display:{{ k.tipShow }}">ⓘ<span class="tp"><span class="zh">{{ k.tipZh }}</span><span class="en b">{{ k.tipEn }}</span></span></span></div>
+              <div style="display:flex;align-items:baseline;gap:5px;margin-top:6px">
+                <div style="font-family:Manrope;font-size:25px;font-weight:800;letter-spacing:-.03em;color:{{ k.accent }}">{{ k.val }}</div>
+                <div style="font-size:11.5px;font-weight:700;color:#5A6E75">{{ k.unit }}</div>
+                <div style="display:{{ k.dShow }};font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px;background:#EDF9F4;border:1px solid #A9D9C4;color:#0B5B4A;white-space:nowrap">{{ k.delta }}</div>
+              </div>
+              <div style="font-size:10.5px;color:#8397A0;margin-top:3px;line-height:1.4"><span class="zh">{{ k.subZh }}</span><span class="en">{{ k.subEn }}</span></div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:14px;width:100%;align-items:start">
+          <div class="card">
+            <div class="chd"><h3><span class="zh">37 项要求达标全景</span><span class="en">All 37 requirements</span></h3><span class="pill"><span class="zh">已测量 9 项 · 双口径</span><span class="en">9 measured · dual basis</span></span><span style="margin-left:auto;font-size:10.5px;color:#8397A0;display:flex;align-items:center;gap:11px"><span style="display:flex;align-items:center;gap:4px"><span style="width:9px;height:9px;border-radius:2px;background:#0B5B4A"></span><span class="zh">按家数</span><span class="en">By count</span></span><span style="display:flex;align-items:center;gap:4px"><span style="width:9px;height:9px;border-radius:2px;background:#7ED0B4"></span><span class="zh">按采购额加权</span><span class="en">Spend-weighted</span></span></span></div>
+            <div style="padding:10px 16px 14px">
+              <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding-bottom:10px;border-bottom:1px solid #EDF1F3">
+                <sc-for list="{{ sd37Tabs }}" as="t" hint-placeholder-count="4">
+                  <button onClick="{{ t.pick }}" style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:{{ t.fw }};padding:5px 11px;border-radius:7px;background:{{ t.bg }};border:1px solid {{ t.bd }};color:{{ t.fg }};white-space:nowrap">{{ t.label }}<span style="font-family:Manrope;font-size:11px;font-weight:800;color:{{ t.nFg }}">{{ t.n }}</span></button>
+                </sc-for>
+              </div>
+              <div style="font-size:10.5px;color:#5A6E75;line-height:1.55;padding:9px 0 4px"><span class="zh">{{ sd37Note }}</span><span class="en b">{{ sd37Note }}</span></div>
+              <sc-for list="{{ sd37Rows }}" as="q" hint-placeholder-count="9">
+                <div class="rowlink" onClick="{{ q.pick }}" style="display:grid;grid-template-columns:186px 1fr 118px 16px;gap:11px;align-items:center;padding:8px 7px;border-bottom:1px dashed #E6EBEE;border-radius:7px;background:{{ q.rowbg }}">
+                  <div style="min-width:0">
+                    <div style="display:flex;align-items:center;gap:5px">
+                      <b style="font-family:Manrope;font-size:10px;color:#9AABB1">{{ q.no }}</b>
+                      <span style="font-size:8.5px;font-weight:800;padding:1px 5px;border-radius:4px;background:{{ q.tBg }};color:{{ q.tFg }}"><span class="zh">{{ q.tZh }}</span><span class="en">{{ q.tEn }}</span></span>
+                      <span style="font-size:8.5px;font-weight:800;padding:1px 5px;border-radius:4px;background:{{ q.stBg }};color:{{ q.stFg }}"><span class="zh">{{ q.stZh }}</span><span class="en">{{ q.stEn }}</span></span>
+                    </div>
+                    <div style="font-size:11.5px;font-weight:700;line-height:1.3;color:{{ q.labelColor }};margin-top:3px">{{ q.title }}</div>
+                    <div style="font-size:9px;color:#B6C4C9;margin-top:1px">{{ q.cat }}</div>
+                  </div>
+                  <div style="display:{{ q.measShow }};flex-direction:column;gap:3px">
+                    <div style="display:flex;align-items:center;gap:7px">
+                      <div style="flex:1;height:9px;border-radius:3px;background:#EEF2F4;overflow:hidden"><div style="width:{{ q.w1 }};height:100%;background:{{ q.c1 }};border-radius:3px"></div></div>
+                      <span style="font-family:Manrope;font-size:11.5px;font-weight:800;width:30px;text-align:right;color:{{ q.c1 }}">{{ q.p1 }}</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:7px">
+                      <div style="flex:1;height:6px;border-radius:3px;background:#F2F6F5;overflow:hidden"><div style="width:{{ q.w2 }};height:100%;background:#7ED0B4;border-radius:3px"></div></div>
+                      <span style="font-family:Manrope;font-size:10px;font-weight:700;width:30px;text-align:right;color:#4C6169">{{ q.p2 }}</span>
+                    </div>
+                  </div>
+                  <div style="display:{{ q.unmeasShow }};align-items:center;gap:8px">
+                    <div style="flex:1;height:6px;border-radius:3px;background:#F0F3F5;overflow:hidden"><div style="width:{{ q.covW }};height:100%;background:#C4D0D5;border-radius:3px"></div></div>
+                    <span style="font-size:10px;color:#8397A0;white-space:nowrap"><span class="zh">{{ q.unmeasZh }}</span><span class="en b">{{ q.unmeasEn }}</span></span>
+                  </div>
+                  <div style="text-align:right">
+                    <div style="font-family:Manrope;font-size:11.5px;font-weight:800;color:#B0291D">{{ q.gapN }}</div>
+                    <div style="font-size:9.5px;color:#8397A0;font-family:Manrope">{{ q.gapSpend }}</div>
+                  </div>
+                  <span style="color:{{ q.caretColor }};font-size:12px">›</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="card">
+            <div class="chd"><h3><span class="zh">采购额 × 能力四象限</span><span class="en">Spend × Capability</span></h3><span class="pill" style="background:#FBE9E7;color:#B0291D"><span class="zh">帮扶最优先 11 家</span><span class="en">11 priority</span></span></div>
+            <div style="padding:12px 16px 14px">
+              <div style="position:relative">
+              <svg viewBox="0 0 520 320" style="width:100%;height:auto;display:block">
+                <rect x="52" y="10" width="452" height="252" fill="#FAFBFC"></rect>
+                <rect x="236" y="89" width="268" height="173" fill="#FDF1EF"></rect>
+                <line x1="236" y1="10" x2="236" y2="262" stroke="#D5DFE3" stroke-width="1" stroke-dasharray="4 3"></line>
+                <line x1="52" y1="89" x2="504" y2="89" stroke="#D5DFE3" stroke-width="1" stroke-dasharray="4 3"></line>
+                <line x1="52" y1="262" x2="504" y2="262" stroke="#C4D0D5" stroke-width="1.2"></line>
+                <line x1="52" y1="10" x2="52" y2="262" stroke="#C4D0D5" stroke-width="1.2"></line>
+                <text x="498" y="256" text-anchor="end" font-size="9.5" font-weight="700" fill="#B0291D" font-family="Manrope">高采购额 × 低能力 = 帮扶最优先</text>
+                <text x="58" y="256" font-size="9.5" fill="#9AABB1" font-family="Manrope">低额低能力（批量培训）</text>
+                <text x="498" y="26" text-anchor="end" font-size="9.5" fill="#1F6B32" font-family="Manrope">高额高能力（标杆 / 绿名单）</text>
+                <sc-for list="{{ sdScatter }}" as="d" hint-placeholder-count="0">
+                  <circle class="dotp" cx="{{ d.x }}" cy="{{ d.y }}" r="{{ d.r }}" fill="{{ d.fill }}" fill-opacity="{{ d.op }}" stroke="{{ d.stroke }}" stroke-width="{{ d.sw }}" onClick="{{ d.open }}"></circle>
+                </sc-for>
+                <text x="236" y="278" text-anchor="middle" font-size="9.5" fill="#5A6E75" font-family="Manrope">$10M</text>
+                <text x="372" y="278" text-anchor="middle" font-size="9.5" fill="#9AABB1" font-family="Manrope">$30M</text>
+                <text x="52" y="278" font-size="9.5" fill="#9AABB1" font-family="Manrope">$0</text>
+                <text x="504" y="278" text-anchor="end" font-size="9.5" fill="#9AABB1" font-family="Manrope">$60M · 年采购额</text>
+                <text x="44" y="266" text-anchor="end" font-size="9.5" fill="#9AABB1" font-family="Manrope">0</text>
+                <text x="44" y="93" text-anchor="end" font-size="9.5" fill="#5A6E75" font-family="Manrope">6.5</text>
+                <text x="44" y="26" text-anchor="end" font-size="9.5" fill="#9AABB1" font-family="Manrope">9 项达标</text>
+                <text x="52" y="300" font-size="10" fill="#5A6E75" font-family="Manrope">红点 = 采购额 Top20 且达标 ≤6 项：这 11 家的缺口最该先并入下一轮传导</text>
+                <text x="52" y="314" font-size="9.5" fill="#9AABB1" font-family="Manrope">气泡大小 = 年采购额；点击任一点查看该供应商的能力档案（SUP 编号）</text>
+              </svg>
+              <sc-for list="{{ sdLabels }}" as="l" hint-placeholder-count="0">
+                <div onClick="{{ l.open }}" style="position:absolute;left:{{ l.left }};top:{{ l.top }};font-family:Manrope;font-size:9px;font-weight:700;color:#8A1E14;white-space:nowrap;cursor:pointer;text-shadow:0 0 3px #fff,0 0 3px #fff">{{ l.n }}</div>
+              </sc-for>
+              </div>
+            </div>
+          </div>
+
+            <div class="card" style="border-left:3px solid #C97D1C">
+              <div class="chd" style="padding-bottom:11px"><h3 style="font-size:12.5px"><span class="zh">AI 数据质量校验</span><span class="en">AI data validation</span></h3><span class="pill" style="background:#FDF3E7;color:#A3620F"><span class="zh">已拦截 1 条</span><span class="en">1 blocked</span></span></div>
+              <div style="padding:11px 15px 14px">
+                <div style="display:flex;align-items:center;gap:8px;font-size:11.5px">
+                  <b style="font-family:Manrope">ABC219</b>
+                  <span style="color:#8397A0"><span class="zh">绿电比例</span><span class="en">RE share</span></span>
+                  <span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:#B0291D;text-decoration:line-through">910,808 %</span>
+                </div>
+                <div style="margin-top:9px;padding:9px 11px;background:#FDF9F2;border:1px solid #F2E0C4;border-radius:9px;font-size:11px;color:#33484F;line-height:1.55">
+                  <div><b style="color:#A3620F"><span class="zh">AI 判定</span><span class="en">AI finding</span></b><span class="zh">：疑似将 kWh 填为百分比（合理区间 0–100）。</span><span class="en">: kWh entered as a percentage (valid range 0–100).</span></div>
+                  <div style="margin-top:4px"><b style="color:#0B5B4A"><span class="zh">已执行</span><span class="en">Action</span></b><span class="zh">：自动拦截提交并发回澄清请求，关联要求 #16 绿电凭证。</span><span class="en">: submission blocked, clarification requested (Req #16).</span></div>
+                </div>
+                <div style="font-size:10.5px;color:#8397A0;margin-top:9px;line-height:1.5"><span class="zh">Excel 收卷时这类错误只能人工肉眼发现——317 家 × 10 题 = 3,170 个格子。</span><span class="en">In Excel this needs manual review of 3,170 cells.</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:14px;width:100%;align-items:start">
+          <div class="card">
+            <div class="chd"><h3><span class="zh">缺口构成分析</span><span class="en">Gap composition</span></h3><span class="pill" style="background:#EDF9F4;color:#0B5B4A">{{ sdSelLabel }}</span><span style="margin-left:auto;font-size:10.5px;color:#8397A0"><span class="zh">未达标 </span><span class="en">Gap </span><b style="color:#B0291D;font-family:Manrope">{{ sdSelGap }}</b><span class="zh"> 家 · 采购额 </span><span class="en"> suppliers · </span><b style="font-family:Manrope">{{ sdSelSpend }}</b></span></div>
+            <div style="padding:12px 16px 14px;display:flex;flex-direction:column;gap:13px">
+              <div style="display:flex;align-items:flex-start;gap:11px;padding:11px 13px;border-radius:10px;background:#F2F6FD;border:1px solid #D7E3F6">
+                <span style="font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:5px;background:#0B3A82;color:#fff;white-space:nowrap;flex-shrink:0">{{ sdSelReq }}</span>
+                <span style="font-size:11px;color:#33484F;line-height:1.55"><span class="zh">{{ sdSelReqZh }}</span><span class="en b">{{ sdSelReqEn }}</span></span>
+              </div>
+              <sc-for list="{{ sdBreak }}" as="b" hint-placeholder-count="2">
+                <div>
+                  <div style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:#8397A0;margin-bottom:7px"><span class="zh">{{ b.zh }}</span><span class="en">{{ b.en }}</span></div>
+                  <div style="display:flex;flex-direction:column;gap:6px">
+                    <sc-for list="{{ b.rows }}" as="r" hint-placeholder-count="4">
+                      <div style="display:grid;grid-template-columns:130px 1fr 58px 66px;gap:10px;align-items:center">
+                        <span style="font-size:11.5px;font-weight:600;color:#33484F">{{ r.label }}</span>
+                        <span style="height:8px;border-radius:999px;background:#EEF2F4;overflow:hidden"><span style="display:block;width:{{ r.pct }};height:100%;background:{{ r.color }};border-radius:999px"></span></span>
+                        <span style="font-family:Manrope;font-size:12px;font-weight:800;text-align:right;color:{{ r.color }}">{{ r.n }}</span>
+                        <span style="font-family:Manrope;font-size:10.5px;color:#8397A0;text-align:right">{{ r.spend }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-for>
+              <div style="display:flex;align-items:center;gap:9px;padding-top:11px;border-top:1px dashed #E6EBEE;flex-wrap:wrap">
+                <span style="font-size:10.5px;color:#8397A0;line-height:1.5;flex:1;min-width:190px"><span class="zh">这一屏只做分析：看哪一项要求、在谁身上、缺多少。要看具体是哪些家、或对它们做动作，都到供应商基准清单去。</span><span class="en b">This screen only analyses which requirement is short and where. Named suppliers and actions live in the baseline list.</span></span>
+                <button onClick="{{ sdToList }}" style="font-size:11.5px;font-weight:800;padding:8px 14px;border-radius:9px;background:#0B5B4A;color:#fff;white-space:nowrap">{{ sdToListLabel }}</button>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div class="card" style="border-left:3px solid #0B5B4A">
+              <div class="chd" style="padding-bottom:11px"><h3 style="font-size:12.5px"><span class="zh">帮扶服务映射</span><span class="en">Service mapping</span></h3><span class="pill" style="background:#EDF9F4;color:#0B5B4A"><span class="zh">缺口 = 生意</span><span class="en">Gap = revenue</span></span></div>
+              <div style="padding:10px 15px 14px;display:flex;flex-direction:column;gap:8px">
+                <sc-for list="{{ sdServices }}" as="v" hint-placeholder-count="5">
+                  <div style="display:flex;gap:10px;align-items:flex-start;padding:9px 11px;background:{{ v.bg }};border:1px solid {{ v.bd }};border-radius:9px">
+                    <div style="flex:1">
+                      <div style="font-size:11.5px;font-weight:700;color:#0F1E24">{{ v.gap }}</div>
+                      <div style="font-size:10.5px;color:#0B5B4A;font-weight:600;margin-top:2px">→ {{ v.svc }}</div>
+                    </div>
+                    <div style="text-align:right;flex-shrink:0">
+                      <div style="font-family:Manrope;font-size:13px;font-weight:800;color:{{ v.fg }}">{{ v.n }}</div>
+                      <div style="font-size:9.5px;color:#8397A0;font-family:Manrope">{{ v.spend }}</div>
+                    </div>
+                  </div>
+                </sc-for>
+                <button onClick="{{ sdCascade }}" style="margin-top:2px;padding:9px 12px;border-radius:9px;background:#0B5B4A;color:#fff;font-size:12px;font-weight:700"><span class="zh">批量下发帮扶方案（67 家未传导 + 145 家 LCA 缺口）</span><span class="en">Bulk dispatch support plan</span></button>
+              </div>
+            </div>
+
+            <div class="card" style="padding:13px 15px">
+              <div style="font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">全链绿电分布 · 对照要求 #17</span><span class="en">RE distribution · Req #17</span></div>
+              <div style="display:flex;align-items:baseline;gap:14px;margin-top:9px">
+                <div><div style="font-family:Manrope;font-size:22px;font-weight:800;color:#0B5B4A">23%</div><div style="font-size:10px;color:#8397A0"><span class="zh">中位数</span><span class="en">Median</span></div></div>
+                <div><div style="font-family:Manrope;font-size:16px;font-weight:700;color:#B0291D">67</div><div style="font-size:10px;color:#8397A0"><span class="zh">绿电为 0</span><span class="en">Zero RE</span></div></div>
+                <div><div style="font-family:Manrope;font-size:16px;font-weight:700;color:#1F6B32">146</div><div style="font-size:10px;color:#8397A0"><span class="zh">≥30% 达档</span><span class="en">≥30%</span></div></div>
+                <div><div style="font-family:Manrope;font-size:16px;font-weight:700;color:#0891B2">23</div><div style="font-size:10px;color:#8397A0"><span class="zh">已 100%</span><span class="en">At 100%</span></div></div>
+              </div>
+              <div style="margin-top:11px;height:8px;border-radius:4px;overflow:hidden;display:flex">
+                <div style="width:21.1%;background:#B0291D"></div><div style="width:32.8%;background:#E8A33D"></div><div style="width:38.8%;background:#3FAE55"></div><div style="width:7.3%;background:#0B5B4A"></div>
+              </div>
+              <div style="font-size:10.5px;color:#8397A0;margin-top:7px;line-height:1.5"><span class="zh">要求 #17：2025 年绿电 ≥30% —— 过半供应商未达档，是绿证服务最大的现成市场。</span><span class="en">Req #17 requires ≥30% RE by 2025 — over half fall short.</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+      <sc-if value="{{ vOn.v9 }}" hint-placeholder-val="{{ false }}">
+
+      <div class="m2 v9" data-screen-label="V9 新供应商引入尽调" style="flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:center;gap:9px;height:34px;padding:0 13px;background:#F3FAF7;border:1px solid #CFE8DE;border-radius:9px;font-size:11px;color:#5A6E75;overflow:hidden;flex-shrink:0">
+          <span style="width:7px;height:7px;border-radius:50%;background:#0B5B4A;flex-shrink:0"></span>
+          <b style="font-size:10px;font-weight:800;letter-spacing:.04em;color:#0B5B4A;white-space:nowrap"><span class="zh">入口闸 · 供应商第 0 步</span><span class="en">Gate · supplier step 0</span></b>
+          <span style="color:#C4D0D5">｜</span>
+          <span style="white-space:nowrap"><span class="zh">← 上一步：<b style="color:#33484F">需要新供方补位（采购发起）</b></span><span class="en">← From: <b style="color:#33484F">sourcing needs a new vendor</b></span></span>
+          <span style="color:#C4D0D5">｜</span>
+          <span style="white-space:nowrap"><span class="zh">这一步：<b style="color:#0F1E24">5 步自动筛查、红黄绿准入判定</b></span><span class="en">Now: <b style="color:#0F1E24">five checks, red/amber/green decision</b></span></span>
+          <span style="margin-left:auto;display:flex;align-items:center;gap:9px;flex-shrink:0">
+            <span style="color:#8397A0"><span class="zh">交给</span><span class="en">Hand to</span></span>
+            <button onClick="{{ go3 }}" style="font-size:11px;font-weight:700;color:#0B5B4A;white-space:nowrap"><span class="zh">入库 → 主数据</span><span class="en">Into master data →</span></button>
+            <button onClick="{{ go10 }}" style="font-size:11px;font-weight:700;color:#5B3FA8;white-space:nowrap"><span class="zh">下发任务包 → 门户</span><span class="en">Task pack → portal</span></button>
+          </span>
+        </div>
+        <div style="border:1px solid #BFE3D6;border-left:3px solid #0B5B4A;border-radius:14px;padding:15px 18px;background:linear-gradient(135deg,#EDF9F4,#F7FAF3 90%)">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:18px">
+            <div style="flex:1">
+              <div style="font-size:9.5px;letter-spacing:.2em;color:#0B5B4A;font-weight:700;text-transform:uppercase"><span class="zh">供应商准入 · 引导流</span><span class="en">Onboarding · guided flow</span></div>
+              <div style="font-size:19px;font-weight:800;letter-spacing:-.02em;margin-top:3px"><span class="zh">新供应商引入尽职调查</span><span class="en">New-Supplier Due Diligence</span></div>
+              <div style="font-size:12px;color:#33484F;margin-top:5px;line-height:1.55;max-width:840px"><span class="zh">输入企业名称或统一社会信用代码，平台自动完成工商穿透、失信与环保处罚、制裁与出口管制筛查、ESG 问卷下发与 CoC 签署五步，输出红黄绿分级与准入建议。人工只需处理黄红项。</span><span class="en">Enter a company name or unified credit code; the platform runs five checks and returns a red/amber/green rating. Humans only touch amber and red findings.</span></div>
+            </div>
+            <div style="text-align:right;flex-shrink:0;background:#fff;border:1px solid #BFE3D6;border-radius:11px;padding:11px 14px">
+              <div style="font-size:10px;color:#8397A0;font-weight:600"><span class="zh">本次初筛耗时</span><span class="en">Screening time</span></div>
+              <div style="font-family:Manrope;font-size:24px;font-weight:800;color:#0B5B4A;letter-spacing:-.03em">6′00″</div>
+              <div style="font-size:10px;color:#B0291D;font-weight:600"><span class="zh">传统人工 2–3 周</span><span class="en">vs 2–3 weeks manual</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="padding:14px 16px">
+          <div style="display:grid;grid-template-columns:1.4fr 1fr 150px;gap:12px;align-items:end">
+            <div>
+              <div style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">企业名称</span><span class="en">Company name</span></div>
+              <div style="margin-top:5px;padding:9px 12px;background:#F5F7F8;border:1px solid #E1E7EA;border-radius:9px;font-size:13px;font-weight:600">{{ ddName }}</div>
+            </div>
+            <div>
+              <div style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">统一社会信用代码</span><span class="en">Unified credit code</span></div>
+              <div style="margin-top:5px;padding:9px 12px;background:#F5F7F8;border:1px solid #E1E7EA;border-radius:9px;font-size:13px;font-family:'JetBrains Mono',monospace;color:#4C6169">91330206MA2*****XK</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <button onClick="{{ addOpen }}" style="padding:11px 12px;border-radius:9px;background:#0B5B4A;color:#fff;font-size:12.5px;font-weight:800"><span class="zh">+ 添加供应商</span><span class="en">+ Add supplier</span></button>
+              <button onClick="{{ ddRerun }}" style="padding:7px 12px;border-radius:8px;border:1px solid #BFE3D6;background:#fff;color:#0B5B4A;font-size:11px;font-weight:600"><span class="zh">重新运行尽调</span><span class="en">Re-run screening</span></button>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;margin-top:12px;padding-top:11px;border-top:1px dashed #E6EBEE;font-size:11px;color:#8397A0">
+            <span><span class="zh">引入事由</span><span class="en">Trigger</span>：<b style="color:#33484F">{{ ddTrigger }}</b></span>
+            <span><span class="zh">发起人</span><span class="en">Requested by</span>：<b style="color:#33484F">{{ ddBy }}</b></span>
+            <span style="margin-left:auto;font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:5px;background:#FDF3E7;color:#A3620F"><span class="zh">虚构演示案例</span><span class="en">Fictional demo case</span></span>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 356px;gap:14px;width:100%;align-items:start">
+          <div class="card">
+            <div class="chd"><h3><span class="zh">自动尽调五步</span><span class="en">Five automated checks</span></h3><span class="pill" style="background:#EDF9F4;color:#0B5B4A"><span class="zh">3 通过 · 1 黄旗 · 1 进行中</span><span class="en">3 pass · 1 amber · 1 running</span></span></div>
+            <div style="padding:14px 16px 16px">
+              <sc-for list="{{ ddSteps }}" as="d" hint-placeholder-count="5">
+                <div style="display:flex;gap:12px;align-items:stretch">
+                  <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0">
+                    <span style="width:26px;height:26px;border-radius:8px;background:{{ d.dotBg }};color:{{ d.dotFg }};display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;border:1.5px solid {{ d.dotBd }}">{{ d.mark }}</span>
+                    <span style="width:1.5px;flex:1;background:#E1E7EA;min-height:16px"></span>
+                  </div>
+                  <div style="flex:1;padding-bottom:14px">
+                    <div style="display:flex;align-items:center;gap:9px">
+                      <b style="font-size:13px">{{ d.step }}</b>
+                      <span style="font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:5px;background:{{ d.lvBg }};color:{{ d.lvFg }}">{{ d.status }}</span>
+                      <span style="margin-left:auto;font-family:Manrope;font-size:11px;color:#8397A0">{{ d.time }}</span>
+                    </div>
+                    <div style="font-size:11.5px;color:#33484F;line-height:1.55;margin-top:4px;padding:9px 11px;background:{{ d.bg }};border:1px solid {{ d.bd }};border-radius:9px">{{ d.finding }}</div>
+                  </div>
+                </div>
+              </sc-for>
+              <div style="display:flex;align-items:center;gap:12px;padding:11px 13px;background:#F5F7F8;border-radius:10px">
+                <div style="flex:1">
+                  <div style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">效率对比</span><span class="en">Efficiency</span></div>
+                  <div style="display:flex;align-items:center;gap:8px;margin-top:7px">
+                    <span style="font-size:10.5px;color:#8397A0;width:96px"><span class="zh">传统人工尽调</span><span class="en">Manual DD</span></span>
+                    <div style="flex:1;height:12px;border-radius:4px;background:#F0DAD6;position:relative"><div style="position:absolute;inset:0;width:100%;background:#B0291D;border-radius:4px;opacity:.85"></div></div>
+                    <b style="font-family:Manrope;font-size:11.5px;color:#B0291D;width:60px;text-align:right"><span class="zh">2–3 周</span><span class="en">2–3 wks</span></b>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+                    <span style="font-size:10.5px;color:#8397A0;width:96px"><span class="zh">平台自动初筛</span><span class="en">Platform</span></span>
+                    <div style="flex:1;height:12px;border-radius:4px;background:#DCEFE7"><div style="width:2.5%;height:100%;background:#0B5B4A;border-radius:4px"></div></div>
+                    <b style="font-family:Manrope;font-size:11.5px;color:#0B5B4A;width:60px;text-align:right">6 <span class="zh">分钟</span><span class="en">min</span></b>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div class="card" style="border-top:2px solid #C97D1C">
+              <div class="chd" style="padding-bottom:11px"><h3 style="font-size:12.5px"><span class="zh">准入结论</span><span class="en">Admission decision</span></h3></div>
+              <div style="padding:12px 15px 15px">
+                <div style="display:flex;align-items:center;gap:11px">
+                  <div style="width:44px;height:44px;border-radius:12px;background:#FDF3E7;border:1.5px solid #E8A33D;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:800;color:#A3620F">黄</div>
+                  <div>
+                    <div style="font-size:14px;font-weight:800"><span class="zh">有条件准入</span><span class="en">Conditional approval</span></div>
+                    <div style="font-size:10.5px;color:#8397A0"><span class="zh">1 项黄旗 · 无红线触碰</span><span class="en">1 amber flag · no red line</span></div>
+                  </div>
+                </div>
+                <div style="margin-top:12px;padding:10px 12px;background:#FDF9F2;border:1px solid #F2E0C4;border-radius:9px;font-size:11.5px;color:#33484F;line-height:1.6">
+                  <b style="color:#A3620F"><span class="zh">准入条件</span><span class="en">Conditions</span></b><span class="zh">：环保整改证据核验 + 6 个月内复评。</span><span class="en">: verify remediation evidence; re-assess within 6 months.</span>
+                </div>
+                <div style="display:flex;gap:8px;margin-top:12px">
+                  <button onClick="{{ ddReport }}" style="flex:1;padding:9px 10px;border-radius:9px;background:#0B5B4A;color:#fff;font-size:12px;font-weight:700"><span class="zh">一键生成尽调报告</span><span class="en">Generate DD report</span></button>
+                  <button onClick="{{ ddApprove }}" style="padding:9px 12px;border-radius:9px;background:#fff;border:1px solid #D5DFE3;color:#33484F;font-size:12px;font-weight:600"><span class="zh">批准</span><span class="en">Approve</span></button>
+                </div>
+                <div style="font-size:10px;color:#9AABB1;margin-top:9px;line-height:1.5"><span class="zh">报告附完整证据链（工商快照 / 处罚文书编号 / 名单筛查时间戳），可直接进采购归档。</span><span class="en">Report includes the full evidence chain and is archive-ready.</span></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="chd" style="padding-bottom:11px"><h3 style="font-size:12.5px"><span class="zh">准入红线清单</span><span class="en">Red-line checklist</span></h3><span class="pill" style="background:#FBE9E7;color:#B0291D"><span class="zh">触碰 0 项</span><span class="en">0 breached</span></span></div>
+              <div style="padding:11px 15px 14px">
+                <div style="display:flex;flex-wrap:wrap;gap:6px">
+                  <sc-for list="{{ ddRedlines }}" as="r" hint-placeholder-count="10"><span style="font-size:10.5px;font-weight:600;padding:3px 9px;border-radius:6px;background:#EAF7EA;color:#1F6B32">✓ {{ r }}</span></sc-for>
+                </div>
+                <div style="font-size:10px;color:#9AABB1;margin-top:10px;line-height:1.5"><span class="zh">红线清单参照主机厂准入实践（如奇瑞十大红线）与 Autoliv 要求 #22–#29 设定，任一触碰即自动否决并留痕。</span><span class="en">Red lines follow OEM onboarding practice and Autoliv requirements #22–#29; any breach auto-rejects with an audit record.</span></div>
+              </div>
+            </div>
+
+            <div class="card" style="padding:13px 15px">
+              <div style="font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">引入后自动衔接</span><span class="en">Post-approval handoff</span></div>
+              <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">
+                <div style="display:flex;align-items:center;gap:9px;font-size:11.5px"><span style="width:6px;height:6px;border-radius:50%;background:#0B5B4A"></span><span class="zh">纳入 317 家达标全景基线</span><span class="en">Added to capability cockpit baseline</span></div>
+                <div style="display:flex;align-items:center;gap:9px;font-size:11.5px"><span style="width:6px;height:6px;border-radius:50%;background:#0B5B4A"></span><span class="zh">下发 37 项要求任务包（供应商门户）</span><span class="en">37-requirement task pack dispatched</span></div>
+                <div style="display:flex;align-items:center;gap:9px;font-size:11.5px"><span style="width:6px;height:6px;border-radius:50%;background:#0B5B4A"></span><span class="zh">加入 M3 名单碰撞持续监控库</span><span class="en">Enrolled in watch-list monitoring</span></div>
+              </div>
+              <button onClick="{{ go10 }}" style="margin-top:12px;width:100%;padding:9px;border-radius:9px;background:#F3F6F7;color:#0B5B4A;font-size:11.5px;font-weight:700"><span class="zh">查看供应商门户视角 →</span><span class="en">Open supplier portal →</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script></script>
+</body>
+</html>

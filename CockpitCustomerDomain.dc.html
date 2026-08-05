@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+      <sc-if value="{{ vOn.v2 }}" hint-placeholder-val="{{ false }}">
+      <div class="view v2" data-screen-label="V2 客户要求矩阵">
+  <div style="display:flex;align-items:center;gap:9px;height:34px;padding:0 13px;background:#F2F6FD;border:1px solid #D7E3F6;border-radius:9px;margin-bottom:14px;font-size:11px;color:#5A6E75;overflow:hidden">
+    <span style="width:7px;height:7px;border-radius:50%;background:#0B3A82;flex-shrink:0"></span>
+    <b style="font-size:10px;font-weight:800;letter-spacing:.04em;color:#0B3A82;white-space:nowrap"><span class="zh">展示层 · 对外全景 · 不占步号</span><span class="en">Display · outward picture</span></b>
+    <span style="color:#C4D0D5">｜</span>
+    <span style="white-space:nowrap"><span class="zh">← 上一步：<b style="color:#33484F">客户列表里已接收并归一</b></span><span class="en">← From: <b style="color:#33484F">asks received &amp; normalised in the inbox</b></span></span>
+    <span style="color:#C4D0D5">｜</span>
+    <span style="white-space:nowrap"><span class="zh">这一步：<b style="color:#0F1E24">看 14 家客户的承诺 / 请求 / 缺口全貌</b></span><span class="en">Now: <b style="color:#0F1E24">the whole commitment / request / gap picture</b></span></span>
+    <span style="margin-left:auto;display:flex;align-items:center;gap:9px;flex-shrink:0">
+      <span style="color:#8397A0"><span class="zh">交给</span><span class="en">Hand to</span></span>
+      <button onClick="{{ go4 }}" style="font-size:11px;font-weight:700;color:#0B3A82;white-space:nowrap"><span class="zh">合规雷达（看短板）→</span><span class="en">Radar →</span></button>
+      <button onClick="{{ go6 }}" style="font-size:11px;font-weight:700;color:#002D6B;white-space:nowrap"><span class="zh">第二个来源 · 法规与管制 →</span><span class="en">Source ② Regulatory →</span></button>
+    </span>
+  </div>
+  <div style="font-size:11.5px;color:#33484F;margin-bottom:12px;background:#ECFBFE;padding:10px 14px;border-radius:9px;border-left:3px solid #0891B2">
+    <b style="color:#045B75"><span class="zh">要求汇总</span><span class="en">Ambition summary</span></b> — <span class="zh">6 家主要 OEM（吉利/长城/长安/小米/蔚来/奇瑞）的 ESG 要求归一到 8 项 Autoliv 内部指标（E×4 · S×3 · G×1）。点击左侧客户可仅看该客户；点击任一指标行展开原始条款与出处。</span><span class="en">ESG asks from 6 major OEMs (Geely/GWM/Changan/Xiaomi/NIO/Chery) normalized to 8 internal metrics (E×4 · S×3 · G×1). Pick an OEM at left to focus; click any row to expand the clause text and source.</span>
+  </div>
+  <div class="card" style="margin-bottom:14px">
+    <div class="chd"><h3><span class="zh">要求矩阵 · Ambition Matrix</span><span class="en">Ambition Matrix</span></h3><span class="pill">8 <span class="zh">指标</span><span class="en">metrics</span> × 6 OEM</span><button onClick="{{ toggleExpandAll }}" style="margin-left:auto;font-size:11px;color:#045B75;font-weight:600;display:flex;align-items:center;gap:5px"><span class="zh">{{ expandAllZh }}</span><span class="en">{{ expandAllEn }}</span> <span style="font-size:9px">{{ expandAllCaret }}</span></button></div>
+    <div style="padding:14px 16px 16px;overflow-x:auto">
+      <div style="border:1px solid #E1E7EA;border-radius:8px;overflow:hidden;min-width:900px">
+        <div style="display:grid;grid-template-columns:172px repeat(6,minmax(94px,1fr)) 88px;background:#F5F7F8;border-bottom:1px solid #E1E7EA">
+          <div style="padding:10px 12px;font-size:11px;font-weight:700;color:#33484F;border-right:1px solid #E6EBEE"><span class="zh">Autoliv 指标</span><span class="en">Metric</span></div>
+          <sc-for list="{{ oems }}" as="o" hint-placeholder-count="6"><div style="padding:10px 10px;border-right:1px solid #E6EBEE"><div style="font-size:11.5px;font-weight:800">{{ o.name }}</div><div style="font-size:9px;color:#8397A0;font-family:Manrope">{{ o.docs }}</div></div></sc-for>
+          <div style="padding:10px 8px;font-size:11px;font-weight:700;color:#33484F;text-align:center"><span class="zh">达成</span><span class="en">Agg.</span></div>
+        </div>
+        <sc-for list="{{ matrix }}" as="r" hint-placeholder-count="6">
+          <div style="border-bottom:1px solid #EDF1F3">
+            <div onClick="{{ r.toggle }}" style="display:grid;grid-template-columns:172px repeat(6,minmax(94px,1fr)) 88px;cursor:pointer">
+              <div style="padding:9px 12px;border-right:1px solid #E6EBEE;display:flex;flex-direction:column;gap:2px;background:{{ r.rowbg }};position:relative"><span style="position:absolute;top:9px;right:8px;font-size:9px;color:#9AABB1">{{ r.caret }}</span><span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;color:{{ r.codeColor }}">{{ r.code }}</span><span style="font-size:12px;font-weight:700"><span class="zh">{{ r.zh }}</span><span class="en">{{ r.en }}</span></span><span style="font-size:9px;color:#8397A0;font-family:Manrope">{{ r.dim }}</span></div>
+              <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="6">
+                <div style="padding:8px 8px;border-right:1px solid #EDF1F3;min-height:54px;position:relative;background:{{ c.bg }};display:flex;flex-direction:column;gap:3px;justify-content:center">
+                  <span style="position:absolute;top:6px;right:6px;width:5px;height:5px;border-radius:50%;background:{{ c.prio }}"></span>
+                  <sc-if value="{{ c.has }}" hint-placeholder-val="{{ true }}"><span style="font-size:8px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:1px 5px;border-radius:3px;width:fit-content;background:{{ c.tagBg }};color:#fff">{{ c.tag }}</span><span style="font-size:9px;color:#5A6E75;font-family:Manrope;line-height:1.2">{{ c.note }}</span></sc-if>
+                  <sc-if value="{{ c.none }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:#C4D0D5;text-align:center">—</span></sc-if>
+                </div>
+              </sc-for>
+              <div style="padding:8px;background:{{ r.aggBg }};font-family:Manrope;font-size:10px;color:{{ r.aggFg }};display:flex;flex-direction:column;gap:1px;justify-content:center;text-align:center"><b style="font-size:14px;font-weight:800">{{ r.aggPct }}</b>{{ r.aggNote }}</div>
+            </div>
+            <sc-if value="{{ r.open }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#FAFBFC;border-top:1px dashed #E1E7EA;padding:14px 16px;display:grid;grid-template-columns:1.3fr 1fr;gap:16px">
+                <div>
+                  <div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">原始条款文本 · 出处</span><span class="en">Clause text · Source</span></div>
+                  <div style="font-size:12px;color:#33484F;line-height:1.55;margin-top:6px;padding:10px 12px;background:#fff;border:1px solid #E6EBEE;border-radius:8px"><span class="zh">{{ r.d.clauseZh }}</span><span class="en b">{{ r.d.clauseEn }}</span><div style="margin-top:6px;font-size:10px;color:#9AABB1;font-family:Manrope">{{ r.d.source }}</div></div>
+                  <div style="margin-top:12px;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">关联供应商 · Tier 层级</span><span class="en">Linked suppliers · Tier</span></div>
+                  <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">
+                    <sc-for list="{{ r.d.suppliers }}" as="sp" hint-placeholder-count="3"><span style="font-size:10.5px;font-weight:600;padding:3px 9px;border-radius:6px;background:#ECFBFE;color:#045B75">{{ sp }}</span></sc-for>
+                  </div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                    <div style="background:#fff;border:1px solid #E6EBEE;border-radius:8px;padding:9px 11px"><div style="font-size:9.5px;color:#8397A0;font-weight:600"><span class="zh">当前值</span><span class="en">Current</span></div><div style="font-family:Manrope;font-size:16px;font-weight:800;color:{{ r.d.curColor }};margin-top:1px">{{ r.d.current }}</div></div>
+                    <div style="background:#fff;border:1px solid #E6EBEE;border-radius:8px;padding:9px 11px"><div style="font-size:9.5px;color:#8397A0;font-weight:600"><span class="zh">目标值</span><span class="en">Target</span></div><div style="font-family:Manrope;font-size:16px;font-weight:800;color:#002D6B;margin-top:1px">{{ r.d.target }}</div></div>
+                  </div>
+                  <div style="background:#fff;border:1px solid #E6EBEE;border-radius:8px;padding:9px 11px;display:flex;flex-direction:column;gap:7px;font-size:11.5px">
+                    <div style="display:flex;justify-content:space-between"><span style="color:#8397A0"><span class="zh">负责人</span><span class="en">Owner</span></span><b>{{ r.d.owner }}</b></div>
+                    <div style="display:flex;justify-content:space-between"><span style="color:#8397A0"><span class="zh">截止时间</span><span class="en">Due</span></span><b style="color:{{ r.d.dueColor }}">{{ r.d.due }}</b></div>
+                    <div style="display:flex;justify-content:space-between;align-items:center"><span style="color:#8397A0"><span class="zh">证据附件</span><span class="en">Evidence</span></span><span style="font-size:10.5px;font-weight:600;color:#045B75">{{ r.d.evidence }}</span></div>
+                  </div>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:flex;gap:14px;align-items:center;padding-top:12px;font-size:10.5px;color:#8397A0;flex-wrap:wrap">
+        <span><span style="display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:middle;margin-right:4px;background:linear-gradient(180deg,#EAF7EA,#fff)"></span><span class="zh">承诺达标</span><span class="en">Committed</span></span>
+        <span><span style="display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:middle;margin-right:4px;background:linear-gradient(180deg,#FDF3E7,#fff)"></span><span class="zh">进行中</span><span class="en">In progress</span></span>
+        <span><span style="display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:middle;margin-right:4px;background:linear-gradient(180deg,#FEECEA,#fff)"></span><span class="zh">缺口</span><span class="en">Gap</span></span>
+        <span><span style="display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:middle;margin-right:4px;background:#fff;border:1px solid #E1E7EA"></span><span class="zh">未要求</span><span class="en">Not required</span></span>
+        <span style="margin-left:auto"><span class="zh">优先级</span><span class="en">Priority</span> <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#DC3A2C;vertical-align:middle"></span>H <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#E2A85C;vertical-align:middle"></span>M <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#B6C4C9;vertical-align:middle"></span>L</span>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="chd"><h3><span class="zh">透明度要求追踪</span><span class="en">Transparency Tracker</span></h3><span class="pill">Tier-1 / Tier-2</span><span style="margin-left:auto;font-size:11px;color:#8397A0"><span class="zh">客户可持续采购条款</span><span class="en">OEM sourcing clauses</span></span></div>
+    <div style="padding:6px 16px 14px">
+      <div style="display:grid;grid-template-columns:120px 74px 1fr 100px 88px;gap:12px;padding:9px 0;border-bottom:1px solid #E1E7EA;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:#7A8B92"><span>OEM</span><span>Tier</span><span><span class="zh">要求内容</span><span class="en">Requirement</span></span><span><span class="zh">截止</span><span class="en">Due</span></span><span><span class="zh">状态</span><span class="en">Status</span></span></div>
+      <sc-for list="{{ trackers }}" as="t" hint-placeholder-count="5">
+        <div style="display:grid;grid-template-columns:120px 74px 1fr 100px 88px;gap:12px;align-items:center;padding:10px 0;border-bottom:1px dashed #E6EBEE;font-size:11.5px">
+          <span style="font-weight:800">{{ t.oem }}</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:600;padding:2px 7px;border-radius:4px;background:#ECFBFE;color:#045B75;text-align:center">{{ t.tier }}</span>
+          <span style="color:#33484F"><span class="zh">{{ t.wzh }}</span><span class="en">{{ t.wen }}</span></span>
+          <span style="font-family:Manrope;font-size:10.5px;color:#8397A0">{{ t.due }}</span>
+          <span style="font-size:9.5px;font-weight:700;padding:3px 9px;border-radius:5px;background:{{ t.bg }};color:{{ t.fg }};width:fit-content"><span class="zh">{{ t.szh }}</span><span class="en">{{ t.sen }}</span></span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</div>
+      </sc-if>
+      <sc-if value="{{ vOn.v4 }}" hint-placeholder-val="{{ false }}">
+
+      <div class="m2 v4" data-screen-label="V4 合规雷达" style="flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:center;gap:9px;height:34px;padding:0 13px;background:#F2F6FD;border:1px solid #D7E3F6;border-radius:9px;font-size:11px;color:#5A6E75;overflow:hidden;flex-shrink:0">
+          <span style="width:7px;height:7px;border-radius:50%;background:#0B3A82;flex-shrink:0"></span>
+          <b style="font-size:10px;font-weight:800;letter-spacing:.04em;color:#0B3A82;white-space:nowrap"><span class="zh">展示层 · 对外全景（同域）</span><span class="en">Display · outward picture</span></b>
+          <span style="color:#C4D0D5">｜</span>
+          <span style="white-space:nowrap"><span class="zh">← 上一步：<b style="color:#33484F">要求矩阵已录入 8 指标 × 6 客户</b></span><span class="en">← From: <b style="color:#33484F">matrix loaded 8 metrics × 6 OEM</b></span></span>
+          <span style="color:#C4D0D5">｜</span>
+          <span style="white-space:nowrap"><span class="zh">这一步：<b style="color:#0F1E24">按客户与维度看短板、抽出缺口预警</b></span><span class="en">Now: <b style="color:#0F1E24">find weak dimensions and gap alerts</b></span></span>
+          <span style="margin-left:auto;display:flex;align-items:center;gap:9px;flex-shrink:0">
+            <span style="color:#8397A0"><span class="zh">交给</span><span class="en">Hand to</span></span>
+            <button onClick="{{ go8 }}" style="font-size:11px;font-weight:700;color:#045B75;white-space:nowrap"><span class="zh">监控墙（管制预警）→</span><span class="en">Watch wall →</span></button>
+            <button onClick="{{ go7 }}" style="font-size:11px;font-weight:700;color:#0B5B4A;white-space:nowrap"><span class="zh">供应商达标（第 4 步）→</span><span class="en">Supplier status →</span></button>
+          </span>
+        </div>
+        <div style="display:grid;grid-template-columns:1.35fr 1fr;gap:14px;width:100%;align-items:stretch">
+          <div class="card" style="align-self:start">
+            <div class="chd"><h3><span class="zh">按客户看满足率</span><span class="en">Fulfilment by OEM</span></h3><span class="pill">6 <span class="zh">主要客户</span><span class="en">key OEM</span></span><span style="margin-left:auto;font-size:11px;color:#8397A0"><span class="zh">点行进入该客户聚焦视图</span><span class="en">Click a row to focus that OEM</span></span><button onClick="{{ toggleAnon }}" style="font-size:10.5px;font-weight:700;padding:4px 10px;border-radius:7px;border:1px solid #E1E7EA;background:#fff;color:#43585F;display:flex;align-items:center;gap:6px;white-space:nowrap"><span style="width:6px;height:6px;border-radius:50%;background:{{ anonDot }}"></span><span class="zh">{{ anonZh }}</span><span class="en">{{ anonEn }}</span></button></div>
+            <div style="padding:8px 16px 14px">
+              <div style="display:grid;grid-template-columns:104px 1fr 62px 118px 16px;gap:11px;padding:7px 6px;border-bottom:1px solid #E6EBEE;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:#9AABB1">
+                <span>OEM</span><span><span class="zh">要求满足率</span><span class="en">Fulfilment</span></span><span style="text-align:right"><span class="zh">缺口</span><span class="en">Gaps</span></span><span><span class="zh">构成（覆盖/进行/缺口）</span><span class="en">Breakdown</span></span><span></span>
+              </div>
+              <sc-for list="{{ oemScores }}" as="o" hint-placeholder-count="6">
+                <div class="rowlink" onClick="{{ o.focus }}" style="display:grid;grid-template-columns:104px 1fr 62px 118px 16px;gap:11px;align-items:center;padding:10px 6px;border-bottom:1px dashed #E6EBEE;border-radius:7px">
+                  <b style="font-size:12.5px">{{ o.name }}</b>
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <div style="flex:1;height:10px;border-radius:3px;background:#EEF2F4;overflow:hidden"><div style="width:{{ o.w }};height:100%;background:{{ o.color }};border-radius:3px"></div></div>
+                    <span style="font-family:Manrope;font-size:12px;font-weight:800;color:{{ o.color }};width:38px;text-align:right">{{ o.pct }}</span>
+                  </div>
+                  <span style="font-family:Manrope;font-size:12px;font-weight:800;color:{{ o.gapColor }};text-align:right">{{ o.gaps }}</span>
+                  <div style="display:flex;gap:2px;height:14px;border-radius:3px;overflow:hidden">
+                    <div style="width:{{ o.wG }};background:#1F6B32"></div><div style="width:{{ o.wW }};background:#86CD8A"></div><div style="width:{{ o.wR }};background:#DC3A2C"></div><div style="width:{{ o.wN }};background:#EDF1F3"></div>
+                  </div>
+                  <span style="color:#B6C4C9;font-size:12px">›</span>
+                </div>
+              </sc-for>
+              <div style="font-size:10.5px;color:#8397A0;margin-top:10px;line-height:1.55"><span class="zh">满足率 = （已覆盖 + 0.5×进行中）/ 已提要求数，按该客户实际提出的指标计算（未要求项不计入）。逐指标对比见「要求矩阵」。</span><span class="en">Fulfilment = (covered + 0.5×WIP) / requested metrics. Per-metric detail lives in the Requirement Matrix tab.</span></div>
+            </div>
+          </div>
+          <div class="card" style="align-self:start">
+            <div class="chd"><h3><span class="zh">合规雷达 · E / S / G</span><span class="en">Compliance Radar</span></h3><span style="margin-left:auto;font-size:11px;color:#8397A0"><span class="zh">满足率 %</span><span class="en">Fulfilment %</span></span></div>
+            <div style="padding:14px 16px 8px;display:flex;justify-content:center">
+              <svg viewBox="0 0 300 260" style="width:100%;max-width:300px;height:240px">
+                <polygon points="150,30 254,90 254,200 150,240 46,200 46,90" fill="none" stroke="#E6EBEE"></polygon>
+                <polygon points="150,70 217,110 217,180 150,200 83,180 83,110" fill="none" stroke="#EDF1F3"></polygon>
+                <polygon points="150,110 180,130 180,160 150,170 120,160 120,130" fill="none" stroke="#EDF1F3"></polygon>
+                <line x1="150" y1="135" x2="150" y2="30" stroke="#E6EBEE"></line><line x1="150" y1="135" x2="254" y2="90" stroke="#E6EBEE"></line><line x1="150" y1="135" x2="254" y2="200" stroke="#E6EBEE"></line><line x1="150" y1="135" x2="150" y2="240" stroke="#E6EBEE"></line><line x1="150" y1="135" x2="46" y2="200" stroke="#E6EBEE"></line><line x1="150" y1="135" x2="46" y2="90" stroke="#E6EBEE"></line>
+                <polygon points="150,48 240,98 232,188 150,214 68,184 62,98" fill="rgba(8,145,178,.16)" stroke="#0891B2" stroke-width="2"></polygon>
+                <circle cx="150" cy="48" r="3" fill="#0891B2"></circle><circle cx="240" cy="98" r="3" fill="#0891B2"></circle><circle cx="232" cy="188" r="3" fill="#DC3A2C"></circle><circle cx="150" cy="214" r="3" fill="#0891B2"></circle><circle cx="68" cy="184" r="3" fill="#0891B2"></circle><circle cx="62" cy="98" r="3" fill="#0891B2"></circle>
+                <text x="150" y="22" text-anchor="middle" font-size="9.5" font-weight="700" fill="#33484F" font-family="Manrope">碳目标 92%</text>
+                <text x="262" y="90" font-size="9.5" font-weight="700" fill="#33484F" font-family="Manrope">透明度 96%</text>
+                <text x="262" y="206" font-size="9.5" font-weight="700" fill="#B0291D" font-family="Manrope">能源 40%</text>
+                <text x="150" y="256" text-anchor="middle" font-size="9.5" font-weight="700" fill="#33484F" font-family="Manrope">循环 67%</text>
+                <text x="38" y="206" text-anchor="end" font-size="9.5" font-weight="700" fill="#33484F" font-family="Manrope">人权 60%</text>
+                <text x="38" y="90" text-anchor="end" font-size="9.5" font-weight="700" fill="#33484F" font-family="Manrope">治理 88%</text>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="width:100%">
+          <div class="chd"><h3><span class="zh">客户要求全景 · 难量化的 S 要求长什么样</span><span class="en">What the OEM asks look like</span></h3><span class="pill">SAQ 5.0 · RSCI</span><span style="margin-left:auto;font-size:11px;color:#8397A0"><span class="nr"><span class="zh">吉利/奇瑞/长城为 Drive Sustainability 成员 · 德系客户推 RSCI</span><span class="en">Geely/Chery/GWM in Drive Sustainability · German OEMs push RSCI</span></span><span class="na"><span class="zh">OEM-03 / OEM-01 / OEM-04 为 Drive Sustainability 成员 · 德系客户推 RSCI</span><span class="en">OEM-03 / OEM-01 / OEM-04 in Drive Sustainability · German OEMs push RSCI</span></span></span></div>
+          <div style="padding:14px 16px 16px;display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <sc-for list="{{ panorama }}" as="p" hint-placeholder-count="2">
+              <div style="border:1px solid #E1E7EA;border-radius:10px;padding:13px 15px">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="font-size:10px;font-weight:800;letter-spacing:.04em;padding:3px 9px;border-radius:6px;background:#EDF3FE;color:#2A5CA8">{{ p.k }}</span><span style="font-size:12.5px;font-weight:700"><span class="zh">{{ p.zh }}</span><span class="en">{{ p.en }}</span></span></div>
+                <div style="display:flex;flex-wrap:wrap;gap:6px">
+                  <sc-for list="{{ p.items }}" as="it" hint-placeholder-count="12"><span style="font-size:10.5px;font-weight:600;padding:4px 9px;border-radius:6px;background:#F5F7F8;color:#43585F;border:1px solid #EDF1F3">{{ it }}</span></sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div class="card" style="width:100%">
+          <div class="chd"><h3><span class="zh">合规缺口预警</span><span class="en">Compliance Gap Alerts</span></h3><span class="pill" style="background:#FEECEA;color:#B0291D">6 <span class="zh">项</span><span class="en">open</span></span><span style="margin-left:auto;font-size:11px;color:#8397A0"><span class="zh">按优先级排序</span><span class="en">By priority</span></span><button onClick="{{ go8 }}" style="font-size:11px;font-weight:700;color:#B0291D"><span class="zh">出口管制与名单监控 →</span><span class="en">Export-control watch wall →</span></button></div>
+          <div style="padding:4px 16px 14px">
+            <div style="display:grid;grid-template-columns:72px 120px 1fr 100px 96px 84px;gap:12px;padding:9px 0;border-bottom:1px solid #E1E7EA;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:#7A8B92;text-align:left"><span><span class="zh">维度</span><span class="en">Dim</span></span><span>OEM</span><span><span class="zh">缺口描述</span><span class="en">Gap</span></span><span><span class="zh">当前/目标</span><span class="en">Now/Target</span></span><span><span class="zh">截止</span><span class="en">Due</span></span><span><span class="zh">优先级</span><span class="en">Priority</span></span></div>
+            <sc-for list="{{ gapAlerts }}" as="g" hint-placeholder-count="6">
+              <div class="rowlink" onClick="{{ g.open }}" style="display:grid;grid-template-columns:72px 120px 1fr 100px 96px 84px;gap:12px;align-items:center;padding:10px 6px;border-bottom:1px dashed #E6EBEE;font-size:11.5px;text-align:left;border-radius:6px">
+                <span style="font-size:9px;font-weight:800;padding:2px 7px;border-radius:5px;background:{{ g.dimBg }};color:{{ g.dimFg }};width:fit-content">{{ g.dim }}</span>
+                <span style="font-weight:800">{{ g.oem }}</span>
+                <span style="color:#33484F"><span class="zh">{{ g.zh }}</span><span class="en">{{ g.en }}</span></span>
+                <span style="font-family:Manrope;font-size:11px"><b style="color:#B0291D">{{ g.cur }}</b> / {{ g.tgt }}</span>
+                <span style="font-family:Manrope;font-size:10.5px;color:{{ g.dueColor }};font-weight:600">{{ g.due }}</span>
+                <span style="font-size:9.5px;font-weight:700;padding:3px 9px;border-radius:5px;background:{{ g.prBg }};color:{{ g.prFg }};width:fit-content"><span class="zh">{{ g.przh }}</span><span class="en">{{ g.pren }}</span></span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+      <sc-if value="{{ vOn.v11 }}" hint-placeholder-val="{{ false }}">
+
+      <div class="m2 v11" data-screen-label="V11 客户列表 · 客户档案 / 校卷 / 作答" style="flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:center;gap:9px;height:34px;padding:0 13px;background:#F2F6FD;border:1px solid #D7E3F6;border-radius:9px;font-size:11px;color:#5A6E75;overflow:hidden;flex-shrink:0">
+          <span style="width:7px;height:7px;border-radius:50%;background:#0B3A82;flex-shrink:0"></span>
+          <b style="font-size:10px;font-weight:800;letter-spacing:.04em;color:#0B3A82;white-space:nowrap"><span class="zh">主线 · 第 0 步 · 来源① 客户列表</span><span class="en">Step 0 · Source 1 OEM inbox</span></b>
+          <span style="color:#C4D0D5">｜</span>
+          <span style="white-space:nowrap"><span class="zh">← 上一步：<b style="color:#33484F">客户 P 发来年度问卷</b></span><span class="en">← From: <b style="color:#33484F">Customer P sent the annual survey</b></span></span>
+          <span style="color:#C4D0D5">｜</span>
+          <span style="white-space:nowrap"><span class="zh">这一步：<b style="color:#0F1E24">AI 校卷 → 作答 → 交卷</b></span><span class="en">Now: <b style="color:#0F1E24">verify, answer, submit</b></span></span>
+          <span style="margin-left:auto;display:flex;align-items:center;gap:9px;flex-shrink:0">
+            <span style="color:#8397A0"><span class="zh">交给</span><span class="en">Hand to</span></span>
+            <button onClick="{{ go12 }}" style="font-size:11px;font-weight:700;color:#0B3A82;white-space:nowrap"><span class="zh">缺口并入要求台账（第 1 步）→</span><span class="en">Merge gaps into the ledger →</span></button>
+          </span>
+        </div>
+
+        <sc-if value="{{ srvIsList }}" hint-placeholder-val="{{ false }}">
+        <div class="srv-list" style="flex-direction:column;gap:14px;width:100%">
+          <sc-if value="{{ custIsList }}" hint-placeholder-val="{{ true }}">
+          <div class="card" style="display:flex;flex-direction:column">
+            <div class="chd" style="padding-bottom:11px"><h3 style="font-size:12.5px"><span class="zh">客户档案</span><span class="en">Customer accounts</span></h3><span class="pill" style="background:#F2F6FD;color:#0B3A82">{{ custN }} / {{ custTotal }}</span>
+              <span style="margin-left:16px;font-size:11px;color:#8397A0;line-height:1.5"><span class="zh">问卷、条款与审核清单都挂在客户下面 · 新客户建档时同时引入它的要求体系</span><span class="en b">Surveys, clause letters and audit lists all hang under a customer; creating one imports its framework</span></span>
+              <button onClick="{{ custAddOpen }}" style="margin-left:auto;font-size:11px;font-weight:700;padding:5px 11px;border-radius:7px;background:#0B3A82;color:#fff;white-space:nowrap"><span class="zh">+ 添加客户</span><span class="en">+ Add customer</span></button></div>
+            <div style="padding:2px 16px 14px">
+              <div style="display:grid;grid-template-columns:186px 78px 1.35fr 62px 118px 132px 74px;gap:12px;align-items:center;padding:8px;border-bottom:1px solid #E6EBEE;font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;font-weight:700;color:#9AABB1;white-space:nowrap">
+                <span><span class="zh">客户</span><span class="en">Customer</span></span>
+                <span style="text-align:right"><span class="zh">年供货额</span><span class="en">Revenue</span></span>
+                <span><span class="zh">它用的要求体系</span><span class="en">Their framework</span></span>
+                <span style="text-align:right"><span class="zh">在办来件</span><span class="en">Open</span></span>
+                <span><span class="zh">下一个截止</span><span class="en">Next due</span></span>
+                <span><span class="zh">我们的满足率</span><span class="en">We satisfy</span></span>
+                <span style="text-align:right"><span class="zh">负责人</span><span class="en">Owner</span></span>
+              </div>
+              <sc-for list="{{ custRows }}" as="c" hint-placeholder-count="8">
+                <div>
+                <div class="rowlink" onClick="{{ c.pick }}" style="display:grid;grid-template-columns:186px 78px 1.35fr 62px 118px 132px 74px;gap:12px;align-items:center;padding:10px 8px;border-bottom:1px dashed #E6EBEE;border-radius:7px;white-space:nowrap;background:{{ c.rowBg }}">
+                  <div style="display:flex;align-items:center;gap:8px;min-width:0">
+                    <button onClick="{{ c.toggle }}" title="{{ c.toggleTip }}" style="width:26px;height:26px;margin-left:-4px;border-radius:7px;background:{{ c.caretBg }};border:1px solid {{ c.caretBd }};color:{{ c.caretFg }};font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">{{ c.caret }}</button>
+                    <span style="width:24px;height:24px;border-radius:7px;background:{{ c.avBg }};color:{{ c.avFg }};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0">{{ c.avatar }}</span>
+                    <span style="min-width:0;overflow:hidden;text-overflow:ellipsis"><b style="font-size:12px">{{ c.name }}</b></span>
+                    <span style="font-size:8.5px;font-weight:800;padding:1px 5px;border-radius:4px;background:{{ c.gBg }};color:{{ c.gFg }};flex-shrink:0">{{ c.grade }}</span>
+                  </div>
+                  <span style="font-family:Manrope;font-size:11.5px;font-weight:700;color:#33484F;text-align:right">{{ c.biz }}</span>
+                  <div style="display:flex;flex-wrap:wrap;gap:4px;min-width:0">
+                    <sc-for list="{{ c.sys }}" as="y" hint-placeholder-count="2">
+                      <span style="font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:5px;background:{{ y.bg }};color:{{ y.fg }};white-space:nowrap">{{ y.label }}</span>
+                    </sc-for>
+                  </div>
+                  <span style="font-family:Manrope;font-size:13px;font-weight:800;color:{{ c.openFg }};text-align:right">{{ c.openN }}</span>
+                  <div style="line-height:1.3">
+                    <div style="font-family:Manrope;font-size:10.5px;color:#5A6E75">{{ c.due }}</div>
+                    <div style="font-size:9.5px;font-weight:700;color:{{ c.dueFg }}">{{ c.dueNote }}</div>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:7px">
+                    <div style="flex:1;height:6px;border-radius:3px;background:#EEF2F4;overflow:hidden"><div style="width:{{ c.fitW }};height:100%;background:{{ c.fitFg }};border-radius:3px"></div></div>
+                    <span style="font-family:Manrope;font-size:10.5px;font-weight:800;color:{{ c.fitFg }};width:30px;text-align:right">{{ c.fit }}</span>
+                  </div>
+                  <span style="font-size:10.5px;color:#5A6E75;text-align:right">{{ c.owner }}</span>
+                </div>
+                <div style="display:{{ c.expShow }};gap:14px;padding:12px 14px 14px 30px;background:#F9FBFC;border:1px solid #E6EBEE;border-radius:10px;margin:2px 0 8px">
+                  <div style="flex:1.25;min-width:0">
+                    <div style="font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#8397A0"><span class="zh">它的要求体系 · 条款与台账映射</span><span class="en">Their framework · clauses mapped to the ledger</span></div>
+                    <div style="display:flex;flex-direction:column;gap:5px;margin-top:8px">
+                      <sc-for list="{{ c.clauses }}" as="cl" hint-placeholder-count="3">
+                        <div style="display:flex;align-items:center;gap:8px;padding:6px 9px;background:#fff;border:1px solid #E6EBEE;border-radius:7px;white-space:normal">
+                          <span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:4px;background:{{ cl.sysBg }};color:{{ cl.sysFg }};flex-shrink:0">{{ cl.sysLabel }}</span>
+                          <span style="font-size:11px;color:#0F1E24;line-height:1.4;flex:1;min-width:0">{{ cl.title }}</span>
+                          <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5A6E75;flex-shrink:0">{{ cl.map }}</span>
+                          <span style="font-size:9px;font-weight:800;padding:1px 6px;border-radius:4px;background:{{ cl.stBg }};color:{{ cl.stFg }};flex-shrink:0">{{ cl.stLabel }}</span>
+                        </div>
+                      </sc-for>
+                    </div>
+                    <div style="font-size:10px;color:#9AABB1;margin-top:6px">{{ c.clauseMore }}</div>
+                  </div>
+                  <div style="flex:.85;min-width:0">
+                    <div style="font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#8397A0"><span class="zh">最近问卷与来件</span><span class="en">Recent submissions</span></div>
+                    <div style="display:flex;flex-direction:column;gap:5px;margin-top:8px">
+                      <sc-for list="{{ c.hist }}" as="h" hint-placeholder-count="3">
+                        <div style="display:flex;align-items:center;gap:8px;padding:6px 9px;background:#fff;border:1px solid #E6EBEE;border-radius:7px">
+                          <span style="font-family:Manrope;font-size:11px;font-weight:800;color:#0B3A82;flex-shrink:0">{{ h.yr }}</span>
+                          <span style="font-size:11px;color:#33484F;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis">{{ h.type }} · {{ h.qty }}<span class="zh">题</span><span class="en">q</span></span>
+                          <span style="font-size:9px;font-weight:800;padding:1px 6px;border-radius:4px;background:{{ h.stBg }};color:{{ h.stFg }};flex-shrink:0">{{ h.st }}</span>
+                          <span style="font-family:Manrope;font-size:10.5px;font-weight:800;color:#5A6E75;width:26px;text-align:right;flex-shrink:0">{{ h.score }}</span>
+                        </div>
+                      </sc-for>
+                    </div>
+                    <button onClick="{{ c.enter }}" style="margin-top:9px;font-size:11px;font-weight:800;padding:6px 12px;border-radius:7px;background:#0B3A82;color:#fff;white-space:nowrap"><span class="zh">进入客户档案 →</span><span class="en">Open customer file →</span></button>
+                    <button onClick="{{ c.toggle }}" style="margin-top:9px;margin-left:8px;font-size:11px;font-weight:700;padding:6px 12px;border-radius:7px;background:#fff;border:1px solid #D5DFE3;color:#43585F;white-space:nowrap"><span class="zh">收起 ▴</span><span class="en">Collapse ▴</span></button>
+                    <span style="display:block;font-size:10px;color:#9AABB1;margin-top:7px;line-height:1.5"><span class="zh">再点一下本行也可进入；档案里有全部条款、缺口与历年来件。</span><span class="en b">Clicking the row again opens it too.</span></span>
+                  </div>
+                </div>
+                </div>
+              </sc-for>
+              <div style="padding:11px 8px 0;font-size:10px;color:#9AABB1;line-height:1.55"><span class="zh">满足率 = 该客户要求体系里我们已满足的条款占比（演示值）。点一下展开要求体系与最近问卷，再点一下进入客户档案。</span><span class="en b">Satisfaction is the share of that customer’s clauses we already meet (demo). One click expands framework and recent surveys; a second click opens the file.</span></div>
+            </div>
+          </div>
+
+          </sc-if>
+          <sc-if value="{{ custIsDet }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:14px;width:100%">
+            <div class="card" style="padding:15px 17px">
+              <div style="display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap">
+                <div style="min-width:0;flex:1">
+                  <button onClick="{{ custBack }}" style="font-size:10.5px;font-weight:700;color:#0B3A82"><span class="zh">← 返回客户档案</span><span class="en">← All customers</span></button>
+                  <div style="display:flex;align-items:center;gap:9px;margin-top:7px;flex-wrap:wrap">
+                    <h1 style="margin:0;font-size:19px;font-weight:800;letter-spacing:-.02em">{{ cdName }}</h1>
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#5A6E75;background:#F3F6F7;border:1px solid #E1E7EA;border-radius:4px;padding:1px 5px">{{ cdCode }}</span>
+                    <span style="font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:5px;background:{{ cdGBg }};color:{{ cdGFg }}">{{ cdGrade }}</span>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:14px;margin-top:6px;font-size:10.5px;color:#8397A0;flex-wrap:wrap">
+                    <span>{{ cdBiz }}</span><span>{{ cdSince }}</span><span>{{ cdOwner }}</span>
+                    <span><span class="zh">下一个截止 </span><span class="en">Next due </span>{{ cdDue }}</span>
+                  </div>
+                  <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:9px">
+                    <sc-for list="{{ cdSys }}" as="y" hint-placeholder-count="2">
+                      <span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:6px;background:{{ y.bg }};color:{{ y.fg }}">{{ y.label }}</span>
+                    </sc-for>
+                  </div>
+                </div>
+                <div style="display:flex;gap:10px;flex-shrink:0">
+                  <div style="padding:9px 13px;border:1px solid #E1E7EA;border-radius:10px;background:#F9FBFC;min-width:118px">
+                    <div style="font-size:10px;color:#8397A0;font-weight:600"><span class="zh">条款 / 缺口</span><span class="en">Clauses / gaps</span></div>
+                    <div style="display:flex;align-items:baseline;gap:5px;margin-top:3px"><span style="font-family:Manrope;font-size:19px;font-weight:800;color:#0F1E24">{{ cdClauseN }}</span><span style="font-family:Manrope;font-size:13px;font-weight:800;color:#B0291D">/ {{ cdGapN }}</span></div>
+                  </div>
+                  <div style="padding:9px 13px;border:1px solid #E1E7EA;border-radius:10px;background:#F9FBFC;min-width:118px">
+                    <div style="font-size:10px;color:#8397A0;font-weight:600"><span class="zh">我们的满足率</span><span class="en">We satisfy</span></div>
+                    <div style="font-family:Manrope;font-size:19px;font-weight:800;color:{{ cdFitFg }};margin-top:3px">{{ cdFit }}</div>
+                    <div style="height:4px;border-radius:2px;background:#EEF2F4;overflow:hidden;margin-top:5px"><div style="width:{{ cdFitW }};height:100%;background:{{ cdFitFg }};border-radius:2px"></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="chd" style="padding-bottom:11px"><h3 style="font-size:12.5px"><span class="zh">要求体系与条款</span><span class="en">Framework &amp; clauses</span></h3><span class="pill" style="background:#F2F6FD;color:#0B3A82">{{ cdClauseN }}</span>
+                <span style="margin-left:16px;font-size:11px;color:#8397A0"><span class="zh">每条条款都映射到要求台账 · 点开即到台账对应行</span><span class="en b">Every clause maps onto a ledger row</span></span>
+                <button onClick="{{ custToLedger }}" style="margin-left:auto;font-size:11px;font-weight:700;color:#0B3A82;white-space:nowrap"><span class="zh">把缺口带到来源归一 →</span><span class="en">Carry gaps into Merge sources →</span></button></div>
+              <div style="padding:2px 16px 14px">
+                <sc-for list="{{ cdClauses }}" as="cl" hint-placeholder-count="5">
+                  <div class="rowlink" onClick="{{ cl.go }}" style="display:grid;grid-template-columns:1.7fr 168px 128px 84px 84px;gap:12px;align-items:center;padding:10px 8px;border-bottom:1px dashed #E6EBEE;border-radius:7px">
+                    <b style="font-size:12px;font-weight:700;line-height:1.4;color:#0F1E24">{{ cl.title }}</b>
+                    <span style="font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:5px;background:{{ cl.sysBg }};color:{{ cl.sysFg }};width:fit-content;white-space:nowrap">{{ cl.sysLabel }}</span>
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#0B5B4A;white-space:nowrap">{{ cl.map }}</span>
+                    <span style="font-size:10.5px;color:#5A6E75">{{ cl.cyc }}</span>
+                    <span style="font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:5px;background:{{ cl.stBg }};color:{{ cl.stFg }};width:fit-content;white-space:nowrap">{{ cl.stLabel }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="chd" style="padding-bottom:11px"><h3 style="font-size:12.5px"><span class="zh">来件与历年答卷</span><span class="en">Submissions by year</span></h3><span class="pill" style="background:#FDF3E7;color:#A3620F">{{ cdOpenN }}</span>
+                <button onClick="{{ srvImportOpen }}" style="margin-left:auto;font-size:11px;font-weight:700;padding:5px 11px;border-radius:7px;background:#0B3A82;color:#fff;white-space:nowrap"><span class="zh">+ 在该客户下添加来件</span><span class="en">+ Add a submission</span></button></div>
+              <div style="padding:2px 16px 14px">
+                <sc-for list="{{ cdHist }}" as="h" hint-placeholder-count="3">
+                  <div class="rowlink" onClick="{{ h.go }}" style="display:grid;grid-template-columns:64px 1.4fr 74px 104px 84px;gap:12px;align-items:center;padding:10px 8px;border-bottom:1px dashed #E6EBEE;border-radius:7px">
+                    <span style="font-family:Manrope;font-size:12.5px;font-weight:800;color:#0F1E24">{{ h.yr }}</span>
+                    <span style="font-size:11.5px;color:#33484F">{{ h.type }}</span>
+                    <span style="font-family:Manrope;font-size:11px;color:#5A6E75;text-align:right">{{ h.qty }}</span>
+                    <span style="font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:5px;background:{{ h.stBg }};color:{{ h.stFg }};width:fit-content;white-space:nowrap">{{ h.st }}</span>
+                    <span style="font-family:Manrope;font-size:12.5px;font-weight:800;color:#0B3A82;text-align:right">{{ h.score }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+
+          </sc-if>
+          <sc-if value="{{ custIsList }}" hint-placeholder-val="{{ true }}">
+          <div>
+          <div class="card">
+            <div class="chd" style="padding-bottom:11px"><h3 style="font-size:12.5px"><span class="zh">问卷收件箱</span><span class="en">Inbox</span></h3><span class="pill" style="background:#F2F6FD;color:#0B3A82">4</span>
+              <div style="display:flex;align-items:center;gap:16px;margin-left:20px;padding-left:20px;border-left:1px solid #E6EBEE">
+                <sc-for list="{{ srvKpis }}" as="k" hint-placeholder-count="4">
+                  <div style="display:flex;align-items:baseline;gap:5px;white-space:nowrap">
+                    <span style="font-family:Manrope;font-size:15px;font-weight:800;letter-spacing:-.02em;color:{{ k.c }}">{{ k.v }}</span>
+                    <span style="font-size:10px;color:#8397A0;font-weight:600"><span class="zh">{{ k.zh }}</span><span class="en">{{ k.en }}</span></span>
+                  </div>
+                </sc-for>
+              </div>
+              <button onClick="{{ srvImportOpen }}" style="margin-left:auto;font-size:11px;font-weight:700;padding:5px 11px;border-radius:7px;background:#0B3A82;color:#fff;white-space:nowrap"><span class="zh">+ 导入新问卷</span><span class="en">+ Import survey</span></button></div>
+            <div style="padding:2px 16px 0">
+              <div style="display:grid;grid-template-columns:176px minmax(0,1fr) 86px 58px 70px 62px 152px 74px 74px;gap:12px;align-items:center;padding:8px 8px;border-bottom:1px solid #E6EBEE;font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;font-weight:700;color:#9AABB1;white-space:nowrap">
+                <span><span class="zh">客户</span><span class="en">Customer</span></span>
+                <span><span class="zh">问卷与来源</span><span class="en">Survey &amp; source</span></span>
+                <span><span class="zh">状态</span><span class="en">Status</span></span>
+                <span style="text-align:right"><span class="zh">题量</span><span class="en">Items</span></span>
+                <span style="text-align:right"><span class="zh">当前得分</span><span class="en">Score</span></span>
+                <span style="text-align:right"><span class="zh">剩余</span><span class="en">Left</span></span>
+                <span><span class="zh">完成度</span><span class="en">Progress</span></span>
+                <span style="text-align:right"><span class="zh">收到 / 截止</span><span class="en">Rcvd / due</span></span>
+                <span style="text-align:right"><span class="zh">导出</span><span class="en">Export</span></span>
+              </div>
+              <sc-for list="{{ srvInbox }}" as="i" hint-placeholder-count="4">
+                <div class="rowlink" onClick="{{ i.pick }}" style="display:grid;grid-template-columns:176px minmax(0,1fr) 86px 58px 70px 62px 152px 74px 74px;gap:12px;align-items:center;padding:9px 8px;border-bottom:1px dashed #E6EBEE;border-left:3px solid {{ i.edge }};background:{{ i.bg }};border-radius:7px;white-space:nowrap">
+                  <div style="display:flex;align-items:center;gap:8px;min-width:0">
+                    <span style="width:24px;height:24px;border-radius:7px;background:{{ i.avBg }};color:{{ i.avFg }};display:flex;align-items:center;justify-content:center;font-family:Manrope;font-size:11px;font-weight:800;flex-shrink:0">{{ i.avatar }}</span>
+                    <span style="min-width:0;overflow:hidden;text-overflow:ellipsis"><b style="font-size:12px">{{ i.cust }}</b></span>
+                    <span style="display:{{ i.grpShow }};align-items:center;font-size:8.5px;font-weight:700;padding:1px 5px;border-radius:4px;background:#EDE7FB;color:#5B3FA8;flex-shrink:0">×{{ i.grpN }}</span>
+                    <span style="display:{{ i.curShow }};align-items:center;font-size:8.5px;font-weight:800;padding:1px 5px;border-radius:4px;background:#0B3A82;color:#fff;flex-shrink:0"><span class="zh">当前</span><span class="en">Now</span></span>
+                  </div>
+                  <div style="min-width:0;display:flex;align-items:baseline;gap:8px;overflow:hidden">
+                    <b style="font-size:11.5px;color:#0F1E24;flex-shrink:0">{{ i.type }}</b>
+                    <span style="font-size:10px;color:#9AABB1;min-width:0;overflow:hidden;text-overflow:ellipsis">✉ {{ i.src }}</span>
+                  </div>
+                  <span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:5px;background:{{ i.stBg }};color:{{ i.stFg }};width:fit-content">{{ i.status }}</span>
+                  <span style="font-family:Manrope;font-size:11.5px;font-weight:700;color:#33484F;text-align:right">{{ i.qty }}</span>
+                  <span style="font-family:Manrope;font-size:11.5px;font-weight:800;color:{{ i.scoreC }};text-align:right">{{ i.score }}</span>
+                  <span style="font-family:Manrope;font-size:11.5px;font-weight:800;color:{{ i.dueC }};text-align:right">{{ i.left }}</span>
+                  <div style="display:flex;align-items:center;gap:7px">
+                    <div style="flex:1;height:6px;border-radius:3px;background:#EEF2F4;overflow:hidden"><div style="width:{{ i.w }};height:100%;background:{{ i.bar }};border-radius:3px"></div></div>
+                    <span style="font-family:Manrope;font-size:10px;font-weight:800;color:#5A6E75;width:28px;text-align:right">{{ i.pct }}</span>
+                  </div>
+                  <div style="text-align:right;line-height:1.3">
+                    <div style="font-family:Manrope;font-size:9.5px;color:#9AABB1">{{ i.received }}</div>
+                    <div style="font-family:Manrope;font-size:9.5px;color:{{ i.dueC }};font-weight:600">{{ i.due }}</div>
+                  </div>
+                  <div style="display:flex;gap:4px;justify-content:flex-end">
+                    <button onClick="{{ i.dlRaw }}" style="font-size:9.5px;font-weight:700;padding:3px 7px;border-radius:5px;background:#fff;border:1px solid #D5DFE3;color:#5A6E75"><span class="zh">原件</span><span class="en">Raw</span></button>
+                    <button onClick="{{ i.dlFilled }}" style="font-size:9.5px;font-weight:700;padding:3px 7px;border-radius:5px;background:{{ i.dlBg }};border:1px solid {{ i.dlBd }};color:{{ i.dlFg }}"><span class="zh">已答</span><span class="en">Filled</span></button>
+                  </div>
+                </div>
+              </sc-for>
+              <div style="display:flex;align-items:center;gap:10px;padding:10px 8px 13px;font-size:10px;color:#9AABB1;line-height:1.5">
+                <span style="flex:1"><span class="zh">按紧急度排序 · 剩余 ≤14 天描红。客户名可在顶栏切换真实名 / 匿名。四类来源：客户自有指数问卷 / 行业 SAQ / 冲突矿产模板 / 自定义卷。</span><span class="en b">Sorted by urgency; ≤14 days left is flagged red. Toggle real / anonymized names in the top bar. Four source types: customer index survey, industry SAQ, conflict-minerals template, custom form.</span></span>
+                <button onClick="{{ srvOpenCur }}" style="font-size:10.5px;font-weight:700;color:#0B3A82;white-space:nowrap;flex-shrink:0"><span class="zh">进入当前卷 · 从校卷开始 →</span><span class="en">Open the current survey →</span></button>
+              </div>
+            </div>
+          </div>
+          </div>
+          </sc-if>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ srvIsOpen }}" hint-placeholder-val="{{ false }}">
+        <div class="srv-open" style="flex-direction:column;gap:14px;width:100%">
+          <div style="display:flex;align-items:center;gap:12px;padding:9px 14px;background:#fff;border:1px solid #E1E7EA;border-radius:10px">
+            <button onClick="{{ srvBack }}" style="font-size:11.5px;font-weight:700;color:#0B3A82;display:flex;align-items:center;gap:5px"><span class="zh">← 返回收件箱</span><span class="en">← Back to inbox</span></button>
+            <span style="width:1px;height:16px;background:#E1E7EA"></span>
+            <b style="font-size:12.5px">{{ srvOpenTitle }}</b>
+            <span style="margin-left:auto;font-size:10.5px;color:#8397A0"><span class="zh">截止 2026-08-27</span><span class="en">Due 2026-08-27</span></span>
+          </div>
+
+          <div onClick="{{ srvHeadToggle }}" style="display:flex;align-items:center;gap:10px;padding:9px 14px;background:#F9FBFC;border:1px solid #E1E7EA;border-radius:10px;cursor:pointer" style-hover="background:#F3F6F7">
+            <span style="font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">卷头信息</span><span class="en">Survey header</span></span>
+            <span style="font-size:11.5px;color:#33484F;font-weight:600">{{ srvHeadSummary }}</span>
+            <span style="margin-left:auto;font-size:11px;font-weight:700;color:#0B3A82;white-space:nowrap"><span class="zh">{{ srvHeadBtnZh }}</span><span class="en">{{ srvHeadBtnEn }}</span> {{ srvHeadCaret }}</span>
+          </div>
+          <div style="display:{{ srvHeadShow }};flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:center;gap:0;background:#fff;border:1px solid #D7E3F6;border-radius:12px;padding:14px 18px">
+            <div style="flex:1;min-width:0">
+              <div style="font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">原始件 · 陌生格式</span><span class="en">Raw file · unfamiliar format</span></div>
+              <div style="font-size:13.5px;font-weight:700;margin-top:4px;color:#5A6E75">{{ srvRawTitle }}</div>
+              <div style="display:flex;gap:5px;margin-top:6px;flex-wrap:wrap">
+                <span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:5px;background:#F0F3F5;color:#8397A0"><span class="zh">英文题干</span><span class="en">English wording</span></span>
+                <span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:5px;background:#F0F3F5;color:#8397A0"><span class="zh">隐藏权重表</span><span class="en">Hidden weights</span></span>
+                <span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:5px;background:#F0F3F5;color:#8397A0"><span class="zh">无作答指引</span><span class="en">No guidance</span></span>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;padding:0 22px;flex-shrink:0">
+              <span style="font-size:9px;font-weight:800;letter-spacing:.1em;color:#0B3A82;text-transform:uppercase">AI</span>
+              <span style="font-size:22px;color:#0B3A82;line-height:1.1">→</span>
+              <span style="font-size:9px;color:#8397A0"><span class="zh">解析 · 预填</span><span class="en">parse · fill</span></span>
+            </div>
+            <div style="flex:1.4;min-width:0;background:linear-gradient(135deg,#F2F6FD,#fff);border:1px solid #D7E3F6;border-radius:10px;padding:11px 14px">
+              <div style="font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#0B3A82"><span class="zh">AI 已解析并预填 · 可直接作答</span><span class="en">Parsed & pre-filled · ready to answer</span></div>
+              <div style="display:flex;align-items:baseline;gap:7px;margin-top:4px">
+                <span style="font-family:Manrope;font-size:24px;font-weight:800;letter-spacing:-.03em;color:#0B3A82">83</span>
+                <span style="font-size:12px;color:#5A6E75">/ 112</span>
+                <span style="font-size:11px;font-weight:700;color:#A3620F;margin-left:6px"><span class="zh">剩 29 需人工</span><span class="en">29 need a human</span></span>
+              </div>
+              <div style="display:flex;gap:12px;margin-top:7px;font-size:10.5px;color:#5A6E75">
+                <span><span class="zh">平台直出</span><span class="en">Platform</span> <b style="font-family:Manrope;color:#045B75">36</b></span>
+                <span><span class="zh">证据库引用</span><span class="en">Evidence</span> <b style="font-family:Manrope;color:#0B3A82">27</b></span>
+                <span><span class="zh">历史复用</span><span class="en">History</span> <b style="font-family:Manrope;color:#5B3FA8">20</b></span>
+              </div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <div class="card" style="padding:12px 15px">
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:#5B3FA8"><span class="zh">客户上下文 · 历史答卷</span><span class="en">Customer context · answer history</span></span>
+                <span style="margin-left:auto;font-size:9px;font-weight:700;padding:1px 6px;border-radius:4px;background:#EDE7FB;color:#5B3FA8"><span class="zh">按客户保存</span><span class="en">Kept per customer</span></span>
+              </div>
+              <div style="display:flex;align-items:center;gap:16px;margin-top:9px">
+                <div><div style="font-family:Manrope;font-size:19px;font-weight:800;color:#5B3FA8">20</div><div style="font-size:10px;color:#8397A0"><span class="zh">历史答卷已复用</span><span class="en">reused from history</span></div></div>
+                <div><div style="font-family:Manrope;font-size:19px;font-weight:800;color:#0B3A82">2</div><div style="font-size:10px;color:#8397A0">{{ srvOpenCust }}</div></div>
+                <div style="flex:1;font-size:10.5px;color:#5A6E75;line-height:1.5;border-left:1px dashed #D5DFE3;padding-left:14px"><span class="zh">今年新增 / 变更题已标注；同一客户历史口径保持一致，避免前后答案矛盾。</span><span class="en">New and changed questions are flagged; answers stay consistent with what this customer was told before.</span></div>
+              </div>
+            </div>
+            <div class="card" style="padding:12px 15px">
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:#045B75"><span class="zh">解析复核</span><span class="en">Parse review</span></span>
+                <button onClick="{{ srvShowManual }}" style="margin-left:auto;font-size:11px;font-weight:700;color:#A3620F"><span class="zh">查看待确认 →</span><span class="en">Review pending →</span></button>
+              </div>
+              <div style="display:flex;align-items:center;gap:14px;margin-top:9px">
+                <div><div style="font-family:Manrope;font-size:19px;font-weight:800;color:#045B75">112</div><div style="font-size:10px;color:#8397A0"><span class="zh">已识别题</span><span class="en">recognized</span></div></div>
+                <div><div style="font-family:Manrope;font-size:19px;font-weight:800;color:#1F6B32">17</div><div style="font-size:10px;color:#8397A0"><span class="zh">红线全命中</span><span class="en">red lines mapped</span></div></div>
+                <div><div style="font-family:Manrope;font-size:19px;font-weight:800;color:#1F6B32">0</div><div style="font-size:10px;color:#8397A0"><span class="zh">未识别</span><span class="en">unrecognized</span></div></div>
+                <div><div style="font-family:Manrope;font-size:19px;font-weight:800;color:#A3620F">{{ srvManualN }}</div><div style="font-size:10px;color:#8397A0"><span class="zh">需人工作答</span><span class="en">need a human</span></div></div>
+              </div>
+              <div style="font-size:10px;color:#8397A0;margin-top:8px;line-height:1.5"><span class="zh">需人工的多为叙述 / 判断类题。若原件存在未识别或低置信题，会在此列出待人工确认。</span><span class="en">Mostly narrative or judgement questions. Unrecognized or low-confidence items would be listed here for human review.</span></div>
+            </div>
+          </div>
+
+            <div class="card" style="padding:13px 16px">
+              <div style="display:flex;align-items:center;gap:9px">
+                <span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">被问的主体 · 工厂档案</span><span class="en">Entity under review</span></span>
+                <b style="font-size:12.5px">{{ fName }}</b>
+                <span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:5px;background:#F0F3F5;color:#5A6E75">{{ fProduct }}</span>
+                <span style="margin-left:auto;font-size:10.5px;color:#8397A0"><span class="zh">另供 </span><span class="en">also supplies </span><b style="color:#33484F">{{ fOther }}</b></span>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:11px">
+                <div style="border-left:2px solid #E1E7EA;padding-left:9px"><div style="font-size:9.5px;color:#8397A0;font-weight:600"><span class="zh">供货车型</span><span class="en">Models</span></div><div style="font-size:11.5px;font-weight:700;margin-top:2px">{{ fModels }}</div></div>
+                <div style="border-left:2px solid #E1E7EA;padding-left:9px"><div style="font-size:9.5px;color:#8397A0;font-weight:600"><span class="zh">员工</span><span class="en">Employees</span></div><div style="font-size:11.5px;font-weight:700;font-family:Manrope;margin-top:2px">{{ fEmp }} <span style="font-size:10px;color:#5A6E75;font-weight:600"><span class="zh">女工 </span><span class="en">female </span>{{ fFemale }}</span></div></div>
+                <div style="border-left:2px solid #E1E7EA;padding-left:9px"><div style="font-size:9.5px;color:#8397A0;font-weight:600"><span class="zh">年用电</span><span class="en">Electricity</span></div><div style="font-size:11.5px;font-weight:700;font-family:Manrope;margin-top:2px">{{ fKwh }} <span style="font-size:10px;color:#5A6E75"><span class="zh">万 kWh</span><span class="en">×10k kWh</span></span></div></div>
+                <div style="border-left:2px solid #F2D9AE;padding-left:9px"><div style="font-size:9.5px;color:#8397A0;font-weight:600"><span class="zh">绿电</span><span class="en">Renewable</span></div><div style="font-size:11.5px;font-weight:700;font-family:Manrope;margin-top:2px;color:#B0291D">{{ fRe }} kWh</div></div>
+                <div style="border-left:2px solid #E1E7EA;padding-left:9px"><div style="font-size:9.5px;color:#8397A0;font-weight:600"><span class="zh">体系认证</span><span class="en">Certification</span></div><div style="font-size:11.5px;font-weight:700;margin-top:2px">{{ fCert }}</div></div>
+                <div style="border-left:2px solid #E1E7EA;padding-left:9px"><div style="font-size:9.5px;color:#8397A0;font-weight:600"><span class="zh">童工 / 未成年</span><span class="en">Juvenile workers</span></div><div style="font-size:11.5px;font-weight:700;font-family:Manrope;margin-top:2px;color:#1F6B32">0</div></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="chd" style="padding-bottom:11px"><h3 style="font-size:12.5px"><span class="zh">提交前自动校验</span><span class="en">Pre-submission validation</span></h3><span class="pill" style="background:#EAF7EA;color:#1F6B32"><span class="zh">可提交 · 1 项待补</span><span class="en">Submittable · 1 to fix</span></span></div>
+              <div style="padding:11px 16px 15px;display:grid;grid-template-columns:repeat(4,1fr);gap:11px">
+                <sc-for list="{{ srvChecks }}" as="c" hint-placeholder-count="3">
+                  <div style="border:1px solid {{ c.bd }};background:{{ c.bg }};border-radius:10px;padding:11px 13px">
+                    <div style="font-size:10.5px;font-weight:700;color:#5A6E75"><span class="zh">{{ c.zh }}</span><span class="en">{{ c.en }}</span></div>
+                    <div style="font-family:Manrope;font-size:24px;font-weight:800;letter-spacing:-.03em;color:{{ c.fg }};margin-top:3px">{{ c.n }}</div>
+                    <div style="font-size:10px;color:#8397A0;line-height:1.45;margin-top:2px"><span class="zh">{{ c.noteZh }}</span><span class="en">{{ c.noteEn }}</span></div>
+                  </div>
+                </sc-for>
+                <div onClick="{{ srvHollow }}" style="border:1px solid #F2D9AE;background:#FFF7EC;border-radius:10px;padding:11px 13px;cursor:pointer;transition:.14s;order:3" style-hover="box-shadow:0 6px 16px -8px rgba(163,98,15,.4);border-color:#C97D1C">
+                  <div style="font-size:10.5px;font-weight:700;color:#5A6E75"><span class="zh">未填支持信息</span><span class="en">Missing support</span></div>
+                  <div style="font-family:Manrope;font-size:24px;font-weight:800;letter-spacing:-.03em;color:#A3620F;margin-top:3px">{{ srvNoSupport }}</div>
+                  <div style="font-size:10px;color:#8397A0;line-height:1.45;margin-top:2px"><span class="zh">答"是"但无证据 · 点击查看</span><span class="en">"Yes" without evidence · click</span></div>
+                </div>
+              </div>
+            </div>
+
+      </div>
+      </sc-if>
+      <div style="display:flex;align-items:stretch;gap:0;background:#fff;border:1px solid #E1E7EA;border-radius:12px;padding:6px">
+        <sc-for list="{{ srvPhases }}" as="ph" hint-placeholder-count="3">
+          <div style="display:flex;align-items:center;gap:0;flex:{{ ph.flex }};min-width:0">
+            <button onClick="{{ ph.go }}" style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;text-align:left;padding:8px 13px;border-radius:9px;background:{{ ph.bg }}">
+              <span style="width:24px;height:24px;border-radius:50%;background:{{ ph.dotBg }};color:{{ ph.dotFg }};border:1.5px solid {{ ph.dotBd }};display:flex;align-items:center;justify-content:center;font-family:Manrope;font-size:10.5px;font-weight:800;flex-shrink:0">{{ ph.mark }}</span>
+              <span style="min-width:0">
+                <span style="display:block;font-size:12.5px;font-weight:{{ ph.fw }};color:{{ ph.fg }};white-space:nowrap"><span class="zh">{{ ph.zh }}</span><span class="en">{{ ph.en }}</span></span>
+                <span style="display:block;font-size:10px;color:{{ ph.subFg }};white-space:nowrap;margin-top:1px"><span class="zh">{{ ph.subZh }}</span><span class="en">{{ ph.subEn }}</span></span>
+              </span>
+              <span style="display:{{ ph.badgeShow }};margin-left:auto;font-family:Manrope;font-size:10px;font-weight:800;padding:2px 8px;border-radius:5px;background:{{ ph.badgeBg }};color:{{ ph.badgeFg }};flex-shrink:0">{{ ph.badge }}</span>
+            </button>
+            <span style="display:{{ ph.arrowShow }};color:#C4D0D5;font-size:12px;flex-shrink:0;padding:0 2px">›</span>
+          </div>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{ srvTabCheck }}" hint-placeholder-val="{{ false }}">
+      <div class="srv-check" style="flex-direction:column;gap:14px;width:100%">
+        <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;background:#fff;border:1px solid #E1E7EA;border-radius:11px;padding:10px 14px;position:sticky;top:70px;z-index:30;box-shadow:0 -14px 0 0 #F5F7F8,0 10px 18px -14px rgba(15,30,36,.45)">
+          <span style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#9AABB1"><span class="zh">校卷操作</span><span class="en">Actions</span></span>
+          <button onClick="{{ srvLock }}" style="padding:8px 14px;border-radius:8px;background:{{ srvLockBg }};color:#fff;font-size:11.5px;font-weight:700;white-space:nowrap">{{ srvLockLabel }}</button>
+          <button onClick="{{ srvSkipCheck }}" style="padding:8px 13px;border-radius:8px;background:#fff;border:1px solid #D5DFE3;color:#5A6E75;font-size:11.5px;font-weight:600;white-space:nowrap"><span class="zh">题面无误，直接作答 →</span><span class="en">Looks right — skip to answering →</span></button>
+          <span style="width:1px;height:20px;background:#E6EBEE"></span>
+          <button onClick="{{ srvAllOK }}" style="padding:8px 13px;border-radius:8px;background:#F2F6FD;border:1px solid #D7E3F6;color:#0B3A82;font-size:11.5px;font-weight:700;white-space:nowrap"><span class="zh">把当前列表全部标为题面正确</span><span class="en">Mark everything shown as correct</span></button>
+          <span style="margin-left:auto;font-size:10.5px;color:#8397A0;white-space:nowrap"><span class="zh">已核对 {{ srvChkOK }} / 112 · 存疑 {{ srvChkIssue }}</span><span class="en">{{ srvChkOK }}/112 reviewed · {{ srvChkIssue }} flagged</span></span>
+        </div>
+
+        <div class="card">
+          <div class="chd"><h3><span class="zh">解析质检 · 这份卷读对了吗</span><span class="en">Parse QC</span></h3><span class="pill" style="background:#FFF7EC;color:#A3620F">{{ srvChkIssue }} <span class="zh">题存疑</span><span class="en">flagged</span></span><span style="margin-left:auto;font-size:11px;color:#8397A0"><span class="zh">这一步只看题目本身，不看答案</span><span class="en">This step is about the questions, not the answers</span></span></div>
+          <div style="padding:12px 16px 16px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+            <sc-for list="{{ srvQc }}" as="c" hint-placeholder-count="4">
+              <button onClick="{{ c.pick }}" style="text-align:left;padding:12px 13px;border-radius:11px;background:{{ c.bg }};border:1px solid {{ c.bd }}">
+                <div style="display:flex;align-items:baseline;gap:6px">
+                  <span style="font-family:Manrope;font-size:20px;font-weight:800;letter-spacing:-.02em;color:{{ c.c }}">{{ c.n }}</span>
+                  <span style="font-size:10px;font-weight:700;color:{{ c.c }}">{{ c.mark }}</span>
+                </div>
+                <div style="font-size:11px;font-weight:700;color:#33484F;margin-top:4px;line-height:1.35"><span class="zh">{{ c.zh }}</span><span class="en b">{{ c.en }}</span></div>
+                <div style="font-size:9.5px;color:#8397A0;margin-top:3px;line-height:1.4"><span class="zh">{{ c.noteZh }}</span><span class="en b">{{ c.noteEn }}</span></div>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="chd"><h3><span class="zh">题面核对</span><span class="en">Question review</span></h3><span class="pill" style="background:#F2F6FD;color:#0B3A82">{{ srvChkLabel }}</span><span style="margin-left:auto;font-size:11px;color:#8397A0">{{ srvChkCount }} <span class="zh">题</span><span class="en">items</span></span></div>
+          <div style="padding:11px 14px 14px;display:flex;flex-direction:column;gap:9px">
+            <sc-for list="{{ srvChkRows }}" as="r" hint-placeholder-count="6">
+              <div style="border:1px solid {{ r.bd }};border-left:3px solid {{ r.edge }};background:{{ r.bg }};border-radius:10px;padding:11px 13px">
+                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                  <b style="font-family:Manrope;font-size:11.5px;color:#0B3A82">{{ r.no }}</b>
+                  <span style="font-size:10px;font-weight:600;color:#5A6E75">{{ r.sub }}</span>
+                  <span style="font-size:9.5px;color:#9AABB1">{{ r.pillar }}</span>
+                  <sc-for list="{{ r.flags }}" as="fg" hint-placeholder-count="0">
+                    <span style="font-size:9.5px;font-weight:800;padding:2px 8px;border-radius:5px;background:{{ fg.bg }};color:{{ fg.fg }};border:1px solid {{ fg.bd }}"><span class="zh">{{ fg.zh }}</span><span class="en">{{ fg.en }}</span></span>
+                  </sc-for>
+                  <span style="margin-left:auto;font-size:9.5px;font-weight:800;padding:2px 9px;border-radius:5px;background:{{ r.stBg }};color:{{ r.stFg }};flex-shrink:0"><span class="zh">{{ r.stZh }}</span><span class="en">{{ r.stEn }}</span></span>
+                </div>
+                <div style="display:{{ r.readShow }};font-size:12.5px;color:#0F1E24;line-height:1.6;margin-top:7px">{{ r.text }}</div>
+                <div style="display:{{ r.editShow }};flex-direction:column;gap:5px;margin-top:8px">
+                  <span style="font-size:9.5px;font-weight:700;color:#5B3FA8"><span class="zh">修订后的题面（仅内部展示 · 导出给客户时仍用原文）</span><span class="en">Revised wording (internal only)</span></span>
+                  <textarea value="{{ r.draft }}" onChange="{{ r.onEdit }}" rows="2" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid #E3DAF7;background:#FCFBFE;font-size:12px;line-height:1.6;outline:none"></textarea>
+                </div>
+                <div style="display:{{ r.origShow }};margin-top:7px;padding:8px 11px;background:#FAFCFC;border:1px solid #EDF1F3;border-left:2px solid #C4D0D5;border-radius:0 8px 8px 0">
+                  <div style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#9AABB1"><span class="zh">客户原文</span><span class="en">Customer original</span></div>
+                  <div style="font-size:11px;color:#5A6E75;line-height:1.6;margin-top:3px">{{ r.orig }}</div>
+                  <div style="font-size:11px;color:#8397A0;line-height:1.6;margin-top:4px">{{ r.origEn }}</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:9px;padding-top:9px;border-top:1px dashed #EDF1F3">
+                  <button onClick="{{ r.ok }}" style="padding:5px 12px;border-radius:7px;font-size:11.5px;font-weight:700;background:{{ r.okBg }};border:1px solid {{ r.okBd }};color:{{ r.okFg }}"><span class="zh">题面正确</span><span class="en">Wording is right</span></button>
+                  <button onClick="{{ r.toggleEdit }}" style="padding:5px 12px;border-radius:7px;font-size:11.5px;font-weight:600;background:#fff;border:1px solid #D5DFE3;color:#5A6E75">{{ r.editLabel }}</button>
+                  <button onClick="{{ r.toggleOrig }}" style="font-size:10.5px;font-weight:600;color:#8397A0;padding:5px 4px">{{ r.origLabel }}</button>
+                  <span style="margin-left:auto;font-size:10px;color:#9AABB1">{{ r.hint }}</span>
+                </div>
+              </div>
+            </sc-for>
+            <div style="font-size:10.5px;color:#8397A0;text-align:center;padding:4px">{{ srvChkMore }}</div>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+      <sc-if value="{{ srvTabScore }}" hint-placeholder-val="{{ false }}">
+      <div class="srv-score" style="flex-direction:column;gap:14px;width:100%">
+        <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;background:#fff;border:1px solid #E1E7EA;border-radius:11px;padding:10px 14px;position:sticky;top:70px;z-index:30;box-shadow:0 -14px 0 0 #F5F7F8,0 10px 18px -14px rgba(15,30,36,.45)">
+          <span style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#9AABB1"><span class="zh">交卷操作</span><span class="en">Actions</span></span>
+          <button onClick="{{ subFull }}" style="padding:8px 15px;border-radius:8px;background:{{ subFullBg }};color:#fff;font-size:11.5px;font-weight:700;white-space:nowrap">{{ subFullLabel }}</button>
+          <button onClick="{{ subPartial }}" style="display:{{ subPartialShow }};padding:8px 13px;border-radius:8px;background:#fff;border:1px solid #F2D9AE;color:#A3620F;font-size:11.5px;font-weight:700;white-space:nowrap">{{ subPartialLabel }}</button>
+          <span style="width:1px;height:20px;background:#E6EBEE"></span>
+          <button onClick="{{ srvExportFilled }}" style="padding:8px 13px;border-radius:8px;background:#F2FAF7;border:1px solid #BFE3D6;color:#0B5B4A;font-size:11.5px;font-weight:700;white-space:nowrap">↓ <span class="zh">按客户模板导出（含作答）</span><span class="en">Export in customer template</span></button>
+          <button onClick="{{ srvExportRaw }}" style="padding:8px 13px;border-radius:8px;background:#fff;border:1px solid #D5DFE3;color:#5A6E75;font-size:11.5px;font-weight:600;white-space:nowrap">↓ <span class="zh">导出原始问卷</span><span class="en">Export the original</span></button>
+          <span style="margin-left:auto;font-size:10.5px;font-weight:700;color:{{ subGateFg }};white-space:nowrap"><span class="zh">{{ subGateZh }}</span><span class="en">{{ subGateEn }}</span></span>
+        </div>
+
+        <div class="card">
+          <div class="chd"><h3><span class="zh">提交前校验 · 还差什么才能交</span><span class="en">Pre-submission checks</span></h3><span class="pill" style="background:{{ subPillBg }};color:{{ subPillFg }}">{{ subBlockN }} <span class="zh">项阻塞</span><span class="en">blocking</span></span><span style="margin-left:auto;font-size:11px;color:#8397A0"><span class="zh">点任一项跳回作答处理</span><span class="en">Click any row to jump back and fix it</span></span></div>
+          <div style="padding:12px 16px 16px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+            <sc-for list="{{ subChecks }}" as="c" hint-placeholder-count="6">
+              <button onClick="{{ c.go }}" style="text-align:left;padding:12px 13px;border-radius:11px;background:{{ c.bg }};border:1px solid {{ c.bd }}">
+                <div style="display:flex;align-items:center;gap:7px">
+                  <span style="font-family:Manrope;font-size:20px;font-weight:800;letter-spacing:-.02em;color:{{ c.c }}">{{ c.n }}</span>
+                  <span style="font-size:11px;font-weight:800;color:{{ c.c }}">{{ c.mark }}</span>
+                  <span style="margin-left:auto;font-size:9px;font-weight:800;padding:2px 7px;border-radius:5px;background:{{ c.tagBg }};color:{{ c.tagFg }}"><span class="zh">{{ c.tagZh }}</span><span class="en">{{ c.tagEn }}</span></span>
+                </div>
+                <div style="font-size:11.5px;font-weight:700;color:#33484F;margin-top:5px;line-height:1.35"><span class="zh">{{ c.zh }}</span><span class="en b">{{ c.en }}</span></div>
+                <div style="font-size:9.5px;color:#8397A0;margin-top:3px;line-height:1.45"><span class="zh">{{ c.noteZh }}</span><span class="en b">{{ c.noteEn }}</span></div>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div class="card" style="display:{{ waitCardShow }}">
+          <div class="chd"><h3><span class="zh">等回明细 · 卡在别人手上的题</span><span class="en">Waiting on others</span></h3><span class="pill" style="background:#F3EFFC;color:#5B3FA8">{{ waitN }}</span><span style="margin-left:auto;font-size:11px;color:#8397A0"><span class="zh">两个出口：等得起就催，等不起就兜底作答</span><span class="en">Two exits: chase it, or answer with a fallback</span></span></div>
+          <div style="padding:6px 16px 14px">
+            <div style="display:grid;grid-template-columns:60px minmax(0,1fr) 150px 96px 108px 196px;gap:12px;align-items:center;padding:8px 6px;border-bottom:1px solid #E6EBEE;font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;font-weight:700;color:#9AABB1;white-space:nowrap">
+              <span>No.</span><span><span class="zh">题目</span><span class="en">Question</span></span><span><span class="zh">等谁</span><span class="en">Waiting on</span></span><span><span class="zh">承诺回期</span><span class="en">Promised</span></span><span><span class="zh">状态</span><span class="en">Status</span></span><span style="text-align:right"><span class="zh">出口</span><span class="en">Exit</span></span>
+            </div>
+            <sc-for list="{{ waitRows }}" as="w" hint-placeholder-count="2">
+              <div style="display:grid;grid-template-columns:60px minmax(0,1fr) 150px 96px 108px 196px;gap:12px;align-items:center;padding:10px 6px;border-bottom:1px dashed #E6EBEE">
+                <b style="font-family:Manrope;font-size:11.5px;color:#0B3A82">{{ w.no }}</b>
+                <span style="font-size:11.5px;color:#33484F;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ w.q }}</span>
+                <span style="font-size:11px;color:#5A6E75;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ w.to }}</span>
+                <span style="font-family:Manrope;font-size:11px;color:{{ w.dueC }};font-weight:700">{{ w.due }}</span>
+                <span style="font-size:9.5px;font-weight:800;padding:2px 8px;border-radius:5px;background:{{ w.stBg }};color:{{ w.stFg }};width:fit-content">{{ w.st }}</span>
+                <div style="display:flex;gap:6px;justify-content:flex-end">
+                  <button onClick="{{ w.chase }}" style="font-size:10.5px;font-weight:700;padding:5px 10px;border-radius:7px;background:#F3EFFC;border:1px solid #E3DAF7;color:#5B3FA8;white-space:nowrap"><span class="zh">催办 / 改期</span><span class="en">Chase</span></button>
+                  <button onClick="{{ w.fallback }}" style="font-size:10.5px;font-weight:700;padding:5px 10px;border-radius:7px;background:#FFF7EC;border:1px solid #F2D9AE;color:#A3620F;white-space:nowrap"><span class="zh">兜底作答</span><span class="en">Fallback</span></button>
+                </div>
+              </div>
+            </sc-for>
+            <div style="font-size:10px;color:#9AABB1;line-height:1.55;padding-top:10px"><span class="zh">兜底作答 = 以「暂无数据 / 部分数据」如实作答，并附行动计划与预计补交时间 —— 这是 SSI / SAQ 的标准做法，比空着或瞎填更能保住客户信任。</span><span class="en b">Fallback = answer honestly with “no data yet / partial”, plus an action plan and a promised date — standard practice in SSI/SAQ, and better than a blank or a guess.</span></div>
+          </div>
+        </div>
+
+        <div style="display:{{ receiptShow }};flex-direction:column;gap:0;background:#0B5B4A;border-radius:12px;padding:16px 18px;color:#fff">
+          <div style="font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#9BE3C8"><span class="zh">提交回执</span><span class="en">Submission receipt</span></div>
+          <div style="font-size:15px;font-weight:800;margin-top:5px">{{ receiptTitle }}</div>
+          <div style="font-size:11.5px;color:#CFE9DF;line-height:1.65;margin-top:6px">{{ receiptBody }}</div>
+        </div>
+
+        <div style="background:#0F1E24;border-radius:12px;padding:14px 18px;color:#fff">
+          <div style="font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#7ED0B4"><span class="zh">收口</span><span class="en">The point</span></div>
+          <div style="font-size:13px;line-height:1.6;margin-top:5px;color:#E8EEF0"><span class="zh">答完之后：快速整改能到 <b style="color:#7ED0B4;font-family:Manrope">86.4</b>；多条缺口的根子在供应链——一键传导给供应商。</span><span class="en">Quick fixes take the score to <b style="color:#7ED0B4;font-family:Manrope">86.4</b>. Most remaining gaps sit in the supply chain — cascade them to suppliers in one click.</span></div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1.05fr 1fr;gap:14px;align-items:start">
+          <div class="card">
+            <div class="chd"><h3><span class="zh">得分模拟 · 三档</span><span class="en">Score simulation</span></h3><span class="pill" style="background:#F2F6FD;color:#0B3A82">SSI</span></div>
+            <div style="padding:14px 16px 16px">
+              <div style="display:flex;align-items:baseline;gap:9px">
+                <span style="font-family:Manrope;font-size:30px;font-weight:800;letter-spacing:-.03em;color:{{ scNowFg }};background:{{ scNowBg }};border-radius:6px;padding:0 4px">{{ scNow }}</span>
+                <span style="display:{{ rfShow }};font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:6px;background:#EDF9F4;border:1px solid #A9D9C4;color:#0B5B4A;white-space:nowrap"><span class="zh">▲ +4.4 供应商回填</span><span class="en">▲ +4.4 supplier return</span></span>
+                <span style="font-size:13px;color:#8397A0">→</span>
+                <span style="font-family:Manrope;font-size:30px;font-weight:800;letter-spacing:-.03em;color:#C97D1C">{{ scQuick }}</span>
+                <span style="font-size:13px;color:#8397A0">→</span>
+                <span style="font-family:Manrope;font-size:30px;font-weight:800;letter-spacing:-.03em;color:#1F6B32">{{ scPot }}</span>
+              </div>
+              <div style="display:flex;height:14px;border-radius:4px;overflow:hidden;margin-top:11px;background:#EEF2F4">
+                <div style="width:{{ scNowW }};background:#B0291D"></div>
+                <div style="width:{{ scQuickW }};background:#E8A33D"></div>
+                <div style="width:{{ scPotW }};background:#3FAE55"></div>
+              </div>
+              <div style="display:flex;gap:14px;margin-top:9px;font-size:10.5px;color:#5A6E75;flex-wrap:wrap">
+                <span><span style="display:inline-block;width:9px;height:9px;border-radius:2px;background:#B0291D;vertical-align:middle"></span> <span class="zh">当前得分</span><span class="en">Current</span></span>
+                <span><span style="display:inline-block;width:9px;height:9px;border-radius:2px;background:#E8A33D;vertical-align:middle"></span> <span class="zh">快速整改可得</span><span class="en">Quick wins</span></span>
+                <span><span style="display:inline-block;width:9px;height:9px;border-radius:2px;background:#3FAE55;vertical-align:middle"></span> <span class="zh">完成全部行动计划</span><span class="en">Full action plan</span></span>
+              </div>
+              <div style="margin-top:15px;padding-top:13px;border-top:1px dashed #E6EBEE;display:flex;flex-direction:column;gap:9px">
+                <sc-for list="{{ scPillars }}" as="p" hint-placeholder-count="5">
+                  <div>
+                    <div style="display:flex;align-items:baseline;gap:7px">
+                      <b style="font-size:11.5px">{{ p.label }}</b>
+                      <span style="margin-left:auto;font-family:Manrope;font-size:11px;font-weight:800;color:{{ p.nowFg }};background:{{ p.nowBg }};border-radius:4px;padding:0 3px">{{ p.now }}</span>
+                      <span style="font-size:9.5px;color:#C4D0D5">→</span>
+                      <span style="font-family:Manrope;font-size:11px;font-weight:700;color:#C97D1C">{{ p.quick }}</span>
+                      <span style="font-size:9.5px;color:#C4D0D5">→</span>
+                      <span style="font-family:Manrope;font-size:11px;font-weight:800;color:#1F6B32">{{ p.pot }}</span>
+                    </div>
+                    <div style="display:flex;height:7px;border-radius:3px;overflow:hidden;margin-top:4px;background:#EEF2F4">
+                      <div style="width:{{ p.nowW }};background:#B0291D"></div>
+                      <div style="width:{{ p.quickW }};background:#E8A33D"></div>
+                      <div style="width:{{ p.potW }};background:#3FAE55"></div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="font-size:10px;color:#9AABB1;line-height:1.55;margin-top:13px;padding-top:11px;border-top:1px dashed #E6EBEE">{{ scNote }}</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="chd"><h3><span class="zh">差距清单与行动</span><span class="en">Gaps & actions</span></h3><span class="pill" style="background:#FBE9E7;color:#B0291D">{{ scGapN }}</span><span style="margin-left:auto;font-size:11px;color:#8397A0"><span class="zh">按快速 → 中期 → 长期排序</span><span class="en">Quick → mid → long</span></span></div>
+            <div style="padding:10px 16px 15px;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;align-items:center;gap:11px;background:#F3FAF7;border:1px solid #CFE8DE;border-radius:9px;padding:9px 11px">
+                <div style="flex:1;font-size:10.5px;color:#5A6E75;line-height:1.5"><span class="zh">标「需传导」的是<b style="color:#33484F">根子在供应链</b>的缺口（{{ scCasN }} 条）——要上游给数据才能答；其余 {{ scOwnN }} 条由 Autoliv 自身整改，无需下发。</span><span class="en"><b style="color:#33484F">{{ scCasN }}</b> gaps are rooted in the supply chain (tagged “To cascade”) — they need upstream data; the other {{ scOwnN }} are fixed by Autoliv itself.</span></div>
+                <button onClick="{{ scCascadeAll }}" style="flex-shrink:0;font-size:11.5px;font-weight:700;padding:7px 13px;border-radius:8px;background:#0B5B4A;color:#fff;white-space:nowrap"><span class="zh">一键传导 {{ scCasN }} 条 →</span><span class="en">Cascade all {{ scCasN }} →</span></button>
+              </div>
+              <sc-for list="{{ scGaps }}" as="g" hint-placeholder-count="8">
+                <div style="border:1px solid #E6EBEE;border-left:3px solid {{ g.accent }};border-radius:9px;padding:10px 12px">
+                  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                    <b style="font-family:Manrope;font-size:11px;color:#0B3A82">{{ g.no }}</b>
+                    <span style="font-size:10px;font-weight:600;color:#5A6E75">{{ g.pillar }}</span>
+                    <span style="font-size:9.5px;color:#9AABB1">{{ g.subject }}</span>
+                    <span style="margin-left:auto;font-size:9.5px;font-weight:800;padding:2px 8px;border-radius:5px;background:{{ g.fixBg }};color:{{ g.fixFg }};flex-shrink:0">{{ g.fixLabel }}</span>
+                  </div>
+                  <div style="font-size:11px;color:#33484F;line-height:1.55;margin-top:5px">{{ g.advice }}</div>
+                  <div style="display:{{ g.casShow }};align-items:center;gap:8px;margin-top:7px;padding-top:7px;border-top:1px dashed #EDF1F3">
+                    <span style="font-size:10px;color:#8397A0;flex:1;line-height:1.45">{{ g.casNote }}</span>
+                    <span style="display:{{ g.casTagShow }};font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:5px;background:#EDF9F4;color:#0B5B4A;white-space:nowrap;flex-shrink:0"><span class="zh">需传导</span><span class="en">To cascade</span></span>
+                    <span style="display:{{ g.rfTagShow }};font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:5px;background:#0B5B4A;color:#fff;white-space:nowrap;flex-shrink:0"><span class="zh">已补 · 供应商回填</span><span class="en">Closed · supplier returned</span></span>
+                  </div>
+                  <div style="display:{{ g.rfNoteShow }};margin-top:6px;background:#EDF9F4;border:1px solid #A9D9C4;border-radius:7px;padding:6px 9px;font-size:10px;color:#0B5B4A;line-height:1.45">{{ g.rfNote }}</div>
+                </div>
+              </sc-for>
+              <div style="font-size:10.5px;color:#8397A0;text-align:center;padding:3px">{{ scGapMore }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ srvTabAnswer }}" hint-placeholder-val="{{ false }}">
+      <div class="srv-answer" style="flex-direction:column;gap:14px;width:100%">
+      <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;background:#fff;border:1px solid #E1E7EA;border-radius:11px;padding:10px 14px;position:sticky;top:70px;z-index:30;box-shadow:0 -14px 0 0 #F5F7F8,0 10px 18px -14px rgba(15,30,36,.45)">
+        <span style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#9AABB1"><span class="zh">本卷操作</span><span class="en">Actions</span></span>
+        <button onClick="{{ srvSubmitReview }}" style="padding:8px 14px;border-radius:8px;background:#0B3A82;color:#fff;font-size:11.5px;font-weight:700;white-space:nowrap"><span class="zh">提交内部复核</span><span class="en">Submit for internal review</span></button>
+        <button onClick="{{ srvSaveDraft }}" style="padding:8px 13px;border-radius:8px;background:#fff;border:1px solid #D5DFE3;color:#33484F;font-size:11.5px;font-weight:600;white-space:nowrap"><span class="zh">保存草稿</span><span class="en">Save draft</span></button>
+        <span style="width:1px;height:20px;background:#E6EBEE"></span>
+        <button onClick="{{ srvExportFilled }}" style="display:flex;align-items:center;gap:6px;padding:8px 13px;border-radius:8px;background:#F2FAF7;border:1px solid #BFE3D6;color:#0B5B4A;font-size:11.5px;font-weight:700;white-space:nowrap">↓ <span class="zh">按客户模板导出（含作答）</span><span class="en">Export in customer template (answered)</span></button>
+        <button onClick="{{ srvExportRaw }}" style="display:flex;align-items:center;gap:6px;padding:8px 13px;border-radius:8px;background:#fff;border:1px solid #D5DFE3;color:#5A6E75;font-size:11.5px;font-weight:600;white-space:nowrap">↓ <span class="zh">导出原始问卷</span><span class="en">Export the original file</span></button>
+        <span style="margin-left:auto;font-size:10.5px;color:#8397A0;white-space:nowrap"><span class="zh">作答自动保存 · 最近 {{ srvSavedAt }}</span><span class="en">Auto-saved · {{ srvSavedAt }}</span></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #E1E7EA;border-radius:11px;padding:11px 15px">
+        <span style="font-size:11.5px;font-weight:700;color:#33484F;white-space:nowrap"><span class="zh">还需你处理 <b style="font-family:Manrope;font-size:15px;color:#A3620F">{{ srvOpenN }}</b> 题</span><span class="en">You still need to handle <b style="font-family:Manrope;font-size:15px;color:#A3620F">{{ srvOpenN }}</b></span></span>
+        <div style="flex:1;display:flex;height:9px;border-radius:5px;overflow:hidden;background:#EEF2F4;min-width:0">
+          <sc-for list="{{ srvBar }}" as="s" hint-placeholder-count="4">
+            <div onClick="{{ s.pick }}" style="width:{{ s.w }};background:{{ s.c }};cursor:pointer"></div>
+          </sc-for>
+        </div>
+        <span style="font-size:10.5px;color:#8397A0;white-space:nowrap"><span class="zh"><b style="font-family:Manrope;color:#1F6B32">{{ srvReadyN }}</b> 题 AI 已填且可信 · 不用你逐题看</span><span class="en"><b style="font-family:Manrope;color:#1F6B32">{{ srvReadyN }}</b> AI-filled and trusted — nothing to do</span></span>
+      </div>
+      <div style="display:grid;grid-template-columns:236px 1fr 314px;gap:14px;width:100%;align-items:start">
+          <div class="card" style="position:sticky;top:136px">
+            <div class="chd" style="padding-bottom:11px"><h3 style="font-size:12.5px"><span class="zh">处理队列</span><span class="en">Work queue</span></h3><span style="margin-left:auto;font-size:10px;color:#8397A0"><span class="zh">每题只归一档</span><span class="en">one bucket each</span></span></div>
+            <div style="padding:10px 12px 4px;display:flex;flex-direction:column;gap:6px">
+              <sc-for list="{{ srvQueue }}" as="k" hint-placeholder-count="5">
+                <button onClick="{{ k.pick }}" style="display:flex;align-items:center;gap:9px;width:100%;text-align:left;border:1px solid {{ k.bd }};background:{{ k.bg }};border-radius:9px;padding:8px 10px;opacity:{{ k.dim }}">
+                  <span style="width:6px;height:6px;border-radius:50%;background:{{ k.c }};flex-shrink:0"></span>
+                  <span style="min-width:0;flex:1">
+                    <span style="display:block;font-size:11.5px;font-weight:{{ k.fw }};color:#0F1E24;line-height:1.3">{{ k.label }}</span>
+                    <span style="display:block;font-size:9.5px;color:#9AABB1;line-height:1.35;margin-top:1px">{{ k.sub }}</span>
+                  </span>
+                  <span style="font-family:Manrope;font-size:14px;font-weight:800;color:{{ k.c }};flex-shrink:0">{{ k.n }}</span>
+                </button>
+              </sc-for>
+            </div>
+            <div class="chd" style="padding-top:11px;padding-bottom:9px;border-top:1px dashed #EDF1F3"><h3 style="font-size:12.5px"><span class="zh">按支柱浏览</span><span class="en">Browse by pillar</span></h3></div>
+            <div style="padding:0 12px 13px;display:flex;flex-direction:column;gap:7px">
+              <sc-for list="{{ srvPillars }}" as="p" hint-placeholder-count="6">
+                <div class="rowlink" onClick="{{ p.pick }}" style="border:1px solid {{ p.bd }};background:{{ p.bg }};border-radius:9px;padding:9px 11px">
+                  <div style="display:flex;align-items:center;gap:6px">
+                    <span style="width:6px;height:6px;border-radius:50%;background:{{ p.gapDot }};flex-shrink:0"></span>
+                    <b style="font-size:11.5px;font-weight:{{ p.fw }};color:{{ p.fg }};line-height:1.3">{{ p.label }}</b>
+                    <span style="margin-left:auto;font-family:Manrope;font-size:9.5px;color:#8397A0;flex-shrink:0">{{ p.n }}</span>
+                  </div>
+                  <div style="display:{{ p.scoreShow }};margin-top:5px">
+                    <div style="display:flex;align-items:baseline;gap:5px">
+                      <span style="font-family:Manrope;font-size:16px;font-weight:800;letter-spacing:-.03em;color:{{ p.fg }}">{{ p.score }}</span>
+                      <span style="font-size:9.5px;color:#9AABB1"><span class="zh">当前分</span><span class="en">now</span></span>
+                      <span style="margin-left:auto;font-size:9.5px;font-weight:700;color:#B0291D;font-family:Manrope">{{ p.gapN }}</span>
+                    </div>
+                    <div style="height:4px;border-radius:2px;background:#EEF2F4;margin-top:4px;overflow:hidden"><div style="width:{{ p.scoreW }};height:100%;background:{{ p.barBg }};border-radius:2px"></div></div>
+                  </div>
+                </div>
+              </sc-for>
+              <div style="font-size:10px;color:#9AABB1;line-height:1.5;margin-top:2px"><span class="zh">上面按「下一步该做什么」分档，每题只出现在一处；下面按支柱浏览，用于抽查而不是干活。</span><span class="en b">The queue groups by next action — each item appears once. Pillars are for spot-checking, not for working through.</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="chd"><h3><span class="zh">逐题作答</span><span class="en">Answer by question</span></h3><span class="pill" style="background:#F2F6FD;color:#0B3A82">{{ srvFilterLabel }}</span><span style="margin-left:auto;font-size:11px;color:#8397A0">{{ srvCount }} <span class="zh">题</span><span class="en">items</span></span></div>
+            <div style="padding:11px 14px 14px;display:flex;flex-direction:column;gap:9px">
+              <sc-for list="{{ srvCards }}" as="c" hint-placeholder-count="6">
+                <div class="rowlink" onClick="{{ c.pick }}" style="border:1px solid {{ c.bd }};border-left:3px solid {{ c.accent }};background:{{ c.bg }};border-radius:10px;padding:11px 13px">
+                  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                    <b style="font-family:Manrope;font-size:11.5px;color:#0B3A82">{{ c.no }}</b>
+                    <span style="font-size:10px;font-weight:600;color:#5A6E75">{{ c.sub }}</span>
+                    <span style="font-size:9.5px;color:#9AABB1">{{ c.subject }}</span>
+                    <span style="margin-left:auto;font-size:10px;font-weight:800;padding:2px 9px;border-radius:5px;background:{{ c.ansBg }};color:{{ c.ansFg }};flex-shrink:0">{{ c.ansLabel }}</span>
+                  </div>
+                  <div style="font-size:12px;color:#0F1E24;line-height:1.55;margin-top:6px">{{ c.q }}</div>
+                  <div style="display:flex;align-items:center;gap:6px;margin-top:8px;flex-wrap:wrap">
+                    <span title="{{ c.pfNote }}" style="display:{{ c.pfShow }};align-items:center;gap:4px;font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:5px;background:{{ c.pfBg }};color:{{ c.pfFg }};cursor:help"><span class="zh">AI 预填 · </span><span class="en">AI · </span>{{ c.pfLabel }}</span>
+                    <span style="display:{{ c.reuseShow }};align-items:center;font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:5px;background:#EDE7FB;color:#5B3FA8"><span class="zh">复用</span><span class="en">Reused</span></span>
+                    <span style="display:{{ c.minShow }};font-size:9.5px;font-weight:800;padding:2px 8px;border-radius:5px;background:#FBE9E7;color:#B0291D"><span class="zh">最低要求</span><span class="en">Minimum req.</span></span>
+                    <span style="display:{{ c.hollowShow }};align-items:center;gap:4px;font-size:9.5px;font-weight:800;padding:2px 8px;border-radius:5px;background:#FFF3E0;color:#A3620F;border:1px solid #F2D9AE"><span class="zh">空心的"是" · 缺支持信息</span><span class="en">Hollow "Yes" · no evidence</span></span>
+                  </div>
+                  <div style="display:{{ c.pendShow }};align-items:flex-start;gap:8px;margin-top:8px;padding:8px 11px;background:#FFF7EC;border:1px solid #F2D9AE;border-radius:8px">
+                    <span style="font-size:11px;color:#A3620F;flex-shrink:0">⚑</span>
+                    <span style="font-size:10.5px;color:#A3620F;line-height:1.5;flex:1"><span class="zh">{{ c.pendZh }}</span><span class="en b">{{ c.pendEn }}</span></span>
+                    <button onClick="{{ c.confirm }}" style="flex-shrink:0;font-size:10.5px;font-weight:800;padding:4px 11px;border-radius:6px;background:#A3620F;color:#fff;white-space:nowrap"><span class="zh">确认这一题</span><span class="en">Confirm</span></button>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:9px;padding-top:9px;border-top:1px dashed #EDF1F3">
+                    <span style="font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9AABB1"><span class="zh">作答</span><span class="en">Answer</span></span>
+                    <button onClick="{{ c.setYes }}" style="min-width:56px;padding:5px 12px;border-radius:7px;font-size:11.5px;font-weight:700;background:{{ c.yBg }};border:1px solid {{ c.yBd }};color:{{ c.yFg }}"><span class="zh">是</span><span class="en">Yes</span></button>
+                    <button onClick="{{ c.setNo }}" style="min-width:56px;padding:5px 12px;border-radius:7px;font-size:11.5px;font-weight:700;background:{{ c.nBg }};border:1px solid {{ c.nBd }};color:{{ c.nFg }}"><span class="zh">否</span><span class="en">No</span></button>
+                    <button onClick="{{ c.setNa }}" style="min-width:66px;padding:5px 12px;border-radius:7px;font-size:11.5px;font-weight:700;background:{{ c.aBg }};border:1px solid {{ c.aBd }};color:{{ c.aFg }}"><span class="zh">不适用</span><span class="en">N/A</span></button>
+                    <span style="display:{{ c.editedShow }};font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:5px;background:#EAF7EA;color:#1F6B32"><span class="zh">已人工修改</span><span class="en">Edited</span></span>
+                    <button onClick="{{ c.naToggle }}" style="display:{{ c.naBtnShow }};align-items:center;gap:5px;font-size:10.5px;font-weight:600;color:#5B3FA8;padding:5px 10px;border-radius:7px;border:1px solid #E3DAF7;background:#FCFBFE"><span class="zh">答不了？</span><span class="en">Can’t answer?</span></button>
+                    <label style="margin-left:auto;display:flex;align-items:center;gap:5px;font-size:10.5px;font-weight:600;color:#5A6E75;padding:5px 10px;border-radius:7px;border:1px dashed #C4D0D5;background:#FAFBFC;cursor:pointer">📎 <span class="zh">附证据</span><span class="en">Evidence</span><input type="file" multiple onChange="{{ c.onFile }}" style="display:none"/></label>
+                  </div>
+                  <div style="display:{{ c.naOpenShow }};flex-direction:column;gap:6px;margin-top:9px;padding:11px 13px;background:#FCFBFE;border:1px solid #E3DAF7;border-radius:9px">
+                    <span style="font-size:10.5px;font-weight:700;color:#5B3FA8"><span class="zh">这题答不了，是因为 —— 选一个，平台会自动分流</span><span class="en">Why can’t you answer it? Pick one and we route it</span></span>
+                    <sc-for list="{{ c.naReasons }}" as="r" hint-placeholder-count="3">
+                      <button onClick="{{ r.pick }}" style="text-align:left;padding:8px 11px;border-radius:8px;background:#fff;border:1px solid #E3DAF7">
+                        <span style="display:block;font-size:11.5px;font-weight:700;color:#3E2A73">{{ r.zh }}</span>
+                        <span style="display:block;font-size:10px;color:#8397A0;margin-top:2px">{{ r.note }}</span>
+                      </button>
+                    </sc-for>
+                  </div>
+                  <div style="display:{{ c.blockShow }};flex-direction:column;gap:7px;margin-top:9px;padding:11px 13px;background:{{ c.blockBg }};border:1px solid #E3DAF7;border-radius:9px">
+                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                      <span style="font-size:9.5px;font-weight:800;padding:2px 9px;border-radius:5px;background:#fff;color:{{ c.blockFg }};border:1px solid currentColor">{{ c.blockSt }}</span>
+                      <span style="display:{{ c.blockToShow }};font-size:10.5px;color:#5A6E75"><span class="zh">对象</span><span class="en">To</span> <b style="color:#33484F">{{ c.blockTo }}</b> · <span class="zh">截止</span><span class="en">due</span> {{ c.blockDue }}</span>
+                      <button onClick="{{ c.blockClear }}" style="margin-left:auto;font-size:10px;font-weight:600;color:#9AABB1"><span class="zh">撤销标记</span><span class="en">Undo</span></button>
+                    </div>
+                    <span style="font-size:11px;color:#4C6169;line-height:1.55"><span class="zh">{{ c.blockZh }}</span><span class="en b">{{ c.blockEn }}</span></span>
+                    <button onClick="{{ c.dispatch }}" style="display:{{ c.dispatchShow }};align-self:flex-start;padding:7px 13px;border-radius:8px;background:#5B3FA8;color:#fff;font-size:11.5px;font-weight:700"><span class="zh">立即下发给供应商 →</span><span class="en">Dispatch to the supplier now →</span></button>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:4px;margin-top:8px">
+                    <span style="font-size:9.5px;font-weight:700;color:#8397A0"><span class="zh">支持信息（客户复核依据）</span><span class="en">Supporting information</span></span>
+                    <textarea value="{{ c.sup }}" onChange="{{ c.onSup }}" rows="2" placeholder="{{ c.supPh }}" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid {{ c.supBd }};background:{{ c.supBg }};font-size:11.5px;line-height:1.55;outline:none"></textarea>
+                    <div style="display:{{ c.filesShow }};flex-wrap:wrap;gap:6px;margin-top:2px">
+                      <sc-for list="{{ c.files }}" as="f" hint-placeholder-count="0">
+                        <span style="display:inline-flex;align-items:center;gap:6px;padding:3px 8px;border-radius:6px;background:#F1F9FC;border:1px solid #CFE9F2;font-size:10px;color:#0B4A5E;max-width:220px"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ f.name }}</span><button onClick="{{ f.remove }}" style="color:#7FA3AE;font-size:11px;flex-shrink:0">✕</button></span>
+                      </sc-for>
+                    </div>
+                  </div>
+                </div>
+              </sc-for>
+              <div style="display:{{ srvMoreShow }};align-items:center;gap:10px;justify-content:center;padding:6px 4px 2px">
+                <button onClick="{{ srvMoreGo }}" style="font-size:11.5px;font-weight:700;color:#0B3A82;background:#F2F6FD;border:1px solid #D7E3F6;border-radius:8px;padding:7px 15px">{{ srvMoreLabel }}</button>
+                <span style="font-size:10.5px;color:#9AABB1">{{ srvShownLabel }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="border-top:2px solid #0B3A82;position:sticky;top:136px">
+            <div class="chd" style="padding-bottom:11px"><h3 style="font-size:12.5px"><span class="zh">AI 作答面板</span><span class="en">AI panel</span></h3><span class="pill" style="background:#F2F6FD;color:#0B3A82">{{ srvSelNo }}</span></div>
+            <div style="padding:12px 15px 15px">
+              <div style="font-size:11px;color:#0B3A82;font-weight:700;line-height:1.5"><span class="zh">AI 已为你预填并给出依据</span><span class="en">AI pre-filled this and shows why</span></div>
+              <div style="font-size:9.5px;color:#9AABB1;font-weight:700;margin-top:11px;letter-spacing:.1em;text-transform:uppercase">{{ srvSelSub }}</div>
+              <div style="font-size:11.5px;color:#0F1E24;line-height:1.6;margin-top:4px">{{ srvSelQ }}</div>
+              <div style="margin-top:12px;padding:10px 12px;background:#F5F8FD;border:1px solid #DCE6F5;border-radius:9px">
+                <div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#0B3A82"><span class="zh">预填来源</span><span class="en">Prefill source</span> · {{ srvSelSrc }}</div>
+                <div style="font-size:11px;color:#33484F;line-height:1.55;margin-top:4px">{{ srvSelNote }}</div>
+              </div>
+              <div style="margin-top:10px;padding:10px 12px;background:#F7FAFB;border:1px solid #E6EBEE;border-radius:9px">
+                <div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">数据来自平台模块</span><span class="en">Source module</span></div>
+                <div style="font-size:11.5px;font-weight:700;color:#0B5B4A;margin-top:3px">{{ srvSelMod }}</div>
+              </div>
+              <div style="display:{{ srvSelGapShow }};margin-top:10px;padding:10px 12px;background:#FDF6F5;border:1px solid #EFD8D4;border-radius:9px">
+                <div style="display:flex;align-items:center;gap:7px">
+                  <span style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8A1E14"><span class="zh">整改建议</span><span class="en">Remediation</span></span>
+                  <span style="font-size:9px;font-weight:800;padding:1px 7px;border-radius:4px;background:#FBE9E7;color:#B0291D">{{ srvSelFix }}</span>
+                </div>
+                <div style="font-size:11px;color:#33484F;line-height:1.55;margin-top:4px">{{ srvSelGap }}</div>
+              </div>
+              <div style="display:{{ srvSelHollowShow }};margin-top:10px;padding:10px 12px;background:#FFF7EC;border:1px solid #F2D9AE;border-radius:9px">
+                <div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#A3620F"><span class="zh">空心的"是"</span><span class="en">Hollow "Yes"</span></div>
+                <div style="font-size:11px;color:#33484F;line-height:1.55;margin-top:4px"><span class="zh">答案为"是"但证据库无对应支持文件，客户抽查时无法举证。</span><span class="en">Answered "Yes" but no evidence on file — cannot be substantiated in an audit.</span></div>
+                <button onClick="{{ srvSelAsk }}" style="width:100%;margin-top:9px;padding:8px;border-radius:8px;background:#A3620F;color:#fff;font-size:11.5px;font-weight:700"><span class="zh">生成数据请求单补证据</span><span class="en">Create data request</span></button>
+              </div>
+              <div style="margin-top:11px;padding-top:10px;border-top:1px dashed #E6EBEE">
+                <div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">客户作答指引</span><span class="en">Guideline</span></div>
+                <div style="font-size:10.5px;color:#5A6E75;line-height:1.55;margin-top:3px">{{ srvSelGuide }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </sc-if>
+        </div>
+      </div>
+      </sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script></script>
+</body>
+</html>

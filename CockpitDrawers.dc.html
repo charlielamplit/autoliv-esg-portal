@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+  <div class="dw-wrap" data-kind="{{ drawer }}">
+    <div class="dw-back" onClick="{{ closeDrawer }}"></div>
+    <div class="dw-panel">
+      <div style="display:flex;align-items:center;gap:10px;padding:15px 18px;background:#fff;border-bottom:1px solid #E1E7EA;flex-shrink:0">
+        <span style="font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:{{ dwKindColor }}"><span class="zh">{{ dwKindZh }}</span><span class="en">{{ dwKindEn }}</span></span>
+        <button onClick="{{ closeDrawer }}" style="margin-left:auto;width:28px;height:28px;border-radius:7px;background:#F3F6F7;color:#4C6169;font-size:15px">✕</button>
+      </div>
+      <div style="flex:1;overflow-y:auto;padding:18px">
+        <sc-if value="{{ dwOn.cd }}" hint-placeholder-val="{{ false }}">
+        <div class="dwd cd">
+          <div style="display:flex;align-items:flex-start;gap:12px">
+            <div style="flex:1;min-width:0">
+              <h2 style="margin:0;font-size:18px;font-weight:800;line-height:1.25">{{ cdName }}</h2>
+              <div style="font-size:11px;color:#8397A0;font-family:Manrope;margin-top:3px">{{ cdCode }} · {{ cdCat }}</div>
+            </div>
+            <span style="font-size:9.5px;font-weight:800;padding:3px 10px;border-radius:5px;background:{{ cdStBg }};color:{{ cdStFg }};flex-shrink:0">{{ cdStZh }}</span>
+          </div>
+          <div style="background:#FBFAFE;border:1px solid #E3DAF7;border-radius:11px;padding:12px 14px;margin-top:13px">
+            <div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#5B3FA8"><span class="zh">回卷状态</span><span class="en">Reply status</span></div>
+            <div style="font-size:12px;color:#33484F;line-height:1.6;margin-top:5px">{{ cdReply }}</div>
+            <div style="font-size:10.5px;color:#8397A0;margin-top:6px;padding-top:6px;border-top:1px dashed #E3DAF7"><span class="zh">对接人</span><span class="en">Contact</span> {{ cdContact }}</div>
+          </div>
+          <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0;margin:16px 0 8px"><span class="zh">引入尽调 5 步</span><span class="en">Five onboarding checks</span></div>
+          <div style="background:#fff;border:1px solid #E1E7EA;border-radius:10px;padding:5px 13px">
+            <sc-for list="{{ cdSteps }}" as="st" hint-placeholder-count="5">
+              <div style="display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px dashed #EDF1F3">
+                <span style="width:19px;height:19px;border-radius:50%;background:{{ st.dotBg }};color:{{ st.dotFg }};font-size:9.5px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">{{ st.mark }}</span>
+                <div style="flex:1;min-width:0">
+                  <div style="font-size:11.5px;font-weight:700;color:#0F1E24"><span class="zh">{{ st.zh }}</span><span class="en">{{ st.en }}</span></div>
+                  <div style="font-size:10.5px;color:{{ st.noteFg }};line-height:1.5;margin-top:2px">{{ st.note }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px">
+            <button onClick="{{ cdSend }}" style="display:{{ cdSendShow }};padding:10px 15px;border-radius:9px;background:#5B3FA8;color:#fff;font-size:12px;font-weight:700"><span class="zh">发出自评问卷 →</span><span class="en">Send the self-assessment →</span></button>
+            <button onClick="{{ cdChase }}" style="display:{{ cdChaseShow }};padding:10px 15px;border-radius:9px;background:#fff;border:1px solid #E3DAF7;color:#5B3FA8;font-size:12px;font-weight:700"><span class="zh">催办 / 改期</span><span class="en">Chase</span></button>
+            <button onClick="{{ cdCollect }}" style="display:{{ cdCollectShow }};padding:10px 15px;border-radius:9px;background:#5B3FA8;color:#fff;font-size:12px;font-weight:700"><span class="zh">（演示）收卷并打分 →</span><span class="en">(Demo) collect &amp; score →</span></button>
+            <button onClick="{{ cdAdmit }}" style="display:{{ cdAdmitShow }};padding:10px 15px;border-radius:9px;background:#0B5B4A;color:#fff;font-size:12px;font-weight:700"><span class="zh">准入并加入主数据清单 →</span><span class="en">Admit to master data →</span></button>
+          </div>
+          <div style="font-size:10.5px;color:#9AABB1;line-height:1.55;margin-top:12px"><span class="zh">准入前这家不出现在在册清单，也不进入 {{ supN }} 家统计、达标率分母和分级分布 —— 避免用一份还没回来的问卷去拉高或拉低供应链整体表现。</span><span class="en b">Until admitted it stays out of the active list, the {{ supN }}-supplier count, every compliance denominator and the grade histogram.</span></div>
+        </div>
+        </sc-if>
+        <sc-if value="{{ dwOn.si }}" hint-placeholder-val="{{ false }}">
+        <div class="dwd si">
+          <div style="background:linear-gradient(150deg,#F2F6FD,#fff);border:1px solid #D7E3F6;border-radius:12px;padding:14px 16px">
+            <div style="font-size:16px;font-weight:800"><span class="zh">导入新问卷</span><span class="en">Import a new survey</span></div>
+            <div style="font-size:11.5px;color:#33484F;line-height:1.6;margin-top:6px"><span class="zh">把客户发来的原件（Excel / PDF / 邮件附件 / 门户链接）解析成可逐题作答、可计分的卷。全程四步，约 40 秒。</span><span class="en b">Turn the customer’s raw file (Excel, PDF, email attachment or portal link) into an answerable, scoreable survey. Four steps, about 40 seconds.</span></div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:0;margin-top:16px">
+            <sc-for list="{{ siSteps }}" as="p" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;gap:0;flex:{{ p.flex }};min-width:0">
+                <div style="display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0;width:{{ p.w }}">
+                  <span style="width:22px;height:22px;border-radius:50%;background:{{ p.dotBg }};color:{{ p.dotFg }};border:1.5px solid {{ p.dotBd }};display:flex;align-items:center;justify-content:center;font-family:Manrope;font-size:10px;font-weight:800">{{ p.mark }}</span>
+                  <span style="font-size:9.5px;font-weight:{{ p.fw }};color:{{ p.fg }};white-space:nowrap"><span class="zh">{{ p.zh }}</span><span class="en">{{ p.en }}</span></span>
+                </div>
+                <span style="display:{{ p.barShow }};flex:1;height:2px;background:{{ p.barBg }};margin:0 4px 16px;border-radius:2px"></span>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="display:{{ si1Show }};flex-direction:column;gap:14px;margin-top:18px">
+            <div>
+              <div style="font-size:11px;font-weight:700;color:#33484F;margin-bottom:7px"><span class="zh">1 · 这份卷来自哪家客户？</span><span class="en">1 · Which customer sent it?</span></div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px">
+                <sc-for list="{{ srvImpCusts }}" as="u" hint-placeholder-count="4">
+                  <button onClick="{{ u.pick }}" style="font-size:11.5px;font-weight:{{ u.fw }};padding:7px 13px;border-radius:8px;background:{{ u.bg }};border:1px solid {{ u.bd }};color:{{ u.fg }}">{{ u.label }}</button>
+                </sc-for>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:#33484F;margin-bottom:7px"><span class="zh">2 · 上传原件</span><span class="en">2 · Upload the source file</span></div>
+              <div onClick="{{ srvImpDrop }}" style="border:1.5px dashed {{ srvImpDropBd }};background:{{ srvImpDropBg }};border-radius:11px;padding:22px 16px;text-align:center;cursor:pointer">
+                <div style="font-size:20px;color:#0B3A82;line-height:1">⤓</div>
+                <div style="font-size:12px;font-weight:700;color:#0B3A82;margin-top:6px">{{ srvImpFileLabel }}</div>
+                <div style="font-size:10.5px;color:#8397A0;margin-top:3px">{{ srvImpFileSub }}</div>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:9px">
+                <span style="font-size:10px;font-weight:600;padding:3px 8px;border-radius:5px;background:#fff;border:1px solid #E1E7EA;color:#8397A0">Excel .xlsx</span>
+                <span style="font-size:10px;font-weight:600;padding:3px 8px;border-radius:5px;background:#fff;border:1px solid #E1E7EA;color:#8397A0">PDF</span>
+                <span style="font-size:10px;font-weight:600;padding:3px 8px;border-radius:5px;background:#fff;border:1px solid #E1E7EA;color:#8397A0"><span class="zh">邮件附件</span><span class="en">Email attachment</span></span>
+                <span style="font-size:10px;font-weight:600;padding:3px 8px;border-radius:5px;background:#fff;border:1px solid #E1E7EA;color:#8397A0"><span class="zh">客户门户链接</span><span class="en">Portal link</span></span>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:{{ si2Show }};flex-direction:column;gap:12px;margin-top:18px">
+            <div style="display:flex;align-items:center;gap:10px;background:#F7FAFD;border:1px solid #D7E3F6;border-radius:11px;padding:12px 14px">
+              <span style="width:26px;height:26px;border-radius:8px;background:#0B3A82;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">✦</span>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:11.5px;font-weight:700;color:#0B3A82"><span class="zh">AI 正在读原件并逐题结构化</span><span class="en">AI is reading and structuring the file</span></div>
+                <div style="font-size:10.5px;color:#5A6E75;margin-top:2px">{{ srvImpFileLabel }} · {{ siCustLabel }}</div>
+              </div>
+            </div>
+            <sc-for list="{{ siParse }}" as="p" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;gap:10px;padding:10px 13px;background:#fff;border:1px solid #E6EBEE;border-radius:10px">
+                <span style="width:18px;height:18px;border-radius:50%;background:{{ p.bg }};color:{{ p.fg }};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0">✓</span>
+                <span style="font-size:11.5px;color:#33484F;flex:1"><span class="zh">{{ p.zh }}</span><span class="en">{{ p.en }}</span></span>
+                <span style="font-family:Manrope;font-size:12.5px;font-weight:800;color:{{ p.numFg }}">{{ p.n }}</span>
+              </div>
+            </sc-for>
+            <div style="display:flex;align-items:flex-start;gap:9px;background:#FFF7EC;border:1px solid #F2D9AE;border-radius:10px;padding:11px 13px">
+              <span style="font-size:12px;color:#A3620F;flex-shrink:0">⚑</span>
+              <span style="font-size:11px;color:#A3620F;line-height:1.55"><span class="zh"><b>6 题</b>低置信或未能识别 —— 已挑出，进入作答后会排在最前，逐题人工确认后才计入得分。</span><span class="en b"><b>6 items</b> are low-confidence or unrecognised — they are flagged, sorted first in the answering view, and only count towards the score once confirmed.</span></span>
+            </div>
+          </div>
+
+          <div style="display:{{ si3Show }};flex-direction:column;gap:12px;margin-top:18px">
+            <div style="background:#fff;border:1px solid #E6EBEE;border-radius:11px;padding:14px 15px">
+              <div style="display:flex;align-items:baseline;gap:7px">
+                <span style="font-family:Manrope;font-size:30px;font-weight:800;letter-spacing:-.03em;color:#0B3A82;line-height:1">83</span>
+                <span style="font-size:12px;color:#5A6E75;font-weight:600">/ 112 <span class="zh">题已自动预填</span><span class="en">items pre-filled</span></span>
+                <span style="margin-left:auto;font-size:9.5px;font-weight:700;padding:3px 9px;border-radius:5px;background:#EAF7EA;color:#1F6B32">74%</span>
+              </div>
+              <div style="display:flex;height:8px;border-radius:4px;overflow:hidden;margin-top:11px;background:#EEF2F4">
+                <div style="width:32%;background:#045B75"></div><div style="width:24%;background:#0B3A82"></div><div style="width:18%;background:#5B3FA8"></div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:7px;margin-top:11px">
+                <sc-for list="{{ siFill }}" as="f" hint-placeholder-count="4">
+                  <div style="display:flex;align-items:center;gap:9px">
+                    <span style="width:8px;height:8px;border-radius:2px;background:{{ f.c }};flex-shrink:0"></span>
+                    <span style="font-size:11px;color:#33484F;flex:1;min-width:0"><span class="zh">{{ f.zh }}</span><span class="en b">{{ f.en }}</span></span>
+                    <span style="font-family:Manrope;font-size:12px;font-weight:800;color:{{ f.c }};flex-shrink:0">{{ f.n }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:9px;background:#FDF6F5;border:1px solid #E9C9C4;border-radius:10px;padding:11px 13px">
+              <span style="font-size:12px;color:#8A1E14;flex-shrink:0">⚠</span>
+              <span style="font-size:11px;color:#8A1E14;line-height:1.55"><span class="zh"><b>17 项</b>为该客户的最低要求（红线）—— 任一不达标即影响供货资格，作答时会单独标红并要求上传证据。</span><span class="en b"><b>17 items</b> are this customer’s minimum requirements — any miss affects sourcing eligibility; they are flagged and require evidence.</span></span>
+            </div>
+          </div>
+
+          <div style="display:{{ si4Show }};flex-direction:column;gap:12px;margin-top:18px">
+            <div style="background:#F2FAF7;border:1px solid #BFE3D6;border-radius:11px;padding:15px 16px">
+              <div style="font-size:13px;font-weight:800;color:#0B5B4A"><span class="zh">✓ 可答卷已生成</span><span class="en">✓ Answerable survey created</span></div>
+              <div style="font-size:11.5px;color:#33484F;line-height:1.6;margin-top:6px"><span class="zh">112 题已按 5 大支柱归类并进入收件箱；83 题预填、29 题待人工。现在可以直接开始逐题作答，答不了的会在「得分与传导」页汇成缺口传给采购。</span><span class="en b">112 items are classified into 5 pillars and added to the inbox; 83 pre-filled, 29 need a human. Whatever you cannot answer becomes a gap handed to sourcing on the “score &amp; cascade” tab.</span></div>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:9px;margin-top:20px;padding-top:14px;border-top:1px solid #E6EBEE">
+            <button onClick="{{ siBack }}" style="display:{{ siBackShow }};padding:10px 15px;border-radius:9px;background:#fff;border:1px solid #D5DFE3;color:#5A6E75;font-size:12px;font-weight:600"><span class="zh">← 上一步</span><span class="en">← Back</span></button>
+            <button onClick="{{ srvImportNext }}" style="flex:1;padding:11px;border-radius:9px;background:{{ srvImpBtnBg }};color:#fff;font-size:12.5px;font-weight:700">{{ srvImpBtn }}</button>
+          </div>
+        </div>
+        </sc-if>
+        <sc-if value="{{ dwOn.r3 }}" hint-placeholder-val="{{ false }}">
+        <div class="dwd r3">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#0B5B4A;background:#EDF9F4;border:1px solid #CFE8DE;border-radius:4px;padding:2px 7px">{{ dwr3.id }}</span>
+            <span style="font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:5px;background:{{ dwr3.tBg }};color:{{ dwr3.tFg }}">{{ dwr3.tLabel }}</span>
+            <span style="margin-left:auto;font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:5px;background:#F0F3F5;color:#5A6E75">{{ dwr3.cat }}</span>
+          </div>
+          <h2 style="margin:10px 0 0;font-size:16.5px;font-weight:800;line-height:1.32">{{ dwr3.title }}</h2>
+          <div style="font-size:11px;color:#8397A0;margin-top:3px;line-height:1.45">{{ dwr3.titleAlt }}</div>
+
+          <div style="display:{{ dwr3.measShow }};flex-direction:column;background:#fff;border:1px solid #E1E7EA;border-radius:12px;padding:14px 16px;margin-top:13px">
+            <div style="display:flex;align-items:baseline;gap:9px">
+              <div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">本项达标率 · 双口径</span><span class="en">Pass rate · dual basis</span></div>
+              <span style="margin-left:auto;font-size:10px;color:#9AABB1"><span class="zh">分母 327 家（本轮起算在册）</span><span class="en">Denominator 327 at cycle start</span></span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px">
+              <div>
+                <div style="display:flex;align-items:baseline;gap:6px"><span style="font-family:Manrope;font-size:31px;font-weight:800;letter-spacing:-.03em;line-height:1;color:{{ dwr3.c1 }}">{{ dwr3.p1 }}</span><span style="font-size:11px;color:#5A6E75;font-weight:600"><span class="zh">按家数</span><span class="en">by count</span></span></div>
+                <div style="height:8px;border-radius:3px;background:#EEF2F4;overflow:hidden;margin-top:8px"><div style="width:{{ dwr3.w1 }};height:100%;background:{{ dwr3.c1 }};border-radius:3px"></div></div>
+                <div style="font-size:10.5px;color:#5A6E75;margin-top:6px"><span class="zh">{{ dwr3.passN }} / {{ dwr3.respN }} 家应答中达标</span><span class="en b">{{ dwr3.passN }} of {{ dwr3.respN }} responders pass</span></div>
+              </div>
+              <div>
+                <div style="display:flex;align-items:baseline;gap:6px"><span style="font-family:Manrope;font-size:31px;font-weight:800;letter-spacing:-.03em;line-height:1;color:#0B5B4A">{{ dwr3.p2 }}</span><span style="font-size:11px;color:#5A6E75;font-weight:600"><span class="zh">按采购额加权</span><span class="en">spend-weighted</span></span></div>
+                <div style="height:8px;border-radius:3px;background:#F2F6F5;overflow:hidden;margin-top:8px"><div style="width:{{ dwr3.w2 }};height:100%;background:#7ED0B4;border-radius:3px"></div></div>
+                <div style="font-size:10.5px;color:#5A6E75;margin-top:6px"><span class="zh">达标供应商合计 {{ dwr3.passSpend }} 年采购额</span><span class="en b">{{ dwr3.passSpend }} of annual spend passes</span></div>
+              </div>
+            </div>
+            <div style="margin-top:15px;padding-top:13px;border-top:1px dashed #EDF1F3">
+              <div style="display:flex;height:12px;border-radius:4px;overflow:hidden;background:#EEF2F4">
+                <sc-for list="{{ dwr3.segs }}" as="g" hint-placeholder-count="3"><span style="width:{{ g.w }};background:{{ g.color }}"></span></sc-for>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:13px;margin-top:9px">
+                <sc-for list="{{ dwr3.segs }}" as="g" hint-placeholder-count="3">
+                  <span style="display:flex;align-items:center;gap:5px;font-size:10.5px;color:#5A6E75"><span style="width:8px;height:8px;border-radius:2px;background:{{ g.color }}"></span>{{ g.label }} <b style="font-family:Manrope;color:#0F1E24">{{ g.n }}</b></span>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:{{ dwr3.unmeasShow }};flex-direction:column;background:#fff;border:1px solid {{ dwr3.emptyBd }};border-radius:12px;padding:14px 16px;margin-top:13px">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="width:8px;height:8px;border-radius:50%;background:{{ dwr3.emptyFg }}"></span>
+              <div style="font-size:13px;font-weight:800;color:{{ dwr3.emptyFg }}">{{ dwr3.emptyTitle }}</div>
+            </div>
+            <div style="display:{{ dwr3.covShow }};margin-top:11px">
+              <div style="display:flex;align-items:center;gap:9px">
+                <div style="flex:1;height:8px;border-radius:3px;background:#EEF2F4;overflow:hidden"><div style="width:{{ dwr3.covW }};height:100%;background:#C4D0D5;border-radius:3px"></div></div>
+                <span style="font-family:Manrope;font-size:12px;font-weight:800;color:#5A6E75">{{ dwr3.cov }}</span>
+              </div>
+              <div style="font-size:10px;color:#9AABB1;margin-top:5px"><span class="zh">只有回收率，没有达标率 —— 灰色即表示"交了但没判"</span><span class="en b">Coverage only — returned but never judged</span></div>
+            </div>
+            <p style="font-size:11.5px;color:#33484F;line-height:1.6;margin:11px 0 0">{{ dwr3.emptyBody }}</p>
+            <div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0;margin:14px 0 8px"><span class="zh">要能算达标率，还缺这三件</span><span class="en">Three things missing before a pass rate exists</span></div>
+            <div style="display:flex;flex-direction:column;gap:7px">
+              <sc-for list="{{ dwr3.todo }}" as="t" hint-placeholder-count="3">
+                <div style="display:flex;align-items:flex-start;gap:8px;font-size:11.5px;color:#33484F;line-height:1.5"><span style="width:15px;height:15px;border-radius:4px;border:1.5px dashed #C4D0D5;flex-shrink:0;margin-top:1px"></span><span>{{ t.text }}</span></div>
+              </sc-for>
+            </div>
+            <button onClick="{{ dwr3.toLedger }}" style="width:100%;margin-top:13px;padding:9px;border-radius:9px;background:#0B5B4A;color:#fff;font-size:12px;font-weight:700"><span class="zh">去全量要求挂判定口径与周期 →</span><span class="en">Set the verdict basis in the ledger →</span></button>
+          </div>
+
+          <div style="background:#fff;border:1px solid #E1E7EA;border-radius:12px;padding:13px 15px;margin-top:12px">
+            <div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">怎么算达标 · 判定口径</span><span class="en">What counts as compliant</span></div>
+            <p style="font-size:11.5px;color:#33484F;line-height:1.62;margin:8px 0 0">{{ dwr3.defined }}</p>
+            <div style="display:flex;flex-direction:column;gap:0;margin-top:10px;border-top:1px dashed #EDF1F3">
+              <sc-for list="{{ dwr3.rules }}" as="r" hint-placeholder-count="4">
+                <div style="display:grid;grid-template-columns:96px 1fr;gap:10px;padding:8px 0;border-bottom:1px dashed #EDF1F3;font-size:11.5px;align-items:baseline">
+                  <span style="color:#8397A0;font-weight:600">{{ r.k }}</span>
+                  <span style="color:{{ r.fg }};font-weight:{{ r.fw }};line-height:1.5">{{ r.v }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="display:{{ dwr3.measShow }};flex-direction:column;background:#fff;border:1px solid #E1E7EA;border-radius:12px;padding:12px 15px;margin-top:12px">
+            <div style="display:flex;align-items:baseline;gap:8px">
+              <div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">缺口与帮扶</span><span class="en">Gap & support</span></div>
+              <span style="margin-left:auto;font-size:10.5px;color:#5A6E75"><b style="font-family:Manrope;color:#B0291D">{{ dwr3.gapN }}</b><span class="zh"> 家未达标 · </span><span class="en"> short · </span><b style="font-family:Manrope">{{ dwr3.gapSpend }}</b></span>
+            </div>
+            <div style="font-size:11.5px;color:#33484F;line-height:1.55;margin-top:7px"><span class="zh">帮扶服务：</span><span class="en">Support: </span><b>{{ dwr3.svc }}</b></div>
+            <div style="font-size:10.5px;color:#8397A0;line-height:1.5;margin-top:5px"><span class="zh">名单、催办、整改与豁免在管理页处理 —— 抽屉只做速览。</span><span class="en b">The worklist, chasing, CAPs and exemptions live on the management page.</span></div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #E1E7EA;border-radius:11px;padding:13px 15px;margin-top:12px">
+            <div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">这条要求从哪来 / 到哪去</span><span class="en">Where it comes from, where it goes</span></div>
+            <div style="font-size:11.5px;color:#33484F;line-height:1.6;margin-top:7px"><span class="zh">{{ dwr3.chainZh }}</span><span class="en b">{{ dwr3.chainEn }}</span></div>
+          </div>
+          <button onClick="{{ dwr3.toQ }}" style="display:{{ dwr3.qShow }};width:100%;margin-top:12px;padding:10px;border-radius:9px;background:#0B5B4A;color:#fff;font-size:12px;font-weight:700"><span class="zh">查看该问卷正文（9 题 · 供应商视角）→</span><span class="en">Open the survey itself (9 items, supplier view) →</span></button>
+          <div style="display:flex;gap:8px;margin-top:14px">
+            <button onClick="{{ dwr3.toCas }}" style="display:{{ dwr3.casShow }};flex:1;padding:10px;border-radius:9px;background:#0B3A82;color:#fff;font-size:12px;font-weight:700">{{ dwr3.casBtn }}</button>
+            <button onClick="{{ dwr3.toManage }}" style="flex:1;padding:10px;border-radius:9px;background:#0B5B4A;color:#fff;font-size:12px;font-weight:700"><span class="zh">管理本项（名单 · 催办 · 整改）→</span><span class="en">Manage this requirement →</span></button>
+          </div>
+          <div style="font-size:10px;color:#9AABB1;margin-top:11px;line-height:1.5"><span class="zh">覆盖数为演示值。要求正文与承接系统来自 D0′ 数据包的 37 项要求集。</span><span class="en b">Coverage is demo data; the requirement text and owning system come from the 37-item set in the D0′ pack.</span></div>
+        </div>
+        </sc-if>
+        <sc-if value="{{ dwOn.gl }}" hint-placeholder-val="{{ false }}">
+        <div class="dwd gl">
+          <div style="background:linear-gradient(150deg,#F2F6FD,#fff);border:1px solid #D7E3F6;border-radius:12px;padding:14px 16px">
+            <div style="font-size:16px;font-weight:800"><span class="zh">数字口径说明 · 勾稽链</span><span class="en">Number definitions · reconciliation</span></div>
+            <div style="font-size:11.5px;color:#5A6E75;line-height:1.6;margin-top:5px"><span class="zh">同一件事在不同屏上会看到不同的数字 —— 因为口径（范围）不同。下面三组把关键数字串成链条，每个数标明它到底数的是什么。</span><span class="en b">The same subject shows different counts on different screens because each number has its own scope. Below, the key figures are chained with the scope of each spelled out.</span></div>
+          </div>
+          <sc-for list="{{ glossGroups }}" as="g" hint-placeholder-count="3">
+            <div style="background:#fff;border:1px solid #E1E7EA;border-radius:12px;padding:14px 16px;margin-top:12px">
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="width:8px;height:8px;border-radius:50%;background:{{ g.color }}"></span>
+                <span style="font-size:13px;font-weight:800"><span class="zh">{{ g.zh }}</span><span class="en">{{ g.en }}</span></span>
+                <span style="margin-left:auto;font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:5px;background:#F0F3F5;color:#5A6E75">{{ g.tag }}</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:0;margin-top:11px">
+                <sc-for list="{{ g.nodes }}" as="n" hint-placeholder-count="3">
+                  <div style="display:flex;gap:12px;padding:9px 0;border-bottom:1px dashed #EDF1F3">
+                    <span style="font-family:Manrope;font-size:20px;font-weight:800;letter-spacing:-.02em;color:{{ g.color }};width:62px;flex-shrink:0;text-align:right;line-height:1.15">{{ n.v }}</span>
+                    <div style="flex:1;min-width:0">
+                      <div style="font-size:12px;font-weight:700"><span class="zh">{{ n.zh }}</span><span class="en">{{ n.en }}</span></div>
+                      <div style="font-size:10.5px;color:#8397A0;line-height:1.5;margin-top:2px"><span class="zh">{{ n.szh }}</span><span class="en b">{{ n.sen }}</span></div>
+                      <div style="font-size:9.5px;color:#B6C4C9;font-family:Manrope;margin-top:2px">{{ n.where }}</div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="font-size:10.5px;color:#5A6E75;line-height:1.55;margin-top:9px;background:#F7FAFB;border-radius:8px;padding:8px 10px"><span class="zh">{{ g.notezh }}</span><span class="en b">{{ g.noteen }}</span></div>
+            </div>
+          </sc-for>
+          <div style="font-size:10px;color:#9AABB1;margin-top:12px;line-height:1.55"><span class="zh">本演示的口径链条来自 D0/D0′ 数据包；实际部署时由平台按主数据与问卷回收状态实时生成，并作为报告脚注一起导出。</span><span class="en b">In this demo the chains come from the D0/D0′ data pack; in production the platform derives them live and exports them as report footnotes.</span></div>
+        </div>
+        </sc-if>
+        <sc-if value="{{ dwOn.ab }}" hint-placeholder-val="{{ false }}">
+        <div class="dwd ab">
+          <div style="display:flex;align-items:flex-start;gap:13px">
+            <div style="width:46px;height:46px;border-radius:11px;background:{{ dwab.tierColor }};color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;font-family:Manrope">{{ dwab.pass }}/9</div>
+            <div style="flex:1">
+              <div style="font-size:16px;font-weight:800;line-height:1.25;font-family:Manrope">{{ dwab.n }}</div>
+              <div style="font-size:11px;color:#8397A0;margin-top:2px"><span class="zh">直接材料供应商 · 恒定匿名编号</span><span class="en">Direct-material supplier · anonymized ID</span></div>
+            </div>
+            <span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:6px;background:{{ dwab.tierBg }};color:{{ dwab.tierColor }};flex-shrink:0">{{ dwab.tierLabel }}</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px">
+            <div style="background:#fff;border:1px solid #E1E7EA;border-radius:9px;padding:10px 11px"><div style="font-size:9.5px;color:#8397A0;font-weight:600"><span class="zh">年采购额</span><span class="en">Annual spend</span></div><div style="font-size:15px;font-weight:800;font-family:Manrope;margin-top:2px">{{ dwab.spend }}</div></div>
+            <div style="background:#fff;border:1px solid #E1E7EA;border-radius:9px;padding:10px 11px"><div style="font-size:9.5px;color:#8397A0;font-weight:600"><span class="zh">采购额排名</span><span class="en">Spend rank</span></div><div style="font-size:15px;font-weight:800;font-family:Manrope;margin-top:2px;color:{{ dwab.rankColor }}">{{ dwab.rank }}</div></div>
+            <div style="background:#fff;border:1px solid #E1E7EA;border-radius:9px;padding:10px 11px"><div style="font-size:9.5px;color:#8397A0;font-weight:600"><span class="zh">绿电比例</span><span class="en">RE share</span></div><div style="font-size:15px;font-weight:800;font-family:Manrope;margin-top:2px;color:{{ dwab.reColor }}">{{ dwab.re }}</div></div>
+          </div>
+          <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0;margin:16px 0 8px"><span class="zh">年度气候问卷作答 · 逐项达标</span><span class="en">Climate survey · item by item</span></div>
+          <div style="background:#fff;border:1px solid #E1E7EA;border-radius:11px;overflow:hidden">
+            <sc-for list="{{ dwab.items }}" as="i" hint-placeholder-count="9">
+              <div style="display:flex;align-items:center;gap:10px;padding:9px 12px;border-bottom:1px dashed #EDF1F3;background:{{ i.bg }}">
+                <span style="width:17px;height:17px;border-radius:5px;background:{{ i.markBg }};color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0">{{ i.mark }}</span>
+                <div style="flex:1;min-width:0"><div style="font-size:11.5px;font-weight:600;line-height:1.35">{{ i.label }}</div><div style="font-size:9.5px;color:#8397A0;margin-top:1px">{{ i.svc }}</div></div>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;color:#045B75;background:#ECFBFE;padding:2px 6px;border-radius:4px;flex-shrink:0">{{ i.req }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="margin-top:14px;background:linear-gradient(150deg,#EDF9F4,#fff);border:1px solid #BFE3D6;border-radius:11px;padding:13px 15px">
+            <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#0B5B4A"><span class="zh">AI 帮扶建议</span><span class="en">AI support plan</span></div>
+            <div style="font-size:11.5px;color:#33484F;line-height:1.6;margin-top:6px">{{ dwab.advice }}</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px">
+              <sc-for list="{{ dwab.svcs }}" as="v" hint-placeholder-count="2"><span style="font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:6px;background:#0B5B4A;color:#fff">{{ v }}</span></sc-for>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:14px">
+            <button onClick="{{ dwabPlan }}" style="flex:1;padding:10px;border-radius:9px;background:#0B5B4A;color:#fff;font-size:12px;font-weight:700"><span class="zh">下发帮扶方案</span><span class="en">Dispatch support plan</span></button>
+            <button onClick="{{ dwabReq }}" style="flex:1;padding:10px;border-radius:9px;background:#fff;border:1px solid #D5DFE3;color:#33484F;font-size:12px;font-weight:600"><span class="zh">发起数据请求</span><span class="en">Request data</span></button>
+          </div>
+          <div style="margin-top:12px;border-top:1px dashed #D5DFE3;padding-top:12px">
+            <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">同一家供应商 · 跨屏贯通</span><span class="en">Same supplier across screens</span></div>
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <button onClick="{{ dwabToPortal }}" style="flex:1;padding:10px 11px;border-radius:9px;background:#F8F6FD;border:1px solid #DED5F5;color:#3C2A73;font-size:11.5px;font-weight:700;text-align:left"><span class="zh">查看该供应商门户视角 →</span><span class="en">Its portal view →</span></button>
+              <button onClick="{{ dwabToCas }}" style="flex:1;padding:10px 11px;border-radius:9px;background:#F3FAF7;border:1px solid #CFE8DE;color:#0B5B4A;font-size:11.5px;font-weight:700;text-align:left"><span class="zh">它收到的下发 →</span><span class="en">Requests to it →</span></button>
+            </div>
+          </div>
+          <div style="font-size:10px;color:#9AABB1;margin-top:11px;line-height:1.5"><span class="zh">供应商身份恒定匿名（ABC 编号），问卷作答与采购额为客户提供的真实统计数据。</span><span class="en">Supplier identity permanently anonymized; survey answers and spend are the client's real figures.</span></div>
+        </div>
+        </sc-if>
+        <sc-if value="{{ dwOn.s }}" hint-placeholder-val="{{ false }}">
+        <div class="dwd s">
+          <div style="display:flex;align-items:flex-start;gap:13px">
+            <div style="width:46px;height:46px;border-radius:11px;background:#002D6B;color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;flex-shrink:0">{{ dws.avatar }}</div>
+            <div style="flex:1">
+              <div style="font-size:16px;font-weight:800;line-height:1.25"><span class="nr">{{ dws.nameNr }}</span><span class="na">{{ dws.nameNa }}</span></div>
+              <div style="font-size:11px;color:#8397A0;font-family:Manrope;margin-top:2px">{{ dws.code }} · <span class="zh">{{ dws.catZh }}</span><span class="en">{{ dws.catEn }}</span> · {{ dws.tier }}</div>
+              <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:6px">
+                <span style="font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:5px;background:#F2F6FD;color:#0B3A82"><span class="zh">分级</span><span class="en">Grade</span> {{ dws.grade }}</span>
+                <span style="font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:5px;background:#F3FAF7;color:#0B5B4A"><span class="zh">年供货额</span><span class="en">Spend</span> {{ dws.spend }}</span>
+                <span style="font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:5px;background:{{ dws.passBg }};color:{{ dws.passFg }}"><span class="zh">要求达标</span><span class="en">Requirements passed</span> {{ dws.pass }}</span>
+                <span style="font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:5px;background:#FDF3E7;color:#A3620F"><span class="zh">风险</span><span class="en">Risk</span> {{ dws.riskLabel }}</span>
+              </div>
+            </div>
+            <div style="text-align:center;flex-shrink:0"><div style="font-family:Manrope;font-size:26px;font-weight:800;color:{{ dws.gradeColor }};line-height:1">{{ dws.grade }}</div><div style="font-size:9px;color:#8397A0;font-weight:600"><span class="zh">评级</span><span class="en">Grade</span></div></div>
+          </div>
+          <div style="background:#fff;border:1px solid #E1E7EA;border-radius:11px;padding:14px 15px;margin-top:14px">
+            <div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:11px;font-weight:700;color:#33484F"><span class="zh">可持续综合评分 · 按五类要求</span><span class="en">Sustainability score by requirement category</span></span><span style="font-family:Manrope;font-size:22px;font-weight:800;color:{{ dws.gradeColor }}">{{ dws.score }}<span style="font-size:11px;color:#9AABB1;font-weight:600">/100</span></span></div>
+            <div style="font-size:10px;color:#9AABB1;line-height:1.5;margin-top:4px"><span class="zh">= 这家在 37 项要求上的达标情况，硬性/新增 ×3 · 期望 ×1 加权</span><span class="en b">= this supplier's compliance across the 37 requirements, mandatory×3 / expected×1</span></div>
+            <div style="display:flex;flex-direction:column;gap:9px;margin-top:11px">
+              <sc-for list="{{ dws.breakdown }}" as="b" hint-placeholder-count="5">
+                <div><div style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:#33484F"><span><span class="zh">{{ b.zh }}</span><span class="en">{{ b.en }}</span> <span style="color:#9AABB1;font-weight:500">· {{ b.weight }}</span></span><span style="display:{{ b.missShow }};font-size:9px;font-weight:800;padding:1px 6px;border-radius:4px;background:#FBE9E7;color:#B0291D"><span class="zh">硬性缺 {{ b.miss }}</span><span class="en">{{ b.miss }} mandatory</span></span><span style="margin-left:auto;font-family:Manrope;color:{{ b.color }};font-weight:700">{{ b.val }}</span></div><div style="height:6px;background:#E6EBEE;border-radius:999px;margin-top:4px;overflow:hidden"><div style="width:{{ b.pct }};height:100%;background:{{ b.color }};border-radius:999px"></div></div></div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px">
+            <sc-for list="{{ dws.facts }}" as="f" hint-placeholder-count="4"><div style="background:#fff;border:1px solid #E1E7EA;border-radius:9px;padding:9px 11px"><div style="font-size:9.5px;color:#8397A0;font-weight:600"><span class="zh">{{ f.kzh }}</span><span class="en">{{ f.ken }}</span></div><div style="font-size:13px;font-weight:700;color:{{ f.color }};margin-top:2px;font-family:Manrope">{{ f.v }}</div></div></sc-for>
+          </div>
+          <div style="display:flex;align-items:center;gap:7px;margin:16px 0 8px"><span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">未达标的硬性要求</span><span class="en">Mandatory requirements missed</span></span><span style="font-family:Manrope;font-size:10px;font-weight:800;padding:1px 7px;border-radius:5px;background:#FBE9E7;color:#B0291D">{{ dws.missN }}</span><span style="margin-left:auto;font-size:9.5px;color:#9AABB1"><span class="zh">点开看要求原文与下发</span><span class="en">open the requirement</span></span></div>
+          <div style="display:{{ dws.missEmpty }};background:#F2FAF7;border:1px solid #BFE3D6;border-radius:9px;padding:11px 13px;font-size:11.5px;color:#0B5B4A"><span class="zh">硬性要求全部达标 —— 剩余差距都在期望项，不影响供货资格。</span><span class="en b">All mandatory requirements are met — the remaining gaps are expected-level only.</span></div>
+          <div style="display:flex;flex-direction:column;gap:7px">
+            <sc-for list="{{ dws.linked }}" as="l" hint-placeholder-count="3"><button onClick="{{ l.go }}" style="background:#fff;border:1px solid #E9C9C4;border-left:3px solid #DC3A2C;border-radius:9px;padding:9px 11px;display:flex;align-items:center;gap:9px;width:100%;text-align:left"><span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:#B0291D;background:#FBE9E7;padding:2px 6px;border-radius:4px;flex-shrink:0">{{ l.code }}</span><span style="font-size:11.5px;font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><span class="zh">{{ l.zh }}</span><span class="en">{{ l.en }}</span></span><span style="margin-left:auto;font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:5px;background:{{ l.bg }};color:{{ l.fg }};flex-shrink:0">{{ l.oem }}</span></button></sc-for>
+          </div>
+          <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0;margin:16px 0 8px"><span class="zh">近期动态</span><span class="en">Recent activity</span></div>
+          <div style="background:#fff;border:1px solid #E1E7EA;border-radius:9px;padding:6px 12px">
+            <sc-for list="{{ dws.timeline }}" as="t" hint-placeholder-count="3"><div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px dashed #EDF1F3"><span style="width:7px;height:7px;border-radius:50%;background:{{ t.dot }};margin-top:4px;flex-shrink:0"></span><div style="flex:1"><div style="font-size:11.5px;color:#33484F"><span class="zh">{{ t.zh }}</span><span class="en">{{ t.en }}</span></div><div style="font-size:9.5px;color:#9AABB1;font-family:Manrope">{{ t.date }}</div></div></div></sc-for>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:16px"><button onClick="{{ dws.openDataReq }}" style="flex:1;padding:9px;border-radius:8px;font-size:12px;font-weight:700;background:#002D6B;color:#fff"><span class="zh">发起数据请求</span><span class="en">Request data</span></button><button onClick="{{ dwsPlan }}" style="padding:9px 13px;border-radius:8px;font-size:12px;font-weight:600;background:#fff;border:1px solid #E1E7EA;color:#43585F"><span class="zh">整改计划</span><span class="en">Plan</span></button></div>
+          <div style="margin-top:14px;border-top:1px dashed #D5DFE3;padding-top:12px">
+            <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">同一家供应商 · 跨屏贯通</span><span class="en">Same supplier across screens</span></div>
+            <div style="display:flex;flex-direction:column;gap:7px;margin-top:8px">
+              <button onClick="{{ dws.toPortal }}" style="display:flex;align-items:center;gap:9px;text-align:left;padding:10px 12px;border-radius:9px;background:#F8F6FD;border:1px solid #DED5F5;width:100%">
+                <span style="width:22px;height:22px;border-radius:6px;background:#5B3FA8;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0">◉</span>
+                <span style="flex:1"><span style="display:block;font-size:12px;font-weight:700;color:#3C2A73"><span class="zh">查看该供应商门户视角</span><span class="en">Open its supplier-portal view</span></span><span style="display:block;font-size:10px;color:#7A6BA8;margin-top:1px"><span class="zh">它登录后看到的任务包与作答界面</span><span class="en">The task pack it sees after logging in</span></span></span>
+                <span style="color:#5B3FA8;font-weight:800">→</span>
+              </button>
+              <button onClick="{{ dws.toCascade }}" style="display:flex;align-items:center;gap:9px;text-align:left;padding:10px 12px;border-radius:9px;background:#F3FAF7;border:1px solid #CFE8DE;width:100%">
+                <span style="width:22px;height:22px;border-radius:6px;background:#0B5B4A;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0">↧</span>
+                <span style="flex:1"><span style="display:block;font-size:12px;font-weight:700;color:#0B5B4A"><span class="zh">它收到的下发</span><span class="en">Requests dispatched to it</span></span><span style="display:block;font-size:10px;color:#4C8577;margin-top:1px">{{ dws.casNote }}</span></span>
+                <span style="color:#0B5B4A;font-weight:800">→</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+        <sc-if value="{{ dwOn.r }}" hint-placeholder-val="{{ false }}">
+        <div class="dwd r">
+          <div style="display:flex;align-items:center;gap:8px"><span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;color:#045B75;background:#ECFBFE;padding:2px 7px;border-radius:4px">{{ dwr.code }}</span><span style="font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:5px;background:{{ dwr.stBg }};color:{{ dwr.stFg }}"><span class="zh">{{ dwr.stZh }}</span><span class="en">{{ dwr.stEn }}</span></span><span style="margin-left:auto;font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:5px;background:{{ dwr.oemBg }};color:{{ dwr.oemFg }}">{{ dwr.oem }}</span></div>
+          <h2 style="margin:10px 0 0;font-size:17px;font-weight:800;line-height:1.3"><span class="zh">{{ dwr.zh }}</span><span class="en">{{ dwr.en }}</span></h2>
+          <div style="background:#fff;border:1px solid #E1E7EA;border-radius:11px;padding:13px 15px;margin-top:14px">
+            <div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">原始条款文本</span><span class="en">Clause text</span></div>
+            <p style="font-size:12px;color:#33484F;line-height:1.6;margin:7px 0 0"><span class="zh">{{ dwr.clauseZh }}</span><span class="en b">{{ dwr.clauseEn }}</span></p>
+            <div style="font-size:10px;color:#9AABB1;font-family:Manrope;margin-top:8px;border-top:1px dashed #EDF1F3;padding-top:8px">{{ dwr.source }}</div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px">
+            <div style="background:#fff;border:1px solid #E1E7EA;border-radius:9px;padding:10px 12px"><div style="font-size:9.5px;color:#8397A0;font-weight:600"><span class="zh">当前值</span><span class="en">Current</span></div><div style="font-family:Manrope;font-size:16px;font-weight:800;color:{{ dwr.curColor }};margin-top:1px">{{ dwr.current }}</div></div>
+            <div style="background:#fff;border:1px solid #E1E7EA;border-radius:9px;padding:10px 12px"><div style="font-size:9.5px;color:#8397A0;font-weight:600"><span class="zh">目标值</span><span class="en">Target</span></div><div style="font-family:Manrope;font-size:16px;font-weight:800;color:#002D6B;margin-top:1px">{{ dwr.target }}</div></div>
+          </div>
+          <div style="background:#fff;border:1px solid #E1E7EA;border-radius:9px;padding:11px 13px;margin-top:12px;display:flex;flex-direction:column;gap:8px;font-size:12px">
+            <div style="display:flex;justify-content:space-between"><span style="color:#8397A0"><span class="zh">负责人</span><span class="en">Owner</span></span><b>{{ dwr.owner }}</b></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:#8397A0"><span class="zh">截止时间</span><span class="en">Due</span></span><b style="color:{{ dwr.dueColor }}">{{ dwr.due }}</b></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:#8397A0"><span class="zh">证据附件</span><span class="en">Evidence</span></span><span style="font-weight:600;color:#045B75">{{ dwr.evidence }}</span></div>
+          </div>
+          <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0;margin:16px 0 8px"><span class="zh">整改路径 · AI 建议</span><span class="en">Remediation · AI</span></div>
+          <div style="background:#fff;border:1px solid #E1E7EA;border-radius:9px;padding:8px 13px">
+            <sc-for list="{{ dwr.steps }}" as="s" hint-placeholder-count="3"><div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px dashed #EDF1F3"><span style="width:18px;height:18px;border-radius:50%;background:{{ s.numBg }};color:{{ s.numFg }};font-family:Manrope;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">{{ s.n }}</span><div style="font-size:11.5px;color:#33484F;line-height:1.45"><span class="zh">{{ s.zh }}</span><span class="en">{{ s.en }}</span></div></div></sc-for>
+          </div>
+          <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0;margin:16px 0 8px"><span class="zh">关联供应商</span><span class="en">Linked suppliers</span></div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{ dwr.suppliers }}" as="sp" hint-placeholder-count="3"><span style="font-size:10.5px;font-weight:600;padding:3px 9px;border-radius:6px;background:#ECFBFE;color:#045B75">{{ sp }}</span></sc-for></div>
+        </div>
+        </sc-if>
+        <sc-if value="{{ dwOn.a }}" hint-placeholder-val="{{ false }}">
+        <div class="dwd a">
+          <div style="display:flex;align-items:center;gap:8px"><span style="width:9px;height:9px;border-radius:50%;background:{{ dwa.dot }}"></span><span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;color:#8397A0">{{ dwa.code }}</span><span style="margin-left:auto;font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:5px;background:{{ dwa.prBg }};color:{{ dwa.prFg }}"><span class="zh">{{ dwa.prZh }}</span><span class="en">{{ dwa.prEn }}</span></span></div>
+          <h2 style="margin:10px 0 0;font-size:17px;font-weight:800;line-height:1.3"><span class="zh">{{ dwa.zh }}</span><span class="en">{{ dwa.en }}</span></h2>
+          <div style="font-size:11.5px;color:#8397A0;font-family:Manrope;margin-top:4px">{{ dwa.oem }} · {{ dwa.metric }}</div>
+          <div style="background:#fff;border:1px solid #E1E7EA;border-radius:11px;padding:13px 15px;margin-top:14px;font-size:12px;color:#33484F;line-height:1.6"><span class="zh">{{ dwa.descZh }}</span><span class="en b">{{ dwa.descEn }}</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px">
+            <div style="background:#fff;border:1px solid #E1E7EA;border-radius:9px;padding:10px 12px"><div style="font-size:9.5px;color:#8397A0;font-weight:600"><span class="zh">负责人</span><span class="en">Owner</span></div><div style="font-size:13px;font-weight:700;margin-top:1px">{{ dwa.owner }}</div></div>
+            <div style="background:#fff;border:1px solid #E1E7EA;border-radius:9px;padding:10px 12px"><div style="font-size:9.5px;color:#8397A0;font-weight:600"><span class="zh">截止</span><span class="en">Due</span></div><div style="font-size:13px;font-weight:700;margin-top:1px;color:{{ dwa.dueColor }}">{{ dwa.due }}</div></div>
+          </div>
+          <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0;margin:16px 0 8px"><span class="zh">处理清单</span><span class="en">Checklist</span></div>
+          <div style="background:#fff;border:1px solid #E1E7EA;border-radius:9px;padding:6px 13px">
+            <sc-for list="{{ dwa.checklist }}" as="c" hint-placeholder-count="3"><div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px dashed #EDF1F3;align-items:center"><span style="width:16px;height:16px;border-radius:5px;background:{{ c.boxBg }};color:#fff;font-size:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0">{{ c.mark }}</span><span style="font-size:11.5px;color:{{ c.textColor }};line-height:1.4"><span class="zh">{{ c.zh }}</span><span class="en">{{ c.en }}</span></span></div></sc-for>
+          </div>
+          <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0;margin:16px 0 8px"><span class="zh">活动记录</span><span class="en">Activity</span></div>
+          <div style="background:#fff;border:1px solid #E1E7EA;border-radius:9px;padding:6px 12px">
+            <sc-for list="{{ dwa.activity }}" as="t" hint-placeholder-count="2"><div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px dashed #EDF1F3"><span style="width:7px;height:7px;border-radius:50%;background:{{ t.dot }};margin-top:4px;flex-shrink:0"></span><div style="flex:1"><div style="font-size:11.5px;color:#33484F"><span class="zh">{{ t.zh }}</span><span class="en">{{ t.en }}</span></div><div style="font-size:9.5px;color:#9AABB1;font-family:Manrope">{{ t.date }}</div></div></div></sc-for>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:16px"><button onClick="{{ dwaMarkDone }}" style="flex:1;padding:9px;border-radius:8px;font-size:12px;font-weight:700;background:#002D6B;color:#fff"><span class="zh">标记完成</span><span class="en">Mark done</span></button><button onClick="{{ dwaAssign }}" style="padding:9px 13px;border-radius:8px;font-size:12px;font-weight:600;background:#fff;border:1px solid #E1E7EA;color:#43585F"><span class="zh">指派</span><span class="en">Assign</span></button></div>
+        </div>
+        </sc-if>
+        <sc-if value="{{ dwOn.rg }}" hint-placeholder-val="{{ false }}">
+        <div class="dwd rg">
+          <div style="display:flex;align-items:center;gap:8px"><span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;color:{{ dwrg.accentFg }};background:{{ dwrg.accentBg }};padding:2px 7px;border-radius:4px">{{ dwrg.code }}</span><span style="margin-left:auto;font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:5px;background:{{ dwrg.stBg }};color:{{ dwrg.stFg }}"><span class="zh">{{ dwrg.stZh }}</span><span class="en">{{ dwrg.stEn }}</span></span></div>
+          <h2 style="margin:10px 0 0;font-size:17px;font-weight:800;line-height:1.3"><span class="zh">{{ dwrg.zh }}</span><span class="en">{{ dwrg.en }}</span></h2>
+          <div style="font-size:11px;color:#8397A0;font-family:Manrope;margin-top:4px">{{ dwrg.origin }}</div>
+          <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:9px">
+            <span style="font-size:10px;font-weight:800;letter-spacing:-.03em;color:{{ dwrg.starFg }};font-family:Manrope">{{ dwrg.stars }}</span>
+            <span style="font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:5px;background:{{ dwrg.urgBg }};color:{{ dwrg.urgFg }}">{{ dwrg.urg }}</span>
+            <span style="font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:5px;background:{{ dwrg.inBg }};color:{{ dwrg.inFg }};border:1px solid {{ dwrg.inBd }}">{{ dwrg.inLabel }}</span>
+          </div>
+          <div style="display:{{ dwrg.applicShow }};flex-direction:column;gap:7px;margin-top:11px;padding:11px 13px;border-radius:10px;background:#F2F6FD;border:1px solid #D7E3F6">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+              <span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#0B3A82"><span class="zh">适用性判定</span><span class="en">Applicability</span></span>
+              <sc-for list="{{ dwrg.applicMkts }}" as="m" hint-placeholder-count="2">
+                <span style="font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:5px;background:{{ m.bg }};color:{{ m.fg }}">{{ m.label }}</span>
+              </sc-for>
+              <span style="margin-left:auto;display:flex;align-items:center;gap:5px;font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:5px;background:{{ dwrg.scBg }};color:{{ dwrg.scFg }};border:1px solid {{ dwrg.scBd }}"><span style="width:6px;height:6px;border-radius:50%;background:{{ dwrg.scDot }}"></span><span class="zh">{{ dwrg.scZh }}</span><span class="en">{{ dwrg.scEn }}</span></span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+              <span style="font-size:9.5px;color:#8397A0;font-weight:600"><span class="zh">压力来源</span><span class="en">Pressure from</span></span>
+              <sc-for list="{{ dwrg.srcTags }}" as="t" hint-placeholder-count="3">
+                <span style="font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:5px;background:{{ t.bg }};color:{{ t.fg }}"><span class="zh">{{ t.zh }}</span><span class="en">{{ t.en }}</span></span>
+              </sc-for>
+            </div>
+            <div style="font-size:11px;color:#33484F;line-height:1.55"><b style="font-weight:700"><span class="zh">判定依据：</span><span class="en">Tested on: </span></b>{{ dwrg.applicBasis }}</div>
+            <div style="font-size:11px;color:#0B3A82;font-weight:600;line-height:1.5">{{ dwrg.applicVerdict }}</div>
+          </div>
+          <div style="display:{{ dwrg.statusShow }};gap:8px;margin-top:10px;padding:10px 12px;border-radius:10px;background:#F3FAF7;border:1px solid #CFE8DE">
+            <div style="min-width:0">
+              <div style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#0B5B4A"><span class="zh">Autoliv 当前状态</span><span class="en">Autoliv status</span></div>
+              <div style="font-size:11.5px;color:#33484F;line-height:1.5;margin-top:3px">{{ dwrg.autolivStatus }}</div>
+            </div>
+          </div>
+          <div style="display:{{ dwrg.legacyShow }};background:#fff;border:1px solid #E1E7EA;border-radius:11px;padding:13px 15px;margin-top:12px;font-size:12px;color:#33484F;line-height:1.6"><span class="zh">{{ dwrg.summaryZh }}</span><span class="en b">{{ dwrg.summaryEn }}</span></div>
+          <div style="display:{{ dwrg.fourShow }};flex-direction:column;gap:9px;margin-top:12px">
+            <sc-for list="{{ dwrg.four }}" as="p" hint-placeholder-count="4">
+              <div style="background:#fff;border:1px solid #E1E7EA;border-left:3px solid {{ p.accent }};border-radius:10px;padding:11px 13px">
+                <div style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:{{ p.accent }}">{{ p.k }}</div>
+                <div style="font-size:11.5px;color:#33484F;line-height:1.6;margin-top:5px">{{ p.v }}</div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:{{ dwrg.datesShow }};flex-direction:column;gap:6px;margin-top:12px;background:#FDF9F2;border:1px solid #F2E0C4;border-radius:10px;padding:11px 13px">
+            <div style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#A3620F"><span class="zh">关键日期与倒计时</span><span class="en">Key dates</span></div>
+            <sc-for list="{{ dwrg.dates }}" as="d" hint-placeholder-count="2">
+              <div style="display:flex;align-items:center;gap:8px;font-size:11.5px">
+                <span style="width:6px;height:6px;border-radius:50%;background:{{ d.dot }};flex-shrink:0"></span>
+                <span style="color:{{ d.fg }};font-weight:{{ d.fw }}">{{ d.text }}</span>
+                <span style="margin-left:auto;font-family:Manrope;font-size:10.5px;font-weight:800;color:{{ d.cdFg }}">{{ d.cd }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:{{ dwrg.delivShow }};flex-direction:column;gap:9px;margin-top:12px;padding:12px 13px;border-radius:11px;background:linear-gradient(150deg,#EDF9F4,#F5FBF8);border:1px solid #BFE3D6">
+            <div style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#0B5B4A"><span class="zh">结果：这条法规自动产出什么</span><span class="en">Result: what this regulation auto-produces</span></div>
+            <div style="background:#fff;border:1px solid #CFE8DE;border-radius:9px;padding:10px 12px">
+              <div style="font-size:12px;font-weight:700;color:#0F1E24;line-height:1.5">{{ dwrg.delivText }}</div>
+              <div style="font-size:10px;color:#0B5B4A;font-weight:600;margin-top:4px">{{ dwrg.delivAgent }}</div>
+            </div>
+            <div class="rowlink" onClick="{{ dwrg.collectPick }}" style="display:flex;align-items:center;gap:9px;background:#fff;border:1px solid #CDEFF6;border-radius:9px;padding:9px 12px">
+              <span style="font-size:9px;font-weight:700;color:#045B75;background:#ECFBFE;padding:2px 7px;border-radius:4px;white-space:nowrap"><span class="zh">采集自</span><span class="en">Collected by</span></span>
+              <span style="font-size:11px;font-weight:700;color:#045B75;line-height:1.4">{{ dwrg.collectLabel }}</span>
+              <span style="margin-left:auto;color:#9AABB1;font-size:11px">›</span>
+            </div>
+            <div style="font-size:10px;color:#5A6E75;line-height:1.5">{{ dwrg.collectFull }}</div>
+          </div>
+          <div style="display:{{ dwrg.nodesShow }};flex-wrap:wrap;gap:6px;margin-top:12px">
+            <sc-for list="{{ dwrg.nodes }}" as="n" hint-placeholder-count="2">
+              <span style="font-size:10.5px;font-weight:700;padding:4px 10px;border-radius:6px;background:{{ n.bg }};color:{{ n.fg }};border:1px solid {{ n.bd }}">{{ n.label }}</span>
+            </sc-for>
+          </div>
+          <div style="display:{{ dwrg.legacyGrid }};grid-template-columns:1fr 1fr;gap:10px;margin-top:12px">
+            <div style="background:#fff;border:1px solid #E1E7EA;border-radius:9px;padding:10px 12px"><div style="font-size:9.5px;color:#8397A0;font-weight:600"><span class="zh">触发周期</span><span class="en">Trigger</span></div><div style="font-size:12.5px;font-weight:700;margin-top:1px"><span class="zh">{{ dwrg.periodZh }}</span><span class="en">{{ dwrg.periodEn }}</span></div></div>
+            <div style="background:#fff;border:1px solid #E1E7EA;border-radius:9px;padding:10px 12px"><div style="font-size:9.5px;color:#8397A0;font-weight:600"><span class="zh">关键时点</span><span class="en">Key date</span></div><div style="font-size:12.5px;font-weight:700;margin-top:1px;color:#B0291D"><span class="zh">{{ dwrg.nextZh }}</span><span class="en">{{ dwrg.nextEn }}</span></div></div>
+          </div>
+          <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0;margin:16px 0 8px;display:{{ dwrg.legacyShow }}"><span class="zh">为什么适用 Autoliv</span><span class="en">Why it applies</span></div>
+          <div style="display:flex;flex-direction:column;gap:7px">
+            <sc-for list="{{ dwrg.why }}" as="w" hint-placeholder-count="3"><div style="background:#fff;border:1px solid #E1E7EA;border-radius:9px;padding:9px 11px;display:flex;gap:9px"><span style="font-size:9px;font-weight:700;color:#045B75;background:#ECFBFE;padding:2px 7px;border-radius:5px;height:fit-content;white-space:nowrap">{{ w.k }}</span><span style="font-size:11.5px;color:#33484F;line-height:1.45">{{ w.v }}</span></div></sc-for>
+          </div>
+          <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0;margin:16px 0 8px"><span class="zh">承接后落到哪些供应商要求</span><span class="en">Which supplier requirements it lands on</span></div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <sc-for list="{{ dwrg.reqChips }}" as="c" hint-placeholder-count="3">
+              <div class="rowlink" onClick="{{ c.open }}" style="display:flex;align-items:center;gap:9px;background:{{ c.bg }};border:1px solid {{ c.bd }};border-radius:9px;padding:8px 11px">
+                <span style="font-size:11.5px;font-weight:700;color:{{ c.fg }};line-height:1.35">{{ c.label }}</span>
+                <span style="margin-left:auto;font-size:9.5px;font-weight:700;color:{{ c.fg }};opacity:.75;white-space:nowrap">{{ c.tag }}</span>
+                <span style="color:#C4D0D5;font-size:11px">›</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="font-size:10.5px;color:#8397A0;line-height:1.55;margin-top:8px">{{ dwrg.reqNote }}</div>
+          <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0;margin:16px 0 8px"><span class="zh">AI 推荐动作</span><span class="en">AI-recommended actions</span></div>
+          <div style="background:#fff;border:1px solid #E1E7EA;border-radius:9px;padding:8px 13px">
+            <sc-for list="{{ dwrg.actions }}" as="s" hint-placeholder-count="3"><div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px dashed #EDF1F3"><span style="width:18px;height:18px;border-radius:50%;background:#EAF7EA;color:#1F6B32;font-family:Manrope;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">{{ s.n }}</span><div style="font-size:11.5px;color:#33484F;line-height:1.45"><span class="zh">{{ s.zh }}</span><span class="en">{{ s.en }}</span></div></div></sc-for>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:16px"><button onClick="{{ dwrgCreateTask }}" style="flex:1;padding:9px;border-radius:8px;font-size:12px;font-weight:700;background:#002D6B;color:#fff"><span class="zh">生成整改任务</span><span class="en">Create task</span></button><button onClick="{{ dwrgSubscribe }}" style="padding:9px 13px;border-radius:8px;font-size:12px;font-weight:600;background:#fff;border:1px solid #E1E7EA;color:#43585F"><span class="zh">订阅触发流</span><span class="en">Subscribe</span></button></div>
+        </div>
+        </sc-if>
+        <sc-if value="{{ dwOn.cs }}" hint-placeholder-val="{{ false }}">
+        <div class="dwd cs">
+          <div style="background:#fff;border:1px solid #E1E7EA;border-radius:12px;padding:15px 17px">
+            <div style="display:flex;align-items:center;gap:7px">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#0B3A82;background:#F2F6FD;border:1px solid #D7E3F6;border-radius:5px;padding:2px 6px">{{ dwcs.id }}</span>
+              <span style="font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;background:{{ dwcs.stBg }};color:{{ dwcs.stFg }}">{{ dwcs.stLabel }}</span>
+            </div>
+            <div style="font-size:16px;font-weight:800;letter-spacing:-.01em;margin-top:8px;line-height:1.35">{{ dwcs.req }}</div>
+            <div style="font-size:11px;color:#5A6E75;margin-top:4px;line-height:1.5">{{ dwcs.note }}</div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #E1E7EA;border-radius:12px;padding:15px 17px;margin-top:12px">
+            <div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">回收进度</span><span class="en">Return progress</span></div>
+            <div style="display:flex;align-items:baseline;gap:7px;margin-top:8px">
+              <span style="font-family:Manrope;font-size:26px;font-weight:800;letter-spacing:-.03em;color:#0B5B4A">{{ dwcs.bkX }}</span>
+              <span style="font-size:12px;color:#5A6E75">/ {{ dwcs.bkN }} <span class="zh">家已回</span><span class="en">returned</span></span>
+              <span style="margin-left:auto;font-family:Manrope;font-size:13px;font-weight:800;color:#0B5B4A">{{ dwcs.bkPct }}</span>
+            </div>
+            <div style="height:8px;border-radius:4px;background:#EEF2F4;overflow:hidden;margin-top:7px"><div style="width:{{ dwcs.bkPct }};height:100%;background:#0B5B4A;border-radius:4px"></div></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-top:12px">
+              <div><div style="font-size:9.5px;color:#8397A0"><span class="zh">已回</span><span class="en">Returned</span></div><div style="font-family:Manrope;font-size:15px;font-weight:800;color:#0B5B4A">{{ dwcs.bkX }}</div></div>
+              <div><div style="font-size:9.5px;color:#8397A0"><span class="zh">未回</span><span class="en">Pending</span></div><div style="font-family:Manrope;font-size:15px;font-weight:800;color:#A3620F">{{ dwcs.bkLeft }}</div></div>
+              <div><div style="font-size:9.5px;color:#8397A0"><span class="zh">校验未通过</span><span class="en">Failed check</span></div><div style="font-family:Manrope;font-size:15px;font-weight:800;color:#B0291D">{{ dwcs.bkFail }}</div></div>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:13px">
+              <button onClick="{{ dwcs.chase }}" style="display:{{ dwcs.chaseShow }};flex:1;padding:9px;border-radius:8px;font-size:12px;font-weight:700;background:#0B5B4A;color:#fff">{{ dwcs.chaseLabel }}</button>
+              <button onClick="{{ dwcs.export }}" style="padding:9px 13px;border-radius:8px;font-size:12px;font-weight:600;background:#fff;border:1px solid #D5DFE3;color:#43585F"><span class="zh">导出回收明细</span><span class="en">Export detail</span></button>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #E1E7EA;border-radius:12px;padding:15px 17px;margin-top:12px">
+            <div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">来源与对齐</span><span class="en">Sources & alignment</span></div>
+            <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:8px">
+              <sc-for list="{{ dwcs.srcs }}" as="c" hint-placeholder-count="3">
+                <span style="font-size:10px;font-weight:{{ c.fw }};padding:3px 7px;border-radius:5px;background:{{ c.bg }};border:1px solid {{ c.bd }};color:{{ c.fg }}">{{ c.label }}</span>
+              </sc-for>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-top:11px;font-size:11.5px;color:#33484F">
+              <span style="font-family:Manrope;font-size:10.5px;font-weight:800;color:#0B5B4A;background:#EDF9F4;border:1px solid #CFE8DE;border-radius:5px;padding:2px 6px">{{ dwcs.alignNo }}</span>
+              <span>{{ dwcs.alignZh }}</span>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #E1E7EA;border-radius:12px;padding:15px 17px;margin-top:12px">
+            <div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">周期与下次触发</span><span class="en">Cycle & next trigger</span></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:9px;font-size:11.5px">
+              <div><div style="font-size:9.5px;color:#8397A0"><span class="zh">回收周期</span><span class="en">Cycle</span></div><div style="font-weight:700;margin-top:2px">{{ dwcs.cyc }}</div></div>
+              <div><div style="font-size:9.5px;color:#8397A0"><span class="zh">下次自动触发</span><span class="en">Next auto-trigger</span></div><div style="font-weight:700;margin-top:2px;font-family:Manrope">{{ dwcs.next }}</div></div>
+            </div>
+            <div style="font-size:10.5px;color:#5A6E75;line-height:1.5;margin-top:9px"><span class="zh">完成后不删除：本轮留档可查（编号 + 回收明细 + 证据），到期按周期自动重开下一轮，只向未回/到期供应商发。</span><span class="en">Completed rounds are archived (ID, return detail, evidence) and reopen automatically at the next cycle, targeting only pending or expiring suppliers.</span></div>
+            <button onClick="{{ dwcs.reopen }}" style="margin-top:11px;width:100%;padding:9px;border-radius:8px;font-size:12px;font-weight:700;background:#F3F6F7;color:#0B5B4A"><span class="zh">立即重新发起本轮 →</span><span class="en">Reopen this round now →</span></button>
+          </div>
+
+          <div style="background:#fff;border:1px solid #E1E7EA;border-radius:12px;padding:15px 17px;margin-top:12px">
+            <div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">追办记录</span><span class="en">Activity</span></div>
+            <div style="margin-top:8px">
+              <sc-for list="{{ dwcs.timeline }}" as="t" hint-placeholder-count="4">
+                <div style="display:flex;gap:9px;padding:7px 0;border-bottom:1px dashed #EDF1F3">
+                  <span style="width:7px;height:7px;border-radius:50%;background:{{ t.dot }};margin-top:5px;flex-shrink:0"></span>
+                  <span style="flex:1;font-size:11.5px;color:#33484F;line-height:1.45">{{ t.what }}</span>
+                  <span style="font-size:10px;color:#9AABB1;font-family:Manrope;flex-shrink:0">{{ t.when }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+        <sc-if value="{{ dwOn.dr }}" hint-placeholder-val="{{ false }}">
+        <div class="dwd dr">
+          <div style="background:#fff;border:1px solid #E1E7EA;border-radius:12px;overflow:hidden">
+            <div style="background:linear-gradient(135deg,#002D6B,#001B41);color:#fff;padding:15px 17px">
+              <div style="display:flex;align-items:center;justify-content:space-between"><div style="display:flex;align-items:center;gap:8px"><div style="width:22px;height:22px;border-radius:6px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800">AL</div><span style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;opacity:.75">Autoliv China · ESG</span></div><span style="font-size:9px;font-weight:700;padding:2px 8px;border-radius:5px;background:rgba(255,255,255,.16)">DRAFT</span></div>
+              <div style="font-size:15px;font-weight:800;margin-top:11px"><span class="zh">供应商 ESG 数据请求单</span><span class="en b">Supplier ESG Data Request</span></div>
+              <div style="font-size:10.5px;opacity:.8;font-family:Manrope;margin-top:3px">No. {{ dwdr.reqNo }} · <span class="zh">签发</span><span class="en">Issued</span> {{ dwdr.issued }}</div>
+              <div style="display:{{ dwdr.ctxShow }};margin-top:10px;padding-top:9px;border-top:1px solid rgba(255,255,255,.18)">
+                <div style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;opacity:.75;font-weight:700"><span class="zh">本单要求</span><span class="en">Requirement</span></div>
+                <div style="font-size:13px;font-weight:800;margin-top:3px;line-height:1.35">{{ dwdr.ctxReq }}</div>
+              </div>
+            </div>
+            <div style="padding:14px 16px;display:flex;flex-direction:column;gap:13px">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:11.5px">
+                <div><div style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#8397A0;font-weight:700"><span class="zh">致 · 供应商</span><span class="en">To</span></div><div style="font-weight:700;margin-top:2px"><span class="nr">{{ dwdr.toNr }}</span><span class="na">{{ dwdr.toNa }}</span></div><div style="color:#8397A0;font-family:Manrope;font-size:10px">{{ dwdr.code }} · {{ dwdr.tier }}</div><div style="color:#5A6E75;font-size:10px;margin-top:1px"><span class="zh">对接人 </span><span class="en">Attn </span>{{ dwdr.contact }}</div></div>
+                <div><div style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#8397A0;font-weight:700"><span class="zh">填报周期</span><span class="en">Period</span></div><div style="font-weight:700;margin-top:2px">{{ dwdr.period }}</div><div style="color:#B0291D;font-family:Manrope;font-size:10px"><span class="zh">截止</span><span class="en">Due</span> {{ dwdr.due }}</div></div>
+              </div>
+              <div style="background:#ECFBFE;border-left:3px solid #0891B2;border-radius:8px;padding:9px 11px;font-size:11px;color:#33484F;line-height:1.5"><span class="zh">本请求依据下列客户要求与法规义务发起，请按指标提交数据与证据。带 </span><span class="en b">Requested per the OEM asks & regulations below. Provide data + evidence per line; items marked </span><b style="color:#B0291D">*</b> <span class="zh">为强制项。</span><span class="en">are mandatory.</span></div>
+              <div style="display:{{ dwdr.ctxShow }};background:#F2F6FD;border:1px solid #D7E3F6;border-radius:8px;padding:9px 11px;font-size:10.5px;color:#0B3A82;line-height:1.5;font-weight:600">{{ dwdr.ctxBasis }}</div>
+              <div>
+                <div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0;margin-bottom:7px"><span class="zh">请求指标清单</span><span class="en">Requested indicators</span></div>
+                <div style="border:1px solid #E1E7EA;border-radius:9px;overflow:hidden">
+                  <div style="display:grid;grid-template-columns:22px 1fr 96px 60px;gap:8px;padding:7px 10px;background:#F5F7F8;font-size:9px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:#7A8B92"><span>#</span><span><span class="zh">指标 / 数据项</span><span class="en">Indicator</span></span><span><span class="zh">证据</span><span class="en">Evidence</span></span><span><span class="zh">格式</span><span class="en">Format</span></span></div>
+                  <sc-for list="{{ dwdr.items }}" as="it" hint-placeholder-count="7">
+                    <div style="display:grid;grid-template-columns:22px 1fr 96px 60px;gap:8px;padding:9px 10px;border-top:1px dashed {{ it.bd }};background:{{ it.bg }};font-size:11px;align-items:flex-start">
+                      <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#9AABB1;padding-top:1px">{{ it.no }}</span>
+                      <span><span style="font-weight:700"><span class="zh">{{ it.zh }}</span><span class="en">{{ it.en }}</span></span> <b style="color:#B0291D">{{ it.req }}</b><div style="font-size:9.5px;color:#8397A0;font-family:'JetBrains Mono',monospace">{{ it.code }}</div></span>
+                      <span style="font-size:10px;color:#5A6E75"><span class="zh">{{ it.evzh }}</span><span class="en">{{ it.even }}</span></span>
+                      <span style="font-size:9px;font-weight:700;color:#045B75;background:#ECFBFE;padding:2px 6px;border-radius:4px;width:fit-content">{{ it.fmt }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="display:{{ dwdr.packShow }}">
+                <div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0;margin-bottom:6px"><span class="zh">聚合结果 · 一家一张</span><span class="en">Aggregated packs · one per supplier</span></div>
+                <div style="font-size:10.5px;color:#5A6E75;line-height:1.5;margin-bottom:7px">{{ dwdr.packNote }}</div>
+                <div style="display:flex;flex-direction:column;gap:5px">
+                  <sc-for list="{{ dwdr.packs }}" as="p" hint-placeholder-count="4">
+                    <div style="display:flex;align-items:center;gap:9px;padding:7px 10px;border:1px solid #E1E7EA;border-radius:8px;background:#FAFBFC">
+                      <span style="font-size:11px;font-weight:600;color:#33484F;flex:1;min-width:0">{{ p.label }}</span>
+                      <span style="font-size:10px;font-weight:700;color:#0B5B4A;background:#EDF9F4;padding:2px 8px;border-radius:5px;white-space:nowrap">{{ p.n }}</span>
+                    </div>
+                  </sc-for>
+                  <span style="font-size:10px;color:#9AABB1">{{ dwdr.packMore }}</span>
+                </div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">提交方式与回执</span><span class="en">Submission & acknowledgement</span></div>
+                <sc-for list="{{ dwdr.notes }}" as="n" hint-placeholder-count="3"><div style="display:flex;gap:7px;font-size:10.5px;color:#5A6E75;line-height:1.45"><span style="color:#0891B2">•</span><span><span class="zh">{{ n.zh }}</span><span class="en">{{ n.en }}</span></span></div></sc-for>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:14px"><button onClick="{{ drSend }}" style="flex:1;padding:9px;border-radius:8px;font-size:12px;font-weight:700;background:#002D6B;color:#fff">↗ {{ dwdr.sendLabel }}</button><button onClick="{{ drPdf }}" style="padding:9px 13px;border-radius:8px;font-size:12px;font-weight:600;background:#fff;border:1px solid #CDE0F2;color:#003A7A"><span class="zh">下载 PDF</span><span class="en">PDF</span></button><button onClick="{{ drDraft }}" style="padding:9px 13px;border-radius:8px;font-size:12px;font-weight:600;background:#fff;border:1px solid #E1E7EA;color:#43585F"><span class="zh">存草稿</span><span class="en">Draft</span></button></div>
+        </div>
+        </sc-if>
+      </div>
+    </div>
+  </div>
+</x-dc>
+<script type="text/x-dc" data-dc-script></script>
+</body>
+</html>

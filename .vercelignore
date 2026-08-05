@@ -1,5 +1,6 @@
-# 部署清单 = 3 个入口页 + support.js + assi-data.js + data/ 下的 3 个运行时 JSON。
-# 调研底稿 / 截图 / DC 编辑源不上公网。
+# 部署清单 = 3 个入口页 + 7 个子 DC 模块 + support.js + assi-data.js
+#           + ASSI 源文件（被 iframe 内嵌）+ data/ 下的 4 个运行时 JSON。
+# 调研底稿 / 截图 / 未被运行时引用的 DC 源不上公网。
 
 # 调研底稿与开发产物
 uploads/
@@ -8,15 +9,25 @@ HANDOFF.md
 README.md
 sync.sh
 
-# DC 编辑源（入口页由 sync.sh 生成，源文件不必上线）。
-# 注意这里是逐个排除、不能写 *.dc.html ——
-# "ASSI 线上供应商可持续问卷.dc.html" 被 index.html 第 2509 行用 iframe 内嵌
-# （供应商问卷的 ASSI 标签页），排掉它线上 iframe 就是 404，
-# 而本地和设计文件夹里文件都在，测不出来。改名/删除该文件前先改那处 iframe src。
+# ── DC 源文件：**逐个排除，绝不能写 *.dc.html** ──
+# 根目录下 12 个 .dc.html 里有 8 个是运行时依赖，通配符会把它们一起排掉，
+# 而本地和设计文件夹里文件都在，完全测不出来。
+#
+# 必须部署（不在下面的排除列表里）：
+#   CockpitCustomerDomain / CockpitSupplierDomain / CockpitPortal /
+#   CockpitReportDomain / CockpitRegulatoryDomain / CockpitLedgerDomain /
+#   CockpitDrawers          ← index.html 用 <dc-import name="X"> 加载，
+#                             support.js 解析成 "./X.dc.html"（COMPONENT_DIR="."）
+#   ASSI 线上供应商可持续问卷.dc.html
+#                           ← index.html 用 iframe 内嵌（供应商问卷的 ASSI 标签页）
+#
+# 以下是纯编辑源 / 存档，入口页由 sync.sh 生成，不必上线：
+Autoliv ESG Cockpit v2.dc.html
+Autoliv ESG Cockpit v2 (单文件备份).dc.html
 Autoliv ESG Cockpit.dc.html
 Autoliv Demo 页面框架.dc.html
 
-# data/ 下只有这三个 JSON 是 index.html 运行时 fetch 的，必须部署；
+# data/ 下这 4 个 JSON 是 index.html 运行时 fetch 的，必须部署；
 # 其余是已回填进代码的底稿，排除。
 data/matrix_cells.csv
 data/matrix_detail.csv
