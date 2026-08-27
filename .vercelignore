@@ -1,5 +1,5 @@
-# 部署清单 = 3 个入口页 + 7 个子 DC 模块 + support.js + assi-data.js
-#           + ASSI 源文件（被 iframe 内嵌）+ data/ 下的 4 个运行时 JSON。
+# 部署清单 = 3 个入口页 + 7 个 Plat 子 DC 模块 + support.js + assi-data.js
+#           + data/ 下的 2 个运行时 JSON。
 # 调研底稿 / 截图 / 未被运行时引用的 DC 源不上公网。
 
 # 调研底稿与开发产物
@@ -10,25 +10,56 @@ README.md
 sync.sh
 
 # ── DC 源文件：**逐个排除，绝不能写 *.dc.html** ──
-# 根目录下 12 个 .dc.html 里有 8 个是运行时依赖，通配符会把它们一起排掉，
+# 根目录下 21 个 .dc.html 里有 7 个是运行时依赖，通配符会把它们一起排掉，
 # 而本地和设计文件夹里文件都在，完全测不出来。
 #
 # 必须部署（不在下面的排除列表里）：
-#   CockpitCustomerDomain / CockpitSupplierDomain / CockpitPortal /
-#   CockpitReportDomain / CockpitRegulatoryDomain / CockpitLedgerDomain /
-#   CockpitDrawers          ← index.html 用 <dc-import name="X"> 加载，
-#                             support.js 解析成 "./X.dc.html"（COMPONENT_DIR="."）
-#   ASSI 线上供应商可持续问卷.dc.html
-#                           ← index.html 用 iframe 内嵌（供应商问卷的 ASSI 标签页）
+#   PlatBase / PlatSystem / PlatGap / PlatSupply / PlatReg / PlatPortal / PlatDrawers
+#   ← index.html 用 <dc-import name="X"> 加载，support.js 解析成 "./X.dc.html"
+#     （COMPONENT_DIR="."），路径必须逐字对上。
 #
 # 以下是纯编辑源 / 存档，入口页由 sync.sh 生成，不必上线：
+Autoliv ESG 平台 v2.dc.html
+Autoliv ESG 平台.dc.html
+Autoliv Demo 页面框架.dc.html
+
+# Cockpit 系列（2026-08-05 的上一代主入口）。2026-08-27 起主入口换成平台 v2，
+# 这一代不再被任何运行时引用，整代排除，省约 1.6MB 带宽。
+# 源文件仍留在仓库作对照 —— 若要恢复 /cockpit，把下面 8 行删掉并在 sync.sh 加一条
+# sync "Autoliv ESG Cockpit v2.dc.html" cockpit.html，同时把 Cockpit* 加进模块校验。
 Autoliv ESG Cockpit v2.dc.html
 Autoliv ESG Cockpit v2 (单文件备份).dc.html
 Autoliv ESG Cockpit.dc.html
-Autoliv Demo 页面框架.dc.html
+CockpitCustomerDomain.dc.html
+CockpitSupplierDomain.dc.html
+CockpitPortal.dc.html
+CockpitReportDomain.dc.html
+CockpitRegulatoryDomain.dc.html
+CockpitLedgerDomain.dc.html
+CockpitDrawers.dc.html
 
-# data/ 下这 4 个 JSON 是 index.html 运行时 fetch 的，必须部署；
-# 其余是已回填进代码的底稿，排除。
+# ASSI 源文件：曾被 Cockpit v2 用 iframe 内嵌，故必须部署；平台 v2 不再内嵌它，
+# 只保留 /assi 这个独立入口页，所以源文件可以排除。恢复 Cockpit 时要一并放回。
+ASSI 线上供应商可持续问卷.dc.html
+
+# data/ 下只有这 2 个 JSON 是运行时 fetch 的，必须部署：
+#   req_meta.json  ← 根 DC（台账条数与分层口径的唯一来源）
+#   reg_demo.json  ← PlatReg
+# 其余是底稿 / 中间产物 / 上一代数据包，排除。
 data/matrix_cells.csv
 data/matrix_detail.csv
 data/合规矩阵_填写模板_说明.md
+data/supply_demo.json
+data/survey_demo.json
+data/supply_suppliers.json
+data/_extract_extra.txt
+data/_extract_helpers.txt
+data/_extract_m3Vals.txt
+data/_extract_regVals.txt
+data/_platreg_js.txt
+data/_platreg_tpl.txt
+data/_xlsx_dump.json
+data/onboarding-strings.txt
+data/onboarding-template.xlsx
+data/quote-annotated.txt
+data/quote-annotated.xlsx

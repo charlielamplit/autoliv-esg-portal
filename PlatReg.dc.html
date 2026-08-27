@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<sc-if value="{{ onP9 }}" hint-placeholder-val="{{ true }}">
+      <div data-screen-label="义务图谱" style="display:flex;flex-direction:column;gap:14px">
+        <div style="border:1px solid #CDE0F2;border-left:3px solid #002D6B;border-radius:14px;padding:15px 18px;background:linear-gradient(135deg,#EBF2FA,#F0FAF0 90%)">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:18px">
+            <div style="flex:1">
+              <div style="font-size:9.5px;letter-spacing:.2em;color:#003A7A;font-weight:700;text-transform:uppercase"><span class="zh">Autoliv 自身合规 · AI 法规扫描</span><span class="en">Own Compliance · AI Regulatory Scan</span></div>
+              <h1 style="margin:5px 0 0;font-size:20px;font-weight:800;letter-spacing:-.02em"><span class="zh">面向 Autoliv 的 ESG 合规义务图谱</span><span class="en">ESG Obligation Radar for Autoliv</span></h1>
+              <p style="font-size:12.5px;color:#33484F;margin:6px 0 0;line-height:1.55;max-width:780px"><span class="zh">平台已扫描 <b>124 条</b>公开法规与框架，基于 Autoliv 中国的企业画像（Tier-1 被动安全 · 出口欧美 · 集团上市）识别 <b>{{ regRelN }} 项</b>相关合规义务（本屏 {{ regV6N }} 项，另 {{ regV8N }} 项出口管制在监控墙），其中 <b>{{ regHiN }} 项强相关（★4 以上）</b>建议优先承接。这不仅是客户要求的传导，更是法规、标准对 Autoliv 直接施加的义务。</span><span class="en b">Scanned 124 public regulations & frameworks. Based on Autoliv China's profile (Tier-1 passive safety · EU/US exporter · listed group), {{ regRelN }} relevant obligations identified ({{ regV6N }} here, {{ regV8N }} export controls on the watch wall) — {{ regHiN }} high-impact ones to adopt first. These are obligations laws impose on Autoliv directly, beyond the OEM cascade.</span></p>
+            </div>
+            <div style="flex-shrink:0;display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+              <button onClick="{{ regAdopt }}" style="display:{{ regAdoptShow }};padding:7px 13px;border-radius:8px;font-size:12px;font-weight:700;background:#002D6B;color:#fff">{{ regAdoptLabel }}</button>
+              <span style="font-size:10.5px;color:#8397A0"><span class="zh">画像更新于 2026-07 · 覆盖率 61%</span><span class="en">Profile updated 2026-07 · 61% covered</span></span>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:13px">
+            <sc-for list="{{ regKpis }}" as="k" hint-placeholder-count="5">
+              <div style="background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.9);border-radius:9px;padding:9px 12px">
+                <div style="font-size:10px;color:#5A6E75;font-weight:600"><span class="zh">{{ k.lzh }}</span><span class="en">{{ k.len }}</span></div>
+                <div style="font-family:Manrope;font-size:23px;font-weight:800;letter-spacing:-.02em;color:{{ k.color }};margin-top:1px">{{ k.v }}</div>
+                <div style="font-size:10px;color:{{ k.subColor }};font-family:Manrope;margin-top:1px;font-weight:600"><span class="zh">{{ k.szh }}</span><span class="en">{{ k.sen }}</span></div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="border-radius:10px;padding:11px 14px;background:#F5F8FC;border:1px solid #E0E7F2;display:flex;align-items:flex-start;gap:12px">
+          <span style="font-size:9.5px;font-weight:800;letter-spacing:.05em;padding:2px 7px;border-radius:5px;background:#E4EAF3;color:#002D6B;flex-shrink:0;margin-top:1px"><span class="zh">库的来源</span><span class="en">LIBRARY</span></span>
+          <span style="font-size:11.5px;color:#33484F;font-weight:500;line-height:1.6"><span class="zh">法规库由后台统一导入与维护，前台不设导入入口。基础版覆盖四类范围：出口管制与制裁名单、欧盟通用 ESG 法规、国际其它 ESG 法规、中国境内 ESG 法规。</span><span class="en b">The library is imported and maintained from the back office — no front-end import. The base edition covers four scopes: export controls, EU ESG law, other international ESG law, and PRC ESG law.</span></span>
+        </div>
+        <div style="display:{{ regEmptyShow }};border-radius:10px;padding:11px 14px;background:#FFFDF9;border:1px solid #F3E4D0;align-items:flex-start;gap:12px">
+          <span style="font-size:9.5px;font-weight:800;letter-spacing:.05em;padding:2px 7px;border-radius:5px;background:#FDF0E3;color:#8A4B08;flex-shrink:0;margin-top:1px"><span class="zh">首日空态</span><span class="en">DAY ONE</span></span>
+          <span style="font-size:11.5px;color:#5A6E75;font-weight:500;line-height:1.6"><span class="zh">法规库<b style="color:#33484F">不是空的，也不该是空的</b> —— 124 条扫描结果由平台后台维护，开通即有，这是产品自带的资产，不需要你导入。<b style="color:#33484F">空的是碰撞结果</b>：每条法规「落到几项供应商要求、命中哪几家」要拿供应商主数据和要求台账去撞，两者首日都还没有，所以下方清单里的<b style="color:#33484F">「→ 落到 N 项供应商要求」与受影响名单暂时为空</b>。先导入要求与供应商清单，碰撞会自动跑。</span><span class="en b">The library is not empty and should not be: 124 scanned regulations ship with the platform. What is empty is the collision result — mapping each regulation to supplier requirements and affected suppliers needs the ledger and the master list, neither of which exists on day one.</span></span>
+        </div>
+        <div style="display:{{ regM6Show }};border-radius:10px;padding:11px 14px;background:#F7F9FA;border:1px dashed #D5DEE2;align-items:flex-start;gap:12px">
+          <span style="font-size:9.5px;font-weight:800;letter-spacing:.05em;padding:2px 7px;border-radius:5px;background:#fff;color:#8397A0;border:1px dashed #CFD8DC;flex-shrink:0;margin-top:1px"><span class="zh">未含 · M6</span><span class="en">LOCKED · M6</span></span>
+          <span style="font-size:11.5px;color:#5A6E75;font-weight:500;line-height:1.6"><span class="zh">基础版覆盖全部四类范围的法规，<b style="color:#33484F">只有汽车行业特定法规不含</b>：另有 <b style="color:#33484F">{{ regM6N }} 条</b>（报废车辆回收 ELV、电池法规 BATT）随选配 M6 入库，本版不参与义务判定；另有 <b style="color:#33484F">{{ regDeepN }} 条</b>已含法规的<b style="color:#33484F">汽车专项深度</b>（产出什么可交付 · 证据由哪些题采集 · 落到哪些供应商要求）也属 M6，本版这些条目只到「适用与否」为止，清单里带虚线标记。</span><span class="en b">The base edition covers all four regulatory scopes — only automotive-specific law is excluded: {{ regM6N }} regulations ship with M6, and the automotive depth on {{ regDeepN }} included regulations (deliverables, evidence sourcing, mapping to supplier requirements) is an M6 layer too.</span></span>
+        </div>
+        <div class="card">
+          <div class="chd" style="flex-wrap:wrap"><span style="width:8px;height:8px;border-radius:50%;background:#A3620F;box-shadow:0 0 0 3px #FAE7CC"></span><h3 style="font-size:12.5px"><span class="zh">合规时间日历 · 什么时候到</span><span class="en">Compliance calendar · when it lands</span></h3><span class="pill" style="background:#FDF3E7;color:#A3620F">2026 → 2040</span><span style="margin-left:auto;font-size:10.5px;color:#8397A0"><span class="zh">按月落位 · 灰色为已生效 · 点节点打开对应法规</span><span class="en">Placed by month · grey = already in force · click a node to open its regulation</span></span></div>
+          <div style="padding:12px 15px 14px;display:grid;grid-template-columns:288px 1fr;gap:16px;align-items:start">
+            <div style="display:flex;flex-direction:column;gap:7px">
+              <div style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">最近三个硬节点</span><span class="en">Next three hard dates</span></div>
+              <sc-for list="{{ regCalNext }}" as="n" hint-placeholder-count="3">
+                <div class="rowlink" onClick="{{ n.open }}" style="display:flex;align-items:center;gap:11px;border:1px solid {{ n.nbd }};background:{{ n.nbg }};border-radius:10px;padding:8px 11px">
+                  <div style="display:flex;flex-direction:column;align-items:center;min-width:40px;flex-shrink:0">
+                    <span style="font-family:Manrope;font-size:22px;font-weight:800;letter-spacing:-.04em;line-height:1;color:{{ n.nfg }}">{{ n.dayN }}</span>
+                    <span style="font-size:9px;font-weight:700;color:{{ n.nfg }};margin-top:1px">{{ n.unit }}</span>
+                  </div>
+                  <div style="min-width:0">
+                    <div style="display:flex;align-items:center;gap:6px">
+                      <span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:{{ n.nfg }};background:rgba(255,255,255,.75);padding:1px 5px;border-radius:3px">{{ n.code }}</span>
+                      <span style="font-family:Manrope;font-size:10px;font-weight:700;color:#5A6E75">{{ n.date }}</span>
+                    </div>
+                    <div style="font-size:11px;color:#33484F;line-height:1.4;margin-top:3px">{{ n.short }}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:11px;border-left:1px solid #EDF1F3;padding-left:16px">
+              <sc-for list="{{ regCalRails }}" as="y" hint-placeholder-count="2">
+                <div style="display:grid;grid-template-columns:36px repeat(12,1fr);gap:5px 4px;align-items:start">
+                  <span style="grid-column:1;grid-row:1;font-family:Manrope;font-size:11.5px;font-weight:800;color:#0F1E24;letter-spacing:.02em">{{ y.year }}</span>
+                  <sc-for list="{{ y.months }}" as="m" hint-placeholder-count="12">
+                    <span style="grid-row:1;text-align:center;font-family:Manrope;font-size:9px;font-weight:{{ m.fw }};color:{{ m.fg }};background:{{ m.bg }};border-radius:4px;padding:2px 0">{{ m.label }}</span>
+                  </sc-for>
+                  <sc-for list="{{ y.items }}" as="i" hint-placeholder-count="4">
+                    <div class="rowlink" onClick="{{ i.open }}" title="{{ i.full }}" style="grid-column:{{ i.gcol }};border:1px solid {{ i.bd }};background:{{ i.bg }};border-radius:8px;padding:5px 8px">
+                      <div style="display:flex;align-items:center;gap:5px">
+                        <span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;font-weight:700;color:{{ i.cfg }};background:{{ i.cbg }};padding:1px 5px;border-radius:3px">{{ i.code }}</span>
+                        <span style="font-family:Manrope;font-size:9.5px;font-weight:700;color:{{ i.fg }}">{{ i.date }}</span>
+                        <span style="margin-left:auto;font-family:Manrope;font-size:8.5px;font-weight:800;padding:1px 6px;border-radius:4px;background:{{ i.cdBg }};color:{{ i.cdFg }};white-space:nowrap">{{ i.cd }}</span>
+                      </div>
+                      <div style="font-size:10px;color:{{ i.fg }};line-height:1.35;margin-top:3px">{{ i.short }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-for>
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;border-top:1px solid #EDF1F3;padding-top:9px">
+                <span style="font-family:Manrope;font-size:11px;font-weight:800;color:#0F1E24;flex-shrink:0">2028 → 2040</span>
+                <sc-for list="{{ regCalFar }}" as="f" hint-placeholder-count="6">
+                  <span class="rowlink" onClick="{{ f.open }}" style="display:inline-flex;align-items:center;gap:6px;font-size:10.5px;padding:3px 9px;border-radius:7px;background:{{ f.bg }};border:1px solid {{ f.bd }};color:{{ f.fg }}"><b style="font-family:Manrope;font-weight:800">{{ f.yr }}</b>{{ f.label }}</span>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 320px;gap:14px;align-items:start">
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;flex-direction:column;gap:7px">
+              <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+                <span style="font-size:12.5px;font-weight:800;color:#0F1E24;white-space:nowrap"><span class="zh">法规义务库</span><span class="en">Obligation library</span></span>
+                <span style="font-family:Manrope;font-size:11px;font-weight:700;color:#0B3A82;background:#F2F6FD;padding:3px 8px;border-radius:6px;white-space:nowrap">{{ regShownN }} / {{ regTotalN }}</span>
+                <span style="width:1px;height:16px;background:#DDE4E7;margin:0 1px"></span>
+                <sc-for list="{{ regCatChips }}" as="c" hint-placeholder-count="4">
+                  <button onClick="{{ c.pick }}" style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:{{ c.fw }};padding:4px 10px;border-radius:7px;background:{{ c.bg }};border:1px solid {{ c.bd }};color:{{ c.fg }}">{{ c.label }}<span style="font-family:Manrope;font-size:9.5px;font-weight:800;color:{{ c.nFg }}">{{ c.n }}</span></button>
+                </sc-for>
+                <span style="margin-left:auto;display:flex;align-items:center;gap:6px;flex-shrink:0">
+                  <button onClick="{{ regClear }}" style="display:{{ regFilterShow }};align-items:center;gap:5px;font-size:10.5px;font-weight:700;color:#B0291D;background:#FEECEA;border:1px solid #E9C9C4;border-radius:6px;padding:4px 9px"><span class="zh">清空筛选</span><span class="en">Clear</span></button>
+                  <button onClick="{{ regFoldAll }}" style="font-size:10.5px;font-weight:700;color:#4C6169;background:#fff;border:1px solid #E1E7EA;border-radius:6px;padding:4px 9px"><span class="zh">全部收起</span><span class="en">Collapse</span></button>
+                  <button onClick="{{ regUnfoldAll }}" style="font-size:10.5px;font-weight:700;color:#4C6169;background:#fff;border:1px solid #E1E7EA;border-radius:6px;padding:4px 9px"><span class="zh">全部展开</span><span class="en">Expand</span></button>
+                </span>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+                <sc-for list="{{ regStChips }}" as="c" hint-placeholder-count="4">
+                  <button onClick="{{ c.pick }}" title="{{ c.tip }}" style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:{{ c.fw }};padding:4px 10px;border-radius:7px;background:{{ c.bg }};border:1px solid {{ c.bd }};color:{{ c.fg }}"><span style="display:{{ c.dotShow }};width:7px;height:7px;border-radius:50%;background:{{ c.dot }};flex-shrink:0"></span>{{ c.label }}<span style="font-family:Manrope;font-size:9.5px;font-weight:800;color:{{ c.nFg }}">{{ c.n }}</span></button>
+                </sc-for>
+                <span style="width:1px;height:16px;background:#DDE4E7;margin:0 1px"></span>
+                <sc-for list="{{ regTogChips }}" as="c" hint-placeholder-count="2">
+                  <button onClick="{{ c.pick }}" style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:{{ c.fw }};padding:4px 10px;border-radius:7px;background:{{ c.bg }};border:1px solid {{ c.bd }};color:{{ c.fg }}">{{ c.label }}<span style="font-family:Manrope;font-size:9.5px;font-weight:800;color:{{ c.nFg }}">{{ c.n }}</span></button>
+                </sc-for>
+                <span style="margin-left:auto;font-size:10px;color:#8397A0;flex-shrink:0"><span class="zh">状态含义见筛选项悬停说明</span><span class="en">Hover a state chip for its meaning</span></span>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+                <span style="font-size:10px;font-weight:700;color:#8397A0;white-space:nowrap"><span class="zh">压力来源</span><span class="en">Pressure</span></span>
+                <sc-for list="{{ regDims }}" as="d" hint-placeholder-count="5">
+                  <button onClick="{{ d.pick }}" title="{{ d.tip }}" style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:{{ d.fw }};padding:4px 10px;border-radius:7px;background:{{ d.bg }};border:1px solid {{ d.bd }};color:{{ d.fg }}">
+                    <span class="zh">{{ d.zh }}</span><span class="en">{{ d.en }}</span>
+                    <span style="font-family:Manrope;font-size:9.5px;font-weight:800;color:{{ d.nFg }}">{{ d.n }}</span>
+                  </button>
+                </sc-for>
+              </div>
+            </div>
+            <sc-for list="{{ regGroups }}" as="g" hint-placeholder-count="3">
+              <div class="card" style="border-left:3px solid {{ g.bd }}">
+                <div class="chd rowlink" onClick="{{ g.toggle }}" style="background:{{ g.headBg }};border-radius:8px 8px 0 0">
+                  <span style="font-family:Manrope;font-size:11px;font-weight:800;color:#8397A0;width:9px;flex-shrink:0">{{ g.caret }}</span>
+                  <span style="width:8px;height:8px;border-radius:50%;background:{{ g.dot }};flex-shrink:0"></span>
+                  <h3 style="font-size:12.5px"><span class="zh">{{ g.zh }}</span><span class="en">{{ g.en }}</span></h3>
+                  <span class="pill">{{ g.count }}</span>
+                  <span style="display:flex;align-items:center;gap:5px">
+                    <sc-for list="{{ g.mixParts }}" as="p" hint-placeholder-count="3">
+                      <span style="display:flex;align-items:center;gap:4px;font-family:Manrope;font-size:9.5px;font-weight:800;padding:2px 6px;border-radius:5px;background:{{ p.bg }};color:{{ p.fg }}"><span style="width:6px;height:6px;border-radius:50%;background:{{ p.dot }}"></span>{{ p.n }}</span>
+                    </sc-for>
+                  </span>
+                  <span style="margin-left:auto;font-size:10.5px;color:#8397A0;text-align:right"><span class="zh">{{ g.subZh }}</span><span class="en">{{ g.subEn }}</span></span>
+                </div>
+                <div style="display:{{ g.emptyShow }};padding:15px 16px;font-size:11.5px;color:#8397A0"><span class="zh">当前筛选下这一组没有条目 —— 换个类别或状态试试。</span><span class="en">No items in this cluster under the current filter.</span></div>
+                <div style="display:{{ g.bodyShow }}">
+                <sc-for list="{{ g.rows }}" as="r" hint-placeholder-count="5">
+                  <div class="rowlink" onClick="{{ r.open }}" style="display:grid;grid-template-columns:250px 1fr 150px 96px 44px;gap:14px;align-items:center;padding:11px 16px;border-bottom:1px dashed #E6EBEE">
+                    <div style="display:flex;align-items:flex-start;gap:8px;min-width:0">
+                      <span style="width:8px;height:8px;border-radius:50%;background:{{ r.stDot }};margin-top:5px;flex-shrink:0"></span>
+                      <div style="min-width:0">
+                        <div style="font-size:12.5px;font-weight:700;line-height:1.3"><span class="zh">{{ r.zh }}</span><span class="en">{{ r.en }}</span></div>
+                        <div style="display:flex;align-items:center;gap:6px;margin-top:3px">
+                          <span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;color:{{ r.stFg }};background:{{ r.stBg }};padding:1px 5px;border-radius:3px">{{ r.code }}</span>
+                          <span style="font-size:9.5px;color:#9AABB1;font-family:Manrope">{{ r.inLabel }}</span>
+                          <span style="display:{{ r.depShow }};align-items:center;font-size:8.5px;font-weight:800;padding:1px 6px;border-radius:4px;background:{{ r.depBg }};color:{{ r.depFg }};border:{{ r.depBorder }};white-space:nowrap"><span class="zh">{{ r.depZh }}</span><span class="en">{{ r.depEn }}</span></span>
+                        </div>
+                      </div>
+                    </div>
+                    <div style="min-width:0">
+                      <div style="font-size:11px;color:#5A6E75;line-height:1.5">{{ r.oneLine }}</div>
+                      <div style="font-size:9.5px;font-weight:700;color:{{ r.linkFg }};margin-top:4px;line-height:1.45"><span class="zh">{{ r.linkZh }}</span><span class="en">{{ r.linkEn }}</span></div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:3px">
+                      <span style="font-size:10px;font-weight:700;color:{{ r.stFg }}"><span class="zh">{{ r.stZh }}</span><span class="en">{{ r.stEn }}</span></span>
+                      <span style="font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:5px;background:{{ r.urgBg }};color:{{ r.urgFg }};width:fit-content">{{ r.urg }}</span>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:3px">
+                      <div style="display:flex;justify-content:space-between;align-items:center;font-size:9px;color:#8397A0;font-weight:600"><span class="zh">影响</span><span class="en">Impact</span><span style="font-family:Manrope;color:{{ r.starFg }};font-weight:800;letter-spacing:-.04em">{{ r.stars }}</span></div>
+                      <div style="height:4px;background:#E6EBEE;border-radius:2px;overflow:hidden"><div style="width:{{ r.starPct }};height:100%;background:{{ r.starFg }}"></div></div>
+                    </div>
+                    <span style="justify-self:end;display:flex;align-items:center;gap:3px;font-size:10px;font-weight:700;color:#0B3A82;white-space:nowrap"><span class="zh">详情</span><span class="en">Open</span>›</span>
+                  </div>
+                </sc-for>
+                </div>
+              </div>
+            </sc-for>
+            <div class="card">
+              <div class="chd"><span style="width:8px;height:8px;border-radius:50%;background:#0B3A82;box-shadow:0 0 0 3px #D7E3F6"></span><h3><span class="zh">法规 → 业务节点穿透</span><span class="en">Where regulation lands in the business</span></h3><span class="pill" style="background:#F2F6FD;color:#0B3A82">7</span><span style="margin-left:auto;font-size:10.5px;color:#8397A0"><span class="zh">法规不是合规部的事 —— 它改的是这七个动作的门槛</span><span class="en">Regulation changes the bar for these seven steps</span></span></div>
+              <div style="padding:4px 16px 14px">
+                <div style="display:grid;grid-template-columns:132px 1fr 1fr;gap:10px;padding:8px 0;border-bottom:1px solid #EDF1F3;font-size:9px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:#7A8B92">
+                  <span><span class="zh">业务节点</span><span class="en">Business step</span></span>
+                  <span><span class="zh">新的门槛</span><span class="en">New threshold</span></span>
+                  <span><span class="zh">做不到的后果</span><span class="en">If it fails</span></span>
+                </div>
+                <sc-for list="{{ regNodes }}" as="n" hint-placeholder-count="7">
+                  <div style="display:grid;grid-template-columns:132px 1fr 1fr;gap:10px;padding:9px 10px;margin:6px -10px 0;border-radius:8px;border:1px solid {{ n.bd }};background:{{ n.bg }};align-items:flex-start">
+                    <div>
+                      <div style="font-size:11.5px;font-weight:700;color:{{ n.fg }}">{{ n.node }}</div>
+                      <span style="display:{{ n.tagShow }};font-size:8.5px;font-weight:800;padding:1px 6px;border-radius:4px;background:#B0291D;color:#fff;margin-top:4px">{{ n.tag }}</span>
+                    </div>
+                    <div style="font-size:11px;color:#33484F;line-height:1.5">{{ n.thr }}</div>
+                    <div style="font-size:11px;color:{{ n.failFg }};line-height:1.5">{{ n.fail }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div class="card" style="border-left:3px solid #B6C4C9">
+              <div class="chd rowlink" onClick="{{ regExToggle }}"><span style="font-family:Manrope;font-size:11px;font-weight:800;color:#8397A0;width:9px">{{ regExCaret }}</span><span style="width:8px;height:8px;border-radius:50%;background:#B6C4C9;box-shadow:0 0 0 3px #E9EEF0"></span><h3><span class="zh">已排除 · 附原因</span><span class="en">Excluded · with reason</span></h3><span class="pill">{{ regExCount }}</span><span style="margin-left:auto;font-size:10.5px;color:#8397A0"><span class="zh">扫描到但判定不适用 —— 判定理由留痕</span><span class="en">Scanned but ruled out — reasons kept on record</span></span></div>
+              <div style="display:{{ regExShow }};padding:6px 16px 12px">
+                <sc-for list="{{ regEx }}" as="r" hint-placeholder-count="2">
+                  <div style="display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px dashed #E6EBEE;font-size:11.5px">
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:600;color:#8397A0;background:#F0F3F5;padding:1px 6px;border-radius:3px">{{ r.code }}</span>
+                    <span style="font-weight:700"><span class="zh">{{ r.zh }}</span><span class="en">{{ r.en }}</span></span>
+                    <span style="color:#8397A0;margin-left:auto;text-align:right"><span class="zh">{{ r.reasonZh }}</span><span class="en">{{ r.reasonEn }}</span></span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+          <div class="card" style="position:sticky;top:70px;overflow:hidden">
+            <div style="padding:12px 14px;background:linear-gradient(160deg,#ECFBFE,#fff);border-bottom:1px solid #E1E7EA">
+              <div style="display:flex;align-items:center;gap:9px"><div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#0891B2,#3FAE55);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800">AI</div><div><div style="font-size:13px;font-weight:700"><span class="zh">合规顾问</span><span class="en">Compliance Advisor</span></div><div style="font-size:10px;color:#8397A0"><span class="zh">在线 · 每条都可问「为什么」</span><span class="en">Online · ask why on any item</span></div></div></div>
+            </div>
+            <div style="padding:11px 12px;display:flex;flex-direction:column;gap:10px">
+              <div style="background:#F5F7F8;border:1px solid #E1E7EA;border-radius:10px;padding:10px 11px;font-size:11.5px;color:#33484F;line-height:1.55">
+                <div style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#045B75;font-weight:700;margin-bottom:4px"><span class="zh">今日重点</span><span class="en">Today</span></div>
+                <span class="zh"><b>CBAM</b> 已进入 2026 强制期，Autoliv 对欧盟出口的钢/铝制安全部件需逐 SKU 提交嵌入排放。建议本周启动 <b>ISO 14067</b> 产线级 PCF 核算作为底层方法学，可一并支撑奇瑞的绿电与再生材料要求。</span><span class="en b"><b>CBAM</b> is in its 2026 definitive phase — steel/aluminium safety parts to the EU need per-SKU embedded emissions. Kick off <b>ISO 14067</b> line-level PCF this week; it also feeds Chery's RE & recycled-content asks.</span>
+              </div>
+              <div style="background:#fff;border:1px solid #E1E7EA;border-radius:10px;padding:8px 10px">
+                <sc-for list="{{ regChain }}" as="c" hint-placeholder-count="4">
+                  <div style="display:flex;gap:10px;padding:5px 0;align-items:flex-start"><span style="width:12px;height:12px;border-radius:50%;background:{{ c.dotBg }};border:2px solid {{ c.dotBd }};flex-shrink:0;margin-top:2px"></span><div style="font-size:11.5px;color:#33484F;line-height:1.45"><b style="display:block;font-size:12px;color:{{ c.titleColor }}"><span class="zh">{{ c.tzh }}</span><span class="en">{{ c.ten }}</span></b><span class="zh">{{ c.dzh }}</span><span class="en">{{ c.den }}</span></div></div>
+                </sc-for>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:5px">
+                <div style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#9AABB1;font-weight:700"><span class="zh">你可能想问</span><span class="en">You may ask</span></div>
+                <button style="padding:7px 10px;background:#fff;border:1px solid #E1E7EA;border-radius:7px;font-size:11.5px;color:#33484F;text-align:left" onClick="{{ regAsk1 }}"><span class="zh">CBAM 与客户绿电要求如何协同？</span><span class="en">How do CBAM & OEM RE asks align?</span></button>
+                <button style="padding:7px 10px;background:#fff;border:1px solid #E1E7EA;border-radius:7px;font-size:11.5px;color:#33484F;text-align:left" onClick="{{ regAsk2 }}"><span class="zh">CSDDD 2029 前我要准备什么？</span><span class="en">What to prep before CSDDD 2029?</span></button>
+                <button style="padding:7px 10px;background:#fff;border:1px solid #E1E7EA;border-radius:7px;font-size:11.5px;color:#33484F;text-align:left" onClick="{{ regAsk3 }}"><span class="zh">哪条法规最省力先做？</span><span class="en">Which reg is the easiest first win?</span></button>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;background:#F5F7F8;border-radius:999px;padding:5px 6px 5px 12px;border:1px solid #E1E7EA">
+                <span style="flex:1;font-size:11.5px;color:#9AABB1"><span class="zh">问我关于合规的任何事…</span><span class="en">Ask me anything…</span></span>
+                <span style="width:28px;height:28px;border-radius:50%;background:#0891B2;color:#fff;display:flex;align-items:center;justify-content:center">→</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+      
+<sc-if value="{{ onB4 }}" hint-placeholder-val="{{ false }}">
+
+      <div data-screen-label="实时监控墙" style="display:flex;flex-direction:column;gap:14px">
+        <div style="border:1px solid #E9C9C4;border-left:3px solid #B0291D;border-radius:14px;padding:14px 18px;background:linear-gradient(135deg,#FDF2F0,#FAFBFC 90%);display:flex;align-items:center;gap:18px">
+          <div style="flex:1">
+            <div style="font-size:9.5px;letter-spacing:.2em;color:#8A1E14;font-weight:700;text-transform:uppercase"><span class="zh">链主服务 II · 合规实时监控</span><span class="en">Chain-lead service II · Live monitoring</span></div>
+            <div style="font-size:19px;font-weight:800;letter-spacing:-.02em;margin-top:3px"><span class="zh">供应链合规监控墙</span><span class="en">Supply-Chain Compliance Watch Wall</span></div>
+            <div style="font-size:12px;color:#33484F;margin-top:4px;line-height:1.55;max-width:860px"><span class="zh">政策发布 → AI 实体/物项抽取 → 供应链主数据碰撞 → 分级告警：分钟级。碰撞的前提是主数据沉淀在平台上——这就是链主账号的价值。</span><span class="en">Policy → AI entity extraction → master-data collision → tiered alert, in minutes. Collision only works because the master data lives on the platform.</span></div>
+          </div>
+          <div style="display:flex;gap:16px;flex-shrink:0;text-align:center">
+            <div><div style="font-family:Manrope;font-size:22px;font-weight:800;color:#B0291D">{{ m3CtA }}</div><div style="font-size:10px;color:#8397A0"><span class="zh">核查</span><span class="en">Alert</span></div></div>
+            <div><div style="font-family:Manrope;font-size:22px;font-weight:800;color:#C97D1C">{{ m3CtW }}</div><div style="font-size:10px;color:#8397A0"><span class="zh">关注</span><span class="en">Watch</span></div></div>
+            <div><div style="font-family:Manrope;font-size:22px;font-weight:800;color:#0891B2">{{ m3CtI }}</div><div style="font-size:10px;color:#8397A0"><span class="zh">提示</span><span class="en">Info</span></div></div>
+            <div style="border-left:1px dashed #D5DFE3;padding-left:16px"><div style="font-family:Manrope;font-size:22px;font-weight:800;color:#0B5B4A">4′12″</div><div style="font-size:10px;color:#8397A0"><span class="zh">发布→告警</span><span class="en">Policy→alert</span></div></div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:322px minmax(0,1fr) 340px;gap:14px;width:100%;align-items:start">
+          <div class="card">
+            <div class="chd"><h3 style="font-size:12.5px"><span class="zh">政策流</span><span class="en">Policy feed</span></h3><span class="pill" style="background:#EAF7EA;color:#1F6B32"><span class="zh">实时抓取</span><span class="en">Live</span></span></div>
+            <div style="padding:12px 14px 14px;display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{ m3Sources }}" as="p" hint-placeholder-count="4">
+                <div class="rowlink" onClick="{{ p.pick }}" style="border:1px solid {{ p.bd }};border-left:3px solid {{ p.accent }};border-radius:10px;background:{{ p.bg }};padding:11px 12px">
+                  <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+                    <span style="font-size:9px;font-weight:800;padding:2px 6px;border-radius:4px;background:{{ p.tagBg }};color:{{ p.tagFg }};letter-spacing:.06em">{{ p.tag }}</span>
+                    <span style="font-size:9.5px;font-weight:800;color:{{ p.starFg }};letter-spacing:.06em">{{ p.stars }}</span>
+                    <span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;background:{{ p.urgBg }};color:{{ p.urgFg }}">{{ p.urg }}</span>
+                    <span style="display:flex;align-items:center;gap:4px;font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;background:{{ p.scBg }};color:{{ p.scFg }}"><span style="width:5px;height:5px;border-radius:50%;background:{{ p.scDot }}"></span><span class="zh">{{ p.scZh }}</span><span class="en">{{ p.scEn }}</span></span>
+                    <span style="margin-left:auto;font-family:Manrope;font-size:10px;color:#8397A0">{{ p.date }}</span>
+                  </div>
+                  <div style="font-size:12.5px;font-weight:700;line-height:1.4;margin-top:7px;color:{{ p.titleFg }}"><span class="zh">{{ p.zh }}</span><span class="en b">{{ p.en }}</span></div>
+                  <div style="font-size:10.8px;color:#33484F;line-height:1.55;margin-top:5px"><span class="zh">{{ p.descZh }}</span><span class="en b">{{ p.descEn }}</span></div>
+                  <div style="display:flex;flex-direction:column;gap:3px;margin-top:8px;padding-top:8px;border-top:1px dashed {{ p.bd }}">
+                    <sc-for list="{{ p.facts }}" as="x" hint-placeholder-count="2">
+                      <div style="display:flex;gap:7px;font-size:10.5px;line-height:1.45"><span style="color:#8397A0;flex-shrink:0;min-width:52px">{{ x.k }}</span><span style="color:{{ x.fg }};font-weight:{{ x.fw }}">{{ x.v }}</span></div>
+                    </sc-for>
+                  </div>
+                  <div style="margin-top:8px;padding:8px 10px;border-radius:8px;background:#EDF9F4;border:1px solid #CFE8DE">
+                    <div style="font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#0B5B4A"><span class="zh">自动产出</span><span class="en">Auto deliverable</span></div>
+                    <div style="font-size:10.5px;font-weight:700;color:#0F1E24;line-height:1.45;margin-top:3px">{{ p.deliv }}</div>
+                    <div style="font-size:9px;color:#0B5B4A;font-weight:600;margin-top:2px">{{ p.delivAgent }}</div>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:6px;margin-top:8px;font-size:10px;color:{{ p.hitFg }};font-weight:700">{{ p.hit }}<span style="margin-left:auto;color:#C4D0D5">›</span></div>
+                </div>
+              </sc-for>
+              <div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0;margin-top:2px"><span class="zh">其它源 · 本月抓取</span><span class="en">Other sources this month</span></div>
+              <sc-for list="{{ m3Feed }}" as="f" hint-placeholder-count="3">
+                <div style="border:1px solid #E6EBEE;border-radius:10px;padding:10px 12px;background:#fff">
+                  <div style="display:flex;align-items:center;gap:6px">
+                    <span style="font-size:9px;font-weight:800;padding:2px 6px;border-radius:4px;background:{{ f.tagBg }};color:{{ f.tagFg }};letter-spacing:.06em">{{ f.src }}</span>
+                    <span style="margin-left:auto;font-family:Manrope;font-size:10px;color:#9AABB1">{{ f.date }}</span>
+                  </div>
+                  <div style="font-size:11.5px;font-weight:600;line-height:1.4;margin-top:6px;color:#33484F">{{ f.title }}</div>
+                  <div style="font-size:10px;color:#8397A0;margin-top:4px">{{ f.hit }}</div>
+                </div>
+              </sc-for>
+              <div style="font-size:10px;color:#9AABB1;line-height:1.5"><span class="zh">监控源：商务部 / 海关总署 / 美国 BIS / 欧盟官方公报 / 各国制裁名单，共 23 个源，30 分钟轮询。</span><span class="en">23 sources polled every 30 min.</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="chd"><h3 style="font-size:12.5px">{{ m3Title }}</h3><span class="pill" style="background:#FDF3E7;color:#A3620F"><span class="zh">虚构演示链路</span><span class="en">Fictional demo paths</span></span><span style="margin-left:auto;font-size:10.5px;color:#8397A0"><span class="zh">主数据规模 317 供应商 · 1,842 零件号</span><span class="en">317 suppliers · 1,842 part numbers</span></span><button onClick="{{ go4 }}" style="font-size:11px;font-weight:700;color:#045B75"><span class="zh">在合规雷达中查看 →</span><span class="en">Open in radar →</span></button></div>
+            <div style="padding:12px 16px 6px">
+              <div style="display:{{ m3CdShow }};align-items:center;gap:11px;padding:9px 13px;border-radius:10px;background:#FDF2F0;border:1px solid #E9C9C4;margin-bottom:11px">
+                <span style="font-family:Manrope;font-size:22px;font-weight:800;letter-spacing:-.02em;color:#B0291D;line-height:1">{{ m3CdDays }}</span>
+                <div style="min-width:0">
+                  <div style="font-size:11.5px;font-weight:800;color:#8A1E14"><span class="zh">{{ m3CdZh }}</span><span class="en b">{{ m3CdEn }}</span></div>
+                  <div style="font-size:10.5px;color:#5A6E75;margin-top:2px"><span class="zh">{{ m3CdSubZh }}</span><span class="en b">{{ m3CdSubEn }}</span></div>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 96px 1fr;gap:0;align-items:start">
+                <div>
+                  <div style="font-size:9.5px;font-weight:800;letter-spacing:.06em;color:#8A1E14;font-family:Manrope;margin-bottom:8px">{{ m3LeftTitle }}</div>
+                  <div style="display:flex;flex-direction:column;gap:8px">
+                    <sc-for list="{{ m3Left }}" as="l" hint-placeholder-count="4">
+                      <div style="height:56px;box-sizing:border-box;border:1px solid {{ l.bd }};border-radius:9px;background:{{ l.bg }};padding:8px 11px;display:flex;flex-direction:column;justify-content:center">
+                        <div style="font-size:11px;font-weight:700;line-height:1.3;color:#0F1E24;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ l.title }}</div>
+                        <div style="font-size:9.5px;color:#8397A0;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ l.sub }}</div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+                <div style="position:relative;height:{{ m3H }}px;margin-top:22px">
+                  <svg viewBox="0 0 96 {{ m3H }}" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%">
+                    <sc-for list="{{ m3Links }}" as="k" hint-placeholder-count="3">
+                      <path d="{{ k.d }}" fill="none" stroke="{{ k.color }}" stroke-width="{{ k.w }}" stroke-dasharray="{{ k.dash }}" opacity="{{ k.op }}"></path>
+                    </sc-for>
+                  </svg>
+                </div>
+                <div>
+                  <div style="font-size:9.5px;font-weight:800;letter-spacing:.06em;color:#045B75;font-family:Manrope;margin-bottom:8px;text-align:right">{{ m3RightTitle }}</div>
+                  <div style="display:flex;flex-direction:column;gap:8px">
+                    <sc-for list="{{ m3Right }}" as="n" hint-placeholder-count="3">
+                      <div class="rowlink" onClick="{{ n.pick }}" style="height:56px;box-sizing:border-box;border:1px solid {{ n.bd }};border-radius:9px;background:{{ n.bg }};padding:8px 11px;display:flex;flex-direction:column;justify-content:center">
+                        <div style="display:flex;align-items:center;gap:6px">
+                          <span style="font-size:11px;font-weight:700;line-height:1.3;color:#0F1E24;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ n.title }}</span>
+                          <span style="margin-left:auto;font-size:8.5px;font-weight:800;padding:1px 6px;border-radius:4px;background:{{ n.lvBg }};color:{{ n.lvFg }};white-space:nowrap;flex-shrink:0">{{ n.lv }}</span>
+                        </div>
+                        <div style="font-size:9.5px;color:{{ n.subFg }};margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ n.sub }}</div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+              <div style="font-size:9.5px;color:#9AABB1;font-family:Manrope;text-align:center;margin-top:10px">{{ m3GraphNote }}</div>
+            </div>
+            <div style="padding:0 16px 14px">
+              <sc-for list="{{ m3Rows }}" as="c" hint-placeholder-count="3">
+                <div class="rowlink" onClick="{{ c.pick }}" style="display:flex;gap:11px;align-items:flex-start;padding:10px 12px;border-radius:9px;border:1px solid {{ c.bd }};background:{{ c.bg }};margin-top:8px">
+                  <span style="font-size:9.5px;font-weight:800;padding:3px 8px;border-radius:5px;background:{{ c.lvBg }};color:{{ c.lvFg }};white-space:nowrap;flex-shrink:0">{{ c.level }}</span>
+                  <div style="flex:1;min-width:0">
+                    <div style="font-size:11.5px;font-weight:700;line-height:1.4">{{ c.path }}</div>
+                    <div style="font-size:10.5px;color:#5A6E75;line-height:1.5;margin-top:3px">{{ c.finding }}</div>
+                  </div>
+                  <span style="font-size:8.5px;font-weight:700;padding:2px 6px;border-radius:4px;background:#F0F3F5;color:#8397A0;white-space:nowrap;flex-shrink:0"><span class="zh">虚构演示</span><span class="en">Fictional</span></span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div class="card" style="border-top:2px solid {{ m3SelColor }}">
+              <div class="chd" style="padding-bottom:11px"><h3 style="font-size:12.5px"><span class="zh">告警处置</span><span class="en">Disposition</span></h3><span class="pill" style="background:{{ m3SelBg }};color:{{ m3SelColor }}">{{ m3SelId }} · {{ m3SelLevel }}</span></div>
+              <div style="padding:12px 15px 14px">
+                <div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">受影响链路</span><span class="en">Affected path</span></div>
+                <div style="font-size:11.5px;font-weight:600;line-height:1.5;margin-top:5px;padding:9px 11px;background:#F5F7F8;border-radius:8px">{{ m3SelPath }}</div>
+                <div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0;margin-top:12px"><span class="zh">AI 判定</span><span class="en">AI finding</span></div>
+                <div style="font-size:11px;color:#33484F;line-height:1.55;margin-top:4px">{{ m3SelFinding }}</div>
+                <div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0;margin-top:12px"><span class="zh">建议处置</span><span class="en">Recommended action</span></div>
+                <div style="font-size:11px;color:#0F1E24;line-height:1.55;margin-top:4px;font-weight:600">{{ m3SelAction }}</div>
+                <div style="display:flex;gap:7px;margin-top:13px">
+                  <button onClick="{{ m3Stop }}" style="flex:1;padding:8px 10px;border-radius:8px;background:#B0291D;color:#fff;font-size:11.5px;font-weight:700"><span class="zh">暂缓发运</span><span class="en">Hold shipment</span></button>
+                  <button onClick="{{ m3Assign }}" style="flex:1;padding:8px 10px;border-radius:8px;background:#fff;border:1px solid #D5DFE3;color:#33484F;font-size:11.5px;font-weight:600"><span class="zh">指派核查</span><span class="en">Assign review</span></button>
+                  <button onClick="{{ m3Watch }}" style="padding:8px 10px;border-radius:8px;background:#F3F6F7;color:#4C6169;font-size:11.5px;font-weight:600"><span class="zh">仅关注</span><span class="en">Watch</span></button>
+                </div>
+              </div>
+            </div>
+
+            <div class="card" style="border-top:2px solid #8A1E14">
+              <div class="chd" style="padding-bottom:11px"><span style="width:8px;height:8px;border-radius:50%;background:#8A1E14;box-shadow:0 0 0 3px #FBD5D0"></span><h3 style="font-size:12.5px"><span class="zh">红旗 · 一票否决</span><span class="en">Red flags · veto</span></h3><span class="pill" style="background:#FDF2F0;color:#8A1E14">{{ vetoN }}</span></div>
+              <div style="padding:0 15px 13px">
+                <div style="display:flex;align-items:baseline;gap:8px;padding:9px 11px;border-radius:9px;background:#FDF2F0;border:1px solid #E9C9C4">
+                  <span style="font-family:Manrope;font-size:20px;font-weight:800;color:#8A1E14;line-height:1">{{ vetoKpiV }}</span>
+                  <span style="font-size:10.5px;color:#8A1E14;font-weight:700;line-height:1.4"><span class="zh">{{ vetoKpiZh }}</span><span class="en b">{{ vetoKpiEn }}</span></span>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:5px;margin-top:10px">
+                  <sc-for list="{{ vetoRows }}" as="v" hint-placeholder-count="7">
+                    <div style="display:flex;gap:8px;align-items:flex-start;font-size:11px;line-height:1.5">
+                      <span style="font-family:Manrope;font-size:9.5px;font-weight:800;color:#B0291D;flex-shrink:0;padding-top:1px">{{ v.no }}</span>
+                      <span style="color:#33484F">{{ v.text }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="font-size:10px;color:#9AABB1;line-height:1.5;margin-top:9px"><span class="zh">命中任一条即红旗：系统直接拦截放行，须合规负责人书面解除，不能由采购自行判断。</span><span class="en b">Any hit is a red flag: release is blocked until compliance signs it off.</span></div>
+              </div>
+            </div>
+            <div class="card" style="border-top:2px solid #5B3FA8">
+              <div class="chd" style="padding-bottom:11px"><span style="width:8px;height:8px;border-radius:50%;background:#5B3FA8;box-shadow:0 0 0 3px #E4DBF9"></span><h3 style="font-size:12.5px"><span class="zh">责任边界 · 谁做什么</span><span class="en">Responsibility boundary</span></h3><span class="pill" style="background:#EDE7FB;color:#5B3FA8">{{ respN }}</span><span style="margin-left:auto;font-size:10px;color:#8397A0"><span class="zh">高风险项适用</span><span class="en">Applies to high-risk items</span></span></div>
+              <div style="padding:2px 15px 13px">
+                <sc-for list="{{ respRows }}" as="r" hint-placeholder-count="5">
+                  <div style="display:flex;gap:10px;align-items:flex-start">
+                    <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;align-self:stretch">
+                      <span style="width:20px;height:20px;border-radius:50%;background:{{ r.bg }};border:1.5px solid {{ r.bd }};color:{{ r.fg }};font-family:Manrope;font-size:9.5px;font-weight:800;display:flex;align-items:center;justify-content:center">{{ r.no }}</span>
+                      <span style="display:{{ r.lastShow }};flex:1;width:1.5px;background:#E6EBEE;min-height:14px"></span>
+                    </div>
+                    <div style="padding-bottom:11px;min-width:0">
+                      <div style="font-size:11.5px;font-weight:700;color:#0F1E24;line-height:1.4">{{ r.stage }}</div>
+                      <div style="display:flex;align-items:center;gap:7px;margin-top:3px;flex-wrap:wrap">
+                        <span style="font-size:10px;font-weight:800;padding:2px 7px;border-radius:5px;background:{{ r.bg }};color:{{ r.fg }}">{{ r.owner }}</span>
+                        <span style="font-size:10px;color:#8397A0">{{ r.nature }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </sc-for>
+                <div style="font-size:10px;color:#5A6E75;line-height:1.55;padding:9px 11px;border-radius:9px;background:#F7F5FD;border:1px solid #E4DBF9"><span class="zh">{{ respNoteZh }}</span><span class="en b">{{ respNoteEn }}</span></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="chd" style="padding-bottom:11px"><h3 style="font-size:12.5px"><span class="zh">七类场景控制</span><span class="en">Seven control scenarios</span></h3><span class="pill" style="background:#F2F6FD;color:#0B3A82">{{ scenN }}</span></div>
+              <div style="padding:0 15px 13px;display:flex;flex-direction:column;gap:6px">
+                <sc-for list="{{ scenRows }}" as="x" hint-placeholder-count="7">
+                  <div>
+                    <button onClick="{{ x.pick }}" style="width:100%;display:flex;align-items:center;gap:8px;padding:8px 11px;border-radius:8px;background:{{ x.bg }};border:1px solid {{ x.bd }};text-align:left">
+                      <span style="font-family:Manrope;font-size:9.5px;font-weight:800;color:#8397A0">{{ x.no }}</span>
+                      <span style="font-size:11.5px;font-weight:{{ x.fw }};color:{{ x.fg }}">{{ x.title }}</span>
+                      <span style="margin-left:auto;color:#C4D0D5;font-size:11px">{{ x.caret }}</span>
+                    </button>
+                    <div style="display:{{ x.openShow }};flex-direction:column;gap:7px;padding:10px 12px;margin-top:5px;border-radius:9px;background:#F5F7F8;border:1px solid #E1E7EA">
+                      <div><div style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#B0291D"><span class="zh">风险</span><span class="en">Risk</span></div><div style="font-size:11px;color:#33484F;line-height:1.55;margin-top:3px">{{ x.risk }}</div></div>
+                      <div><div style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#0B5B4A"><span class="zh">必须采取的控制</span><span class="en">Required control</span></div><div style="font-size:11px;color:#33484F;line-height:1.55;margin-top:3px">{{ x.control }}</div></div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div class="card">
+              <div class="chd" style="padding-bottom:11px"><h3 style="font-size:12.5px"><span class="zh">处置留痕</span><span class="en">Audit trail</span></h3><span style="margin-left:auto;font-size:10px;color:#9AABB1"><span class="zh">不可篡改 · 可导出</span><span class="en">Immutable · exportable</span></span></div>
+              <div style="padding:12px 15px 14px;display:flex;flex-direction:column;gap:0">
+                <sc-for list="{{ m3Trail }}" as="t" hint-placeholder-count="4">
+                  <div style="display:flex;gap:10px;align-items:flex-start;padding-bottom:11px">
+                    <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;padding-top:3px">
+                      <span style="width:7px;height:7px;border-radius:50%;background:{{ t.dot }}"></span>
+                      <span style="width:1px;flex:1;min-height:14px;background:#E1E7EA"></span>
+                    </div>
+                    <div style="flex:1">
+                      <div style="font-size:11.5px;font-weight:600;line-height:1.4">{{ t.what }}</div>
+                      <div style="font-size:10px;color:#9AABB1;font-family:Manrope;margin-top:1px">{{ t.who }} · {{ t.when }}</div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <div style="border-radius:11px;background:#0F1E24;color:#fff;padding:14px 16px">
+              <div style="font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#7ED0B4"><span class="zh">现场讲解口径</span><span class="en">Pitch</span></div>
+              <div style="font-size:12px;line-height:1.6;margin-top:6px;color:#E8EEF0"><span class="zh">政策发布 → 实体抽取 → 主数据碰撞 → 分级告警：分钟级。碰撞的前提是供应链主数据沉淀在平台——这就是链主账号的价值。</span><span class="en">Policy → entity extraction → master-data collision → tiered alert, in minutes. The collision only exists because master data lives on the platform — that is the value of the chain-lead account.</span></div>
+              <div style="font-size:10px;color:#8397A0;margin-top:10px;padding-top:9px;border-top:1px solid rgba(255,255,255,.12);line-height:1.5"><span class="zh">名单与公告为公开信息；所有受影响链路均为虚构演示数据。</span><span class="en">List and announcement are public information; all affected paths are fictional demo data.</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1234,&quot;height&quot;:840},&quot;st&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;object&quot;},&quot;api&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;object&quot;}}">
+class Component extends DCLogic {
+  state = {};
+  componentDidMount() {
+    fetch('./data/reg_demo.json').then(r => r.json()).then(p => this.setState({ regPack: p })).catch(() => {});
+  }
+  showToast(a, b) { const api = this.props.api || {}; api.toast && api.toast(a, b); }
+  casBatches() { return []; }
+  regFromPack(r,zh){
+    const S={高:['#FEECEA','#B0291D','紧迫 高','High urgency'],中高:['#FDF3E7','#A3620F','紧迫 中高','Med-high'],
+      中:['#FDF9F2','#A3620F','紧迫 中','Medium'],已生效:['#F0F3F5','#5A6E75','已生效 · 持续','In force']};
+    const u=S[r.urgency]||S['中'];
+    const inC=r.inPlatform==='新增'?['#FDF3E7','#A3620F','#F2D9AE','新增','New']
+      :(r.inPlatform==='部分'?['#F2F6FD','#0B3A82','#D7E3F6','部分覆盖','Partial']:['#F3F6F7','#5A6E75','#E1E7EA','已在库','Existing']);
+    const star=n=>'★★★★★'.slice(0,n)+'☆☆☆☆☆'.slice(0,5-n);
+    const dayTo=t=>{const m=String(t).match(/(20\d\d)-(\d\d)-(\d\d)/); if(!m) return null;
+      return Math.ceil((new Date(m[0])-new Date())/86400000);};
+    const nodeC=n=>/RFQ|出口/.test(n)?['#FDF2F0','#B0291D','#E9C9C4']:['#F5F7F8','#4C6169','#E1E7EA'];
+    const SC={'绿':['#3FAE55','#EAF7EA','#1F6B32','#BFE3C6','数据与证据齐全 · 可直接提交','Ready to submit'],
+      '黄':['#E2A85C','#FDF3E7','#A3620F','#F2D9AE','可暂用但需补验证 · 自动生成整改任务','Needs verification · auto CAP'],
+      '红':['#DC3A2C','#FEECEA','#B0291D','#E9C9C4','重大缺口或高风险 · 触发采购/合规升级','Major gap · escalate']};
+    const sc=SC[r.statusColor]||SC['黄'];
+    const mkts=[];
+    const txt=[r.name,r.nameEn,r.coreRequirement].join(' ');
+    if(/欧盟|EU |CBAM|CSRD|CSDDD|EUDR|PPWR|ESPR|REACH|电池|循环|毁林/.test(txt)) mkts.push([zh?'欧盟市场':'EU market','#0B3A82','#F2F6FD']);
+    if(/美国|UFLPA|SEC/.test(txt)) mkts.push([zh?'美国市场':'US market','#8A1E14','#FDF2F0']);
+    if(/德国|LkSG/.test(txt)) mkts.push([zh?'德国法人 / 客户':'German entity','#0B3A82','#F2F6FD']);
+    if(/中国|稀土|出口管制|两用物项/.test(txt)) mkts.push([zh?'中国出口管制':'China export control','#B0291D','#FEECEA']);
+    if(!mkts.length) mkts.push([zh?'全球客户传导':'Global cascade','#4C6169','#F3F6F7']);
+    const basis={C1:zh?'企业规模门槛（员工 / 净营业额）+ 法人所在地 + 是否达门槛第三方集团 → 再看客户合同传导'
+        :'Headcount & turnover thresholds + entity location + third-country group tests, then contractual cascade',
+      C2:zh?'CN / HS 编码 + 材料构成 + 产品类别与角色（制造商 / 进口商 / 包装填充者）→ 逐零件判定'
+        :'CN/HS code + material composition + product class & role (manufacturer / importer / packer), judged per part',
+      C3:zh?'物项归类（两用物项清单）+ 原产地与中国成分占比 + 最终用户 / 最终用途 → 逐交易判定'
+        :'Item classification + origin & China-content share + end-user/end-use, judged per transaction'}[r.category];
+    const clShort=(function(t){const s2=String(t||'');
+      if(/贸易合规字段|不在 ASSI/.test(s2)) return zh?'贸易合规字段 · 由 V8 交易筛查采集':'Trade-compliance fields · V8 screening';
+      const m=s2.match(/共\s*(\d+)\s*题/); return (zh?'ASSI 统一问卷 · ':'ASSI survey · ')+(m?m[1]:'—')+(zh?' 题，一次采集多处复用':' items, collected once');})(r.collectedBy);
+    return {
+      scDot:sc[0], scBg:sc[1], scFg:sc[2], scBd:sc[3], scZh:sc[4], scEn:sc[5],
+      srcTags:[['reg','法规硬性义务','Statutory'],['oem','品牌方要求传导','OEM cascade'],['std','行业标准与评级','Standards'],
+        ['own','自有 37 项要求','Own 37 asks'],['geo','地缘政治与管制','Geopolitics']]
+        .filter(x=>this.dimsOf(r).indexOf(x[0])>=0)
+        .map(x=>({zh:x[1],en:x[2],bg:x[0]==='geo'?'#FDF2F0':'#F2F6FD',fg:x[0]==='geo'?'#8A1E14':'#0B3A82'})),
+      applicShow:'flex',
+      applicMkts:mkts.map(m=>({label:m[0], fg:m[1], bg:m[2]})),
+      applicBasis:basis||'',
+      applicVerdict:(zh?('判定结论：适用于 Autoliv 中国 —— '+(r.autolivStatus||'待补充'))
+        :('Verdict: applies to Autoliv China — '+(r.autolivStatus||''))),
+      delivShow:'flex', delivText:r.deliverable||'—',
+      delivAgent:(zh?'由 ':'by ')+(r.agent||'—')+(zh?' 自动执行产出':''),
+      collectLabel:clShort, collectFull:r.collectedBy||'',
+      collectPick:()=>this.showToast('采集链：'+(r.collectedBy||'—')+' —— 同一批题同时支撑客户问卷、报告与本条法规，不重复问供应商',
+        'Collected via: '+(r.collectedBy||'—')),
+      code:r.id, zh:r.name, en:r.nameEn, accentBg:'#E7F6FA', accentFg:'#045B75',
+      origin:(r.category==='C1'?(zh?'气候 · 披露 · 尽调':'Climate, disclosure & diligence')
+        :(r.category==='C2'?(zh?'产品 · 材料 · 循环':'Product, materials & circularity'):(zh?'出口管制与地缘':'Export control'))),
+      stBg:u[0], stFg:u[1], stZh:u[2], stEn:u[3],
+      stars:star(r.impactStar), starFg:r.impactStar>=5?'#B0291D':(r.impactStar>=4?'#A3620F':'#5A6E75'),
+      urg:zh?u[2]:u[3], urgBg:u[0], urgFg:u[1],
+      inLabel:zh?inC[3]:inC[4], inBg:inC[0], inFg:inC[1], inBd:inC[2],
+      statusShow:r.autolivStatus?'flex':'none', autolivStatus:r.autolivStatus||'', legacyShow:'none', legacyGrid:'none',
+      summaryZh:r.coreRequirement, summaryEn:r.coreRequirement,
+      periodZh:(r.keyDates&&r.keyDates.length)?(zh?'有明确时点':'Dated'):(zh?'持续义务':'Standing'),
+      periodEn:(r.keyDates&&r.keyDates.length)?'Dated':'Standing',
+      nextZh:(r.keyDates&&r.keyDates[0])||(zh?'无固定时点':'—'), nextEn:(r.keyDates&&r.keyDates[0])||'—',
+      fourShow:'flex',
+      four:[
+        {k:zh?'状态与核心要求':'Core requirement',v:r.coreRequirement,accent:'#045B75'},
+        {k:zh?'对 Autoliv 影响':'Impact on Autoliv',v:r.impactAutoliv,accent:'#B0291D'},
+        {k:zh?'对供应商要求 · 关键证据':'Supplier requirement & evidence',v:r.supplierRequirement,accent:'#0B5B4A'}
+      ],
+      datesShow:(r.keyDates&&r.keyDates.length)?'flex':'none',
+      dates:(r.keyDates||[]).map(t=>{const d=dayTo(t), hot=d!==null&&d<=200;
+        return {text:t, dot:hot?'#B0291D':'#C4D0D5', fg:hot?'#8A1E14':'#33484F', fw:hot?'700':'600',
+          cd:d===null?'':(d<0?(zh?'已过':'passed'):((zh?'剩 ':'')+d+(zh?' 天':'d'))), cdFg:hot?'#B0291D':'#8397A0'};}),
+      nodesShow:(r.businessNodes&&r.businessNodes.length)?'flex':'none',
+      nodes:(r.businessNodes||[]).map(n=>{const c=nodeC(n);
+        return {label:(zh?'穿透 · ':'Hits · ')+n, bg:c[0], fg:c[1], bd:c[2]};}),
+      why:[],
+      reqs:this.reqNosOf(r.relatedReq37),
+      actions:[{n:1,zh:'把本条的证据要求并入下一轮供应商任务单',en:'Fold the evidence needs into the next supplier pack'},
+        {n:2,zh:'指定责任人与复核周期，变更自动触发重评',en:'Assign an owner and review cycle; changes retrigger assessment'}]
+    };
+  }
+
+  dimsOf(r){
+    const t=[r.name,r.nameEn,r.coreRequirement,r.impactAutoliv,r.deliverable,r.relatedReq37].join(' ');
+    const out=[];
+    if(/罚|禁|扣留|暂停|下架|资格|不得|强制/.test(t)) out.push('reg');
+    if(/客户|OEM|主机厂|传导|授标|问卷|报告/.test(t)) out.push('oem');
+    if(/IMDS|CMRT|EMRT|SCIP|GADSL|EcoVadis|RSCI|SAQ|ISO|PCF|LCA|护照|声明/.test(t)) out.push('std');
+    if(this.reqNosOf(r.relatedReq37).length) out.push('own');
+    if(r.category==='C3'||/强迫劳动|制裁|名单|出口管制|地缘/.test(t)) out.push('geo');
+    return out;
+  }
+
+  casReqNos(){ return this.casBatches().reduce((a,b)=>a.concat(b.reqs),[]); }
+
+  reqNosOf(list){
+    const out=[];
+    (list||[]).forEach(x=>{ const t=String(x);
+      const m=t.match(/#\s*(\d+)\s*[–\-~至]\s*#?\s*(\d+)/);
+      if(m){ for(let i=+m[1];i<=+m[2];i++) out.push(i); return; }
+      const one=t.match(/#\s*(\d+)/); if(one) out.push(+one[1]); });
+    return out.filter((v,i,a)=>a.indexOf(v)===i);
+  }
+  M6SET(){ return ['ELV','BATT']; }
+  M6DEEP(){ return ['RARE','FLR','UFLPA','FLDUAL','CMEU','ESPR']; }
+  regVals(anon){
+    const s=this.state, zh=s.lang==='zh';
+    const plus=!!(this.props.st||{}).plus;
+    const M6=this.M6SET();
+    const P=s.regPack||null;
+    const rawAll=(P&&P.regulations)||[];
+    const all=plus?rawAll:rawAll.filter(r=>M6.indexOf(r.id)<0);
+    const m6N=rawAll.filter(r=>M6.indexOf(r.id)>=0).length;
+    const DEEP=this.M6DEEP();
+    const deepN=all.filter(r=>DEEP.indexOf(r.id)>=0).length;
+    const v6=all.filter(r=>r.view.indexOf('V6')>=0);
+    const v8=all.filter(r=>r.view==='V8');
+    const star=n=>'★★★★★'.slice(0,n)+'☆☆☆☆☆'.slice(0,5-n);
+    const urgC=u=>u==='高'?['#FEECEA','#B0291D']:(u==='中高'?['#FDF3E7','#A3620F']:(u==='中'?['#FDF9F2','#A3620F']:['#F0F3F5','#5A6E75']));
+    const inC=p=>p==='新增'?['#FDF3E7','#A3620F','#F2D9AE']:(p==='部分'?['#F2F6FD','#0B3A82','#D7E3F6']:['#F3F6F7','#5A6E75','#E1E7EA']);
+    const cut=(t,n)=>{t=String(t||'');return t.length>n?t.slice(0,n)+'…':t;};
+    const casNos=this.casReqNos();
+    const q6=(s.q||'').trim().toLowerCase();
+    const SC={'绿':['#3FAE55','#EAF7EA','#1F6B32','#BFE3C6','齐全可提交','Ready'],
+      '黄':['#E2A85C','#FDF3E7','#A3620F','#F2D9AE','需补验证','Needs verification'],
+      '红':['#DC3A2C','#FEECEA','#B0291D','#E9C9C4','重大缺口 · 升级','Major gap · escalate']};
+    const DIMOF=r=>this.dimsOf(r);
+    const collectShort=t=>{const s2=String(t||'');
+      if(/贸易合规字段|不在 ASSI/.test(s2)) return zh?'贸易合规字段 · V8 交易筛查采集':'Trade-compliance fields · V8 screening';
+      if(/ASSI/.test(s2)){const m=s2.match(/共\s*(\d+)\s*题/); return (zh?'ASSI 统一问卷 · ':'ASSI survey · ')+(m?m[1]:'—')+(zh?' 题一次采集':' items');}
+      return zh?'贸易合规字段 · V8 交易筛查采集':'Trade-compliance fields · V8 screening';};
+    const mk=r=>{
+      const uc=urgC(r.urgency), ic=inC(r.inPlatform);
+      const nos=this.reqNosOf(r.relatedReq37);
+      const inCas=nos.filter(n=>casNos.indexOf(n)>=0).length;
+      const sc=SC[r.statusColor]||SC['黄'];
+      const isDeep=DEEP.indexOf(r.id)>=0;
+      return {open:()=>api0.openDw&&api0.openDw('reg',r.id), code:r.id, zh:r.name, en:r.nameEn, cat:r.category,
+        stDot:sc[0], stBg:sc[1], stFg:sc[2], stBd:sc[3], stZh:sc[4], stEn:sc[5],
+        depShow:isDeep?'inline-flex':'none',
+        depZh:plus?'汽车专项深度':'深度属 M6', depEn:plus?'Automotive depth':'Depth in M6',
+        depBg:plus?'#E6F4F8':'transparent', depFg:plus?'#045B75':'#B6C4C9',
+        depBd:plus?'#E6F4F8':'1px dashed #CFD8DC', depBorder:plus?'none':'1px dashed #CFD8DC',
+        oneLine:cut(r.coreRequirement,58),
+        deliv:r.deliverable||'—', agent:(zh?'由 ':'by ')+(r.agent||'—')+(zh?' 执行':''),
+        collect:collectShort(r.collectedBy), collectFull:r.collectedBy||'',
+        origin:(r.category==='C1'?(zh?'气候 · 披露 · 尽调':'Climate & diligence')
+          :(r.category==='C2'?(zh?'产品 · 材料 · 循环':'Product & materials')
+          :(zh?'出口管制与地缘':'Export control')))+' · '+r.inPlatform,
+        why:[{k:zh?'核心要求：':'Core: ',v:cut(zh?r.coreRequirement:r.coreRequirement,86)},
+          {k:zh?'对 Autoliv：':'Impact: ',v:cut(r.impactAutoliv,86)}],
+        periodZh:(r.keyDates&&r.keyDates.length)?(zh?'关键日期':'Key dates'):(zh?'持续义务':'Standing'),
+        periodEn:(r.keyDates&&r.keyDates.length)?'Key dates':'Standing',
+        nextZh:(r.keyDates&&r.keyDates[0])||(zh?'无固定时点':'no fixed date'),
+        nextEn:(r.keyDates&&r.keyDates[0])||'no fixed date',
+        stars:star(r.impactStar), starPct:(r.impactStar*20)+'%',
+        starFg:r.impactStar>=5?'#B0291D':(r.impactStar>=4?'#A3620F':'#5A6E75'),
+        urg:(zh?'紧迫 ':'')+r.urgency, urgBg:uc[0], urgFg:uc[1],
+        inLabel:zh?r.inPlatform:(r.inPlatform==='新增'?'New':(r.inPlatform==='部分'?'Partial':'Existing')),
+        inBg:ic[0], inFg:ic[1], inBd:ic[2],
+        linkZh:this._empty?'→ 待碰撞：要求台账与供应商清单为空，无法判断本条落到哪几项要求':(nos.length?('→ 落到 '+nos.length+' 项供应商要求 '+nos.map(n=>'#'+n).join(' ')+(inCas?('（'+inCas+' 项本轮在传导）'):'（本轮未传导）')):'→ 仅对 Autoliv 自身，未落到供应商要求'),
+        linkEn:this._empty?'→ Pending collision: no requirements or suppliers yet':(nos.length?('→ '+nos.length+' supplier requirements '+nos.map(n=>'#'+n).join(' ')):'→ binds Autoliv only'),
+        linkFg:this._empty?'#8A4B08':(inCas?'#0B5B4A':'#8397A0'),
+        };
+    };
+    const hit=r=>!q6||[r.id,r.name,r.nameEn,r.category,r.coreRequirement].join(' ').toLowerCase().indexOf(q6)>=0;
+    const hi=v6.filter(r=>r.impactStar>=4&&hit(r)).map(mk);
+    const ex=[
+      {code:'US IRA',zh:'美国通胀削减法案',en:'US IRA',reasonZh:'无美国本土生产实体',reasonEn:'No US production entity'},
+      {code:'加州 SB253',zh:'加州气候披露法',en:'CA SB-253',reasonZh:'营收未达门槛',reasonEn:'Below revenue threshold'},
+    ];
+    const toV8=()=>{ this.setState({view:'v8'}); this.showToast('出口管制类在「实时监控墙」按事件与名单管理 —— 与 V6 的常态义务分开','Export controls are handled on the watch wall'); };
+    // ── 分类筛选 ──────────────────────────────────────────────
+    const fCat=s.regCat||'all', fSt=s.regSt||'all', fStar=!!s.regStar, fNew=!!s.regNew, fDim=s.regDim||'';
+    const filterOn=fCat!=='all'||fSt!=='all'||fStar||fNew||!!fDim||!!q6;
+    const pass=r=>hit(r)&&(fCat==='all'||r.category===fCat)&&(fSt==='all'||r.statusColor===fSt)
+      &&(!fStar||r.impactStar>=4)&&(!fNew||r.inPlatform==='新增')&&(!fDim||DIMOF(r).indexOf(fDim)>=0);
+    const shown=all.filter(pass);
+    const chip=(on,c)=>({bg:on?(c||'#0F1E24'):'#fff',fg:on?'#fff':'#4C6169',bd:on?(c||'#0F1E24'):'#E1E7EA',fw:on?'800':'600',
+      nFg:on?'rgba(255,255,255,.72)':'#9AABB1'});
+    const nCat=k=>all.filter(r=>k==='all'||r.category===k).length;
+    const nSt=k=>all.filter(r=>k==='all'||r.statusColor===k).length;
+    const catChips=[['all',zh?('全部 '+all.length+' 条'):('All '+all.length),'#0F1E24'],['C1',zh?'C1 气候 · 披露 · 尽调':'C1 Climate & diligence','#0B3A82'],
+      ['C2',zh?'C2 产品 · 材料 · 循环':'C2 Product & materials','#0B5B4A'],['C3',zh?'C3 出口管制与地缘':'C3 Export control','#B0291D']]
+      .map(x=>({label:x[0]==='all'?x[1]:x[1],n:String(nCat(x[0])),...chip(fCat===x[0],x[2]),pick:()=>this.setState({regCat:x[0]})}));
+    const stTip={'all':zh?'不限状态':'Any state',
+      '红':zh?'重大缺口或高风险：数据/证据缺失或命中高风险，触发采购与合规升级':'Major gap or high risk — escalates to purchasing & compliance',
+      '黄':zh?'可暂用但需补验证：先用现有数据出结果，同时自动生成整改任务':'Usable but needs verification — auto-creates a CAP',
+      '绿':zh?'数据与证据齐全，可直接提交客户 / 报告':'Data & evidence complete — ready to submit'};
+    const stChips=[['all',zh?'全部状态':'All states','#0F1E24',''],['红',zh?'重大缺口 · 升级':'Major gap','#B0291D','#DC3A2C'],
+      ['黄',zh?'需补验证 · 自动整改':'Needs verification','#A3620F','#E2A85C'],['绿',zh?'齐全可提交':'Ready to submit','#1F6B32','#3FAE55']]
+      .map(x=>({label:x[1],n:String(nSt(x[0])),dot:x[3],dotShow:x[3]?'inline-block':'none',tip:stTip[x[0]]||'',
+        ...chip(fSt===x[0],x[2]),pick:()=>this.setState({regSt:x[0]})}));
+    const togChips=[
+      {label:zh?'仅 ★4 以上':'★4+ only',n:String(all.filter(r=>r.impactStar>=4).length),...chip(fStar,'#8A1E14'),pick:()=>this.setState({regStar:!fStar})},
+      {label:zh?'仅本次新增':'New only',n:String(all.filter(r=>r.inPlatform==='新增').length),...chip(fNew,'#A3620F'),pick:()=>this.setState({regNew:!fNew})}];
+    // ── 三组聚类（可收起）───────────────────────────────────────
+    const gdefs=[
+      {k:'C1',dot:'#0B3A82',bd:'#0B3A82',zh:'C1 · 气候 / 披露 / 尽调',en:'C1 · Climate, disclosure & due diligence',
+        subZh:'跨全公司的报告与尽调义务，落在同一套价值链数据上',subEn:'Company-wide reporting & diligence on one value-chain dataset'},
+      {k:'C2',dot:'#0B5B4A',bd:'#0B5B4A',zh:'C2 · 产品 / 材料 / 循环',en:'C2 · Product, materials & circularity',
+        subZh:'按零件与物料判定，产出直接进 IMDS / 护照 / 声明',subEn:'Judged per part & material; feeds IMDS, passports, declarations'},
+      {k:'C3',dot:'#B0291D',bd:'#B0291D',zh:'C3 · 出口管制与地缘（在监控墙执行）',en:'C3 · Export control & geopolitics (run on the watch wall)',
+        subZh:'按事件与名单管理，命中不由 AI 放行',subEn:'Event- and list-driven; hits are never released by AI'}];
+    const openMap=s.regOpen||{};
+    const groups=gdefs.map(g=>{
+      const rows=all.filter(r=>r.category===g.k&&pass(r)).sort((a,b)=>(b.impactStar-a.impactStar)||(a.id<b.id?-1:1)).map(mk);
+      const total=all.filter(r=>r.category===g.k).length;
+      const dflt=g.k!=='C3';
+      const open=filterOn?rows.length>0:(openMap[g.k]===undefined?dflt:!!openMap[g.k]);
+      const redN=all.filter(r=>r.category===g.k&&r.statusColor==='红').length;
+      const ylwN=all.filter(r=>r.category===g.k&&r.statusColor==='黄').length;
+      const grnN=all.filter(r=>r.category===g.k&&r.statusColor==='绿').length;
+      return {key:g.k, dot:g.dot, bd:g.bd, zh:g.zh, en:g.en, subZh:g.subZh, subEn:g.subEn,
+        rows, count:(rows.length===total?String(total):(rows.length+' / '+total)),
+        mixParts:[['#DC3A2C','#FEECEA','#B0291D',redN],['#E2A85C','#FDF3E7','#A3620F',ylwN],['#3FAE55','#EAF7EA','#1F6B32',grnN]]
+          .filter(x=>x[3]).map(x=>({dot:x[0],bg:x[1],fg:x[2],n:String(x[3])})),
+        caret:open?'▾':'▸', bodyShow:open?'block':'none', headBg:open?'#fff':'#FBFCFD',
+        emptyShow:(open&&!rows.length)?'block':'none',
+        toggle:()=>{const n2={...(this.state.regOpen||{})}; n2[g.k]=!(n2[g.k]===undefined?dflt:n2[g.k]); this.setState({regOpen:n2});}};
+    });
+    const exOpen=!!(s.regExOpen);
+    const dim=[
+      {k:'reg',zh:'法规与管制',en:'Regulation',star:5,urg:'高',subZh:'16 条在库 · 10 条新增',subEn:'16 tracked · 10 new',go:()=>this.showToast('下方即为 16 条法规库：C1 气候披露尽调 6 条 · C2 产品材料循环 7 条 · C3 出口管制 3 条（在监控墙）','The 16-regulation library is below')},
+      {k:'oem',zh:'品牌方要求',en:'OEM asks',star:5,urg:'高',subZh:'47 条客户条款 · 评级挂授标',subEn:'47 clauses · scores gate awards',go:()=>this.setState({view:'v2'})},
+      {k:'std',zh:'行业标准与评级',en:'Standards & ratings',star:4,urg:'中',subZh:'EcoVadis · RSCI · SAQ 5.0',subEn:'EcoVadis · RSCI · SAQ 5.0',go:()=>this.setState({view:'v4'})},
+      {k:'own',zh:'自有 37 项要求',en:'Own 37 requirements',star:4,urg:'中',subZh:'硬性 18 · 新增 2 · 期望 17',subEn:'18 required · 2 new · 17 expected',go:()=>this.setState({view:'v13'})},
+      {k:'geo',zh:'地缘政治与管制',en:'Geopolitics',star:5,urg:'高',subZh:'稀土 2026-11-10 · 强迫劳动双禁',subEn:'Rare earth · forced-labour bans',go:()=>this.setState({view:'v8'})}
+    ];
+    const nodes=(P&&P.businessNodes)||[];
+    const cal=(P&&P.calendar)||{};
+    const dayTo=t=>Math.ceil((new Date(t)-new Date())/86400000);
+    // ── 合规时间日历：月轨 + 倒计时 ──────────────────────────────
+    const KW=[[/CBAM/,'CBAM','CBAM'],[/ESPR|DPP/,'ESPR','ESPR'],[/PPWR|包装/,'PPWR','PPWR'],[/稀土/,'RARE','RARE'],
+      [/EUDR|毁林/,'EUDR','EUDR'],[/CSRD/,'CSRD','CSRD'],[/电池/,'BATT','BATT'],[/强迫劳动/,'FLR','FLDUAL'],
+      [/CSDDD/,'CSDDD','CSDDD'],[/SBTi/,'SBTi',''],[/碳中和|绿电|净零/,'ALV',''] ];
+    const today=new Date();
+    const api0=this.props.api||{};
+    const openReg=id=>id?(()=>api0.openDw&&api0.openDw('reg',id))
+      :(()=>this.showToast('这是 Autoliv 自身的目标节点，不对应外部法规条目','This is an Autoliv internal target, not an external regulation'));
+    const parseItem=(t,y)=>{
+      const s2=String(t);
+      const kw=KW.find(k=>k[0].test(s2))||[null,'—',''];
+      const md2=s2.match(/^(\d\d)-(\d\d)/), full=s2.match(/^(20\d\d)-(\d\d)(?:-(\d\d))?/);
+      const yy=full?full[1]:y, mm=full?+full[2]:(md2?+md2[1]:null), dd=full?(+full[3]||1):(md2?+md2[2]:1);
+      const iso=mm?(yy+'-'+String(mm).padStart(2,'0')+'-'+String(dd).padStart(2,'0')):null;
+      const days=iso?dayTo(iso):null, passed=days!==null&&days<0;
+      let rest=s2.replace(/^(20\d\d-)?\d\d(-\d\d)?\s*/,'').replace(kw[1],'').trim();
+      if(!rest) rest=s2;
+      const hot=days!==null&&days>=0&&days<=180;
+      return {code:kw[1], regId:kw[2], short:rest.length>13?rest.slice(0,13)+'…':rest, full:s2,
+        col:mm||1, gcol:String(Math.min((mm||1)+1,11))+' / span 3',
+        date:(mm?String(mm).padStart(2,'0')+'-'+String(dd).padStart(2,'0'):yy), days, passed, hot,
+        bg:passed?'#F3F6F7':(hot?'#FEECEA':'#fff'), bd:passed?'#E6EBEE':(hot?'#E9C9C4':'#DCE6F5'),
+        fg:passed?'#9AABB1':(hot?'#8A1E14':'#33484F'),
+        cbg:passed?'#E9EEF0':(hot?'#B0291D':'#EEF3F8'), cfg:passed?'#8397A0':(hot?'#fff':'#0B3A82'),
+        cd:days===null?'':(passed?(zh?'已生效':'in force'):((zh?'剩 ':'')+days+(zh?' 天':'d'))),
+        cdBg:passed?'#EAF7EA':(hot?'#B0291D':'#F2F6FD'), cdFg:passed?'#1F6B32':(hot?'#fff':'#0B3A82'),
+        open:openReg(kw[2])};
+    };
+    const monthCells=y=>Array.from({length:12},(_,i)=>{
+      const now=y===String(today.getFullYear())&&(i+1)===today.getMonth()+1;
+      return {label:String(i+1), bg:now?'#0F1E24':'transparent', fg:now?'#fff':'#9AABB1', fw:now?'800':'600'};});
+    const calKeep=it=>plus||M6.indexOf(it.regId)<0;
+    const rails=['2026','2027'].map(y=>({year:y, months:monthCells(y),
+      items:(cal[y]||[]).map(t=>parseItem(t,y)).filter(calKeep)}));
+    const far=(cal['2028–2040']||[]).filter(t=>plus||M6.indexOf(parseItem(t,'2028').regId)<0).map(t=>{const p=parseItem(t,'2028');
+      return {label:String(t).replace(/^(20\d\d)(-\d\d)?(-\d\d)?\s*/,''), yr:String(t).slice(0,4), code:p.code, open:p.open,
+        bg:/Autoliv/.test(t)?'#EDF9F4':'#F5F8FC', bd:/Autoliv/.test(t)?'#BFE3D6':'#DCE6F5', fg:/Autoliv/.test(t)?'#0B5B4A':'#0B3A82'};});
+    const upcoming=rails.reduce((a,r)=>a.concat(r.items),[]).filter(x=>x.days!==null&&x.days>=0)
+      .sort((a,b)=>a.days-b.days).slice(0,3)
+      .map(x=>({...x, dayN:String(x.days), unit:zh?'天':'days',
+        nbg:x.days<=120?'#FEECEA':'#FDF9F2', nbd:x.days<=120?'#E9C9C4':'#F2E0C4',
+        nfg:x.days<=120?'#B0291D':'#A3620F'}));
+    return {
+      regPlus:plus,
+      regM6Show:plus?'none':'flex',
+      regM6N:String(m6N),
+      regDeepN:String(deepN),
+      regAdoptShow:plus?'inline-flex':'none',
+      regKpis:[
+        {lzh:'扫描法规',len:'Scanned',v:'124',color:'#0F1E24',szh:'公开来源',sen:'public',subColor:'#8397A0'},
+        {lzh:'相关义务',len:'Relevant',v:String(all.length),color:'#002D6B',szh:'本屏 '+(v6.length||13)+' · 管制 '+(v8.length||3)+' 在监控墙',sen:v6.length+' here · '+v8.length+' on the wall',subColor:'#8397A0'},
+        {lzh:'强相关 ★4+',len:'High impact',v:String(hi.length),color:'#B0291D',szh:'建议优先承接',sen:'adopt first',subColor:'#B0291D'},
+        {lzh:'本次新增',len:'New',v:String(all.filter(r=>r.inPlatform==='新增').length),color:'#A3620F',szh:'较上次扫描',sen:'vs. last scan',subColor:'#A3620F'},
+        {lzh:'已落到要求',len:'Mapped to asks',v:this._empty?'—':String(new Set(all.reduce((a,r)=>a.concat(this.reqNosOf(r.relatedReq37)),[])).size),color:this._empty?'#8A4B08':'#0F1E24',szh:this._empty?'待碰撞 · 台账为空':'条供应商要求',sen:this._empty?'pending collision':'supplier requirements',subColor:'#8397A0'},
+      ],
+      regRelN:String(all.length), regV6N:String(v6.length), regV8N:String(v8.length),
+      regHiN:String(hi.length),
+      regAdoptLabel:zh?('一键承接 '+hi.length+' 项强相关'):('Adopt '+hi.length+' high-impact'),
+      regGroups:groups, regEx:ex, regExCount:ex.length,
+      regExCaret:exOpen?'▾':'▸', regExShow:exOpen?'block':'none',
+      regExToggle:()=>this.setState({regExOpen:!exOpen}),
+      regCatChips:catChips, regStChips:stChips, regTogChips:togChips,
+      regShownN:String(shown.length), regTotalN:String(all.length), regFilterShow:filterOn?'inline-flex':'none',
+      regClear:()=>this.setState({regCat:'all',regSt:'all',regStar:false,regNew:false,regDim:'',q:''}),
+      regFoldAll:()=>this.setState({regOpen:{C1:false,C2:false,C3:false},regExOpen:false}),
+      regUnfoldAll:()=>this.setState({regOpen:{C1:true,C2:true,C3:true},regExOpen:true}),
+      regHiCount:hi.length,
+      regDims:dim.map(d=>{const n2=all.filter(r=>DIMOF(r).indexOf(d.k)>=0).length, on=fDim===d.k;
+        const ac=d.star>=5?'#B0291D':'#A3620F';
+        return {zh:d.zh,en:d.en,stars:star(d.star),
+          cls:on?'dimsel':'', fw:on?'800':'600', dot:on?'rgba(255,255,255,.75)':ac,
+          tip:(zh?d.zh+'：影响强度 '+d.star+'/5 · 紧迫 '+d.urg+' · '+d.subZh+' —— 点击只看这类压力驱动的 '+n2+' 条义务'
+            :d.en+': impact '+d.star+'/5 · '+d.urg+' urgency · '+d.subEn),
+          starFg:on?'rgba(255,255,255,.8)':ac,
+          urg:(zh?'紧迫 ':'')+d.urg, urgBg:on?'rgba(255,255,255,.16)':urgC(d.urg)[0], urgFg:on?'#fff':urgC(d.urg)[1],
+          subZh:d.subZh, subEn:d.subEn,
+          n:String(n2), nFg:on?'#fff':'#0F1E24', nSub:on?'rgba(255,255,255,.6)':'#8397A0',
+          bg:on?'#0F1E24':'#fff', bd:on?'#0F1E24':'#E1E7EA', fg:on?'#fff':'#4C6169',
+          barBg:on?'rgba(255,255,255,.22)':'#EDF1F3', barFill:(d.star*20)+'%', barFg:on?'#fff':ac,
+          hintZh:on?'点击取消筛选':'点击只看这类压力', hintEn:on?'Click to clear':'Filter by this source',
+          hintFg:on?'rgba(255,255,255,.66)':'#9AABB1',
+          pick:()=>this.setState({regDim:on?'':d.k}), go:d.go};}),
+      regDimNote:zh?'矩阵即筛选器：点任一来源，只看这类压力驱动的义务条目':'The matrix is the filter — click a source to see only the obligations it drives',
+      regNodes:nodes.map(n=>({node:n.node, thr:n.newThreshold, fail:n.failureConsequence,
+        bg:n.highStakes?'#FDF6F5':'#fff', bd:n.highStakes?'#E9C9C4':'#E6EBEE',
+        fg:n.highStakes?'#8A1E14':'#0F1E24', failFg:n.highStakes?'#B0291D':'#5A6E75',
+        tag:n.highStakes?(zh?'高风险节点':'High stakes'):'', tagShow:n.highStakes?'inline-flex':'none'})),
+      regCalRails:rails, regCalFar:far, regCalNext:upcoming,
+      regChain:[
+        {dotBg:'#DC3A2C',dotBd:'#FBD5D0',titleColor:'#B0291D',tzh:'稀土窗口 2026-11-10',ten:'Rare-earth window',dzh:'磁材 BOM 溯源 → 双源认证',den:'Trace magnet BOM → dual source'},
+        {dotBg:'#E2A85C',dotBd:'#FAE7CC',titleColor:'#A3620F',tzh:'CBAM 与 PCF 同源',ten:'CBAM shares PCF',dzh:'ISO 14067 产线核算提供方法学',den:'ISO 14067 line accounting'},
+        {dotBg:'#3FAE55',dotBd:'#CDEBD3',titleColor:'#1F6B32',tzh:'一次取证多处复用',ten:'Collect once, reuse',dzh:'同一份供应商证据供 CSRD / 客户 / CBAM',den:'One evidence set for CSRD, OEM and CBAM'},
+        {dotBg:'#0891B2',dotBd:'#CDEEF5',titleColor:'#045B75',tzh:'变更触发重评',ten:'Change triggers re-check',dzh:'法规或 BOM 变更自动重跑适用性',den:'Reg or BOM change re-runs applicability'},
+      ],
+    };
+  }
+  m3Vals(s){
+    const zh=s.lang==='zh', P=s.regPack||null;
+    const toast=(a,b)=>()=>this.showToast(a,b);
+    const days=t=>Math.max(0,Math.ceil((new Date(t)-new Date())/86400000));
+    const L={alert:['核查（高）','Alert','#B0291D','#FDF6F5','#E9C9C4','#B0291D','#fff'],
+      watch:['关注（中）','Watch','#C97D1C','#FDF9F2','#F2E0C4','#FDF3E7','#A3620F'],
+      info:['提示（低）','Info','#0891B2','#F4FBFD','#CDEFF6','#ECFBFE','#045B75'],
+      veto:['红旗 · 一票否决','Red flag','#8A1E14','#FDF2F0','#E9C9C4','#8A1E14','#fff']};
+    const nd=(id,lv,title,sub,li,pathZh,pathEn,fZh,fEn,aZh,aEn)=>({id,lv,title,sub,li,pathZh,pathEn,fZh,fEn,aZh,aEn});
+    const ec=(P&&P.exportControl)||{};
+    const groups=(ec.entities20&&ec.entities20.groups)||[];
+    const gN=c=>{const g=groups.find(x=>x.cat===c);return g?g.n:0;};
+    const parts=(ec.rareEarth&&ec.rareEarth.affectedParts)||[
+      {part:'安全带预紧器 / 卷收器电机',use:'钕铁硼永磁'},{part:'方向盘转向助力与力反馈电机',use:'钕铁硼永磁'},
+      {part:'各类安全传感器',use:'稀土磁性材料'},{part:'气囊控制单元（ACU）内小型电机',use:'稀土永磁'}];
+    const flMat=(ec.forcedLabor&&ec.forcedLabor.materials)||['铝','多晶硅','棉纺','钢材','锂电材料'];
+    const SRC=[
+      {id:'RARE',tag:'MOFCOM 61/62',accent:'#B0291D',tagBg:'#B0291D',tagFg:'#fff',date:'2025-10-09',star:5,urg:'高',
+       zh:'稀土出口管制（第 61/62 号公告）',en:'Rare-earth export controls (Notices 61/62)',
+       descZh:'境外含中国成分（价值占比 ≥0.1%）或使用中国技术境外生产的稀土物项须获许可；覆盖开采、冶炼分离、金属冶炼、磁材制造、二次资源回收全链条。',
+       descEn:'Licences required for rare-earth items with ≥0.1% Chinese content or made abroad with Chinese technology; the whole chain from mining to magnet making and recycling is in scope.',
+       facts:[{k:zh?'暂停窗口':'Window',v:'2026-11-10 '+(zh?'届满':'expires'),fg:'#B0291D',fw:'800'},
+         {k:zh?'中国占比':'China share',v:zh?'约 60% 产量 · 约 90% 加工':'~60% output · ~90% processing',fg:'#33484F',fw:'700'}],
+       hitZh:'碰撞结果：4 个 Autoliv 部件族命中稀土磁材',hitEn:'4 Autoliv part families hit',hitFg:'#B0291D',
+       leftTitle:zh?'稀土磁材供应链 · 管制环节':'Rare-earth chain in scope',
+       left:[{title:zh?'开采 / 冶炼分离':'Mining / separation',sub:zh?'含中国成分 ≥0.1% 即受管':'≥0.1% Chinese content'},
+         {title:zh?'金属冶炼 / 磁材制造':'Metal & magnet making',sub:zh?'钕铁硼永磁主环节':'NdFeB magnets'},
+         {title:zh?'境外用中国技术生产':'Made abroad with CN tech',sub:zh?'技术溯及条款':'Technology reach-back'},
+         {title:zh?'二次资源回收':'Secondary recycling',sub:zh?'再生磁材同样在范围内':'Recycled magnets in scope'}],
+       rightTitle:zh?'Autoliv 受影响部件':'Affected Autoliv parts',
+       right:parts.map((p,i2)=>nd('RARE-'+i2,i2<2?'alert':(i2===2?'watch':'alert'),p.part,p.use,[[0,1],[1],[1,2],[1,3]][i2]||[1],
+         'Autoliv '+p.part+' ← '+p.use,'Autoliv '+p.part+' ← '+p.use,
+         '该部件依赖含中国成分的稀土永磁；若 2026-11-10 暂停窗口届满后恢复许可要求，需逐批申请许可或切换非管制来源。',
+         'This part depends on Chinese-content rare-earth magnets; if the suspension lapses, per-shipment licences or a non-controlled source are required.',
+         '立即完成磁材 BOM 溯源（供应商 / 产地 / 中国成分占比），对高风险件启动双源认证与安全库存。',
+         'Trace the magnet BOM (supplier, origin, Chinese-content share) and start dual sourcing plus buffer stock.'))},
+      {id:'EXPORT',tag:zh?'法律框架':'Framework',accent:'#045B75',tagBg:'#ECFBFE',tagFg:'#045B75',date:zh?'持续更新':'Rolling',star:4,urg:'高',
+       zh:'中国出口管制体系（法律 → 条例 → 清单）',en:'China export-control framework',
+       descZh:'出口管制法（2020-12-01 施行）→ 两用物项出口管制条例（2024-12-01 施行）→ 两用物项出口管制清单、管控名单与最终用户/最终用途管理，构成三层规则体系。',
+       descEn:'Export Control Law (2020) → Dual-Use Regulations (2024) → control lists, entity lists and end-user/end-use management.',
+       facts:((ec.legalFramework)||[{level:'法律',name:'《出口管制法》',status:'2020-12-01 施行'},{level:'行政法规',name:'《两用物项出口管制条例》',status:'2024-12-01 施行'},{level:'配套',name:'管制清单 / 管控名单 / 最终用户管理',status:'持续更新'}])
+         .map(x=>({k:x.level,v:x.name+' · '+x.status,fg:'#33484F',fw:'600'})),
+       hitZh:'碰撞结果：火工品含能材料需归类判定',hitEn:'Energetics need classification',hitFg:'#A3620F',
+       leftTitle:zh?'三层规则体系':'Three-layer framework',
+       left:((ec.legalFramework)||[{level:'法律',name:'《出口管制法》',status:'2020-12-01'},{level:'行政法规',name:'《两用物项出口管制条例》',status:'2024-12-01'},{level:'配套',name:'清单 / 名单 / 最终用户',status:'持续更新'}])
+         .map(x=>({title:x.name,sub:x.level+' · '+x.status})),
+       rightTitle:zh?'Autoliv 侧管制敞口':'Autoliv exposure',
+       right:[
+         nd('EXP-0','alert',zh?'气囊气体发生器 · 含能材料':'Inflator energetics',zh?'硝酸胍等点火药剂 → 两用物项':'Guanidine nitrate igniters',0,
+           zh?'气囊气体发生器含能材料 / 点火药剂 → 两用物项归类待定':'Inflator energetics → dual-use classification pending','Inflator energetics → classification pending',
+           '气囊气体发生器使用硝酸胍等含能材料与点火药剂，部分含能材料及其生产设备、技术可能落入两用物项清单，出口前须完成归类。',
+           'Inflators use guanidine-nitrate energetics; some energetic materials and their production equipment or technology may fall under the dual-use list.',
+           '对气体发生器料号与产线设备做一次性归类判定，形成归类台账并嵌入出口放行流程。',
+           'Classify inflator part numbers and line equipment once, then embed the register into export release.'),
+         nd('EXP-1','watch',zh?'惯性传感器 / 加速度计':'Inertial sensors',zh?'超精度阈值即属管制':'Above accuracy threshold',2,
+           zh?'安全传感器精度参数 → 阈值以上属管制范畴':'Sensor accuracy above control threshold','Sensor accuracy above threshold',
+           '惯性传感器、加速度计在特定精度阈值以上属管制范畴，需按参数逐型号判定，不能按品类一刀切。',
+           'Inertial sensors and accelerometers above certain accuracy thresholds are controlled — classification must be per model.',
+           '按型号参数建立传感器归类矩阵，变更设计即触发重新判定。',
+           'Build a per-model classification matrix; design changes retrigger it.'),
+         nd('EXP-2','info',zh?'技术 / 图纸 / 远程支持':'Technology & drawings',zh?'无形出口同样受管':'Intangible transfers',1,
+           zh?'软件、图纸、工艺与远程支持 → 无形技术出口':'Software, drawings, remote support','Intangible technology transfer',
+           '受控技术与数据可能通过邮件、云盘或远程服务提供，只管实物不足以合规。',
+           'Controlled technology can leave through email, cloud drives or remote support — controlling physical goods is not enough.',
+           '做技术分类 + 访问控制 + 下载日志 + 人员与国别权限，纳入同一审批流。',
+           'Classify technology and add access control, download logs and person/country permissions.')]},
+      {id:'MOFCOM',tag:'MOFCOM',accent:'#B0291D',tagBg:'#B0291D',tagFg:'#fff',date:'2026-06-29',star:4,urg:'高',
+       zh:'禁止向 20 家日本实体出口两用物项',en:'Ban on dual-use exports to 20 Japanese entities',
+       descZh:'禁止中国出口经营者向 20 家日本实体出口两用物项；禁止境外组织将原产中国的相关物项转移提供给上述实体；已开展活动立即停止，例外须单独申请。',
+       descEn:'Chinese exporters may not export dual-use items to the 20 listed Japanese entities, nor may anyone transfer China-origin items to them.',
+       facts:[{k:zh?'防卫机构':'Defense',v:(gN('防卫研究机构')||4)+(zh?' 家':''),fg:'#33484F',fw:'600'},
+         {k:zh?'三菱系':'Mitsubishi',v:((gN('三菱电机系')+gN('三菱重工系')+gN('三菱精密'))||9)+(zh?' 家 · 电机/重工/精密':' entities'),fg:'#8A1E14',fw:'700'},
+         {k:zh?'其它':'Others',v:((gN('日钢系')+gN('航空制造')+gN('其他精密制造'))||7)+(zh?' 家 · 日钢/航空/精密':' entities'),fg:'#33484F',fw:'600'}],
+       hitZh:'碰撞结果：3 条链路命中（1 核查 / 1 关注 / 1 提示）',hitEn:'3 paths hit',hitFg:'#B0291D',
+       leftTitle:zh?'管制名单实体 · 20':'Listed entities · 20',
+       left:[{title:zh?'三菱电机 / 重工 / 精密系':'Mitsubishi group',sub:((gN('三菱电机系')+gN('三菱重工系')+gN('三菱精密'))||9)+(zh?' 家关联企业':' affiliates')},
+         {title:zh?'防卫研究机构 ×'+(gN('防卫研究机构')||4):'Defense institutes',sub:zh?'防卫研究所 / 陆海空装备研究所':'Defense & equipment institutes'},
+         {title:zh?'日钢 / 航空 / 精密制造':'Steel, aircraft, precision',sub:zh?'日钢特机 · 光和兴业 · 日本飞机 等':'JSW M&E, Kowa, NIPPI'},
+         {title:zh?'两用物项转移禁令':'Re-transfer ban',sub:zh?'原产中国物项境外转移条款':'China-origin re-transfer clause'}],
+       rightTitle:zh?'Autoliv 供应链主数据':'Autoliv master data',
+       right:[
+         nd('COL-01','alert',zh?'出口件 P-7742':'Export part P-7742',zh?'BOM 含待判定元器件 → 日本客户 J1':'Undetermined components → customer J1',3,
+           zh?'Autoliv 出口件 P-7742（含中国原产两用物项属性待核）→ 日本客户 J1':'Export part P-7742 → Japanese customer J1','Export part P-7742 → Japanese customer J1',
+           '该零件 BOM 内含受两用物项管制属性待判定的元器件，出口目的地涉及名单关联主体。',
+           'BOM contains components of undetermined dual-use classification; destination linked to a listed entity.',
+           '立即启动物项归类核查；暂缓发运待合规判定；如属实向商务部申请。',
+           'Start classification review; hold shipment; file with MOFCOM if confirmed.'),
+         nd('COL-02','watch',zh?'二级供应商 ABC152':'Tier-2 supplier ABC152',zh?'金属加工 · 亦向三菱电机供货':'Metal forming · also supplies Mitsubishi',0,
+           zh?'二级供应商 ABC152（金属加工）→ 同时向 三菱电机 供货':'Tier-2 ABC152 also supplies Mitsubishi Electric','Tier-2 ABC152 also supplies Mitsubishi Electric',
+           '供应商销售侧与名单实体存在业务关联，非管制行为本身，但需评估其出口合规体系与连带风险。',
+           'Sales-side link to a listed entity — not itself controlled, but its export-compliance system must be assessed.',
+           '向 ABC152 下发合规确认函；纳入季度复核清单。','Issue a compliance confirmation letter; add to the quarterly review list.'),
+         nd('COL-03','info',zh?'CMRT 冶炼厂清单':'CMRT smelter list',zh?'要求 #23 引擎 · 本次未命中':'Req #23 engine · no hit',1,
+           zh?'CMRT 冶炼厂清单例行碰撞（要求 #23 引擎）':'Routine CMRT smelter-list collision','Routine CMRT smelter-list collision',
+           '本次名单未命中现有冶炼厂清单；引擎已将 20 家实体加入持续监控库。',
+           'No hit against the smelter list; the 20 entities were added to continuous monitoring.',
+           '无需动作，自动监控。','No action needed — monitored automatically.')]},
+      {id:'FLDUAL',tag:zh?'双重禁令':'Dual ban',accent:'#5B3FA8',tagBg:'#EDE7FB',tagFg:'#5B3FA8',date:'2027-12-14',star:4,urg:'高',
+       zh:'强迫劳动双重禁令（美国 UFLPA + 欧盟 2024/3015）',en:'Forced-labour dual ban (UFLPA + EU 2024/3015)',
+       descZh:'美国按可反驳推定禁止新疆相关货物进口，举证标准为“清晰且令人信服”；欧盟 2024/3015 自 2027-12-14 适用，无规模门槛，可下架、召回、销毁。',
+       descEn:'The US applies a rebuttable presumption for Xinjiang-linked goods with a clear-and-convincing evidence standard; the EU ban applies from 2027-12-14 with no size threshold.',
+       facts:[{k:'US',v:(ec.forcedLabor&&ec.forcedLabor.us)||'UFLPA & 19 U.S.C. §1307',fg:'#33484F',fw:'600'},
+         {k:'EU',v:(ec.forcedLabor&&ec.forcedLabor.eu)||'2024/3015 · 2027-12-14',fg:'#33484F',fw:'600'},
+         {k:zh?'高风险料':'Materials',v:flMat.join(' · '),fg:'#8A1E14',fw:'700'}],
+       hitZh:'碰撞结果：5 类高风险原料需建链路举证',hitEn:'5 high-risk materials need traceability',hitFg:'#5B3FA8',
+       leftTitle:zh?'双重禁令 · 举证标准':'Dual ban · evidence standard',
+       left:[{title:zh?'美国 UFLPA / §1307':'US UFLPA / §1307',sub:zh?'可反驳推定 · 清晰且令人信服':'Rebuttable presumption'},
+         {title:zh?'欧盟 2024/3015':'EU 2024/3015',sub:zh?'2027-12-14 适用 · 可下架召回销毁':'From 2027-12-14'},
+         {title:zh?'链路举证要求':'Traceability required',sub:zh?'发票 / 订单 / 产能 / 生产与运输记录互相匹配':'Invoices, orders, capacity, logs must match'}],
+       rightTitle:zh?'高风险原料 · Autoliv 用量口径':'High-risk materials',
+       right:flMat.map((m,i2)=>nd('FL-'+i2,i2<2?'alert':'watch',m,
+         [zh?'气囊壳体 / 结构件':'Housings',zh?'电子件上游':'Electronics upstream',zh?'安全带织带 / 内饰':'Webbing & trim',zh?'预紧器 / 结构钢':'Pretensioner steel',zh?'安全电子电池料':'Battery materials'][i2]||'',
+         i2%3,
+         (zh?'高风险原料 ':'High-risk material ')+m+(zh?' → 需重建从原料到成品的交易与物流链':' → chain of custody required'),
+         'High-risk material '+m+' → chain of custody required',
+         '该原料在美欧双重禁令下属高风险：被调查时须在数周内提交从原料到成品的交易链与物流链，且发票、订单、付款、产能与生产记录相互匹配。',
+         'Under both bans this material is high risk: when challenged, the full transaction and logistics chain must be produced within weeks.',
+         '对该原料的一级与次级供应商建立映射，收集工资、工时、招聘费、身份证件与申诉补救证据，并设置高风险地区禁用规则。',
+         'Map tier-1 and sub-tier suppliers, collect labour evidence, and set banned-region rules.'))}
+    ];
+    const src=SRC.find(x=>x.id===s.polSrc)||SRC[0];
+    const nodes=src.right;
+    const sel=nodes.find(n=>n.id===s.m3sel)||nodes[0];
+    const H=Math.max(src.left.length,nodes.length)*64-8;
+    const yOf=(i2)=>i2*64+28;
+    const star=n=>'★★★★★'.slice(0,n)+'☆☆☆☆☆'.slice(0,5-n);
+    const urgCol=u=>u==='高'?['#FEECEA','#B0291D']:(u==='中高'?['#FDF3E7','#A3620F']:(u==='中'?['#FDF9F2','#A3620F']:['#F0F3F5','#5A6E75']));
+    return {
+      m3Sources:SRC.map(x=>{const on=x.id===src.id, uc=urgCol(x.urg);
+        const rgId={RARE:'RARE',EXPORT:'MOFCOM',MOFCOM:'MOFCOM',FLDUAL:'FLDUAL'}[x.id]||x.id;
+        const rg=((P&&P.regulations)||[]).find(r=>r.id===rgId)||{};
+        const scx={'绿':['#3FAE55','#EAF7EA','#1F6B32','齐全可提交','Ready'],
+          '黄':['#E2A85C','#FDF3E7','#A3620F','需补验证 · 自动整改','Needs verification'],
+          '红':['#DC3A2C','#FEECEA','#B0291D','重大缺口 · 升级','Major gap · escalate']}[rg.statusColor||'黄'];
+        const dv=x.id==='RARE'?((ec.rareEarth&&ec.rareEarth.deliverable)||rg.deliverable)
+          :(x.id==='FLDUAL'?((ec.forcedLabor&&ec.forcedLabor.deliverable)||rg.deliverable):rg.deliverable);
+        return {tag:x.tag,tagBg:x.tagBg,tagFg:x.tagFg,accent:x.accent,date:x.date,
+          scDot:scx[0],scBg:scx[1],scFg:scx[2],scZh:scx[3],scEn:scx[4],
+          deliv:dv||'—', delivAgent:(zh?'由 ':'by ')+(rg.agent||(zh?'规则解译 Agent':'Rule Agent'))+(zh?' 执行':''),
+          bg:on?'#FDFBF7':'#fff',bd:on?x.accent:'#E6EBEE',titleFg:on?'#0F1E24':'#33484F',
+          stars:star(x.star),starFg:x.star>=5?'#B0291D':'#A3620F',
+          urg:(zh?'紧迫 ':'')+x.urg,urgBg:uc[0],urgFg:uc[1],
+          zh:x.zh,en:x.en,descZh:x.descZh,descEn:x.descEn,facts:x.facts,
+          hit:zh?x.hitZh:x.hitEn,hitFg:x.hitFg,
+          pick:()=>this.setState({polSrc:x.id,m3sel:x.right[0].id})};}),
+      m3CtA:String(nodes.filter(n=>n.lv==='alert').length),
+      m3CtW:String(nodes.filter(n=>n.lv==='watch').length),
+      m3CtI:String(nodes.filter(n=>n.lv==='info').length),
+      m3Title:(zh?(src.id==='MOFCOM'?'名单 × 供应链主数据碰撞图谱':'管制范围 × 供应链主数据碰撞图谱')
+        :(src.id==='MOFCOM'?'List × master-data collision':'Control scope × master-data collision')),
+      m3H:H, m3LeftTitle:src.leftTitle, m3RightTitle:src.rightTitle,
+      m3Left:src.left.map(l=>({title:l.title,sub:l.sub,bg:'#FDF6F5',bd:'#E9C9C4'})),
+      m3Right:nodes.map((n,i2)=>{const on=n.id===sel.id, lv=L[n.lv];
+        return {title:n.title,sub:n.sub,lv:zh?lv[0]:lv[1],lvBg:lv[5],lvFg:lv[6],
+          bg:on?lv[3]:'#fff',bd:on?lv[2]:'#E1E7EA',subFg:on?'#5A6E75':'#8397A0',
+          pick:()=>this.setState({m3sel:n.id})};}),
+      m3Links:nodes.reduce((acc,n,i2)=>{const on=n.id===sel.id, lv=L[n.lv];
+        const src=Array.isArray(n.li)?n.li:[n.li];
+        src.forEach(li=>acc.push({d:'M0,'+yOf(li)+' C40,'+yOf(li)+' 56,'+yOf(i2)+' 96,'+yOf(i2),
+          color:lv[2],w:on?2.6:1.2,dash:n.lv==='info'?'5 4':'0',op:on?1:0.3}));
+        return acc;},[]),
+      m3GraphNote:zh?'政策抽取 → 主数据碰撞 → 分级告警：点右侧节点看处置':'Extraction → collision → tiered alert: click a node',
+      m3CdShow:src.id==='RARE'?'flex':'none',
+      m3CdDays:String(days('2026-11-10')),
+      m3CdZh:'天 · 距 2026-11-10 稀土管制暂停窗口届满',m3CdEn:'days until the rare-earth suspension lapses (2026-11-10)',
+      m3CdSubZh:'中国约 60% 产量 / 90% 加工能力，短期无完全替代 —— 窗口届满即恢复逐批许可要求',
+      m3CdSubEn:'China holds ~60% of output and ~90% of processing — no full substitute in the short term',
+      m3Rows:nodes.map(n=>{const on=n.id===sel.id, lv=L[n.lv];
+        return {level:zh?lv[0]:lv[1],path:zh?n.pathZh:n.pathEn,finding:zh?n.fZh:n.fEn,
+          bg:on?lv[3]:'#fff',bd:on?lv[2]:'#E6EBEE',lvBg:lv[5],lvFg:lv[6],
+          pick:()=>this.setState({m3sel:n.id})};}),
+      m3SelId:sel.id, m3SelLevel:zh?L[sel.lv][0]:L[sel.lv][1], m3SelColor:L[sel.lv][2], m3SelBg:L[sel.lv][3],
+      m3SelPath:zh?sel.pathZh:sel.pathEn, m3SelFinding:zh?sel.fZh:sel.fEn, m3SelAction:zh?sel.aZh:sel.aEn,
+      m3Feed:[
+        {src:'BIS',date:'2026-07-21',tagBg:'#EDE7FB',tagFg:'#5B3FA8',title:zh?'实体清单新增 14 家主体（第 3 批）':'Entity List: 14 additions (batch 3)',hit:zh?'碰撞结果：未命中 Autoliv 供应链主数据':'No hit against master data'},
+        {src:'EU',date:'2026-07-14',tagBg:'#E7EEFB',tagFg:'#1F4FA8',title:zh?'第 20 轮制裁措施 · 两用物项清单更新':'20th sanctions package · dual-use list update',hit:zh?'碰撞结果：1 项零件号需重新归类（已闭环）':'1 part number reclassified (closed)'},
+        {src:zh?'海关总署':'GACC',date:'2026-07-02',tagBg:'#EAF7EA',tagFg:'#1F6B32',title:zh?'出口许可证管理货物目录调整':'Export licence catalogue update',hit:zh?'碰撞结果：无影响':'No impact'}
+      ],
+      m3Trail:[
+        {what:zh?'政策源抓取入库':'Policy ingested',who:zh?'监控引擎':'Engine',when:'06-29 09:14',dot:'#0891B2'},
+        {what:zh?'AI 抽取实体 / 物项 / 材料范围':'AI extracted entities, items, materials',who:'AI',when:'06-29 09:15',dot:'#5B3FA8'},
+        {what:zh?('主数据碰撞完成 · '+nodes.length+' 条链路命中'):('Collision run complete · '+nodes.length+' paths'),who:zh?'监控引擎':'Engine',when:'06-29 09:18',dot:'#C97D1C'},
+        {what:zh?(sel.id+' 指派至 合规与贸易管制组（李）'):(sel.id+' assigned to Trade Compliance (Li)'),who:zh?'赵（采购）':'Zhao (Sourcing)',when:'06-29 10:02',dot:'#B0291D'}
+      ],
+      respN:String(((ec.responsibility)||[]).length||5),
+      respRows:((ec.responsibility)||[]).map((x,i2)=>{
+        const ai=/AI Agent|祺鲲 AI/.test(x.owner), third=/第三方/.test(x.owner), gate=/出口管制负责人/.test(x.owner);
+        const c=ai?['#EDE7FB','#5B3FA8','#D9CDF6']:(gate?['#FDF2F0','#8A1E14','#E9C9C4']:(third?['#ECFBFE','#045B75','#CDEFF6']:['#F5F7F8','#4C6169','#E1E7EA']));
+        return {no:String(i2+1),stage:x.stage,owner:x.owner,nature:x.nature,bg:c[0],fg:c[1],bd:c[2],
+          lastShow:i2===4?'none':'block'};}),
+      respNoteZh:'命中出口管制 / 制裁名单或强迫劳动线索时，AI 只做采集、碰撞与留痕 —— 放行决定必须由 Autoliv 出口管制负责人作出，认证与核查结论由独立第三方出证。',
+      respNoteEn:'On an export-control, sanctions or forced-labour hit, AI only collects, collides and records — release is decided by Autoliv\'s export-control owner, and assurance conclusions come from an independent third party.',
+      vetoN:String(((ec.vetoConditions7)||[]).length||7),
+      vetoKpiV:'0',
+      vetoKpiZh:'名单 / 红旗交易未审批放行 —— 这是本屏唯一的零容忍 KPI',
+      vetoKpiEn:'zero listed or red-flag transactions released without approval',
+      vetoRows:((ec.vetoConditions7)||['命中出口管制/制裁名单且无合法许可','故意伪造 PCF、绿电、原产地、再生含量、矿产或审计证据','拒绝提供最终用户、Tier-N、审计或纠正措施信息','重大安全事故或环境违法后未立即控制和报告','使用童工、强迫劳动或扣押证件等重大人权问题','含禁止物质或未履行重大化学品合规要求','发现受制裁/高风险冶炼厂后拒绝移除或缓解'])
+        .map((t,i2)=>({no:String(i2+1).padStart(2,'0'),text:t})),
+      scenN:String(((ec.scenarios7)||[]).length||7),
+      scenRows:((ec.scenarios7)||[]).map((x,i2)=>{const on=s.ecScen===i2;
+        return {no:String(i2+1).padStart(2,'0'),title:x.scenario,risk:x.risk,control:x.control,
+          bg:on?'#F2F6FD':'#fff',bd:on?'#D7E3F6':'#E6EBEE',fg:on?'#0B3A82':'#33484F',fw:on?'800':'600',
+          caret:on?'▾':'›',openShow:on?'flex':'none',
+          pick:()=>this.setState({ecScen:on?null:i2})};}),
+      m3Stop:toast('已暂缓相关发运 · 已通知贸易管制组与计划部','Shipment held · trade compliance notified'),
+      m3Assign:toast('已指派贸易管制组核查 · 24 小时内回复','Assigned to trade compliance · 24h SLA'),
+      m3Watch:toast('已加入季度复核清单 · 变更自动提醒','Added to quarterly review list')
+    };
+  }
+  renderVals() {
+    const p = this.props.st || {};
+    const v = p.view;
+    const onP9 = v === 'p9', onB4 = v === 'b4';
+    this.state.lang = (p.zh !== false) ? 'zh' : 'en';
+    this._empty = !!p.empty;
+    let R = { onP9, onB4, regEmptyShow: p.empty ? 'flex' : 'none' };
+    if (onP9) { try { R = Object.assign(R, this.regVals(p.anon)); } catch (e) { console.warn('regVals', e); } }
+    if (onB4) { try { R = Object.assign(R, this.m3Vals(this.state)); } catch (e) { console.warn('m3Vals', e); } }
+    return R;
+  }
+}
+</script>
+</body>
+</html>

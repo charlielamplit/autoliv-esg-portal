@@ -1,0 +1,11 @@
+
+  casReqNos(){ return this.casBatches().reduce((a,b)=>a.concat(b.reqs),[]); }
+
+  reqNosOf(list){
+    const out=[];
+    (list||[]).forEach(x=>{ const t=String(x);
+      const m=t.match(/#\s*(\d+)\s*[–\-~至]\s*#?\s*(\d+)/);
+      if(m){ for(let i=+m[1];i<=+m[2];i++) out.push(i); return; }
+      const one=t.match(/#\s*(\d+)/); if(one) out.push(+one[1]); });
+    return out.filter((v,i,a)=>a.indexOf(v)===i);
+  }

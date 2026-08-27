@@ -36,19 +36,6 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
 .nav-i .mb{margin-left:auto;font-size:8.5px;font-weight:800;padding:1px 5px;border-radius:4px;letter-spacing:.03em}
 .nav-s{padding-left:26px;font-size:12px}
 .nav-s .ico{width:13px;font-size:11px}
-.nav-i.on{background:#002D6B;color:#fff;font-weight:600}
-.nav-i.on:hover{background:#002D6B}
-.nav-i.on .ico{color:#7FB0E0}
-.nav-i.on .ct{color:#9DBBDE}
-.stab{display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:700;padding:7px 13px;border-radius:8px;cursor:pointer;transition:.12s;white-space:nowrap;background:#fff;border:1px solid #E1E7EA;color:#4C6169}
-.stab:hover{border-color:#C4CFD4}
-.stab.on{background:#002D6B;border-color:#002D6B;color:#fff}
-.stab.on .tct{color:#9DBBDE}
-.stab .tct{font-family:Manrope;font-size:10px;font-weight:800;color:#9AABB1}
-.stab.off{background:#F7F9FA;border-style:dashed;color:#B6C4C9;cursor:pointer}
-.stab.off:hover{border-color:#B6C4C9}
-.stab.off .tct{color:#B6C4C9;font-weight:700}
-.mb.lk{background:transparent !important;color:#B6C4C9 !important;border:1px dashed #CFD8DC}
 [data-view="b1"] .nb1,[data-view="b2"] .nb2,[data-view="b4"] .nb4,[data-view="s1"] .ns1,[data-view="s2"] .ns2,[data-view="s3"] .ns3,[data-view="s4"] .ns4{background:#002D6B;color:#fff;font-weight:600}
 [data-view="b1"] .nb1 .ico,[data-view="b2"] .nb2 .ico,[data-view="b4"] .nb4 .ico,[data-view="s1"] .ns1 .ico,[data-view="s2"] .ns2 .ico,[data-view="s3"] .ns3 .ico,[data-view="s4"] .ns4 .ico{color:#7FB0E8}
 [data-view="p1"] .np1,[data-view="pL"] .npL,[data-view="p2"] .np2,[data-view="p3"] .np3,[data-view="p4"] .np4,[data-view="p5"] .np5{background:#0B3A82;color:#fff;font-weight:600}
@@ -86,40 +73,58 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
     </div>
 
     <div>
-      <div style="font-size:9px;letter-spacing:.15em;color:#9AABB1;font-weight:700;padding:2px 10px 6px;text-transform:uppercase"><span class="zh">工作台</span><span class="en">Workbench</span></div>
+      <div style="font-size:9px;letter-spacing:.15em;color:#9AABB1;font-weight:700;padding:2px 10px 6px;text-transform:uppercase"><span class="zh">工作台 · 标准交付</span><span class="en">Workbench</span></div>
       <div style="display:flex;flex-direction:column;gap:2px">
-        <div class="nav-i nw1 {{ onW1 }}" onClick="{{ goB1 }}"><span class="ico">◍</span><span class="zh">待办与任务中心</span><span class="en">Task centre</span><span class="ct">{{ navTodo }}</span></div>
-        <div class="nav-i nw2 {{ onW2 }}" onClick="{{ goB2 }}"><span class="ico">▦</span><span class="zh">企业ESG数据底座</span><span class="en">ESG Data Vault</span><span class="ct">{{ navVault }}</span></div>
+        <div class="nav-i nb1" onClick="{{ goB1 }}"><span class="ico">◍</span><span class="zh">基础管理工作台</span><span class="en">Workbench</span><span class="ct">{{ navTodo }}</span></div>
+        <div class="nav-i nav-s nb4" onClick="{{ goB4 }}"><span class="ico">✦</span><span class="zh">政策与合规监测</span><span class="en">Policy Watch</span><span class="mb" style="background:#E4EAF3;color:#002D6B">II</span></div>
+        <div class="nav-i nb2" onClick="{{ goB2 }}"><span class="ico">▦</span><span class="zh">企业ESG数据底座</span><span class="en">ESG Data Vault</span><span class="ct">{{ navVault }}</span></div>
       </div>
     </div>
 
-    <div>
-      <div style="font-size:9px;letter-spacing:.15em;color:#9AABB1;font-weight:700;padding:2px 10px 6px;text-transform:uppercase"><span class="zh">要求与合规</span><span class="en">Requirements</span></div>
-      <div style="display:flex;flex-direction:column;gap:2px">
-        <div class="nav-i nr1 {{ onR1 }}" onClick="{{ goPL }}"><span class="ico">▤</span><span class="zh">要求台账</span><span class="en">Requirement Ledger</span><span class="{{ mbCls }}" style="background:#E9F0FC;color:#0B3A82">M3</span></div>
-        <div class="nav-i nr2 {{ onR2 }}" onClick="{{ goP9 }}"><span class="ico">✦</span><span class="zh">法规与管制</span><span class="en">Regulations &amp; Controls</span><span class="mb" style="background:#E4EAF3;color:#002D6B">II</span></div>
+    <sc-if value="{{ isPlus }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;flex-direction:column;gap:13px">
+      <div>
+        <div style="font-size:9px;letter-spacing:.15em;color:#9AABB1;font-weight:700;padding:2px 10px 6px;text-transform:uppercase"><span class="zh">① 要求与目标</span><span class="en">Requirements</span></div>
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <div class="nav-i np1" onClick="{{ goP1 }}"><span class="ico">⇱</span><span class="zh">目标与考核导入</span><span class="en">Target Import</span><span class="mb" style="background:#E9F0FC;color:#0B3A82">M3</span></div>
+          <div class="nav-i npL" onClick="{{ goPL }}"><span class="ico">▤</span><span class="zh">要求台账与执行</span><span class="en">Requirement Ledger</span><span class="mb" style="background:#E9F0FC;color:#0B3A82">M3</span></div>
+          <div class="nav-i np2" onClick="{{ goP2 }}"><span class="ico">◫</span><span class="zh">差距分析</span><span class="en">Gap Analysis</span><span class="mb" style="background:#E9F0FC;color:#0B3A82">M3</span></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:9px;letter-spacing:.15em;color:#9AABB1;font-weight:700;padding:2px 10px 6px;text-transform:uppercase"><span class="zh">② 判定与动作</span><span class="en">Routing</span></div>
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <div class="nav-i np3" onClick="{{ goP3 }}"><span class="ico">◈</span><span class="zh">AI 判定与动作</span><span class="en">AI Routing</span><span class="mb" style="background:#E9F0FC;color:#0B3A82">M3</span></div>
+          <div class="nav-i np4" onClick="{{ goP4 }}"><span class="ico">▥</span><span class="zh">收资核验任务</span><span class="en">Evidence Verify</span><span class="mb" style="background:#E9F0FC;color:#0B3A82">M3</span></div>
+          <div class="nav-i np5" onClick="{{ goP5 }}"><span class="ico">✚</span><span class="zh">帮扶服务台</span><span class="en">Enablement</span><span class="mb" style="background:#F1EDFB;color:#5B3FA8">M2</span></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:9px;letter-spacing:.15em;color:#9AABB1;font-weight:700;padding:2px 10px 6px;text-transform:uppercase"><span class="zh">③ 供应商侧执行</span><span class="en">Supplier side</span></div>
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <div class="nav-i np6" onClick="{{ goP6 }}"><span class="ico">☰</span><span class="zh">供应商基准清单</span><span class="en">Baseline List</span><span class="mb" style="background:#EAF6F2;color:#0B5B4A">M4</span></div>
+          <div class="nav-i np7" onClick="{{ goP7 }}"><span class="ico">◔</span><span class="zh">达标全景分析</span><span class="en">Conformance</span><span class="mb" style="background:#EAF6F2;color:#0B5B4A">M4</span></div>
+          <div class="nav-i np8" onClick="{{ goP8 }}"><span class="ico">⊞</span><span class="zh">分层运营与下发</span><span class="en">Tiered Ops</span><span class="mb" style="background:#F1EDFB;color:#5B3FA8">M2</span></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:9px;letter-spacing:.15em;color:#9AABB1;font-weight:700;padding:2px 10px 6px;text-transform:uppercase"><span class="zh">④ 法规深度产出</span><span class="en">Regulatory depth</span></div>
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <div class="nav-i np9" onClick="{{ goP9 }}"><span class="ico">◎</span><span class="zh">合规雷达</span><span class="en">Radar</span><span class="mb" style="background:#E6F4F8;color:#045B75">M7</span></div>
+          <div class="nav-i np10" onClick="{{ goP10 }}"><span class="ico">⬢</span><span class="zh">汽车行业特定法规</span><span class="en">Automotive</span><span class="mb" style="background:#E6F4F8;color:#045B75">M6</span></div>
+        </div>
       </div>
     </div>
-
-    <div>
-      <div style="font-size:9px;letter-spacing:.15em;color:#9AABB1;font-weight:700;padding:2px 10px 6px;text-transform:uppercase"><span class="zh">供应商</span><span class="en">Suppliers</span></div>
-      <div style="display:flex;flex-direction:column;gap:2px">
-        <div class="nav-i nv1 {{ onV1 }}" onClick="{{ goP6 }}"><span class="ico">☰</span><span class="zh">供应商列表</span><span class="en">Supplier List</span><span class="{{ mbCls }}" style="background:#EAF6F2;color:#0B5B4A">M4</span></div>
-      </div>
-    </div>
-
-    <sc-if value="{{ showBaseHint }}" hint-placeholder-val="{{ false }}">
-      <div style="margin:0 4px;padding:9px 10px;border-radius:9px;background:#F7F9FA;border:1px dashed #D5DEE2;font-size:9.5px;line-height:1.55;color:#8397A0;font-weight:500"><span class="zh">{{ baseHintZh }}</span><span class="en">{{ baseHintEn }}</span></div>
     </sc-if>
 
     <div style="margin-top:auto;display:flex;flex-direction:column;gap:13px;padding-top:12px">
       <div style="padding-top:11px;border-top:1px dashed #E6EBEE">
         <div style="font-size:9px;letter-spacing:.15em;color:#9AABB1;font-weight:700;padding:2px 10px 6px;text-transform:uppercase"><span class="zh">系统管理</span><span class="en">System</span></div>
         <div style="display:flex;flex-direction:column;gap:2px">
-          <div class="nav-i ns1 {{ onS1 }}" onClick="{{ goS1 }}"><span class="ico">◉</span><span class="zh">用户管理</span><span class="en">Users</span><span class="ct">794</span></div>
-          <div class="nav-i ns2 {{ onS2 }}" onClick="{{ goS2 }}"><span class="ico">⌗</span><span class="zh">组织管理</span><span class="en">Organisations</span><span class="ct">657</span></div>
-          <div class="nav-i ns3 {{ onS3 }}" onClick="{{ goS3 }}"><span class="ico">▤</span><span class="zh">主数据与字典</span><span class="en">Master Data</span><span class="ct">{{ navSup }}</span></div>
-          <div class="nav-i ns4 {{ onS4 }}" onClick="{{ goS4 }}"><span class="ico">⚙</span><span class="zh">平台配置</span><span class="en">Platform Config</span><span class="ct">5</span></div>
+          <div class="nav-i ns1" onClick="{{ goS1 }}"><span class="ico">◉</span><span class="zh">用户管理</span><span class="en">Users</span><span class="ct">794</span></div>
+          <div class="nav-i ns2" onClick="{{ goS2 }}"><span class="ico">⌗</span><span class="zh">组织管理</span><span class="en">Organisations</span><span class="ct">657</span></div>
+          <div class="nav-i ns3" onClick="{{ goS3 }}"><span class="ico">▤</span><span class="zh">主数据管理</span><span class="en">Master Data</span><span class="ct">{{ navSup }}</span></div>
+          <div class="nav-i ns4" onClick="{{ goS4 }}"><span class="ico">⚙</span><span class="zh">平台配置</span><span class="en">Platform Config</span><span class="ct">5</span></div>
         </div>
       </div>
       <sc-if value="{{ isPlus }}" hint-placeholder-val="{{ true }}">
@@ -147,11 +152,6 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
       </div>
 
       <div style="margin-left:auto;display:flex;align-items:center;gap:8px;flex-shrink:0">
-        <div style="display:flex;align-items:center;gap:6px;background:#fff;border:1px solid {{ dmBd }};border-radius:999px;padding:3px;box-shadow:0 1px 3px rgba(15,30,36,.05)">
-          <span style="font-size:9px;font-weight:700;letter-spacing:.1em;color:#9AABB1;padding:0 6px 0 8px;text-transform:uppercase"><span class="zh">数据</span><span class="en">Data</span></span>
-          <button onClick="{{ toEmpty }}" style="padding:5px 12px;border-radius:999px;font-size:11.5px;font-weight:700;background:{{ dmEmptyBg }};color:{{ dmEmptyFg }}"><span class="zh">首日空态</span><span class="en">Day one</span></button>
-          <button onClick="{{ toLive }}" style="padding:5px 12px;border-radius:999px;font-size:11.5px;font-weight:700;background:{{ dmLiveBg }};color:{{ dmLiveFg }}"><span class="zh">运行中</span><span class="en">Live</span></button>
-        </div>
         <div style="display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #E1E7EA;border-radius:999px;padding:3px;box-shadow:0 1px 3px rgba(15,30,36,.05)">
           <span style="font-size:9px;font-weight:700;letter-spacing:.1em;color:#9AABB1;padding:0 6px 0 8px;text-transform:uppercase"><span class="zh">版本</span><span class="en">Edition</span></span>
           <button onClick="{{ toBase }}" style="padding:5px 13px;border-radius:999px;font-size:11.5px;font-weight:700;background:{{ edBaseBg }};color:{{ edBaseFg }}"><span class="zh">基础版</span><span class="en">Base</span></button>
@@ -160,7 +160,7 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
         <button onClick="{{ openCmp }}" style="padding:7px 12px;border-radius:9px;background:#fff;border:1px solid #E1E7EA;font-size:11px;font-weight:700;color:#33484F"><span class="zh">两版差异对照</span><span class="en">Compare</span></button>
         <div style="position:relative">
           <button onClick="{{ tgNoti }}" style="width:34px;height:34px;border-radius:9px;background:{{ notiBtnBg }};border:1px solid #E1E7EA;font-size:14px;color:#33484F;display:flex;align-items:center;justify-content:center;position:relative">
-            <span style="font-size:13px;line-height:1">◈</span>
+            <span>🔔</span>
             <span style="position:absolute;top:3px;right:3px;min-width:14px;height:14px;padding:0 3px;border-radius:999px;background:#B0291D;color:#fff;font-family:Manrope;font-size:8.5px;font-weight:800;display:flex;align-items:center;justify-content:center">{{ notiN }}</span>
           </button>
           <sc-if value="{{ notiOpen }}" hint-placeholder-val="{{ false }}">
@@ -194,24 +194,16 @@ a{color:#045B75;text-decoration:none}a:hover{color:#0891B2}
 
     <div class="padwrap" style="padding:14px 22px 30px;display:flex;flex-direction:column;gap:14px;min-width:0">
 
-      <sc-if value="{{ hasTabs }}" hint-placeholder-val="{{ false }}">
-        <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:2px 0 2px">
-          <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
-            <div class="stab {{ t.cls }}" onClick="{{ t.go }}"><span class="zh">{{ t.zh }}</span><span class="en">{{ t.en }}</span><span class="tct">{{ t.ct }}</span></div>
-          </sc-for>
-          <div style="margin-left:auto;font-size:10.5px;color:#8397A0;line-height:1.5;max-width:430px;text-align:right"><span class="zh">{{ tabNoteZh }}</span><span class="en">{{ tabNoteEn }}</span></div>
-        </div>
-      </sc-if>
-
-      <div style="display:{{ skelShow }};flex-direction:column;gap:12px">
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
-          <div style="height:78px;border-radius:12px;background:#F2F5F6;border:1px solid #EAEEF0"></div>
-          <div style="height:78px;border-radius:12px;background:#F2F5F6;border:1px solid #EAEEF0"></div>
-          <div style="height:78px;border-radius:12px;background:#F2F5F6;border:1px solid #EAEEF0"></div>
-          <div style="height:78px;border-radius:12px;background:#F2F5F6;border:1px solid #EAEEF0"></div>
-        </div>
-        <div style="height:340px;border-radius:12px;background:#F6F8F9;border:1px solid #EAEEF0"></div>
+      <sc-if value="{{ mlShow }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;align-items:center;gap:11px;height:34px;padding:0 13px;border-radius:9px;background:{{ mlBg }};border:1px solid {{ mlBd }};flex-shrink:0">
+        <span style="width:7px;height:7px;border-radius:50%;background:{{ mlColor }};flex-shrink:0"></span>
+        <span style="font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:5px;background:{{ mlTagBg }};color:{{ mlColor }};white-space:nowrap">{{ mlBadge }}</span>
+        <span style="font-size:11px;color:#8397A0;font-weight:600;white-space:nowrap">{{ mlPrev }}</span>
+        <span style="color:#C4CFD4">｜</span>
+        <span style="font-size:11.5px;color:#1D2F36;font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ mlNow }}</span>
+        <button onClick="{{ mlGo }}" style="margin-left:auto;padding:5px 12px;border-radius:7px;background:{{ mlColor }};color:#fff;font-size:11px;font-weight:700;white-space:nowrap;flex-shrink:0">{{ mlNext }}</button>
       </div>
+      </sc-if>
 
       <sc-if value="{{ onBase }}" hint-placeholder-val="{{ true }}">
         <dc-import name="PlatBase" st="{{ st }}" api="{{ api }}" hint-size="100%,760px"></dc-import>
@@ -283,8 +275,7 @@ class Component extends DCLogic {
     helpSel: 'HB-03',
     supMore: 24, supTier: 'all', supConf: 'all', supSort: 'biz', supDir: -1,
     p7Metric: 'T07', p7Mode: 'cnt',
-    p8Tier: 'strategic', dataMode: 'live', supPage: 'SUP-0142', supPageTab: 'prof',
-    ldView: 'req', tgtEdit: {}, dispBatch: 'B3',
+    p8Tier: 'strategic',
     radSrc: '', regSel: 'BATT',
     sTab: 'tasks', sFilter: 'act', sqMore: 12, evFolder: 'cert',
     sysTab: 'role', sysUserMore: 10, sysOrgMore: 9, sysOrgView: 'list', mdTab: 'sup', mdMore: 14,
@@ -292,8 +283,6 @@ class Component extends DCLogic {
   };
 
   componentDidMount() {
-    this._t0 = setTimeout(() => this.setState({ mounted: 1 }), 900);
-    fetch('./data/req_meta.json').then(r => r.json()).then(m => this.setState({ reqMeta: m })).catch(() => {});
     const p = this.props || {}, n = {};
     if (p.edition && p.edition !== this.state.ed) n.ed = p.edition;
     if (p.persona && p.persona !== this.state.pers) n.pers = p.persona;
@@ -303,7 +292,6 @@ class Component extends DCLogic {
     if (Object.keys(n).length) this.setState(n);
   }
 
-  get REQN() { return (this.state.reqMeta && this.state.reqMeta.count) || 0; }
   go = (v) => this.setState({ view: v, noti: 0 });
   setS = (p) => this.setState(p);
   toast = (zh, en) => { this.setState({ toast: this.state.lang === 'en' ? en || zh : zh }); clearTimeout(this._tt); this._tt = setTimeout(() => this.setState({ toast: '' }), 2800); };
@@ -311,43 +299,41 @@ class Component extends DCLogic {
 
   crumbs() {
     const m = {
-      b1: ['工作台 · 待办与任务中心', '待办总览', 'Task centre', 'All tasks'],
-      p3: ['工作台 · 待办与任务中心', '待办总览', 'Task centre', 'All tasks'],
-      p4: ['工作台 · 待办与任务中心', '收资与核验', 'Task centre', 'Collection'],
-      p5: ['工作台 · 待办与任务中心', '咨询求助列表', 'Task centre', 'Advisory requests'],
+      b1: ['工作台', '基础管理工作台', 'Workbench', 'Task centre'],
+      b4: ['工作台 · 链主服务 II', '政策与合规监测', 'Chain Service II', 'Policy Watch'],
       b2: ['工作台', '企业ESG数据底座', 'Workbench', 'ESG Data Vault'],
       s1: ['系统管理', '用户管理', 'System', 'Users'],
       s2: ['系统管理', '组织管理', 'System', 'Organisations'],
-      s3: ['系统管理', '主数据与字典', 'System', 'Master Data'],
+      s3: ['系统管理', '主数据管理', 'System', 'Master Data'],
       s4: ['系统管理', '平台配置', 'System', 'Platform Config'],
-      pL: ['要求与合规 · 要求台账', '全量供应商要求', 'Requirements', 'All requirements'],
-      p2: ['要求与合规 · 要求台账', '达成与差距', 'Requirements', 'Conformance & gaps'],
-      p8: ['要求与合规 · 要求台账', '目标设定与下发', 'Requirements', 'Targets & dispatch'],
-
-      p9: ['要求与合规 · 法规与管制', '义务图谱', 'Regulations', 'Obligation map'],
-      b4: ['要求与合规 · 法规与管制', '实时监控墙', 'Regulations', 'Live watch wall'],
-      p6: ['供应商 · 供应商列表', '供应商管理', 'Suppliers', 'Supplier master'],
-      p14: ['供应商 · 供应商列表', '供应商雷达', 'Suppliers', 'Supplier radar'],
-      p7: ['供应商 · 供应商列表', '供应链达标全景', 'Suppliers', 'Conformance panorama'],
-      p15: ['供应商 · 供应商列表', '供应商详情', 'Suppliers', 'Supplier detail']
+      p1: ['① 要求与目标', '目标与考核导入', 'Requirements', 'Target Import'],
+      pL: ['① 要求与目标', '37 条要求台账与执行管理', 'Requirements', 'Requirement Ledger'],
+      p2: ['① 要求与目标', '差距分析', 'Requirements', 'Gap Analysis'],
+      p3: ['② 判定与动作', 'AI 判定与下一步动作', 'Routing', 'AI Routing'],
+      p4: ['② 判定与动作', '收资核验任务', 'Routing', 'Evidence Verification'],
+      p5: ['② 判定与动作', '帮扶服务台', 'Routing', 'Enablement Desk'],
+      p6: ['③ 供应商侧执行', '供应商基准清单', 'Suppliers', 'Baseline List'],
+      p7: ['③ 供应商侧执行', '达标全景分析', 'Suppliers', 'Conformance'],
+      p8: ['③ 供应商侧执行', '分层运营与下发', 'Suppliers', 'Tiered Ops'],
+      p9: ['④ 法规深度产出', '合规雷达', 'Regulatory', 'Radar'],
+      p10: ['④ 法规深度产出', '汽车行业特定法规', 'Regulatory', 'Automotive Pack']
     };
     return m[this.state.view] || m.b1;
   }
 
   mainline(view, zh) {
-    const N = this.REQN;
     const S = [
       { k: 1, role: ['可持续', 'Sustainability'], c: '#002D6B', bg: '#F5F8FC', bd: '#E0E7F2', tag: '#E4EAF3',
-        now: ['把 ' + N + ' 条合规目标与分级考核目标从外部系统导进平台', 'Import the ' + N + ' targets and the tiered scorecard'],
+        now: ['把 37 条合规目标与分级考核目标从外部系统导进平台', 'Import the 37 targets and the tiered scorecard'],
         prev: ['起点', 'Start'], next: ['交给：要求台账 →', 'To ledger →'], go: 'pL', views: ['p1'] },
       { k: 2, role: ['可持续', 'Sustainability'], c: '#002D6B', bg: '#F5F8FC', bd: '#E0E7F2', tag: '#E4EAF3',
-        now: [N + ' 条归一成台账，逐条判定内部自答还是向供应商传导', 'Normalise into a ledger; decide self-answer vs. cascade'],
+        now: ['37 条归一成台账，逐条判定内部自答还是向供应商传导', 'Normalise into a ledger; decide self-answer vs. cascade'],
         prev: ['← 上一步：目标与考核导入', '← Target import'], next: ['交给：分层下发 →', 'To dispatch →'], go: 'p8', views: ['pL'] },
       { k: 3, role: ['采购', 'Procurement'], c: '#0B5B4A', bg: '#F3FAF7', bd: '#DCEEE7', tag: '#EAF6F2',
-        now: ['按层级聚合下发，一家一张单', 'Dispatch by tier, one package per supplier'],
+        now: ['按战略／重点／起步／间接四层聚合下发，一家一张单', 'Dispatch by tier, one package per supplier'],
         prev: ['← 上一步：要求台账', '← Requirement ledger'], next: ['交给：供应商门户 →', 'To supplier portal →'], go: 'portal', views: ['p8'] },
       { k: 5, role: ['可持续', 'Sustainability'], c: '#002D6B', bg: '#F5F8FC', bd: '#E0E7F2', tag: '#E4EAF3',
-        now: [N + ' 条 × 各层算出未达成条数与采购额敞口', 'Compute gaps and spend exposure by tier'],
+        now: ['37 条 × 四层算出未达成条数与采购额敞口', 'Compute gaps and spend exposure across the four tiers'],
         prev: ['← 上一步：供应商回填 9 题气候问卷', '← Supplier returns the climate survey'], next: ['交给：AI 判定 →', 'To AI routing →'], go: 'p3', views: ['p2'] },
       { k: 6, role: ['事件 · v2 没有的延伸段', 'Extension'], c: '#045B75', bg: '#F2FAFC', bd: '#D6EDF3', tag: '#E6F4F8',
         now: ['未达成项不止一句不合格：AI 判定后走帮扶指引或收资核验，结论回流刷新台账', 'AI routes each gap to enablement or evidence verification; the verdict refreshes the ledger'],
@@ -364,22 +350,21 @@ class Component extends DCLogic {
   }
 
   cmpRows(zh) {
-    const N = this.REQN;
     const R = [
       ['企业ESG数据资料归集', 'Company ESG document vault', '目录树、批量上传、AI 抽取、完备度体检、原件溯源', '同左（随平台交付，不另收费）', '基础'],
       ['系统管理', 'System administration', '用户管理、组织管理、角色权限、操作日志、基础字典、消息通知、导入导出备份', '同左（含在平台基础，不单独收费）', '基础'],
-      ['供应商主数据', 'Supplier master data', '素的一份档案清单：编号、品类、分级、工厂、联系人', '＋ 年供货额、碳数据、绿电、评分构成、' + N + ' 条达标情况、多维筛选排序', 'M4'],
+      ['供应商主数据', 'Supplier master data', '素的一份档案清单：编号、品类、分级、工厂、联系人', '＋ 年供货额、碳数据、绿电、评分构成、37 条达标情况、多维筛选排序', 'M4'],
       ['政策与合规监测', 'Policy & compliance watch', '出口管制与制裁名单、欧盟通用、国际其它、中国境内四类范围的变更监测与适用性初判', '＋ 汽车行业特定法规包、结果化管理、影响强度矩阵、业务节点穿透、合规日历、三个专案', 'M6'],
-      [N + ' 条合规目标结果', N + ' targets result', '无。外部系统作答结果无处承接', '文件导入向导承接外部作答结果与分级考核目标，入库即建立基准', 'M3'],
-      ['要求台账与执行管理', 'Requirement ledger', '无。仅有要求条目的字段模型，无执行视图', N + ' 条台账 ＋ 执行方判定 ＋ 单条要求看 327 家执行情况 ＋ 豁免审批 ＋ 聚合下发', 'M3'],
-      ['差距分析', 'Gap analysis', '无', N + ' 条 × 各层供应商的达成矩阵，逐条给出未达成家数与采购额敞口', 'M3'],
+      ['37 条合规目标结果', '37 targets result', '无。外部系统作答结果无处承接', '文件导入向导承接外部作答结果与分级考核目标，入库即建立基准', 'M3'],
+      ['要求台账与执行管理', 'Requirement ledger', '无。仅有要求条目的字段模型，无执行视图', '37 条台账 ＋ 执行方判定 ＋ 单条要求看 327 家执行情况 ＋ 豁免审批 ＋ 聚合下发', 'M3'],
+      ['差距分析', 'Gap analysis', '无', '37 条 × 四层供应商的达成矩阵，逐条给出未达成家数与采购额敞口', 'M3'],
       ['未达成项的下一步', 'Next action on gaps', '无', 'AI 按答案与历史／同行异常度判定：走帮扶指引，或发起收资核验', 'M3'],
       ['收资核验', 'Evidence verification', '无', '独立任务对象：逐项要证据 → 供应商上传 → 我方核验结论', 'M3'],
       ['供应商协同门户', 'Supplier portal', '仅供应商账号，可查询排放因子', '任务包、9 题年度气候问卷、导入导出与历史复用、状态回流、分层运营', 'M2'],
       ['供应商证据库', 'Supplier evidence library', '无', '目录树、有效期与到期提醒、被哪些要求引用、一处上传多处复用', 'M2'],
       ['供应商视角法规合规', 'Supplier-side regulatory', '无', '任务化清单：哪些法规管到我、要交什么、截止什么时候', 'M6'],
       ['达标全景与帮扶', 'Conformance & enablement', '无', '按要求逐项达标率双口径、采购额×能力四象限、缺口构成、帮扶服务映射', 'M4'],
-      ['合规雷达', 'Compliance radar', '无', N + ' 条目标 × 法规来源的接住度热力图与缺口预警', 'M7']
+      ['合规雷达', 'Compliance radar', '无', '37 条目标 × 法规来源的接住度热力图与缺口预警', 'M7']
     ];
     return R.map(r => ({
       cap: zh ? r[0] : r[1], sub: zh ? r[1] : r[0],
@@ -393,95 +378,30 @@ class Component extends DCLogic {
   renderVals() {
     const s = this.state, zh = s.lang !== 'en';
     const plus = s.ed === 'plus';
-    const empty = s.dataMode === 'empty';
     const anoTh = this.props.anomalyThreshold ?? 55;
     const cb = this.crumbs();
-    const baseV = ['b1', 'b2', 's3'], sysV = ['s1', 's2', 's4'];
-    const goP9 = () => this.go('p9');
-    const view = (!plus && !baseV.concat(sysV, ['pL', 'p6', 'p9', 'b4']).includes(s.view)) ? 'b1' : s.view;
+    const baseV = ['b1', 'b2', 'b4', 's3'], sysV = ['s1', 's2', 's4'];
+    const view = (!plus && !baseV.includes(s.view) && !sysV.includes(s.view)) ? 'b1' : s.view;
     const portal = plus && s.pers === 'sup';
     const T = (a, b) => zh ? a : b;
 
-    const st = { ...s, view, zh, plus, anoTh, empty };
+    const st = { ...s, view, zh, plus, anoTh };
     const api = { go: this.go, setS: this.setS, toast: this.toast, openDw: this.openDw };
-
-    const GRP = {
-      W1: ['b1', 'p4', 'p5'], W2: ['b2'],
-      R1: ['pL', 'p2', 'p8'], R2: ['p9', 'b4'],
-      V1: ['p6', 'p14', 'p7', 'p15'], S1: ['s1'], S2: ['s2'], S3: ['s3'], S4: ['s4']
-    };
-    const gOn = (g) => GRP[g].includes(view) ? 'on' : '';
-    const reqN = this.REQN;
-    const TABS = {
-      W1: [
-        ['b1', '待办总览', 'All tasks', '18'],
-        ['p4', '收资与核验', 'Collection', '32'],
-        ['p5', '咨询求助列表', 'Advisory requests', '52']
-      ],
-      R1: [
-        ['pL', '① 全量供应商要求', 'Requirements', empty ? '0' : (reqN ? String(reqN) : '')],
-        ['p8', '② 目标设定与下发', 'Targets & dispatch', empty ? '0' : '4'],
-        ['p2', '③ 达成与差距', 'Conformance & gaps', empty ? '0' : '']
-      ],
-      R2: [
-        ['p9', '义务图谱', 'Obligation map', '142'],
-        ['b4', '实时监控墙', 'Live watch wall', '12']
-      ],
-      V1: [
-        ['p6', '供应商管理', 'Supplier master', '327'],
-        ['p14', '供应商雷达', 'Supplier radar', '148'],
-        ['p7', '供应链达标全景', 'Conformance panorama', '']
-      ]
-    };
-    const NOTE = {
-      W1: ['判定由 AI 自动做，不占一个列表 —— 结论直接写在要求与供应商上。这里只有 Autoliv 真要动手的两件事：下发与核验收资、看谁提了咨询求助。', 'AI does the routing; this centre holds only what Autoliv acts on.'],
-      R1: ['三步有先后：先把要求导进台账，再给每条要求设分层目标值并下发，供应商收到并作答后才有达成与差距。上一步没做完，下一步只会是空的。', 'Three ordered steps: import the requirements, set and dispatch tiered target values, then read conformance. Each step is empty until the previous one is done.'],
-      R2: ['义务图谱回答「哪些法规管到我们、义务接住了多少」；监控墙回答「最近变了什么、谁被碰到、怎么处置」。汽车专项法规通过后台导入进同一个法规库，不占前台入口。', 'The map answers which duties apply; the wall answers what just changed. Automotive regulations are imported into the same library from the back office.'],
-      V1: ['清单是供应商主数据；供应商雷达拿它的供货物料去比法规库，扫出来的结果同时推回供应商门户；达标全景是同一批数据按达成看。', 'The list is master data; the radar matches its materials against the regulation library and pushes results back to the supplier portal.']
-    };
-    const BASE_OK = ['b1', 'b2', 'p9', 'b4', 'pL', 'p6', 's1', 's2', 's3', 's4'];
-    const grpOf = Object.keys(TABS).find(g => GRP[g].includes(view));
-    const tabList = grpOf ? TABS[grpOf] : [];
-    const navFlags = {
-      onW1: gOn('W1'), onW2: gOn('W2'), onR1: gOn('R1'), onR2: gOn('R2'), onV1: gOn('V1'),
-      onS1: gOn('S1'), onS2: gOn('S2'), onS3: gOn('S3'), onS4: gOn('S4'),
-      navReq: empty ? '0' : (reqN ? String(reqN) : ''),
-      goP9,
-      skelShow: s.mounted ? 'none' : 'flex',
-      mbCls: plus ? 'mb' : 'mb lk',
-      edLabelZh: plus ? '＋选配' : '基础版',
-      baseHintZh: plus ? '' : '灰色虚线徽章＝该入口在基础版里只有素的一层，深度功能属选配',
-      baseHintEn: plus ? '' : 'Dashed badges: this entry is shallow in the base edition',
-      showBaseHint: !plus,
-      hasTabs: !portal && tabList.length > 1,
-      tabs: tabList.map(t => {
-        const locked = !plus && !BASE_OK.includes(t[0]);
-        return {
-          cls: locked ? 'off' : (t[0] === view ? 'on' : ''),
-          zh: t[1], en: t[2],
-          ct: locked ? T('选配', 'Add-on') : (empty ? (t[3] === '' ? '' : '0') : t[3]),
-          go: locked ? () => this.toast('「' + t[1] + '」属选配模块，基础版未包含。切到「＋选配」看这一 tab。', t[2] + ' is an add-on.') : () => this.go(t[0])
-        };
-      }),
-      tabNoteZh: grpOf && NOTE[grpOf] ? NOTE[grpOf][0] : '',
-      tabNoteEn: grpOf && NOTE[grpOf] ? NOTE[grpOf][1] : ''
-    };
 
     const edNote = plus
       ? (zh ? '增强版：在基础平台之上加载 M2 供应商协同门户、M3 要求台账与执行管理、M4 供应商主数据与达标分析、M6 汽车行业特定法规，并附供应商视角下的法规合规与证据库。' : 'Enhanced: base platform plus modules M2 / M3 / M4 / M6.')
       : (zh ? '基础版：平台底层系统与系统管理、企业ESG数据底座、客户与供应商主数据、基础管理工作台（含链主服务 II 政策与合规监测）。链主服务 I 客户问卷响应不在本次范围。' : 'Base: platform core, system admin, ESG data vault, master data, workbench incl. Chain Service II.');
 
-    const ml = null;
+    const ml = portal ? null : this.mainline(view, zh);
 
     return {
-      ...navFlags,
       view, ed: s.ed, pers: portal ? 'sup' : 'lead', lang: s.lang, anon: s.anon,
       isPlus: plus, st, api,
       onBase: !portal && baseV.includes(view),
       onSys: !portal && sysV.includes(view),
-      onGap: !portal && (['pL', 'p2', 'p3', 'p4', 'p5'].includes(view) || !!s.impOpen),
-      onSupply: !portal && ['p6', 'p7', 'p8', 'p14', 'p15'].includes(view),
-      onRegD: !portal && ['p9', 'b4'].includes(view),
+      onGap: !portal && ['p1', 'pL', 'p2', 'p3', 'p4', 'p5'].includes(view),
+      onSupply: !portal && ['p6', 'p7', 'p8'].includes(view),
+      onRegD: !portal && ['p9', 'p10'].includes(view),
       onPortal: portal,
 
       mlShow: !!ml,
@@ -493,19 +413,13 @@ class Component extends DCLogic {
       mlGo: () => { if (!ml) return; if (ml.go === 'portal') this.setState({ pers: 'sup', sTab: 'tasks' }); else this.go(ml.go); },
 
       crumbTop: zh ? cb[0] : cb[2], crumbNow: zh ? cb[1] : cb[3],
-      navTodo: empty ? '0' : '18', navVault: empty ? '0' : '412', navSup: empty ? '0' : '327',
+      navTodo: '18', navVault: '412', navSup: '327',
 
       goB1: () => this.go('b1'), goB2: () => this.go('b2'), goB4: () => this.go('b4'),
       goS1: () => this.go('s1'), goS2: () => this.go('s2'), goS3: () => this.go('s3'), goS4: () => this.go('s4'),
       goP1: () => this.go('p1'), goPL: () => this.go('pL'), goP2: () => this.go('p2'), goP3: () => this.go('p3'),
       goP4: () => this.go('p4'), goP5: () => this.go('p5'), goP6: () => this.go('p6'), goP7: () => this.go('p7'),
       goP8: () => this.go('p8'), goP9: () => this.go('p9'), goP10: () => this.go('p10'),
-
-      toEmpty: () => this.setState({ dataMode: 'empty', dwKind: '', ldSel: [], ldOpen: '' }),
-      toLive: () => this.setState({ dataMode: 'live' }),
-      dmEmptyBg: empty ? '#8A4B08' : 'transparent', dmEmptyFg: empty ? '#fff' : '#5A6E75',
-      dmLiveBg: empty ? 'transparent' : '#002D6B', dmLiveFg: empty ? '#5A6E75' : '#fff',
-      dmBd: empty ? '#F3E4D0' : '#E1E7EA',
 
       toBase: () => this.setState({ ed: 'base', pers: 'lead', view: 'b1' }),
       toPlus: () => this.setState({ ed: 'plus', view: 'p2' }),
@@ -530,7 +444,7 @@ class Component extends DCLogic {
         { title: T('ISO 45001 证书 60 天后到期（芜湖基地），关联要求 T30 将回退为未达成', 'ISO 45001 expires in 60 days'), time: '2026-08-25 09:12', dot: '#B0291D', go: () => this.go('b2') },
         { title: T('宁波华翔的收资核验 CV-2041 已提交 4 项，1 项强制未上传', 'CV-2041: 4 submitted, 1 mandatory missing'), time: '2026-08-24 21:05', dot: '#8A4B08', go: () => this.setState({ view: 'p4', colTask: 'CV-2041', colStage: 2, noti: 0 }) },
         { title: T('MOFCOM 稀土出口管制公告已入库并完成适用性初判', 'MOFCOM notice ingested and screened'), time: '2026-08-24 17:40', dot: '#045B75', go: () => this.go('b4') },
-        { title: T('2026 Q3 ' + this.REQN + ' 条目标作答结果导入完成：新增 1,962 条、跳过 4 条', 'Q3 answers imported: 1,962 added'), time: '2026-08-23 11:05', dot: '#1E6B3A', go: () => this.go('p1') },
+        { title: T('2026 Q3 37 条目标作答结果导入完成：新增 1,962 条、跳过 4 条', 'Q3 answers imported: 1,962 added'), time: '2026-08-23 11:05', dot: '#1E6B3A', go: () => this.go('p1') },
         { title: T('起步层 52 家的 9 题气候问卷回收率 67%，18 家已催办两轮', 'Starter tier: 67% returned, 18 chased twice'), time: '2026-08-22 15:33', dot: '#0B3A82', go: () => this.go('p8') }
       ],
 

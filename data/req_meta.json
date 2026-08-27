@@ -1,0 +1,10 @@
+{
+  "note": "台账条目数的唯一来源。Autoliv 当前 37 条；换成别的链主企业或 Autoliv 改到 40 条，只改这里，界面上所有条数跟着走。",
+  "count": 37,
+  "tiers": [
+    { "key": "strategic", "zh": "战略", "en": "Strategic", "suppliers": 24 },
+    { "key": "key", "zh": "重点", "en": "Key", "suppliers": 68 },
+    { "key": "starter", "zh": "起步", "en": "Starter", "suppliers": 121 },
+    { "key": "indirect", "zh": "间接", "en": "Indirect", "suppliers": 114 }
+  ]
+}

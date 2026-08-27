@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<sc-if value="{{ onS1 }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:14px">
+  <div class="card" style="padding:13px 16px">
+    <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap">
+      <h3 style="margin:0;font-size:15px;font-weight:800"><span class="zh">用户管理</span><span class="en">Users</span></h3>
+      <span style="font-size:9px;font-weight:800;padding:2px 7px;border-radius:5px;background:#E4EAF3;color:#002D6B"><span class="zh">含在平台基础 · 产品已上线</span><span class="en">INCLUDED · LIVE</span></span>
+      <span style="margin-left:auto;font-size:11px;color:#8397A0;font-weight:500"><span class="zh">管理组织内的所有用户，包括用户创建、权限分配、状态管理与停用交接</span><span class="en">Create users, assign permissions, manage status and handover</span></span>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+    <sc-for list="{{ uKpis }}" as="k" hint-placeholder-count="4">
+      <div class="card" style="padding:13px 15px;border-color:{{ k.bd }}">
+        <div style="font-size:10.5px;color:#8397A0;font-weight:600">{{ k.label }}</div>
+        <div style="display:flex;align-items:baseline;gap:7px;margin-top:5px">
+          <span style="font-size:13px;color:{{ k.color }}">{{ k.icon }}</span>
+          <span style="font-family:Manrope;font-size:26px;font-weight:800;letter-spacing:-.02em;color:{{ k.color }}">{{ k.val }}</span>
+        </div>
+        <div style="font-size:10.5px;color:#8397A0;margin-top:3px;font-weight:600">{{ k.note }}</div>
+      </div>
+    </sc-for>
+  </div>
+
+  <div class="card">
+    <div style="padding:12px 16px;border-bottom:1px solid #EDF1F3;display:flex;align-items:center;gap:9px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:7px;background:#F8FAFB;border:1px solid #E4EAEC;border-radius:9px;padding:6px 11px;width:264px">
+        <span style="color:#9AABB1;font-size:11px">⌕</span>
+        <span style="font-size:11.5px;color:#9AABB1;font-weight:500"><span class="zh">搜索用户姓名、手机号、邮箱、工号</span><span class="en">Search name, phone, email, ID</span></span>
+      </div>
+      <sc-for list="{{ uFilters }}" as="f" hint-placeholder-count="3">
+        <button onClick="{{ f.go }}" style="display:flex;align-items:center;gap:8px;padding:6px 11px;border-radius:9px;background:#fff;border:1px solid #E4EAEC;font-size:11.5px;font-weight:600;color:#4C6169">{{ f.label }}<span style="color:#B6C4C9;font-size:9px">▾</span></button>
+      </sc-for>
+      <button onClick="{{ uImport }}" style="margin-left:auto;padding:7px 13px;border-radius:9px;background:#fff;border:1px solid #E4EAEC;font-size:11.5px;font-weight:700;color:#33484F"><span class="zh">批量导入</span><span class="en">Bulk import</span></button>
+      <button onClick="{{ uAdd }}" style="padding:7px 14px;border-radius:9px;background:#002D6B;color:#fff;font-size:11.5px;font-weight:700"><span class="zh">＋ 添加用户</span><span class="en">+ Add user</span></button>
+    </div>
+    <div style="padding:8px 16px 16px">
+      <div style="display:grid;grid-template-columns:1.5fr 1.2fr 108px 84px 108px 100px 76px;gap:9px;padding:7px 8px;font-size:9.5px;font-weight:800;letter-spacing:.06em;color:#8397A0;text-transform:uppercase;border-bottom:1px solid #EDF1F3">
+        <span><span class="zh">用户信息</span><span class="en">User</span></span>
+        <span><span class="zh">所属组织</span><span class="en">Organisation</span></span>
+        <span><span class="zh">工号 / 部门</span><span class="en">ID / dept.</span></span>
+        <span><span class="zh">状态</span><span class="en">Status</span></span>
+        <span><span class="zh">角色</span><span class="en">Role</span></span>
+        <span><span class="zh">最后登录</span><span class="en">Last login</span></span>
+        <span style="text-align:right"><span class="zh">操作</span><span class="en">Actions</span></span>
+      </div>
+      <sc-for list="{{ users }}" as="u" hint-placeholder-count="10">
+        <div style="display:grid;grid-template-columns:1.5fr 1.2fr 108px 84px 108px 100px 76px;gap:9px;padding:9px 8px;align-items:center;border-bottom:1px solid #F2F5F6">
+          <div style="display:flex;align-items:center;gap:9px;min-width:0">
+            <span style="width:28px;height:28px;border-radius:50%;background:{{ u.avBg }};color:{{ u.avFg }};display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:800;flex-shrink:0">{{ u.ini }}</span>
+            <div style="min-width:0">
+              <div style="font-size:11.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><span class="nr">{{ u.name }}</span><span class="na">{{ u.mask }}</span></div>
+              <div style="font-family:JetBrains Mono;font-size:9.5px;color:#9AABB1;margin-top:1px">{{ u.phone }}</div>
+            </div>
+          </div>
+          <span style="font-size:11px;color:#4C6169;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ u.org }}</span>
+          <div style="min-width:0">
+            <div style="font-family:Manrope;font-size:10.5px;font-weight:700;color:#4C6169">{{ u.eid }}</div>
+            <div style="font-size:9.5px;color:#9AABB1;margin-top:1px;font-weight:500">{{ u.dept }}</div>
+          </div>
+          <span style="font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:5px;background:{{ u.stBg }};color:{{ u.stFg }};justify-self:start">{{ u.state }}</span>
+          <span style="font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:5px;background:{{ u.rBg }};color:{{ u.rFg }};justify-self:start">{{ u.role }}</span>
+          <div>
+            <div style="font-family:Manrope;font-size:10.5px;font-weight:700;color:#4C6169">{{ u.date }}</div>
+            <div style="font-family:Manrope;font-size:9.5px;color:#9AABB1;margin-top:1px;font-weight:600">{{ u.time }}</div>
+          </div>
+          <div style="display:flex;gap:9px;justify-self:end">
+            <button onClick="{{ u.view }}" style="font-size:12px;color:#8397A0">◉</button>
+            <button onClick="{{ u.edit }}" style="font-size:12px;color:#8397A0">✎</button>
+            <button onClick="{{ u.more }}" style="font-size:12px;color:#8397A0">⋮</button>
+          </div>
+        </div>
+      </sc-for>
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 8px 0">
+        <span style="font-size:11px;color:#8397A0;font-weight:500">{{ uPage }}</span>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:6px">
+          <sc-for list="{{ uPages }}" as="p" hint-placeholder-count="6">
+            <button onClick="{{ p.go }}" style="min-width:26px;height:26px;padding:0 7px;border-radius:7px;font-family:Manrope;font-size:11px;font-weight:700;background:{{ p.bg }};color:{{ p.fg }};border:1px solid {{ p.bd }}">{{ p.label }}</button>
+          </sc-for>
+          <button onClick="{{ uSize }}" style="padding:5px 10px;border-radius:7px;background:#fff;border:1px solid #E4EAEC;font-size:10.5px;font-weight:600;color:#4C6169">{{ uSizeLabel }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ onS2 }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:14px">
+  <div class="card" style="padding:13px 16px">
+    <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap">
+      <h3 style="margin:0;font-size:15px;font-weight:800"><span class="zh">组织管理</span><span class="en">Organisations</span></h3>
+      <span style="font-size:9px;font-weight:800;padding:2px 7px;border-radius:5px;background:#E4EAF3;color:#002D6B"><span class="zh">含在平台基础 · 产品已上线</span><span class="en">INCLUDED · LIVE</span></span>
+      <span style="margin-left:auto;font-size:11px;color:#8397A0;font-weight:500"><span class="zh">管理平台中的所有组织：Autoliv 本部与基地、已开户的供应商组织、客户组织与服务机构</span><span class="en">Autoliv sites, onboarded suppliers, customers and service providers</span></span>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+    <sc-for list="{{ oKpis }}" as="k" hint-placeholder-count="4">
+      <div class="card" style="padding:13px 15px;border-color:{{ k.bd }}">
+        <div style="font-size:10.5px;color:#8397A0;font-weight:600">{{ k.label }}</div>
+        <div style="display:flex;align-items:baseline;gap:7px;margin-top:5px">
+          <span style="font-size:13px;color:{{ k.color }}">{{ k.icon }}</span>
+          <span style="font-family:Manrope;font-size:26px;font-weight:800;letter-spacing:-.02em;color:{{ k.color }}">{{ k.val }}</span>
+        </div>
+        <div style="font-size:10.5px;color:#8397A0;margin-top:3px;font-weight:600">{{ k.note }}</div>
+      </div>
+    </sc-for>
+  </div>
+
+  <div class="card">
+    <div style="padding:12px 16px;border-bottom:1px solid #EDF1F3;display:flex;align-items:center;gap:9px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:7px;background:#F8FAFB;border:1px solid #E4EAEC;border-radius:9px;padding:6px 11px;width:250px">
+        <span style="color:#9AABB1;font-size:11px">⌕</span>
+        <span style="font-size:11.5px;color:#9AABB1;font-weight:500"><span class="zh">搜索组织名称、行业、地区</span><span class="en">Search name, industry, region</span></span>
+      </div>
+      <sc-for list="{{ oFilters }}" as="f" hint-placeholder-count="2">
+        <button onClick="{{ f.go }}" style="display:flex;align-items:center;gap:8px;padding:6px 11px;border-radius:9px;background:#fff;border:1px solid #E4EAEC;font-size:11.5px;font-weight:600;color:#4C6169">{{ f.label }}<span style="color:#B6C4C9;font-size:9px">▾</span></button>
+      </sc-for>
+      <button onClick="{{ oImport }}" style="margin-left:auto;padding:7px 13px;border-radius:9px;background:#fff;border:1px solid #E4EAEC;font-size:11.5px;font-weight:700;color:#33484F"><span class="zh">批量导入</span><span class="en">Bulk import</span></button>
+      <button onClick="{{ oAdd }}" style="padding:7px 14px;border-radius:9px;background:#002D6B;color:#fff;font-size:11.5px;font-weight:700"><span class="zh">＋ 添加组织</span><span class="en">+ Add organisation</span></button>
+    </div>
+    <div style="padding:11px 16px 0;display:flex;align-items:center;gap:8px">
+      <div style="display:flex;gap:4px;background:#F0F3F5;border-radius:9px;padding:3px">
+        <button onClick="{{ oViewList }}" style="padding:5px 12px;border-radius:7px;font-size:11.5px;font-weight:700;background:{{ olBg }};color:{{ olFg }}"><span class="zh">列表视图</span><span class="en">List</span></button>
+        <button onClick="{{ oViewTree }}" style="padding:5px 12px;border-radius:7px;font-size:11.5px;font-weight:700;background:{{ otBg }};color:{{ otFg }}"><span class="zh">架构视图</span><span class="en">Hierarchy</span></button>
+      </div>
+      <span style="margin-left:auto;font-size:11px;color:#8397A0;font-weight:600">{{ oCount }}</span>
+    </div>
+
+    <sc-if value="{{ oIsList }}" hint-placeholder-val="{{ true }}">
+    <div style="padding:8px 16px 16px">
+      <div style="display:grid;grid-template-columns:1.9fr 84px 120px 100px 100px 76px;gap:9px;padding:7px 8px;font-size:9.5px;font-weight:800;letter-spacing:.06em;color:#8397A0;text-transform:uppercase;border-bottom:1px solid #EDF1F3">
+        <span><span class="zh">组织信息</span><span class="en">Organisation</span></span>
+        <span><span class="zh">状态</span><span class="en">Status</span></span>
+        <span><span class="zh">用户统计</span><span class="en">Users</span></span>
+        <span><span class="zh">创建时间</span><span class="en">Created</span></span>
+        <span><span class="zh">最后活跃</span><span class="en">Last active</span></span>
+        <span style="text-align:right"><span class="zh">操作</span><span class="en">Actions</span></span>
+      </div>
+      <sc-for list="{{ orgs }}" as="o" hint-placeholder-count="9">
+        <div style="display:grid;grid-template-columns:1.9fr 84px 120px 100px 100px 76px;gap:9px;padding:9px 8px;align-items:center;border-bottom:1px solid #F2F5F6">
+          <div style="display:flex;align-items:center;gap:9px;min-width:0">
+            <span style="width:28px;height:28px;border-radius:8px;background:{{ o.avBg }};color:{{ o.avFg }};display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">{{ o.icon }}</span>
+            <div style="min-width:0">
+              <div style="font-size:11.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><span class="nr">{{ o.name }}</span><span class="na">{{ o.mask }}</span></div>
+              <div style="font-size:9.5px;color:#9AABB1;margin-top:1px;font-weight:500">{{ o.meta }}</div>
+            </div>
+          </div>
+          <span style="font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:5px;background:{{ o.stBg }};color:{{ o.stFg }};justify-self:start">{{ o.state }}</span>
+          <div style="font-size:9.5px;color:#5A6E75;font-weight:600;line-height:1.6">
+            <div>{{ o.u1 }}</div>
+            <div>{{ o.u2 }}</div>
+            <div>{{ o.u3 }}</div>
+          </div>
+          <span style="font-family:Manrope;font-size:10.5px;font-weight:700;color:#4C6169">{{ o.created }}</span>
+          <span style="font-family:Manrope;font-size:10.5px;font-weight:700;color:#4C6169">{{ o.active }}</span>
+          <div style="display:flex;gap:9px;justify-self:end">
+            <button onClick="{{ o.view }}" style="font-size:12px;color:#8397A0">◉</button>
+            <button onClick="{{ o.edit }}" style="font-size:12px;color:#8397A0">✎</button>
+            <button onClick="{{ o.more }}" style="font-size:12px;color:#8397A0">⋮</button>
+          </div>
+        </div>
+      </sc-for>
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 8px 0">
+        <button onClick="{{ oMoreGo }}" style="padding:7px 14px;border-radius:8px;background:#F0F3F5;font-size:11.5px;font-weight:700;color:#33484F">{{ oMoreLabel }}</button>
+        <span style="font-size:11px;color:#8397A0;font-weight:500">{{ oShown }}</span>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ oIsTree }}" hint-placeholder-val="{{ false }}">
+    <div style="padding:14px 16px 16px;display:flex;flex-direction:column;gap:5px">
+      <sc-for list="{{ tree }}" as="t" hint-placeholder-count="10">
+        <div style="display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:9px;background:{{ t.bg }};border:1px solid {{ t.bd }};margin-left:{{ t.indent }}">
+          <span style="width:4px;height:18px;border-radius:2px;background:{{ t.bar }};flex-shrink:0"></span>
+          <span style="font-size:12px;font-weight:{{ t.fw }};color:{{ t.fg }}"><span class="nr">{{ t.name }}</span><span class="na">{{ t.mask }}</span></span>
+          <span style="font-size:9.5px;font-weight:700;padding:1px 6px;border-radius:4px;background:{{ t.tagBg }};color:{{ t.tagFg }}">{{ t.kind }}</span>
+          <span style="margin-left:auto;font-family:Manrope;font-size:10.5px;font-weight:700;color:#8397A0">{{ t.stat }}</span>
+        </div>
+      </sc-for>
+    </div>
+    </sc-if>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ onS4 }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:14px">
+  <div class="card" style="padding:13px 16px">
+    <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap">
+      <h3 style="margin:0;font-size:15px;font-weight:800"><span class="zh">平台配置</span><span class="en">Platform configuration</span></h3>
+      <span style="font-size:9px;font-weight:800;padding:2px 7px;border-radius:5px;background:#E4EAF3;color:#002D6B"><span class="zh">含在平台基础 · 不单独收费</span><span class="en">INCLUDED</span></span>
+      <span style="margin-left:auto;font-size:11px;color:#8397A0;font-weight:500"><span class="zh">以下五项随平台交付，本期不做定制开发 —— 界面按现有产品形态提供，此处只列范围</span><span class="en">Delivered with the platform; no custom development in this phase</span></span>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:7px;flex-wrap:wrap">
+    <sc-for list="{{ cfgTabs }}" as="t" hint-placeholder-count="5">
+      <button onClick="{{ t.go }}" style="padding:7px 14px;border-radius:9px;font-size:12.5px;font-weight:700;background:{{ t.bg }};color:{{ t.fg }};border:1px solid {{ t.bd }}">{{ t.label }}</button>
+    </sc-for>
+  </div>
+
+  <div class="card">
+    <div class="chd">
+      <h3>{{ cfgTitle }}</h3>
+      <span class="pill">{{ cfgPill }}</span>
+      <span style="margin-left:auto;font-size:11px;color:#8397A0;font-weight:500">{{ cfgSrc }}</span>
+    </div>
+    <div style="padding:14px 16px 18px;display:flex;flex-direction:column;gap:13px">
+      <div style="font-size:12px;color:#33484F;line-height:1.65;font-weight:500">{{ cfgSum }}</div>
+      <div style="display:flex;flex-direction:column;gap:7px">
+        <sc-for list="{{ cfgItems }}" as="i" hint-placeholder-count="5">
+          <div style="display:grid;grid-template-columns:1.15fr 2fr 96px;gap:12px;align-items:center;padding:11px 13px;border-radius:10px;background:#FBFCFD;border:1px solid #E9EEF0">
+            <span style="font-size:12px;font-weight:700">{{ i.name }}</span>
+            <span style="font-size:11px;color:#4C6169;font-weight:500;line-height:1.55">{{ i.desc }}</span>
+            <span style="font-size:9.5px;font-weight:800;padding:3px 8px;border-radius:5px;background:{{ i.stBg }};color:{{ i.stFg }};justify-self:start">{{ i.state }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="border:1px dashed #CBD6DA;border-radius:10px;padding:14px 15px;background:#F8FAFB;display:flex;align-items:center;gap:12px">
+        <span style="font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:5px;background:#E4EAF3;color:#002D6B;flex-shrink:0"><span class="zh">本期不定制</span><span class="en">NO CUSTOM DEV</span></span>
+        <span style="font-size:11.5px;color:#5A6E75;font-weight:500;line-height:1.6">{{ cfgNote }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1234,&quot;height&quot;:840},&quot;st&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;object&quot;},&quot;api&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;object&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const p = this.props.st || {}, api = this.props.api || {};
+    const zh = p.zh !== false, v = p.view;
+    const T = (a, b) => zh ? a : b;
+    const ts = (a, b) => () => api.toast && api.toast(a, b);
+    const set = (o) => () => api.setS && api.setS(o);
+    const R = { onS1: v === 's1', onS2: v === 's2', onS4: v === 's4' };
+
+    if (R.onS1) {
+      R.uKpis = [
+        { label: T('总用户数', 'Total users'), val: '512', icon: '◉', note: T('100% · Autoliv 侧 128 · 供应商侧 371 · 客户侧 13', '100%'), color: '#002D6B', bd: '#C9D8EE' },
+        { label: T('活跃用户', 'Active'), val: '341', icon: '✓', note: T('67% · 近 30 天有登录', '67%'), color: '#1E6B3A', bd: '#E1E7EA' },
+        { label: T('待激活', 'Pending activation'), val: '156', icon: '◔', note: T('30% · 多为分层运营批量开户的供应商', '30%'), color: '#8A4B08', bd: '#E1E7EA' },
+        { label: T('停用用户', 'Disabled'), val: '15', icon: '⊘', note: T('3% · 含 4 个待交接账号', '3%'), color: '#B0291D', bd: '#E1E7EA' }
+      ];
+      R.uFilters = [
+        { label: T('全部组织', 'All organisations'), go: ts(T('可按 Autoliv 本部与基地、供应商组织、客户组织三类筛选。', 'Filter by organisation type.')) },
+        { label: T('全部状态', 'All statuses'), go: ts(T('状态：活跃 / 待激活 / 停用 / 待交接。', 'Active / pending / disabled / handover.')) },
+        { label: T('全部角色', 'All roles'), go: ts(T('角色：超级管理员 / ESG 管理员 / 采购 / 合规 / 供应商对接人 / 只读。', 'Six roles.')) }
+      ];
+      R.uImport = ts(T('批量导入模板含姓名、手机号、邮箱、工号、所属组织、部门、角色七列，导入后统一发送激活邀请。', 'Bulk import template with seven columns.'));
+      R.uAdd = ts(T('新增用户：选择所属组织与角色后发送激活邀请，可设置账号有效期。', 'Add user with role and validity.'));
+      const rows = [
+        ['周琳', 'Zhou Lin', '13701235612', 'Autoliv 本部', 'AL-0231', 'ESG 管理部', 'ok', 'ESG 管理员', '2026-08-25', '15:53'],
+        ['高翔', 'Gao Xiang', '13809876543', 'Autoliv 本部', 'AL-0188', '法务合规部', 'ok', '合规', '2026-08-25', '15:35'],
+        ['马宁', 'Ma Ning', '13611122334', 'Autoliv 本部', 'AL-0402', '采购部', 'ok', '采购', '2026-08-25', '15:08'],
+        ['钱宇', 'Qian Yu', '13522233445', 'Autoliv 本部', 'AL-0517', 'IT 部', 'ok', '超级管理员', '2026-08-25', '14:44'],
+        ['邓芳', 'Deng Fang', '13933344556', 'Autoliv 芜湖基地', 'AL-1044', 'EHS', 'ok', 'ESG 管理员', '2026-08-24', '18:21'],
+        ['王建国', 'Wang Jianguo', '13844455667', '宁波华翔汽车饰件', 'SUP-0142-01', '质量部', 'ok', '供应商对接人', '2026-08-25', '10:24'],
+        ['张伟', 'Zhang Wei', '13755566778', '均胜安全系统', 'SUP-0031-01', 'ESG 办公室', 'ok', '供应商对接人', '2026-08-24', '09:12'],
+        ['李慧', 'Li Hui', '13666677889', '敏实集团安全系统', 'SUP-0087-02', '可持续发展', 'wait', '供应商对接人', '—', '—'],
+        ['陈明', 'Chen Ming', '13577788990', '湖北中航精机', 'SUP-0209-01', '技术部', 'wait', '供应商对接人', '—', '—'],
+        ['刘芳', 'Liu Fang', '13488899001', '无锡隆盛科技', 'SUP-0311-01', '—', 'off', '只读', '2026-06-11', '16:40']
+      ];
+      const stC = { ok: ['#E4F3EA', '#1E6B3A', T('活跃', 'Active')], wait: ['#FDF0E3', '#8A4B08', T('待激活', 'Pending')], off: ['#F0F3F5', '#4C6169', T('停用', 'Disabled')] };
+      const rC = { 'ESG 管理员': ['#E9F0FC', '#0B3A82'], '合规': ['#E6F4F8', '#045B75'], '采购': ['#EAF6F2', '#0B5B4A'], '超级管理员': ['#FBE9E7', '#B0291D'], '供应商对接人': ['#F1EDFB', '#5B3FA8'], '只读': ['#F0F3F5', '#4C6169'] };
+      const avC = [['#E9F0FC', '#0B3A82'], ['#EAF6F2', '#0B5B4A'], ['#F1EDFB', '#5B3FA8'], ['#E6F4F8', '#045B75'], ['#FDF0E3', '#8A4B08']];
+      R.users = rows.map((r, i) => ({
+        name: zh ? r[0] : r[1], mask: 'USR-' + String(1000 + i * 7),
+        ini: zh ? r[0].slice(0, 1) : r[1].slice(0, 1),
+        avBg: avC[i % 5][0], avFg: avC[i % 5][1],
+        phone: p.anon ? r[2].slice(0, 3) + '****' + r[2].slice(-4) : r[2],
+        org: p.anon && r[3].indexOf('Autoliv') !== 0 ? 'ORG-' + String(200 + i) : r[3],
+        eid: r[4], dept: r[5],
+        state: stC[r[6]][2], stBg: stC[r[6]][0], stFg: stC[r[6]][1],
+        role: r[7], rBg: (rC[r[7]] || rC['只读'])[0], rFg: (rC[r[7]] || rC['只读'])[1],
+        date: r[8], time: r[9],
+        view: ts(T('用户详情：基本信息、所属组织与部门、角色与数据权限、登录与操作记录。', 'User detail.')),
+        edit: ts(T('编辑用户：可改部门、角色、数据权限范围与账号有效期。', 'Edit user.')),
+        more: ts(T('更多：重置密码 / 停用 / 账号交接（把待办与数据权限移交给他人）/ 删除。', 'Reset · disable · handover · delete.'))
+      }));
+      R.uPage = T('第 1–10 条，共 512 条记录', 'Showing 1–10 of 512');
+      R.uPages = ['1', '2', '3', '4', '5', '…', '52'].map((l, i) => ({
+        label: l, go: ts(T('分页在正式环境接后端；本演示载入第 1 页。', 'Paging wired in production.')),
+        bg: i === 0 ? '#002D6B' : '#fff', fg: i === 0 ? '#fff' : '#4C6169', bd: i === 0 ? '#002D6B' : '#E4EAEC'
+      }));
+      R.uSizeLabel = T('10 条 / 页', '10 / page');
+      R.uSize = ts(T('每页可选 10 / 20 / 50 / 100 条。', '10 / 20 / 50 / 100 per page.'));
+    }
+
+    if (R.onS2) {
+      R.oKpis = [
+        { label: T('总组织数', 'Total organisations'), val: '348', icon: '⌗', note: T('Autoliv 本部与基地 4 · 供应商 327 · 客户 14 · 服务机构 3', 'Sites 4 · suppliers 327 · customers 14 · providers 3'), color: '#002D6B', bd: '#C9D8EE' },
+        { label: T('活跃组织', 'Active'), val: '311', icon: '✓', note: T('近 90 天有提交或登录', 'Active in last 90 days'), color: '#1E6B3A', bd: '#E1E7EA' },
+        { label: T('待审核', 'Pending review'), val: '22', icon: '◔', note: T('引入中的候选企业，不计入 327 家统计口径', 'Candidates, excluded from the 327'), color: '#8A4B08', bd: '#E1E7EA' },
+        { label: T('停用组织', 'Disabled'), val: '15', icon: '⊘', note: T('已终止合作或合并，历史数据保留', 'Terminated or merged'), color: '#B0291D', bd: '#E1E7EA' }
+      ];
+      R.oFilters = [
+        { label: T('全部类型', 'All types'), go: ts(T('类型：Autoliv 本部 / 生产基地 / 供应商组织 / 客户组织 / 服务机构。', 'Five organisation types.')) },
+        { label: T('全部状态', 'All statuses'), go: ts(T('状态：活跃 / 待审核 / 停用。待审核＝引入中，不进统计口径。', 'Active / pending / disabled.')) }
+      ];
+      R.oImport = ts(T('批量导入组织：企业名称、统一社会信用代码、类型、行业、地区、对接人六列。', 'Bulk import with six columns.'));
+      R.oAdd = ts(T('添加组织后进入待审核，通过后才计入 327 家基准清单。', 'New organisations start as pending.'));
+      R.oIsList = (p.sysOrgView || 'list') === 'list';
+      R.oIsTree = !R.oIsList;
+      R.oViewList = set({ sysOrgView: 'list' }); R.oViewTree = set({ sysOrgView: 'tree' });
+      R.olBg = R.oIsList ? '#002D6B' : 'transparent'; R.olFg = R.oIsList ? '#fff' : '#4C6169';
+      R.otBg = R.oIsTree ? '#002D6B' : 'transparent'; R.otFg = R.oIsTree ? '#fff' : '#4C6169';
+      R.oCount = T('共 348 个组织', '348 organisations');
+      const os = [
+        ['Autoliv 中国 本部', 'Autoliv China HQ', 'hq', T('集团 · 汽车安全系统 · 上海市', 'Group · automotive safety · Shanghai'), 'ok', 128, 4, 3, '2024-03-12', '2026-08-25'],
+        ['Autoliv 芜湖基地', 'Autoliv Wuhu Plant', 'site', T('生产基地 · 安徽省', 'Plant · Anhui'), 'ok', 31, 1, 0, '2024-03-12', '2026-08-24'],
+        ['Autoliv 长春基地', 'Autoliv Changchun Plant', 'site', T('生产基地 · 吉林省', 'Plant · Jilin'), 'ok', 24, 1, 0, '2024-05-20', '2026-08-22'],
+        ['宁波华翔汽车饰件', 'Ningbo Huaxiang', 'sup', T('供应商 · 战略层 · 内饰件 · 浙江省', 'Supplier · strategic · interior · Zhejiang'), 'ok', 6, 3, 1, '2024-06-23', '2026-08-25'],
+        ['均胜安全系统', 'Joyson Safety', 'sup', T('供应商 · 战略层 · 安全气囊组件 · 浙江省', 'Supplier · strategic · airbag · Zhejiang'), 'ok', 9, 5, 2, '2024-06-23', '2026-08-24'],
+        ['敏实集团安全系统', 'Minth Group', 'sup', T('供应商 · 战略层 · 结构件 · 浙江省', 'Supplier · strategic · structural · Zhejiang'), 'ok', 4, 4, 1, '2024-08-14', '2026-08-20'],
+        ['Chery 奇瑞汽车', 'Chery Automobile', 'cust', T('客户 · 整车厂 · 安徽省', 'Customer · OEM · Anhui'), 'ok', 3, 0, 0, '2024-04-02', '2026-07-18'],
+        ['江苏欣宇精密制造', 'Xinyu Precision', 'cand', T('待审核 · 引入中 · 金属冲压 · 江苏省', 'Pending · stamping · Jiangsu'), 'wait', 1, 1, 0, '2026-08-14', '2026-08-14'],
+        ['沈阳慧玲股份', 'Shenyang Huiling', 'off', T('已停用 · 2025 年终止合作', 'Disabled · terminated 2025'), 'off', 0, 0, 0, '2024-08-14', '2025-11-30']
+      ];
+      const kC = { hq: ['#E9F0FC', '#0B3A82', '⌂'], site: ['#EAF6F2', '#0B5B4A', '⚒'], sup: ['#F1EDFB', '#5B3FA8', '⌗'], cust: ['#E6F4F8', '#045B75', '◈'], cand: ['#FDF0E3', '#8A4B08', '◔'], off: ['#F0F3F5', '#4C6169', '⊘'] };
+      const stC = { ok: ['#E4F3EA', '#1E6B3A', T('活跃', 'Active')], wait: ['#FDF0E3', '#8A4B08', T('待审核', 'Pending')], off: ['#F0F3F5', '#4C6169', T('停用', 'Disabled')] };
+      const shown = os.slice(0, p.sysOrgMore || 9);
+      R.orgs = shown.map((o, i) => ({
+        name: zh ? o[0] : o[1], mask: 'ORG-' + String(200 + i), meta: o[3],
+        icon: kC[o[2]][2], avBg: kC[o[2]][0], avFg: kC[o[2]][1],
+        state: stC[o[4]][2], stBg: stC[o[4]][0], stFg: stC[o[4]][1],
+        u1: T('用户：' + o[5], 'Users: ' + o[5]),
+        u2: T('场地：' + o[6], 'Sites: ' + o[6]),
+        u3: T('子公司：' + o[7], 'Subsidiaries: ' + o[7]),
+        created: o[8], active: o[9],
+        view: ts(T('组织详情：企业信息、场地与子公司、用户与角色分配、数据权限范围。', 'Organisation detail.')),
+        edit: ts(T('编辑组织：名称、信用代码、类型、行业、地区与对接人。', 'Edit organisation.')),
+        more: ts(T('更多：审核通过 / 停用 / 合并到其他组织 / 导出该组织全部数据。', 'Approve · disable · merge · export.'))
+      }));
+      R.oMoreLabel = shown.length >= os.length ? T('已全部显示', 'All shown') : T('显示更多', 'Show more');
+      R.oMoreGo = set({ sysOrgMore: (p.sysOrgMore || 9) + 20 });
+      R.oShown = T('已显示 ' + shown.length + ' / 348 个（本演示载入 9 条样本）', 'Showing ' + shown.length + ' of 348');
+      R.tree = [
+        ['Autoliv 中国 本部', 'Autoliv China HQ', T('集团', 'Group'), 0, '#0B3A82', 128],
+        ['Autoliv 上海工厂', 'Autoliv Shanghai', T('生产基地', 'Plant'), 1, '#0B3A82', 42],
+        ['Autoliv 芜湖基地', 'Autoliv Wuhu', T('生产基地', 'Plant'), 1, '#0B3A82', 31],
+        ['Autoliv 长春基地', 'Autoliv Changchun', T('生产基地', 'Plant'), 1, '#0B3A82', 24],
+        ['供应商组织', 'Supplier organisations', T('327 家', '327'), 0, '#5B3FA8', 371],
+        ['战略层', 'Strategic tier', T('24 家', '24'), 1, '#5B3FA8', 86],
+        ['重点层', 'Key tier', T('68 家', '68'), 1, '#5B3FA8', 142],
+        ['起步层', 'Starter tier', T('152 家', '152'), 1, '#5B3FA8', 121],
+        ['间接层', 'Indirect tier', T('83 家', '83'), 1, '#5B3FA8', 22],
+        ['客户组织', 'Customer organisations', T('14 家', '14'), 0, '#045B75', 13]
+      ];
+      R.tree = R.tree.map((t, i) => ({
+        name: t[0], mask: 'ORG-' + String(300 + i), kind: t[2],
+        indent: (t[3] * 26) + 'px',
+        bg: t[3] === 0 ? '#F8FAFB' : '#fff', bd: t[3] === 0 ? '#E4EAEC' : '#EDF1F3',
+        bar: t[4], fg: '#1D2F36', fw: t[3] === 0 ? '700' : '600',
+        tagBg: '#F0F3F5', tagFg: '#4C6169',
+        stat: T(t[5] + ' 名用户', t[5] + ' users')
+      }));
+    }
+
+    if (R.onS4) {
+      const cfg = [
+        {
+          k: 'role', zh: '角色与权限', en: 'Roles & permissions',
+          pill: { zh: '6 个内置角色', en: '6 built-in roles' },
+          src: { zh: '报价表：平台基础 · 底层系统 第 2 项', 'en': 'Quote: base platform item 2' },
+          sum: { zh: '角色定义与菜单权限；数据权限可按客户、供应商、工厂、区域授权；关键操作走审批。当前平台已具备该能力，本期沿用现有产品形态，不做定制。', en: 'Role and menu permissions; data scoped by customer, supplier, plant or region; approval on key operations.' },
+          items: [
+            ['角色定义', 'Role definitions', '内置超级管理员 / ESG 管理员 / 采购 / 合规 / 供应商对接人 / 只读六个角色，可克隆新建', 'Six built-in roles, clonable', 'live'],
+            ['菜单权限', 'Menu permissions', '按角色控制左侧导航与页面内操作按钮的可见性', 'Nav and in-page actions by role', 'live'],
+            ['数据权限', 'Data scope', '可按客户、供应商、工厂、区域四个维度授权，支持交叉限定', 'Scoped by customer / supplier / plant / region', 'live'],
+            ['关键操作审批', 'Approval flows', '豁免审批、停用组织、批量下发、导出全量数据四类操作需二级审批', 'Two-level approval on four action types', 'live'],
+            ['权限继承', 'Inheritance', '组织架构上层的授权自动下传，可在下层收窄不可放宽', 'Downward inheritance, narrowing only', 'live']
+          ]
+        },
+        {
+          k: 'log', zh: '操作日志与审计', en: 'Audit log',
+          pill: { zh: '全链路留痕', en: 'Full trail' },
+          src: { zh: '报价表：平台基础 · 底层系统 第 3 项', en: 'Quote: base platform item 3' },
+          sum: { zh: '全链路操作留痕，支持检索与导出，满足审计取证要求。本版所有判定、核验结论、豁免与下发动作都会写入这里。', en: 'Full operation trail, searchable and exportable for audit.' },
+          items: [
+            ['操作留痕', 'Operation trail', '谁、什么时候、对哪个对象做了什么，前后值一并留存', 'Who, when, what, before and after', 'live'],
+            ['AI 判定留痕', 'AI verdict trail', 'AI 判定的输入信号、结论与置信度全部入库，人工覆盖也记录理由', 'AI inputs, verdict, confidence, overrides', 'new'],
+            ['核验结论留痕', 'Verification trail', '收资核验的三类结论与口径纠正过程可回溯', 'Three verdict types and restatements', 'new'],
+            ['检索与导出', 'Search & export', '按人、对象、时间区间、操作类型检索，导出 XLSX 供审计取证', 'Search and export for auditors', 'live'],
+            ['留存期限', 'Retention', '默认留存 5 年，可按合规要求延长', 'Five years by default', 'live']
+          ]
+        },
+        {
+          k: 'dict', zh: '基础配置字典', en: 'Configuration dictionary',
+          pill: { zh: '编号 · 状态 · 单位 · 周期', en: 'Codes · states · units · cycles' },
+          src: { zh: '报价表：平台基础 · 底层系统 第 4 项', en: 'Quote: base platform item 4' },
+          sum: { zh: '编号规则、状态与分级字典、单位与口径定义、周期与截止规则的统一维护。这一项决定各视图数字能不能对账 —— 口径字典本体在主数据管理里维护。', en: 'Codes, states, units, cycles maintained in one place.' },
+          items: [
+            ['编号规则', 'Numbering rules', 'SUP-xxxx 供应商、ORG-xxx 组织、T01–T37 要求、CV-xxxx 收资任务、IMP-xxxx 导入批次', 'Prefix rules per object type', 'live'],
+            ['状态与分级字典', 'State & tier dictionary', '供应商层级（战略/重点/起步/间接）、达成状态、任务状态三套枚举', 'Tier, conformance and task enums', 'live'],
+            ['单位与口径定义', 'Units & basis', 'tCO2e / kWh / % / 元，以及分母口径 —— 与主数据的口径字典同源', 'Units and denominators', 'live'],
+            ['周期与截止规则', 'Cycles & deadlines', '年度 / 半年 / 季度 / 滚动 / 一次性五类，截止日与提醒节奏可配', 'Five cycle types with reminder rhythm', 'live'],
+            ['证据有效期规则', 'Evidence validity', '无标注有效期时按签发日起 12 个月；到期自动把关联要求回退为未达成', 'Default 12 months; expiry reverts conformance', 'new']
+          ]
+        },
+        {
+          k: 'msg', zh: '消息与通知配置', en: 'Notifications',
+          pill: { zh: '站内 ＋ 邮件', en: 'In-app + email' },
+          src: { zh: '报价表：平台基础 · 底层系统 第 5 项', en: 'Quote: base platform item 5' },
+          sum: { zh: '站内消息与邮件通知；截止提醒、超期预警、待办催办。分层运营的四套差异化催办模板在这里维护。', en: 'In-app and email; deadline reminders, overdue alerts, chasing.' },
+          items: [
+            ['通道配置', 'Channels', '站内消息、邮件、可选短信；按事件类型分别开关', 'In-app, email, optional SMS', 'live'],
+            ['截止提醒节奏', 'Reminder rhythm', '截止前 7 / 3 / 1 天，逾期后每 3 天一次，抄送采购负责人', 'T-7 / T-3 / T-1, then every 3 days', 'live'],
+            ['分层催办模板', 'Tier-specific templates', '战略层由采购经理直联，起步层走系统模板＋专题课邀请，四层各一套', 'Four templates by tier', 'new'],
+            ['事件订阅', 'Event subscriptions', '法规变更、证书到期、收资提交、核验结论四类事件可按角色订阅', 'Four subscribable event types', 'live'],
+            ['免打扰与摘要', 'Digest mode', '可改为每日摘要，避免高频事件淹没收件箱', 'Daily digest option', 'live']
+          ]
+        },
+        {
+          k: 'io', zh: '导入导出与备份', en: 'Import, export & backup',
+          pill: { zh: '模板 ＋ 定期备份', en: 'Templates + backup' },
+          src: { zh: '报价表：平台基础 · 主数据管理 第 5 项', en: 'Quote: master data item 5' },
+          sum: { zh: '批量导入模板、数据导出、定期备份与恢复。目标与考核导入向导是它的专用形态，其余对象走通用模板。', en: 'Bulk import templates, export, scheduled backup and restore.' },
+          items: [
+            ['批量导入模板', 'Import templates', '供应商、客户、要求条目、用户、组织五类对象各一套模板，含字段说明与校验规则', 'Five object templates with validation', 'live'],
+            ['专用导入向导', 'Dedicated wizard', '37 条目标作答结果与分级考核目标走四步向导（映射 / 校验 / 回执）', 'Four-step wizard for targets', 'new'],
+            ['数据导出', 'Export', '各列表页均可按当前筛选条件导出 XLSX，导出动作记入操作日志', 'Filtered export, logged', 'live'],
+            ['定期备份', 'Scheduled backup', '每日增量、每周全量；本地部署方案下备份落在贵司环境内', 'Daily incremental, weekly full', 'live'],
+            ['恢复演练', 'Restore drill', '支持按时间点恢复，建议每半年做一次恢复演练', 'Point-in-time restore', 'live']
+          ]
+        }
+      ];
+      const cur = p.sysTab || 'role';
+      R.cfgTabs = cfg.map(c => ({
+        label: zh ? c.zh : c.en, go: set({ sysTab: c.k }),
+        bg: cur === c.k ? '#002D6B' : '#fff', fg: cur === c.k ? '#fff' : '#4C6169',
+        bd: cur === c.k ? '#002D6B' : '#E1E7EA'
+      }));
+      const c = cfg.find(x => x.k === cur) || cfg[0];
+      R.cfgTitle = zh ? c.zh : c.en;
+      R.cfgPill = zh ? c.pill.zh : c.pill.en;
+      R.cfgSrc = zh ? c.src.zh : c.src.en;
+      R.cfgSum = zh ? c.sum.zh : c.sum.en;
+      const stC = { live: ['#E4F3EA', '#1E6B3A', T('产品已上线', 'Live')], new: ['#E9F0FC', '#0B3A82', T('本版新增口径', 'New here')] };
+      R.cfgItems = c.items.map(i => ({
+        name: zh ? i[0] : i[1], desc: zh ? i[2] : i[3],
+        state: stC[i[4]][2], stBg: stC[i[4]][0], stFg: stC[i[4]][1]
+      }));
+      R.cfgNote = T('这一项含在平台基础范围内、不单独收费，界面沿用现有产品形态，本期不做定制开发。上面标「本版新增口径」的几条是本次范围带来的新配置项，属既有配置能力的扩展，不产生额外开发费。', 'Included in the base platform at no extra charge; no custom development in this phase.');
+    }
+
+    return R;
+  }
+}
+
+</script>
+</body>
+</html>

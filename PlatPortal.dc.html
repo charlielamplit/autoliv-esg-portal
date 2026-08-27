@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="min-height:1020px;background:#F4F7F6;display:flex;flex-direction:column">
+  <div style="background:#0E3B3A;padding:0 22px;height:58px;display:flex;align-items:center;gap:14px;flex-shrink:0">
+    <div style="width:30px;height:30px;border-radius:9px;background:#7ED0B4;color:#0E3B3A;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;font-family:Manrope">142</div>
+    <div style="line-height:1.25">
+      <div style="font-size:13.5px;font-weight:700;color:#fff"><span class="zh">供应商可持续门户</span><span class="en">Supplier Sustainability Portal</span></div>
+      <div style="font-size:9.5px;color:#8FB8AE;letter-spacing:.06em">{{ persona }}</div>
+    </div>
+    <div style="margin-left:26px;display:flex;gap:4px">
+      <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
+        <button onClick="{{ t.go }}" style="font-size:11.5px;font-weight:{{ t.fw }};color:{{ t.fg }};background:{{ t.bg }};padding:5px 12px;border-radius:7px">{{ t.label }}</button>
+      </sc-for>
+    </div>
+    <button onClick="{{ toLead }}" style="margin-left:auto;font-size:11px;font-weight:600;color:#CFE6DF;border:1px solid #2E5D57;padding:6px 11px;border-radius:8px"><span class="zh">← 切回 Autoliv 链主侧</span><span class="en">← Back to chain lead</span></button>
+    <div style="width:28px;height:28px;border-radius:50%;background:#2E5D57;color:#CFE6DF;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">王</div>
+  </div>
+
+  <div style="padding:16px 22px 30px;display:flex;flex-direction:column;gap:14px">
+
+    <sc-if value="{{ onTasks }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="display:flex;flex-direction:column;background:#fff;border:1px solid #A9D9C4;border-left:3px solid #0B5B4A;border-radius:13px;padding:15px 18px">
+        <div style="display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap">
+          <div style="flex:1;min-width:240px">
+            <div style="font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#0B5B4A"><span class="zh">收到 · 来自 Autoliv 的分层下发</span><span class="en">Received · dispatched by Autoliv</span></div>
+            <div style="font-size:16px;font-weight:800;letter-spacing:-.01em;margin-top:4px;line-height:1.35">{{ rxTitle }}</div>
+            <div style="font-size:11px;color:#5A6E75;margin-top:3px">{{ rxMeta }}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:9px;flex-shrink:0">
+            <span style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;background:#FDF0E3;color:#8A4B08;white-space:nowrap">{{ rxState }}</span>
+            <button onClick="{{ rxGo }}" style="font-size:11.5px;font-weight:700;padding:8px 14px;border-radius:8px;background:#0B5B4A;color:#fff;white-space:nowrap"><span class="zh">AI 辅助作答 → 提交</span><span class="en">AI-assisted answer → submit</span></button>
+          </div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:12px">
+          <sc-for list="{{ rxItems }}" as="i" hint-placeholder-count="5">
+            <span style="font-size:10.5px;font-weight:600;padding:4px 9px;border-radius:6px;background:#F3FAF7;border:1px solid #CFE8DE;color:#0B5B4A">{{ i.label }}</span>
+          </sc-for>
+        </div>
+        <div style="font-size:10px;color:#8397A0;margin-top:9px;line-height:1.5">{{ rxNote }}</div>
+      </div>
+
+      <div style="background:#fff;border:1px solid #DCE7E3;border-radius:14px;padding:17px 20px">
+        <div style="display:flex;align-items:flex-start;gap:22px;flex-wrap:wrap">
+          <div style="flex:1;min-width:320px">
+            <div style="font-size:9.5px;letter-spacing:.2em;color:#0B5B4A;font-weight:700;text-transform:uppercase"><span class="zh">来自客户 Autoliv · 2026 可持续采购要求</span><span class="en">From Autoliv · 2026 Sustainable Sourcing Requirements</span></div>
+            <div style="font-size:20px;font-weight:800;letter-spacing:-.02em;margin-top:4px"><span class="zh">你的 37 条要求</span><span class="en">Your 37 requirements</span></div>
+            <div style="font-size:12px;color:#33484F;margin-top:5px;line-height:1.6;max-width:700px"><span class="zh">你是<b>战略层</b>供应商，37 条全部适用。每条都写清了「这是什么、为什么要、怎么准备、交到哪个系统、什么时候截止」。按「需你行动」优先处理，其余按生效年份排队。</span><span class="en b">As a strategic-tier supplier all 37 apply. Each is written out plainly: what it is, why, how to prepare, where to submit, and when it is due.</span></div>
+            <div style="display:flex;align-items:center;gap:9px;margin-top:12px;flex-wrap:wrap">
+              <button onClick="{{ goSurvey }}" style="display:flex;align-items:center;gap:8px;padding:9px 15px;border-radius:9px;background:#0B5B4A;color:#fff;font-size:12.5px;font-weight:700"><span style="font-size:11px">▤</span>{{ surveyCta }}</button>
+              <span style="font-size:10.5px;color:#5A6E75">{{ surveyNote }}</span>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;flex-shrink:0">
+            <sc-for list="{{ stats }}" as="t" hint-placeholder-count="4">
+              <div style="background:{{ t.bg }};border:1px solid {{ t.bd }};border-radius:11px;padding:11px 14px;min-width:96px">
+                <div style="font-family:Manrope;font-size:23px;font-weight:800;color:{{ t.fg }};letter-spacing:-.03em">{{ t.n }}</div>
+                <div style="font-size:10.5px;font-weight:600;color:#4C6169;margin-top:1px">{{ t.label }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-top:15px;padding-top:13px;border-top:1px dashed #DCE7E3;flex-wrap:wrap">
+          <div style="flex:1;min-width:280px">
+            <div style="display:flex;justify-content:space-between;font-size:10.5px;font-weight:600;color:#4C6169"><span><span class="zh">整体完成度</span><span class="en">Overall progress</span></span><span style="font-family:Manrope;color:#0B5B4A;font-weight:800">{{ pct }}</span></div>
+            <div style="height:9px;border-radius:4px;background:#EDF1F0;margin-top:5px;overflow:hidden"><div style="width:{{ pct }};height:100%;background:linear-gradient(90deg,#0B5B4A,#7ED0B4);border-radius:4px"></div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:9px;background:#FDF6F5;border:1px solid #E9C9C4;border-radius:10px;padding:8px 13px">
+            <div>
+              <div style="font-size:10px;color:#8A1E14;font-weight:700"><span class="zh">最近截止 · T15 材料成分 IMDS 提交</span><span class="en">Next due · T15 IMDS submission</span></div>
+              <div style="font-size:10.5px;color:#5A6E75;margin-top:1px"><span class="zh">提交至 IMDS，Autoliv 侧自动回收</span><span class="en">Submit in IMDS</span></div>
+            </div>
+            <div style="text-align:center;padding-left:11px;border-left:1px dashed #E9C9C4"><div style="font-family:Manrope;font-size:19px;font-weight:800;color:#B0291D;line-height:1">4</div><div style="font-size:9px;color:#8397A0"><span class="zh">天逾期</span><span class="en">days over</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 330px;gap:14px;align-items:start">
+        <div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:11px">
+            <sc-for list="{{ cats }}" as="c" hint-placeholder-count="5">
+              <button onClick="{{ c.go }}" style="font-size:11.5px;font-weight:{{ c.fw }};padding:6px 12px;border-radius:8px;background:{{ c.bg }};color:{{ c.fg }};border:1px solid {{ c.bd }}">{{ c.label }} <span style="font-family:Manrope;opacity:.7">{{ c.n }}</span></button>
+            </sc-for>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <sc-for list="{{ tasks }}" as="t" hint-placeholder-count="6">
+              <div style="background:#fff;border:1px solid {{ t.bd }};border-left:3px solid {{ t.accent }};border-radius:11px">
+                <div class="rowlink" onClick="{{ t.toggle }}" style="padding:12px 15px;display:flex;gap:13px;align-items:flex-start;border-radius:9px">
+                  <div style="width:34px;text-align:center;flex-shrink:0">
+                    <div style="font-family:JetBrains Mono;font-size:12px;font-weight:700;color:#B6C4C9">{{ t.no }}</div>
+                  </div>
+                  <div style="flex:1;min-width:0">
+                    <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+                      <span style="font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:5px;background:{{ t.tpBg }};color:{{ t.tpFg }}">{{ t.tpLabel }}</span>
+                      <b style="font-size:13.5px;letter-spacing:-.01em">{{ t.title }}</b>
+                      <span style="font-size:10px;color:#9AABB1;font-family:Manrope">{{ t.en }}</span>
+                    </div>
+                    <div style="font-size:12px;color:#33484F;line-height:1.6;margin-top:5px">{{ t.ai }}</div>
+                    <div style="display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap">
+                      <span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:5px;background:#F0F3F5;color:#5A6E75">{{ t.sys }}</span>
+                      <span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:5px;background:#F0F3F5;color:#5A6E75">{{ t.freq }}</span>
+                      <span style="font-size:10px;font-weight:700;color:{{ t.yearFg }};font-family:Manrope">{{ t.yearLabel }}</span>
+                    </div>
+                  </div>
+                  <div style="text-align:right;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:7px">
+                    <span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:6px;background:{{ t.stBg }};color:{{ t.stFg }}">{{ t.stLabel }}</span>
+                    <button onClick="{{ t.ctaGo }}" style="font-size:11px;font-weight:700;color:#0B5B4A">{{ t.cta }}</button>
+                  </div>
+                </div>
+                <sc-if value="{{ t.open }}" hint-placeholder-val="{{ false }}">
+                  <div style="padding:0 15px 14px 62px">
+                    <div style="background:#F7FAF9;border:1px solid #DCE7E3;border-radius:10px;padding:12px 14px">
+                      <div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">条款原意（AI 译写）</span><span class="en">Clause meaning</span></div>
+                      <div style="font-size:11.5px;color:#33484F;line-height:1.6;margin-top:4px">{{ t.def }}</div>
+                      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:11px">
+                        <div style="background:#fff;border:1px solid #E1E7EA;border-radius:8px;padding:9px 11px"><div style="font-size:9.5px;color:#8397A0;font-weight:600"><span class="zh">生效年份</span><span class="en">Effective</span></div><div style="font-size:12.5px;font-weight:700;font-family:Manrope;margin-top:2px">{{ t.year }}</div></div>
+                        <div style="background:#fff;border:1px solid #E1E7EA;border-radius:8px;padding:9px 11px"><div style="font-size:9.5px;color:#8397A0;font-weight:600"><span class="zh">需要的证据</span><span class="en">Evidence needed</span></div><div style="font-size:11.5px;font-weight:700;margin-top:2px">{{ t.ev }}</div></div>
+                        <div style="background:#fff;border:1px solid #E1E7EA;border-radius:8px;padding:9px 11px"><div style="font-size:9.5px;color:#8397A0;font-weight:600"><span class="zh">做不到平台能给什么</span><span class="en">Platform support</span></div><div style="font-size:11.5px;font-weight:700;color:#5B3FA8;margin-top:2px">{{ t.svc }}</div></div>
+                      </div>
+                      <div style="display:flex;gap:8px;margin-top:11px">
+                        <button onClick="{{ t.start }}" style="padding:8px 13px;border-radius:8px;background:#0B5B4A;color:#fff;font-size:11.5px;font-weight:700"><span class="zh">开始引导填报</span><span class="en">Start guided filing</span></button>
+                        <button onClick="{{ t.fromVault }}" style="padding:8px 13px;border-radius:8px;background:#fff;border:1px solid #D5DFE3;color:#33484F;font-size:11.5px;font-weight:600"><span class="zh">从证据库选文件</span><span class="en">Pick from evidence library</span></button>
+                        <button onClick="{{ t.help }}" style="padding:8px 13px;border-radius:8px;background:#F1EDFB;color:#5B3FA8;font-size:11.5px;font-weight:700"><span class="zh">发起咨询与求助</span><span class="en">Request support</span></button>
+                      </div>
+                    </div>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="background:#0E3B3A;border-radius:12px;padding:15px 16px;color:#fff">
+            <div style="font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#7ED0B4"><span class="zh">AI 助手</span><span class="en">AI assistant</span></div>
+            <div style="font-size:12.5px;line-height:1.65;margin-top:7px;color:#E4EFEC">{{ aiText }}</div>
+            <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border-radius:999px;padding:6px 7px 6px 13px;margin-top:12px">
+              <span style="flex:1;font-size:11.5px;color:#8FB8AE"><span class="zh">问我：PCF 是什么？怎么算？</span><span class="en">Ask: what is PCF?</span></span>
+              <button onClick="{{ aiAsk }}" style="width:26px;height:26px;border-radius:50%;background:#7ED0B4;color:#0E3B3A;display:flex;align-items:center;justify-content:center;font-weight:700">→</button>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #DCE7E3;border-radius:12px;padding:14px 16px">
+            <div style="font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">术语卡 · 看不懂就点</span><span class="en">Glossary</span></div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:11px">
+              <sc-for list="{{ terms }}" as="g" hint-placeholder-count="4">
+                <div style="padding:9px 11px;background:#F7FAF9;border:1px solid #E4EDEA;border-radius:9px">
+                  <div style="font-size:11.5px;font-weight:800;color:#0B5B4A;font-family:Manrope">{{ g.k }}</div>
+                  <div style="font-size:11px;color:#33484F;line-height:1.55;margin-top:2px">{{ g.v }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #DCE7E3;border-radius:12px;padding:14px 16px">
+            <div style="font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">我的缺口 · 与 Autoliv 侧同一口径</span><span class="en">Your gaps · support available</span></div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:11px">
+              <sc-for list="{{ gaps }}" as="g" hint-placeholder-count="4">
+                <div style="display:flex;gap:9px;align-items:center;padding:9px 11px;background:{{ g.bg }};border:1px solid {{ g.bd }};border-radius:9px">
+                  <span style="font-family:JetBrains Mono;font-size:9px;font-weight:700;color:{{ g.noFg }};background:{{ g.noBg }};padding:2px 6px;border-radius:4px;flex-shrink:0">{{ g.no }}</span>
+                  <div style="flex:1;min-width:0"><div style="font-size:11.5px;font-weight:700">{{ g.title }}</div><div style="font-size:10.5px;color:#5B3FA8;font-weight:600;margin-top:1px">{{ g.svc }}</div></div>
+                  <span style="font-size:8.5px;font-weight:800;padding:1px 6px;border-radius:4px;background:{{ g.stBg }};color:{{ g.stFg }};white-space:nowrap;flex-shrink:0"><span class="zh">{{ g.stZh }}</span><span class="en">{{ g.stEn }}</span></span>
+                </div>
+              </sc-for>
+            </div>
+            <button onClick="{{ applyAll }}" style="width:100%;margin-top:11px;padding:9px;border-radius:9px;background:#5B3FA8;color:#fff;font-size:11.5px;font-weight:700"><span class="zh">一次性申请全部帮扶</span><span class="en">Request all support</span></button>
+            <div style="font-size:10px;color:#9AABB1;margin-top:9px;line-height:1.5"><span class="zh">这份清单与 Autoliv 侧「达成与差距」用的是同一套状态色与同一个分母定义（你所在层级的应达成条数），两边永远对得上。提交后对方状态自动刷新；答「是」但数据异常的条目会转成收资核验任务回到你这里。</span><span class="en b">On submission Autoliv's conformance status refreshes; anomalous answers come back as evidence requests.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ onSurvey }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="background:#fff;border:1px solid #DCE7E3;border-radius:14px;padding:16px 18px;display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap">
+        <div style="flex:1;min-width:340px">
+          <div style="font-size:9.5px;letter-spacing:.2em;color:#0B5B4A;font-weight:700;text-transform:uppercase"><span class="zh">年度气候数据填报 · 对应 T01 / T03 / T04 / T05 / T06 / T07 / T11 / T12</span><span class="en">Annual climate data</span></div>
+          <div style="font-size:20px;font-weight:800;letter-spacing:-.02em;margin-top:4px"><span class="zh">年度气候问卷（9 题）</span><span class="en">Annual climate survey (9 items)</span></div>
+          <div style="font-size:12px;color:#33484F;margin-top:5px;line-height:1.6;max-width:720px"><span class="zh">这份问卷是 Autoliv 拿到你气候数据的唯一入口。只有两种控件：选项单选和数值填报。AI 已按你去年的答卷与证据库预填，未达标项留空并标「待你填报」。</span><span class="en b">This survey is how Autoliv obtains your climate data. Two control types only: single choice and numeric entry.</span></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:9px;flex-shrink:0;align-items:flex-end">
+          <div style="display:flex;gap:8px">
+            <button onClick="{{ sExport }}" style="padding:8px 13px;border-radius:9px;background:#F0F3F5;color:#33484F;font-size:11.5px;font-weight:700"><span class="zh">导出 Excel 模板</span><span class="en">Export template</span></button>
+            <button onClick="{{ sImport }}" style="padding:8px 13px;border-radius:9px;background:#F0F3F5;color:#33484F;font-size:11.5px;font-weight:700"><span class="zh">导入填好的表</span><span class="en">Import</span></button>
+            <button onClick="{{ sReuse }}" style="padding:8px 13px;border-radius:9px;background:#E4F3EA;color:#1E6B3A;font-size:11.5px;font-weight:700"><span class="zh">复用上年答卷</span><span class="en">Reuse last year</span></button>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <div style="text-align:right">
+              <div style="font-family:Manrope;font-size:19px;font-weight:800;color:#0B5B4A">{{ sDone }}</div>
+              <div style="font-size:9.5px;color:#8397A0;font-weight:600"><span class="zh">已答 / 9 题</span><span class="en">answered / 9</span></div>
+            </div>
+            <button onClick="{{ sDraft }}" style="padding:8px 13px;border-radius:9px;background:#fff;border:1px solid #D5DFE3;color:#33484F;font-size:11.5px;font-weight:600"><span class="zh">保存草稿</span><span class="en">Save draft</span></button>
+            <button onClick="{{ sSubmit }}" style="padding:9px 16px;border-radius:9px;background:#0E3B3A;color:#fff;font-size:12px;font-weight:700">{{ sSubmitLabel }}</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 300px;gap:14px;align-items:start">
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <sc-for list="{{ questions }}" as="q" hint-placeholder-count="9">
+            <div style="background:#fff;border:1px solid {{ q.bd }};border-left:3px solid {{ q.accent }};border-radius:11px;padding:13px 15px">
+              <div style="display:flex;align-items:flex-start;gap:11px">
+                <span style="width:26px;height:26px;border-radius:8px;background:#F3FAF7;color:#0B5B4A;display:flex;align-items:center;justify-content:center;font-family:Manrope;font-size:11.5px;font-weight:800;flex-shrink:0">{{ q.n }}</span>
+                <div style="min-width:0;flex:1">
+                  <div style="font-size:13px;font-weight:700;line-height:1.5">{{ q.text }}</div>
+                  <div style="display:flex;align-items:center;gap:8px;margin-top:4px;flex-wrap:wrap">
+                    <span style="font-family:JetBrains Mono;font-size:9.5px;font-weight:700;color:#0B5B4A">{{ q.target }}</span>
+                    <span style="font-size:10px;color:#8397A0;font-weight:600">{{ q.meta }}</span>
+                  </div>
+                </div>
+                <span style="font-size:9px;font-weight:800;padding:2px 7px;border-radius:5px;background:{{ q.stBg }};color:{{ q.stFg }};flex-shrink:0">{{ q.state }}</span>
+              </div>
+              <div style="display:flex;gap:6px;margin-top:11px;flex-wrap:wrap;align-items:center">
+                <button onClick="{{ q.o0go }}" style="display:{{ q.o0d }};padding:6px 13px;border-radius:8px;font-size:11.5px;font-weight:700;background:{{ q.o0bg }};color:{{ q.o0fg }};border:1.5px solid {{ q.o0bd }}">{{ q.o0 }}</button>
+                <button onClick="{{ q.o1go }}" style="display:{{ q.o1d }};padding:6px 13px;border-radius:8px;font-size:11.5px;font-weight:700;background:{{ q.o1bg }};color:{{ q.o1fg }};border:1.5px solid {{ q.o1bd }}">{{ q.o1 }}</button>
+                <button onClick="{{ q.o2go }}" style="display:{{ q.o2d }};padding:6px 13px;border-radius:8px;font-size:11.5px;font-weight:700;background:{{ q.o2bg }};color:{{ q.o2fg }};border:1.5px solid {{ q.o2bd }}">{{ q.o2 }}</button>
+                <button onClick="{{ q.o3go }}" style="display:{{ q.o3d }};padding:6px 13px;border-radius:8px;font-size:11.5px;font-weight:700;background:{{ q.o3bg }};color:{{ q.o3fg }};border:1.5px solid {{ q.o3bd }}">{{ q.o3 }}</button>
+                <div style="display:{{ q.numD }};align-items:center;gap:8px">
+                  <div style="display:flex;align-items:center;gap:7px;background:#F7FAF9;border:1.5px solid {{ q.numBd }};border-radius:8px;padding:6px 11px">
+                    <span style="font-family:Manrope;font-size:13px;font-weight:800;color:{{ q.numFg }}">{{ q.numVal }}</span>
+                    <span style="font-size:10.5px;color:#8397A0;font-weight:600">{{ q.numUnit }}</span>
+                  </div>
+                  <button onClick="{{ q.numGo }}" style="font-size:10.5px;font-weight:700;color:#0B5B4A">{{ q.numCta }}</button>
+                </div>
+                <button onClick="{{ q.upload }}" style="margin-left:auto;padding:6px 11px;border-radius:8px;font-size:10.5px;font-weight:700;background:{{ q.evBg }};color:{{ q.evFg }}">{{ q.evLabel }}</button>
+              </div>
+              <div style="font-size:10.5px;color:#8397A0;margin-top:9px;line-height:1.55">{{ q.hint }}</div>
+            </div>
+          </sc-for>
+          <div style="background:#fff;border:1.5px dashed #CBD6DA;border-radius:11px;padding:15px;text-align:center">
+            <div style="font-size:12.5px;font-weight:700;color:#5A6E75"><span class="zh">第 10 题 · 待客户补充题干</span><span class="en">Item 10 · awaiting the customer's wording</span></div>
+            <div style="font-size:10.5px;color:#9AABB1;margin-top:4px;font-weight:500"><span class="zh">客户口径中这份问卷共 10 题，第 10 题题干未提供。补齐后按同一模式加进来即可，不影响其余 9 题的计分与回流。</span><span class="en b">The customer refers to a 10-item survey; item 10's wording has not been supplied yet.</span></div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="background:#0E3B3A;border-radius:12px;padding:15px 16px;color:#fff">
+            <div style="font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#7ED0B4"><span class="zh">填报进度</span><span class="en">Progress</span></div>
+            <div style="display:flex;align-items:baseline;gap:7px;margin-top:8px">
+              <span style="font-family:Manrope;font-size:32px;font-weight:800;letter-spacing:-.03em">{{ sDone }}</span>
+              <span style="font-size:13px;color:#8FB8AE;font-weight:600">/ 9</span>
+            </div>
+            <div style="height:7px;border-radius:4px;background:rgba(255,255,255,.14);margin-top:8px;overflow:hidden"><div style="width:{{ sPct }};height:100%;background:#7ED0B4;border-radius:4px"></div></div>
+            <div style="font-size:11.5px;color:#E4EFEC;margin-top:11px;line-height:1.6">{{ sProgNote }}</div>
+          </div>
+          <div style="background:#fff;border:1px solid #DCE7E3;border-radius:12px;padding:14px 16px">
+            <div style="font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">这份问卷会喂给哪些要求</span><span class="en">Which requirements this feeds</span></div>
+            <div style="display:flex;flex-direction:column;gap:1px;margin-top:10px">
+              <sc-for list="{{ sFeeds }}" as="f" hint-placeholder-count="8">
+                <div style="display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid #F2F5F6">
+                  <span style="font-family:JetBrains Mono;font-size:10px;font-weight:700;color:#0B5B4A;flex-shrink:0">{{ f.no }}</span>
+                  <span style="font-size:11px;font-weight:600;min-width:0">{{ f.name }}</span>
+                  <span style="margin-left:auto;font-size:9px;font-weight:800;padding:2px 6px;border-radius:4px;background:{{ f.stBg }};color:{{ f.stFg }};flex-shrink:0">{{ f.state }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ onRegs }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="background:#fff;border:1px solid #DCE7E3;border-radius:14px;padding:16px 18px;display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap">
+        <div style="flex:1;min-width:340px">
+          <div style="font-size:9.5px;letter-spacing:.2em;color:#045B75;font-weight:700;text-transform:uppercase"><span class="zh">适用性由平台按你的品类、工厂位置与供货流向自动判定</span><span class="en">Applicability screened automatically</span></div>
+          <div style="font-size:20px;font-weight:800;letter-spacing:-.02em;margin-top:4px"><span class="zh">管到你的法规</span><span class="en">Regulations that apply to you</span></div>
+          <div style="font-size:12px;color:#33484F;margin-top:5px;line-height:1.6;max-width:720px"><span class="zh">不讲法条，只讲三件事：<b>哪些法规管到你、你要交什么、什么时候交</b>。每条都写了为什么管到你 —— 不服可以在这一条下申诉。</span><span class="en b">Three things only: which regulations apply to you, what you owe, and when.</span></div>
+        </div>
+        <div style="display:flex;gap:10px;flex-shrink:0">
+          <sc-for list="{{ regStats }}" as="r" hint-placeholder-count="3">
+            <div style="background:{{ r.bg }};border:1px solid {{ r.bd }};border-radius:11px;padding:11px 14px;min-width:96px">
+              <div style="font-family:Manrope;font-size:23px;font-weight:800;color:{{ r.color }};letter-spacing:-.03em">{{ r.val }}</div>
+              <div style="font-size:10.5px;font-weight:600;color:#4C6169;margin-top:1px">{{ r.label }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="border:1px solid #CDE0F2;border-left:3px solid #002D6B;border-radius:13px;padding:14px 17px;background:linear-gradient(135deg,#EBF2FA,#F4FAF6 92%)">
+        <div style="display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap">
+          <div style="flex:1;min-width:400px">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+              <span style="font-size:9px;font-weight:800;letter-spacing:.1em;padding:2px 7px;border-radius:5px;background:#002D6B;color:#fff"><span class="zh">Autoliv 扫出来的</span><span class="en">SCANNED BY AUTOLIV</span></span>
+              <span style="font-size:14px;font-weight:800;letter-spacing:-.01em"><span class="zh">你供的零件把哪些法规带进来了</span><span class="en">Which regulations your parts bring in</span></span>
+            </div>
+            <div style="font-size:11.5px;color:#33484F;line-height:1.65;margin-top:7px;max-width:760px;font-weight:500"><span class="zh">Autoliv 拿你供货零件的<b>材料申报、原产地与工序</b>去比对法规库，扫出下面这些命中。<b>这不是问卷，是从你交过的 IMDS 数据里算出来的</b> —— 很多条你自己未必知道，因为你看不到自己的零件装在哪台车、卖到哪个市场。有异议可以逐条申诉。</span><span class="en b">Autoliv matched your parts' material declarations, origin and process against the regulation library. This is computed from the IMDS data you already submitted, not a questionnaire.</span></div>
+          </div>
+          <div style="display:flex;gap:9px;flex-shrink:0">
+            <sc-for list="{{ scanStats }}" as="s" hint-placeholder-count="3">
+              <div style="background:rgba(255,255,255,.78);border:1px solid rgba(255,255,255,.9);border-radius:10px;padding:10px 13px;min-width:92px">
+                <div style="font-family:Manrope;font-size:21px;font-weight:800;color:{{ s.color }};letter-spacing:-.03em">{{ s.val }}</div>
+                <div style="font-size:10px;font-weight:600;color:#4C6169;margin-top:1px">{{ s.label }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:13px">
+          <sc-for list="{{ scanHits }}" as="h" hint-placeholder-count="4">
+            <div style="background:#fff;border:1px solid {{ h.bd }};border-left:3px solid {{ h.accent }};border-radius:10px;padding:11px 13px">
+              <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+                <span style="font-size:12px;font-weight:800">{{ h.reg }}</span>
+                <span style="font-size:8.5px;font-weight:800;padding:2px 6px;border-radius:4px;background:{{ h.clsBg }};color:{{ h.clsFg }};white-space:nowrap">{{ h.cls }}</span>
+                <span style="margin-left:auto;font-family:Manrope;font-size:10px;font-weight:700;color:{{ h.dueFg }};white-space:nowrap">{{ h.due }}</span>
+              </div>
+              <div style="display:grid;grid-template-columns:74px 1fr;gap:6px 9px;margin-top:9px;font-size:10.5px;line-height:1.5">
+                <span style="color:#8397A0;font-weight:700"><span class="zh">哪个零件</span><span class="en">Part</span></span>
+                <span style="color:#33484F;font-weight:600"><span style="font-family:JetBrains Mono;font-size:9.5px;color:#0B3A82">{{ h.part }}</span>　{{ h.partName }}</span>
+                <span style="color:#8397A0;font-weight:700"><span class="zh">哪个材料</span><span class="en">Material</span></span>
+                <span style="color:#33484F;font-weight:600">{{ h.mat }}</span>
+                <span style="color:#8397A0;font-weight:700"><span class="zh">为什么</span><span class="en">Why</span></span>
+                <span style="color:{{ h.accent }};font-weight:600">{{ h.why }}</span>
+                <span style="color:#8397A0;font-weight:700"><span class="zh">你要交</span><span class="en">You owe</span></span>
+                <span style="color:#33484F;font-weight:600">{{ h.owe }}</span>
+              </div>
+              <div style="display:flex;gap:7px;margin-top:10px;padding-top:9px;border-top:1px dashed {{ h.bd }}">
+                <button onClick="{{ h.go }}" style="padding:5px 10px;border-radius:7px;background:#0B5B4A;color:#fff;font-size:10.5px;font-weight:700">{{ h.cta }}</button>
+                <button onClick="{{ h.appeal }}" style="padding:5px 10px;border-radius:7px;background:#fff;border:1px solid {{ h.bd }};color:#4C6169;font-size:10.5px;font-weight:700"><span class="zh">这条不该管到我</span><span class="en">Appeal</span></button>
+                <span style="margin-left:auto;font-size:9.5px;font-weight:800;padding:3px 7px;border-radius:5px;background:{{ h.stBg }};color:{{ h.stFg }};white-space:nowrap">{{ h.state }}</span>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="font-size:10.5px;color:#5A6E75;line-height:1.6;margin-top:11px;padding-top:10px;border-top:1px dashed #CDE0F2;font-weight:500"><span class="zh">换料或换产地能改变命中结果 —— 比如把钕铁硼换成无重稀土牌号，稀土管制这一条就不再适用。想评估替代方案，在这里发起「替代料合规预检」，Autoliv 侧会用同一套扫描规则先算一遍。</span><span class="en b">Changing material or origin changes the hits. Request a pre-check on an alternative and the same scan runs on it first.</span></div>
+        <button onClick="{{ scanPrecheck }}" style="margin-top:9px;padding:6px 12px;border-radius:8px;background:#002D6B;color:#fff;font-size:11px;font-weight:700"><span class="zh">发起替代料合规预检</span><span class="en">Request an alternative pre-check</span></button>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:9px">
+        <sc-for list="{{ regTasks }}" as="r" hint-placeholder-count="9">
+          <div style="background:#fff;border:1px solid {{ r.bd }};border-left:3px solid {{ r.accent }};border-radius:11px;padding:13px 15px;display:grid;grid-template-columns:1.15fr 1.5fr 124px 110px;gap:14px;align-items:center">
+            <div style="min-width:0">
+              <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+                <span style="font-size:9px;font-weight:800;padding:2px 6px;border-radius:4px;background:{{ r.tagBg }};color:{{ r.tagFg }}">{{ r.scope }}</span>
+                <b style="font-size:13px;letter-spacing:-.01em">{{ r.reg }}</b>
+              </div>
+              <div style="font-size:10.5px;color:#5A6E75;margin-top:5px;font-weight:500;line-height:1.55">{{ r.why }}</div>
+            </div>
+            <div style="min-width:0">
+              <div style="font-size:9.5px;font-weight:800;letter-spacing:.05em;color:#8397A0;text-transform:uppercase"><span class="zh">你要交什么</span><span class="en">What you owe</span></div>
+              <div style="font-size:11.5px;font-weight:600;margin-top:3px;line-height:1.5">{{ r.what }}</div>
+              <div style="font-size:10px;color:#8397A0;margin-top:3px;font-weight:600">{{ r.how }}</div>
+            </div>
+            <div>
+              <div style="font-size:9.5px;font-weight:800;letter-spacing:.05em;color:#8397A0;text-transform:uppercase"><span class="zh">截止</span><span class="en">Due</span></div>
+              <div style="font-family:Manrope;font-size:13.5px;font-weight:800;margin-top:3px;color:{{ r.dueFg }}">{{ r.due }}</div>
+              <div style="font-size:10px;font-weight:700;color:{{ r.dueFg }};margin-top:1px">{{ r.left }}</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <span style="font-size:9.5px;font-weight:800;padding:3px 8px;border-radius:5px;background:{{ r.stBg }};color:{{ r.stFg }};text-align:center">{{ r.state }}</span>
+              <button onClick="{{ r.go }}" style="padding:6px 10px;border-radius:8px;background:#0B5B4A;color:#fff;font-size:11px;font-weight:700">{{ r.cta }}</button>
+              <button onClick="{{ r.appeal }}" style="font-size:10px;font-weight:700;color:#8397A0"><span class="zh">申诉适用性</span><span class="en">Appeal</span></button>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ onEv }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="background:#fff;border:1px solid #DCE7E3;border-radius:14px;padding:16px 18px;display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap">
+        <div style="flex:1;min-width:340px">
+          <div style="font-size:9.5px;letter-spacing:.2em;color:#0B5B4A;font-weight:700;text-transform:uppercase"><span class="zh">一处上传 · 多处复用</span><span class="en">Upload once, reuse everywhere</span></div>
+          <div style="font-size:20px;font-weight:800;letter-spacing:-.02em;margin-top:4px"><span class="zh">证据库</span><span class="en">Evidence library</span></div>
+          <div style="font-size:12px;color:#33484F;margin-top:5px;line-height:1.6;max-width:720px"><span class="zh">你的证书、报告与台账都存在这里。<b>气候问卷、收资核验、法规申报三处都从这里取</b>，同一份证书不用传三遍。每份文件都标了「被哪些要求引用」—— 你能看到交上去的东西用在哪。</span><span class="en b">Certificates, reports and ledgers live here and are reused by the survey, evidence requests and regulatory filings alike.</span></div>
+        </div>
+        <div style="display:flex;gap:10px;flex-shrink:0">
+          <sc-for list="{{ evStats }}" as="e" hint-placeholder-count="3">
+            <div style="background:{{ e.bg }};border:1px solid {{ e.bd }};border-radius:11px;padding:11px 14px;min-width:96px">
+              <div style="font-family:Manrope;font-size:23px;font-weight:800;color:{{ e.color }};letter-spacing:-.03em">{{ e.val }}</div>
+              <div style="font-size:10.5px;font-weight:600;color:#4C6169;margin-top:1px">{{ e.label }}</div>
+            </div>
+          </sc-for>
+          <button onClick="{{ evUpload }}" style="align-self:center;padding:9px 15px;border-radius:9px;background:#0B5B4A;color:#fff;font-size:12px;font-weight:700"><span class="zh">上传文件</span><span class="en">Upload</span></button>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:222px 1fr 300px;gap:14px;align-items:start">
+        <div style="background:#fff;border:1px solid #DCE7E3;border-radius:12px;padding:11px 9px">
+          <div style="font-size:9.5px;font-weight:800;letter-spacing:.08em;color:#8397A0;padding:2px 7px 8px;text-transform:uppercase"><span class="zh">分类目录</span><span class="en">Folders</span></div>
+          <div style="display:flex;flex-direction:column;gap:1px">
+            <sc-for list="{{ evFolders }}" as="f" hint-placeholder-count="8">
+              <div class="rowlink" onClick="{{ f.go }}" style="display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:7px;background:{{ f.bg }}">
+                <span style="width:4px;height:14px;border-radius:2px;background:{{ f.bar }};flex-shrink:0"></span>
+                <span style="font-size:11.5px;font-weight:{{ f.fw }};color:{{ f.fg }};min-width:0">{{ f.name }}</span>
+                <span style="margin-left:auto;font-family:Manrope;font-size:10px;font-weight:700;color:#9AABB1">{{ f.n }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="background:#fff;border:1px solid #DCE7E3;border-radius:12px;min-width:0">
+          <div style="padding:13px 16px;border-bottom:1px solid #EDF1F0;display:flex;align-items:center;gap:10px">
+            <h3 style="margin:0;font-size:13.5px;font-weight:700">{{ evTitle }}</h3>
+            <span class="pill">{{ evPill }}</span>
+            <span style="margin-left:auto;font-size:11px;color:#8397A0;font-weight:500"><span class="zh">「被哪些要求引用」是这里和 Autoliv 侧数据底座唯一不同的一列</span><span class="en">The "used by" column is unique to the supplier side</span></span>
+          </div>
+          <div style="padding:8px 16px 16px">
+            <div style="display:grid;grid-template-columns:1.7fr 82px 96px 1.15fr 92px;gap:9px;padding:7px 8px;font-size:9.5px;font-weight:800;letter-spacing:.06em;color:#8397A0;text-transform:uppercase;border-bottom:1px solid #EDF1F0">
+              <span><span class="zh">文件</span><span class="en">File</span></span>
+              <span><span class="zh">期间</span><span class="en">Period</span></span>
+              <span><span class="zh">有效期</span><span class="en">Valid to</span></span>
+              <span><span class="zh">被哪些要求引用</span><span class="en">Used by</span></span>
+              <span><span class="zh">状态</span><span class="en">State</span></span>
+            </div>
+            <sc-for list="{{ evFiles }}" as="f" hint-placeholder-count="7">
+              <div class="rowlink" onClick="{{ f.go }}" style="display:grid;grid-template-columns:1.7fr 82px 96px 1.15fr 92px;gap:9px;padding:9px 8px;align-items:center;border-bottom:1px solid #F2F5F6">
+                <div style="min-width:0;display:flex;align-items:center;gap:8px">
+                  <span style="font-size:9px;font-weight:800;padding:2px 5px;border-radius:4px;background:{{ f.extBg }};color:{{ f.extFg }};font-family:Manrope;flex-shrink:0">{{ f.ext }}</span>
+                  <div style="min-width:0">
+                    <div style="font-size:11.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ f.name }}</div>
+                    <div style="font-size:9.5px;color:#9AABB1;font-weight:500;margin-top:1px">{{ f.ver }}</div>
+                  </div>
+                </div>
+                <span style="font-family:Manrope;font-size:11px;font-weight:600;color:#4C6169">{{ f.period }}</span>
+                <div>
+                  <div style="font-family:Manrope;font-size:11px;font-weight:700;color:{{ f.expFg }}">{{ f.exp }}</div>
+                  <div style="font-size:9px;color:{{ f.expFg }};font-weight:600">{{ f.expNote }}</div>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:4px;min-width:0">
+                  <sc-if value="{{ f.hasRefs }}" hint-placeholder-val="{{ true }}">
+                    <span style="font-family:JetBrains Mono;font-size:9px;font-weight:700;padding:2px 5px;border-radius:4px;background:#F3FAF7;color:#0B5B4A">{{ f.r0 }}</span>
+                  </sc-if>
+                  <span style="display:{{ f.r1d }};font-family:JetBrains Mono;font-size:9px;font-weight:700;padding:2px 5px;border-radius:4px;background:#F3FAF7;color:#0B5B4A">{{ f.r1 }}</span>
+                  <span style="display:{{ f.r2d }};font-family:JetBrains Mono;font-size:9px;font-weight:700;padding:2px 5px;border-radius:4px;background:#F3FAF7;color:#0B5B4A">{{ f.r2 }}</span>
+                  <span style="display:{{ f.rmD }};font-size:9px;font-weight:700;color:#8397A0">{{ f.rMore }}</span>
+                </div>
+                <span style="font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:5px;background:{{ f.stBg }};color:{{ f.stFg }};justify-self:start">{{ f.state }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="background:#fff;border:1px solid #E9C9C4;border-radius:12px;padding:14px 16px">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:#8A1E14"><span class="zh">有效期与到期提醒</span><span class="en">Expiry alerts</span></span>
+              <span style="margin-left:auto;font-family:Manrope;font-size:12px;font-weight:800;color:#B0291D">{{ expN }}</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:11px">
+              <sc-for list="{{ expiring }}" as="e" hint-placeholder-count="3">
+                <div style="padding:9px 11px;background:#FDF6F5;border:1px solid #EFD8D4;border-radius:9px">
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <span style="font-size:11.5px;font-weight:700;min-width:0">{{ e.name }}</span>
+                    <span style="margin-left:auto;font-family:Manrope;font-size:11px;font-weight:800;color:#B0291D;flex-shrink:0">{{ e.left }}</span>
+                  </div>
+                  <div style="font-size:10.5px;color:#5A6E75;margin-top:3px;line-height:1.5">{{ e.impact }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="font-size:10px;color:#9AABB1;margin-top:10px;line-height:1.55"><span class="zh">口径：证据到期后，它支撑的那条要求会自动回退为「未达成」，并出现在 Autoliv 的差距清单里。换证材料在到期前 90 天上传即可避免。</span><span class="en b">When evidence expires, the requirement it supports reverts to "not met".</span></div>
+          </div>
+          <div style="background:#fff;border:1px solid #DCE7E3;border-radius:12px;padding:14px 16px">
+            <div style="font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:#8397A0"><span class="zh">完备度体检 · 对照你的 37 条</span><span class="en">Completeness vs. your 37</span></div>
+            <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px">
+              <sc-for list="{{ evHealth }}" as="h" hint-placeholder-count="5">
+                <div>
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <span style="font-size:11.5px;font-weight:600">{{ h.label }}</span>
+                    <span style="margin-left:auto;font-family:Manrope;font-size:11.5px;font-weight:800;color:{{ h.color }}">{{ h.pct }}</span>
+                  </div>
+                  <div style="height:5px;border-radius:3px;background:#EDF1F0;margin-top:5px;overflow:hidden"><div style="height:100%;width:{{ h.pct }};background:{{ h.color }};border-radius:3px"></div></div>
+                  <div style="font-size:10px;color:#8397A0;margin-top:4px;font-weight:500">{{ h.note }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1480,&quot;height&quot;:1020},&quot;st&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;object&quot;},&quot;api&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;object&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const p = this.props.st || {}, api = this.props.api || {};
+    const zh = p.zh !== false;
+    const T = (a, b) => zh ? a : b;
+    const ts = (a, b) => () => api.toast && api.toast(a, b);
+    const set = (o) => () => api.setS && api.setS(o);
+    const tab = p.sTab || 'tasks';
+    const R = { onTasks: tab === 'tasks', onSurvey: tab === 'survey', onRegs: tab === 'regs', onEv: tab === 'ev' };
+
+    R.persona = p.anon ? 'SUP-0142 · ' + T('战略层供应商', 'STRATEGIC TIER') : T('宁波华翔汽车饰件 · SUP-0142 · 战略层', 'NINGBO HUAXIANG · SUP-0142 · STRATEGIC');
+    R.toLead = set({ pers: 'lead' });
+    R.toGap = () => { api.setS && api.setS({ pers: 'lead', view: 'p2' }); };
+    const tabs = [['tasks', T('我的任务', 'My tasks')], ['survey', T('年度气候问卷', 'Climate survey')], ['regs', T('管到我的法规', 'Regulations')], ['ev', T('证据库', 'Evidence')]];
+    R.tabs = tabs.map(t => ({
+      label: t[1], go: set({ sTab: t[0] }),
+      bg: tab === t[0] ? '#7ED0B4' : 'transparent',
+      fg: tab === t[0] ? '#0E3B3A' : '#8FB8AE',
+      fw: tab === t[0] ? '700' : '500'
+    }));
+
+    if (R.onTasks) {
+      R.rxTitle = T('2026 年度任务包 · 战略层 37 条要求', '2026 package · 37 requirements, strategic tier');
+      R.rxMeta = T('来自 Autoliv 可持续与采购 · 下发 2026-08-12 · 编号 DSP-2026-0812-0142', 'Dispatched 2026-08-12 · DSP-2026-0812-0142');
+      R.rxState = T('5 项需你行动', '5 need action');
+      R.rxGo = set({ sTab: 'survey' });
+      R.rxItems = [
+        { label: T('9 题年度气候问卷', '9-item climate survey') },
+        { label: T('逐项证据登记与有效期', 'Evidence with validity') },
+        { label: T('T15 IMDS 提交更新（46 个零件号）', 'T15 IMDS update (46 parts)') },
+        { label: T('T20 电池护照数据准备', 'T20 battery passport data') },
+        { label: T('CV-2041 收资核验响应', 'CV-2041 evidence request') }
+      ];
+      R.rxNote = T('战略层拿到的是全部 37 条；重点层 28 条、起步层 16 条、间接层 9 条 —— 你收到的条数由 Autoliv 的分级考核目标决定。', 'Strategic tier receives all 37; other tiers receive 28 / 16 / 9.');
+      R.surveyCta = T('打开年度气候问卷（9 题）→', 'Open the climate survey (9 items) →');
+      R.surveyNote = T('这是 Autoliv 拿到你气候数据的唯一入口 · 已填 6/9 · 截止 2026-09-30', 'The only channel for your climate data · 6 of 9 · due 2026-09-30');
+      R.stats = [
+        { n: '26', label: T('已达成', 'Met'), bg: '#F3FAF7', bd: '#CFE8DE', fg: '#0B5B4A' },
+        { n: '7', label: T('在办', 'In progress'), bg: '#FDF8F1', bd: '#F3E4D0', fg: '#8A4B08' },
+        { n: '4', label: T('未开始', 'Not started'), bg: '#FDF6F5', bd: '#EFD8D4', fg: '#B0291D' },
+        { n: '2', label: T('最低要求项缺', 'Minimums missing'), bg: '#FDF6F5', bd: '#EFD8D4', fg: '#B0291D' }
+      ];
+      R.pct = '70%';
+      const cats = [['act', T('需你行动', 'Needs action'), 5], ['due', T('即将到期', 'Due soon'), 3], ['run', T('在办', 'In progress'), 7], ['done', T('已达成', 'Met'), 26], ['all', T('全部', 'All'), 37]];
+      const cur = p.sFilter || 'act';
+      R.cats = cats.map(c => ({
+        label: c[1], n: c[2], go: set({ sFilter: c[0] }),
+        bg: cur === c[0] ? '#0B5B4A' : '#fff', fg: cur === c[0] ? '#fff' : '#4C6169',
+        bd: cur === c[0] ? '#0B5B4A' : '#DCE7E3', fw: cur === c[0] ? '700' : '600'
+      }));
+      const all = [
+        ['act', 'T07', T('产品级碳足迹（ISO 14067）', 'Product carbon footprint'), 'Product carbon footprint', 'min',
+          T('给你供给 Autoliv 的每个零件算出「一件产品从原料到出厂排了多少碳」。不是整厂排放除以产量 —— 要按这个零件真实走过的工序算。', 'Work out the emissions of each part you ship us, following that part\'s actual process route — not plant emissions divided by output.'),
+          T('交到：本门户 · 气候问卷第 9 题', 'Submit: portal · survey Q9'), T('年度', 'Annual'), '2026', 'ver', T('收资核验中', 'Under verification'), T('去补证据 →', 'Add evidence →'),
+          T('客户要的不是一个数字，是一份口径可核验的数据：边界怎么画、用了哪版排放因子、多少来自实测。三样缺一样，交上去会被打回。', 'They need auditable data: boundary, factor version, primary-data share.'),
+          T('核算书 ＋ 边界说明 ＋ 因子来源', 'Report + boundary + factors'), T('PCF 核算辅导（HB-02）', 'PCF coaching (HB-02)')],
+        ['act', 'T11', T('绿电消费比例达门槛', 'Renewable electricity share'), 'Renewable share', 'min',
+          T('你工厂用的电里，有多少是绿电。自己装光伏但没办绿证的那部分，按 Autoliv 的口径不算 —— 这一条最容易多报。', 'Share of your electricity backed by certificates or PPAs. Self-generated power without certificates does not count — the most commonly over-reported item.'),
+          T('交到：本门户 · 气候问卷第 8 题', 'Submit: portal · survey Q8'), T('年度', 'Annual'), '2027', 'ver', T('收资核验中', 'Under verification'), T('去补证据 →', 'Add evidence →'),
+          T('你申报了 96%，但提交的绿证与 PPA 凭证只覆盖 61% 的用电量。差额是自发自用未取证的部分，按口径不计入。', 'You claimed 96% but certificates cover only 61%.'),
+          T('绿证 ＋ PPA 结算凭证', 'Certificates + PPA statements'), T('绿电采购与撮合（HB-04）', 'Renewable procurement (HB-04)')],
+        ['act', 'T15', T('材料成分 IMDS 提交完整', 'IMDS submission complete'), 'IMDS complete', 'norm',
+          T('每个零件的材料成分要提交到 IMDS。GADSL 清单每年改两次，清单一改，你以前提交的可能就失效了，得重提 —— 你有 46 个零件号在这批里。', 'Submit material composition to IMDS. The GADSL list changes twice a year, which can silently invalidate past submissions — 46 of your part numbers are affected.'),
+          T('交到：IMDS，Autoliv 侧自动回收', 'Submit: IMDS'), T('滚动', 'Rolling'), '2024', 'over', T('已逾期 4 天', '4 days overdue'), T('立即处理 →', 'Act now →'),
+          T('本次修订新增 4 项禁限用物质。清单修订后 60 天内须更新提交，逾期可暂停供货 —— 备件也在范围内，这是最常漏的一块。', 'Four new substances; resubmission within 60 days. Service parts are in scope too.'),
+          T('IMDS 提交回执', 'IMDS receipts'), T('材料申报实操课（HB-06）', 'Material declaration (HB-06)')],
+        ['act', 'T20', T('电池护照数据准备', 'Battery passport data'), 'Battery passport', 'norm',
+          T('你供的座椅电机里含电池单元。2027 年起投欧盟要带数字护照，里面的碳足迹和再生含量得你往上游电芯厂问 —— 你自己拿不到。', 'Your motors contain battery cells; from 2027 the EU passport needs carbon footprint and recycled content, which only your upstream cell maker holds.'),
+          T('交到：Autoliv 材料申报系统', 'Submit: Autoliv material system'), T('年度', 'Annual'), '2027', 'run', T('在办', 'In progress'), T('查看数据要求 →', 'View requirements →'),
+          T('钴／锂／镍的再生含量测算台账目前是空的。2026-10 是第一个节点，往上游要数据要留出时间。', 'The recycled-content ledger for cobalt, lithium and nickel is empty; the first milestone is Oct 2026.'),
+          T('再生含量测算台账 ＋ 电芯 CF 声明', 'Recycled-content ledger + cell CF'), T('溯源举证辅导（HB-09）', 'Traceability coaching (HB-09)')],
+        ['act', 'T03', T('范围 3 类别 1 采购排放核算', 'Scope 3 category 1'), 'Scope 3 cat.1', 'norm',
+          T('你从你的供应商买来的东西，背后有多少碳。第一年可以用行业平均值估算，但要说明哪些是估的、哪些是问来的。', 'Emissions embedded in what you buy. Estimates are fine in year one if you flag which figures are estimated.'),
+          T('交到：本门户 · 气候问卷第 5 题', 'Submit: portal · survey Q5'), T('年度', 'Annual'), '2026', 'run', T('在办', 'In progress'), T('去填报 →', 'Fill in →'),
+          T('不要求第一年就全部实测。要求的是：说清哪部分是实测、哪部分是估算，以及明年怎么提高实测占比。', 'Not full primary data in year one — but a clear split and a plan.'),
+          T('核算底稿 ＋ 实测占比说明', 'Working papers + primary-data share'), T('温室气体盘查辅导（HB-01）', 'GHG coaching (HB-01)')],
+        ['run', 'T24', T('人权与劳工尽职调查体系', 'Human rights due diligence'), 'HR due diligence', 'norm',
+          T('要有一套能查、能改、能留痕的机制：怎么识别风险、发现问题怎么处理、工人怎么申诉。只有一份政策文件不算。', 'A mechanism to identify risks, remediate and let workers raise concerns — with records. A policy document alone does not count.'),
+          T('交到：本门户 · 证据库', 'Submit: portal · evidence library'), T('年度', 'Annual'), '2025', 'run', T('在办', 'In progress'), T('继续 →', 'Continue →'),
+          T('德国 LkSG 与欧盟 CSDDD 都要看三段记录：风险识别、整改、申诉受理。三段里缺哪一段，客户审核时就会追到哪一段。', 'LkSG and CSDDD both look for three records: identification, remediation, grievances.'),
+          T('机制说明 ＋ 申诉受理台账', 'Process description + grievance log'), T('体系搭建辅导（HB-07）', 'System-build coaching (HB-07)')],
+        ['run', 'T35', T('出口管制与制裁筛查机制', 'Export control screening'), 'Export screening', 'norm',
+          T('你要能证明自己在查：客户、供应商、物项是否在管控名单上。稀土管制公告之后，Autoliv 把这一条的抽查频率提高了。', 'Show that you screen counterparties and items against control lists. Sampling on this item has increased since the rare-earth notice.'),
+          T('交到：本门户 · 证据库', 'Submit: portal · evidence library'), T('半年', 'Semi-annual'), '2026', 'run', T('在办', 'In progress'), T('继续 →', 'Continue →'),
+          T('你的上游磁材供应商在管控名单上。除了自己的筛查记录，还需要说明对二级供应商怎么穿透。', 'Your upstream magnet supplier is a listed entity; tier-2 screening must be described.'),
+          T('筛查记录 ＋ 二级穿透说明', 'Screening records + tier-2 statement'), T('合规培训（HB-10）', 'Compliance training (HB-10)')]
+      ];
+      const list = cur === 'all' ? all : cur === 'done' ? [] : all.filter(a => cur === 'act' ? a[0] === 'act' : cur === 'due' ? (a[9] === 'over' || a[9] === 'ver') : a[9] === 'run');
+      const stC = { over: ['#FBE9E7', '#B0291D', '#B0291D', '#FDF6F5', '#EFD8D4'], ver: ['#FDF0E3', '#8A4B08', '#8A4B08', '#fff', '#DCE7E3'], run: ['#E9F0FC', '#0B3A82', '#0B3A82', '#fff', '#DCE7E3'] };
+      const opened = p.sOpen || '';
+      R.tasks = list.map(t => {
+        const c = stC[t[9]] || stC.run;
+        return {
+          no: t[1], title: t[2], en: t[3],
+          tpLabel: t[4] === 'min' ? T('最低要求项', 'Minimum') : T('计分项', 'Scored'),
+          tpBg: t[4] === 'min' ? '#FBE9E7' : '#F0F3F5', tpFg: t[4] === 'min' ? '#B0291D' : '#4C6169',
+          ai: t[5], sys: t[6], freq: t[7],
+          yearLabel: T(t[8] + ' 年生效', 'from ' + t[8]), year: t[8],
+          yearFg: t[8] === '2024' ? '#B0291D' : '#4C6169',
+          stLabel: t[10], stBg: c[0], stFg: c[1],
+          cta: t[11], accent: c[2], bd: c[4],
+          def: t[12], ev: t[13], svc: t[14],
+          open: opened === t[1],
+          toggle: () => api.setS && api.setS({ sOpen: opened === t[1] ? '' : t[1] }),
+          ctaGo: t[1] === 'T07' || t[1] === 'T11' ? set({ sTab: 'ev' }) : t[1] === 'T03' ? set({ sTab: 'survey' }) : ts(T(t[2] + '：引导填报会带你逐项走完，缺的证据可以直接从证据库选。', 'Guided filing walks you through it.')),
+          start: ts(T('引导填报已开始：AI 会逐项提示需要什么，缺的证据可以直接从证据库选。', 'Guided filing started.')),
+          fromVault: set({ sTab: 'ev' }),
+          help: () => {
+            const cur = p.extraAdvice || [];
+            if (cur.some(x => x.no === t[1])) { api.toast && api.toast(T(t[1] + ' 已提过咨询，Autoliv 侧正在处理，重复提交不会新增记录。', 'Already requested.')); return; }
+            api.setS && api.setS({ extraAdvice: cur.concat([{ no: t[1], title: t[2], sup: T('宁波华翔汽车饰件', 'Ningbo Huaxiang'), code: 'SUP-0142', when: '08-26 11:20' }]) });
+            api.toast && api.toast(T('已发起咨询：' + t[1] + ' ' + t[2] + '。这条已进 Autoliv 的「咨询求助列表」，AI 会先出成因与实施步骤，3 个工作日内回复。', 'Advisory requested and added to the chain-lead list.'));
+          }
+        };
+      });
+      R.aiText = T('你今年最该先做的是 T15 材料成分 IMDS 提交 —— 已逾期 4 天，46 个零件号待更新。T07 和 T11 已进收资核验，Autoliv 在等你补 EV-06。绿电那一条别再报 96%，凭证只覆盖 61%。', 'Start with T15 — four days overdue, 46 parts. T07 and T11 are under verification and Autoliv is waiting on EV-06.');
+      R.aiAsk = ts(T('PCF＝产品碳足迹，一件产品从原料到出厂的碳排放。ISO 14067 是算它的规矩：边界怎么画、因子怎么选、共线怎么分摊。想细看可以报 HB-02 工作坊。', 'PCF is a product\'s carbon footprint; ISO 14067 sets the rules.'));
+      R.terms = [
+        { k: 'Scope 1 / 2 / 3', v: T('1＝自己烧的（天然气、柴油）；2＝买来的电和热；3＝上下游的，其中「类别 1」就是你采购的东西。', '1 = own combustion; 2 = purchased energy; 3 = value chain, category 1 being purchased goods.') },
+        { k: T('绿电与绿证', 'Renewable & certificates'), v: T('绿电要有权属凭证才算。绿证是买证不买电，PPA 是长期直接买电，两者都认；自发自用没办证的不算。', 'Only certificate-backed renewable counts; certificates and PPAs both qualify.') },
+        { k: 'PCF / ISO 14067', v: T('PCF 是一件产品的碳足迹，ISO 14067 是算它的规矩：边界怎么画、因子怎么选、共线怎么分摊。', 'PCF is a product footprint; ISO 14067 sets boundary, factors and allocation rules.') },
+        { k: T('最低要求项', 'Minimum requirement'), v: T('不达标就不能通过验收的项，跟总分多少无关。你目前有 2 项。', 'Failing one blocks acceptance regardless of score. You have two.') }
+      ];
+      const GS = { gap: ['未达成', 'Not met', '#FBE9E7', '#B0291D'], ver: ['收资核验中', 'Verifying', '#FDF0E3', '#8A4B08'], open: ['在办', 'Open', '#E9F0FC', '#0B3A82'] };
+      const gState = (k) => ({ stZh: GS[k][0], stEn: GS[k][1], stBg: GS[k][2], stFg: GS[k][3] });
+      R.gaps = [
+        { title: T('产品级碳足迹口径不达标', 'PCF basis not acceptable'), svc: '→ ' + T('PCF 核算辅导（HB-02）', 'PCF coaching'), no: 'T07', bg: '#FDF6F5', bd: '#EFD8D4', noFg: '#8A1E14', noBg: '#FBE9E7' , ...gState('gap') },
+        { title: T('绿电占比凭证不足', 'Renewable certificates short'), svc: '→ ' + T('绿电采购与撮合（HB-04）', 'Renewable procurement'), no: 'T11', bg: '#FDF6F5', bd: '#EFD8D4', noFg: '#8A1E14', noBg: '#FBE9E7' , ...gState('gap') },
+        { title: T('电池再生含量台账未建', 'Recycled-content ledger missing'), svc: '→ ' + T('溯源举证辅导（HB-09）', 'Traceability coaching'), no: 'T20', bg: '#FDF6F5', bd: '#EFD8D4', noFg: '#8A1E14', noBg: '#FBE9E7' , ...gState('open') },
+        { title: T('IMDS 提交逾期未更新', 'IMDS update overdue'), svc: '→ ' + T('材料申报实操课（HB-06）', 'Material declaration'), no: 'T15', bg: '#FDF8F1', bd: '#F3E4D0', noFg: '#8A4B08', noBg: '#FDF0E3' , ...gState('open') }
+      ];
+      R.applyAll = ts(T('已一次性提交 4 项帮扶申请。Autoliv 侧按你的层级（战略层）优先排期，3 个工作日内给出时间。', 'Four support requests submitted; strategic tier gets priority scheduling.'));
+    }
+
+    if (R.onSurvey) {
+      const qs = [
+        ['Q1', 'T04', T('是否已设定绝对量减排目标并对外公开？', 'Have you set and published an absolute reduction target?'), T('选项单选 · 权重 3.0', 'Single choice · weight 3.0'), ['是，已公开', '已设定未公开', '否'], ['Yes, published', 'Set, not published', 'No'], 0, null,
+          T('客户看的是「绝对量」而不是「强度」。产量涨了强度降了但总量涨了，这一条算不达标。', 'Absolute, not intensity: rising output with falling intensity still fails.')],
+        ['Q2', 'T06', T('是否作出净零承诺并披露年度进展？', 'Have you made a net-zero commitment and disclosed progress?'), T('选项单选 · 权重 2.0', 'Single choice · weight 2.0'), ['是，年度披露', '有承诺无披露', '否'], ['Yes, disclosed', 'Committed only', 'No'], 0, null,
+          T('只有承诺没有年度进展披露，客户审核时通常按「有承诺无披露」处理，得分减半。', 'A commitment without annual progress scores half.')],
+        ['Q3', 'T05', T('SBTi 近期减排目标是否已获批？', 'Is your SBTi near-term target approved?'), T('选项单选 · 权重 3.0 · 最低要求项', 'Single choice · weight 3.0 · minimum'), ['已获批', '已提交待批', '否'], ['Approved', 'Submitted', 'No'], 1, null,
+          T('「已提交待批」也计分，但需提供提交回执编号。这一条是最低要求项，两年内须获批。', '"Submitted" scores if you provide the receipt number. Approval required within two years.')],
+        ['Q4', 'T01', T('上一完整年度的范围 1 与范围 2 排放量是多少？', 'Scope 1 and 2 emissions for the last full year?'), T('数值填报 · 权重 3.0', 'Numeric · weight 3.0'), null, null, -2, ['12480', 'tCO2e'],
+          T('填合并后的总量，并在证据里附分基地明细。市场基准法与地区基准法两个口径都要，本题填市场基准法。', 'Report the consolidated total; attach per-site detail. This item takes the market-based figure.')],
+        ['Q5', 'T03', T('范围 3 类别 1（采购商品与服务）排放量是多少？', 'Scope 3 category 1 emissions?'), T('数值填报 · 权重 2.5', 'Numeric · weight 2.5'), null, null, -1, ['—', 'tCO2e'],
+          T('第一年可以用支出法估算，但要在证据里说明实测占比。这一题空着，AI 无法从去年答卷推。', 'Spend-based estimates are acceptable in year one if the primary-data share is stated.')],
+        ['Q6', 'T02', T('是否向你的上游供应商传导同等 ESG 要求？', 'Do you cascade equivalent ESG requirements upstream?'), T('选项单选 · 权重 2.0', 'Single choice · weight 2.0'), ['是，含验收', '仅签署条款', '否'], ['Yes, with acceptance', 'Clauses only', 'No'], 1, null,
+          T('只签条款不验收，二级穿透时会暴露 —— 你的磁材供应商在管控名单上，这一条会被重点看。', 'Clauses without acceptance fail tier-2 screening.')],
+        ['Q7', 'T12', T('绿电获取路径是什么？（绿证 / PPA / 自发自用）', 'How do you source renewable power?'), T('选项单选 · 权重 2.0', 'Single choice · weight 2.0'), ['PPA 长期直购', '绿证采购', '自发自用未取证', '无'], ['PPA', 'Certificates', 'Self-generated, uncertified', 'None'], 1, null,
+          T('自发自用未取证的电量，按 Autoliv 口径不计入绿电比例 —— 这是你上一轮多报的原因。', 'Uncertified self-generation does not count; this caused your over-report.')],
+        ['Q8', 'T11', T('绿电占总用电量的比例是多少？', 'What share of your electricity is renewable?'), T('数值填报 · 权重 3.0 · 最低要求项', 'Numeric · weight 3.0 · minimum'), null, null, -2, ['61', '%'],
+          T('原填 96%，收资核验后按凭证实际覆盖量改为 61%。战略层 2027 年门槛 30%，你已达标 —— 但口径要对。', 'Restated from 96% to 61% after verification; the 2027 threshold is 30%.')],
+        ['Q9', 'T07', T('是否能按 ISO 14067 出具产品级碳足迹？', 'Can you produce a product carbon footprint per ISO 14067?'), T('选项单选 · 权重 3.0 · 最低要求项', 'Single choice · weight 3.0 · minimum'), ['是，可交换格式', '是，仅计算书', '否'], ['Yes, exchangeable', 'Report only', 'No'], 1, null,
+          T('客户要的是能在 Catena-X 网络里交换的数据。只有计算书通常会被打回 —— 你现在就在这一档。', 'OEMs need Catena-X-exchangeable data; a standalone report is usually rejected.')]
+      ];
+      let done = 0;
+      qs.forEach(q => { if (q[6] >= 0 || q[6] === -2) done++; });
+      R.sDone = String(done); R.sPct = Math.round(done / 9 * 100) + '%';
+      R.sSubmitLabel = done < 9 ? T('提交（还有 ' + (9 - done) + ' 题未答）', 'Submit (' + (9 - done) + ' unanswered)') : T('提交', 'Submit');
+      R.sSubmit = done < 9
+        ? ts(T('还有 ' + (9 - done) + ' 题未答，暂不能提交。可先保存草稿，或用「导入填好的表」一次填满。', (9 - done) + ' items still unanswered.'))
+        : ts(T('已提交。Autoliv 侧的达标状态与差距清单会自动刷新；答「是」但数据异常的条目会转成收资核验任务回到你这里。', 'Submitted; Autoliv\'s status refreshes.'));
+      R.sExport = ts(T('已导出多表 Excel：填写说明、工厂基本信息、问卷正文、计分汇总（含已作答内容）。', 'Multi-sheet Excel exported.'));
+      R.sImport = ts(T('导入完成：填满 9 题，其中 1 处单位被自动纠正（绿电 kWh → %），已标注待你确认。', 'Import complete; one unit auto-corrected.'));
+      R.sReuse = ts(T('已复用上年度答卷：7 题自动带入，仅需确认 2 项发生变化的题（Q5 与 Q8）。', 'Seven answers carried over from last year.'));
+      R.sDraft = ts(T('草稿已保存，下次进入自动恢复。', 'Draft saved.'));
+      R.sProgNote = T('Q5 范围 3 类别 1 还空着 —— 这一题 AI 无法从去年答卷推，需要你从采购台账取数。Q8 绿电占比已按收资核验结论改为 61%。', 'Q5 is still empty and cannot be pre-filled. Q8 was restated to 61% after verification.');
+      const stC = { ans: ['#E4F3EA', '#1E6B3A', T('已答', 'Answered')], pre: ['#E9F0FC', '#0B3A82', T('AI 预填', 'Pre-filled')], todo: ['#FBE9E7', '#B0291D', T('待你填报', 'Needs you')] };
+      R.questions = qs.map(q => {
+        const isNum = q[7] !== null;
+        const empty = q[6] === -1;
+        const stk = empty ? 'todo' : (q[6] === -2 ? 'ans' : 'pre');
+        const c = stC[stk];
+        const o = {
+          n: q[0].slice(1), target: q[1], text: q[2], meta: q[3],
+          state: c[2], stBg: c[0], stFg: c[1],
+          accent: empty ? '#B0291D' : '#7ED0B4',
+          bd: empty ? '#EFD8D4' : '#DCE7E3',
+          numD: isNum ? 'flex' : 'none',
+          numVal: isNum ? q[7][0] : '', numUnit: isNum ? q[7][1] : '',
+          numBd: empty ? '#EFD8D4' : '#CFE8DE',
+          numFg: empty ? '#B0291D' : '#0B5B4A',
+          numCta: empty ? T('从采购台账取数 →', 'Pull from ledger →') : T('修改 →', 'Edit →'),
+          numGo: ts(T(q[0] + '：可手工填写，或从证据库中已抽取的结构化记录直接取数（推荐 —— 取数即带上原件出处）。', 'Enter manually or pull from the evidence library.')),
+          evLabel: empty ? T('先填数值 ↑', 'Enter a value first ↑') : T('已登记佐证 ✓', 'Evidence attached ✓'),
+          evBg: empty ? '#FBE9E7' : '#F3FAF7', evFg: empty ? '#B0291D' : '#0B5B4A',
+          upload: set({ sTab: 'ev' }),
+          hint: 'AI · ' + q[8]
+        };
+        const os = isNum ? [] : (zh ? q[4] : q[5]);
+        for (let i = 0; i < 4; i++) {
+          const lab = os[i];
+          o['o' + i] = lab || '';
+          o['o' + i + 'd'] = lab ? 'inline-flex' : 'none';
+          o['o' + i + 'bg'] = q[6] === i ? '#0E3B3A' : '#fff';
+          o['o' + i + 'fg'] = q[6] === i ? '#fff' : '#4C6169';
+          o['o' + i + 'bd'] = q[6] === i ? '#0E3B3A' : '#DCE7E3';
+          o['o' + i + 'go'] = lab ? ts(T('已记录：' + q[0] + ' → ' + lab + '。这一题喂给 ' + q[1] + '，Autoliv 侧的达标状态会在你提交后刷新。', 'Recorded: ' + q[0])) : (() => {});
+        }
+        return o;
+      });
+      const feeds = [
+        ['T01', T('范围 1/2 温室气体年度盘查', 'Scope 1/2 inventory'), 'ok'],
+        ['T03', T('范围 3 类别 1 采购排放核算', 'Scope 3 cat.1'), 'gap'],
+        ['T04', T('设定绝对量减排目标并公开', 'Absolute reduction target'), 'ok'],
+        ['T05', T('SBTi 近期目标获批', 'SBTi approved'), 'run'],
+        ['T06', T('年度减排进展披露', 'Annual progress disclosure'), 'ok'],
+        ['T07', T('产品级碳足迹（ISO 14067）', 'Product carbon footprint'), 'ver'],
+        ['T11', T('绿电消费比例达门槛', 'Renewable share'), 'ver'],
+        ['T12', T('绿电权属凭证可核验', 'Certificates verifiable'), 'ok']
+      ];
+      const fC = { ok: ['#E4F3EA', '#1E6B3A', T('已达成', 'Met')], run: ['#E9F0FC', '#0B3A82', T('在办', 'Open')], ver: ['#FDF0E3', '#8A4B08', T('核验中', 'Verifying')], gap: ['#FBE9E7', '#B0291D', T('缺口', 'Gap')] };
+      R.sFeeds = feeds.map(f => ({ no: f[0], name: f[1], state: fC[f[2]][2], stBg: fC[f[2]][0], stFg: fC[f[2]][1] }));
+    }
+
+    if (R.onRegs) {
+      const DD = String.fromCharCode(36);
+      R.scanStats = [
+        { val: '4', label: T('物料扫描命中', 'Material hits'), color: '#002D6B' },
+        { val: '11', label: T('涉及零件号', 'Parts involved'), color: '#0B5B4A' },
+        { val: '1', label: T('已申诉待回复', 'Appeal pending'), color: '#8A4B08' }
+      ];
+      const SH = [
+        ['中国稀土出口管制', 'CTRL', 'P-13886', T('座椅电机总成', 'Seat motor assembly'), T('NdFeB 钕铁硼磁材（含镝）', 'Sintered NdFeB with dysprosium'),
+          T('材料申报里的镝含量落入受控物项清单', 'The dysprosium content falls in the controlled list'),
+          T('受控物项使用台账 ＋ 中国成分测算 ＋ 替代评估', 'Usage ledger, China-content calc, substitution assessment'),
+          T('剩 76 天', '76d'), 'due', T('去上传', 'Upload'), 'CV'],
+        ['美国 UFLPA 进口禁令', 'ORIG', 'P-62588', T('气体发生器壳体', 'Inflator housing'), T('铝合金压铸件（原铝产地待举证）', 'Aluminium casting, origin to be evidenced'),
+          T('原铝冶炼厂在高风险产区清单内 —— 命中的是你的上游，不是你', 'Your upstream smelter, not you'),
+          T('原料级溯源链条（发票 / 订单 / 生产 / 运输匹配）', 'Raw-material traceability chain'),
+          T('剩 36 天', '36d'), 'due', T('去上传', 'Upload'), 'EV'],
+        ['REACH / SCIP 申报', 'SUBST', 'P-28104', T('内饰饰件', 'Trim part'), T('含 SVHC 阻燃剂的塑料件', 'Plastic with an SVHC flame retardant'),
+          T('配方含 1 项 SVHC 且该零件投放欧盟市场', 'One SVHC present and the part enters the EU'),
+          T('SCIP 申报编号回传', 'Return the SCIP notification number'),
+          T('剩 67 天', '67d'), 'plan', T('去回传', 'Submit'), 'EV'],
+        ['欧盟电池法规', 'CTRL', 'P-40213', T('电子控制单元', 'Electronic control unit'), T('锂电池单元（备用电源模块）', 'Lithium cell in the backup module'),
+          T('零件被判为「含电池」—— 备用电源模块也算，这一条最常被漏', 'Backup power modules count as containing a battery'),
+          T('电池碳足迹 ＋ 钴/锂/镍/石墨来源与再生含量', 'Battery footprint and mineral sourcing'),
+          T('剩 51 天', '51d'), 'plan', T('查看要求', 'View'), 'EV']
+      ];
+      const clsP = { CTRL: ['#FBE9E7', '#B0291D', T('受控物项', 'Controlled')], ORIG: ['#FDF0E3', '#8A4B08', T('原产地风险', 'Origin risk')], SUBST: ['#E9F0FC', '#0B3A82', T('管制物质', 'Substance')] };
+      const accP = { CTRL: ['#B0291D', '#F3DDD9'], ORIG: ['#8A4B08', '#F3E4D0'], SUBST: ['#0B3A82', '#E0E7F2'] };
+      const stP = { due: ['#FDF0E3', '#8A4B08', T('待提交', 'Due'), '#B0291D'], plan: ['#E9F0FC', '#0B3A82', T('未开始', 'Not started'), '#8397A0'] };
+      R.scanHits = SH.map(h => {
+        const cc = clsP[h[1]], ac = accP[h[1]], st = stP[h[8]];
+        return {
+          reg: h[0], cls: cc[2], clsBg: cc[0], clsFg: cc[1],
+          accent: ac[0], bd: ac[1],
+          part: h[2], partName: h[3], mat: h[4], why: h[5], owe: h[6],
+          due: h[7], dueFg: st[3], state: st[2], stBg: st[0], stFg: st[1], cta: h[9],
+          go: h[10] === 'CV' ? set({ sTab: 'tasks' }) : set({ sTab: 'ev' }),
+          appeal: ts(T(h[0] + '：申诉已提交 —— 说明为什么这条不该管到你（零件不投放该市场、材料已替换、或成分申报有误）。Autoliv 合规会重跑扫描并在 5 个工作日内回复。', 'Appeal submitted; the scan will be re-run.'))
+        };
+      });
+      R.scanPrecheck = ts(T('替代料合规预检已发起：填入候选牌号与产地，Autoliv 用同一套扫描规则先算一遍，告诉你换了之后哪几条能摆脱、哪几条还在。', 'Pre-check requested: the same scan runs on your candidate material.'));
+      R.regStats = [
+        { val: '9', label: T('管到你的法规', 'Applicable'), bg: '#F2FAFC', bd: '#D6EDF3', color: '#045B75' },
+        { val: '14', label: T('要交的产出物', 'Deliverables'), bg: '#F3FAF7', bd: '#CFE8DE', color: '#0B5B4A' },
+        { val: '2', label: T('已逾期', 'Overdue'), bg: '#FDF6F5', bd: '#EFD8D4', color: '#B0291D' }
+      ];
+      const scopeC = { AUTO: ['#E6F4F8', '#045B75', T('汽车专项', 'Automotive')], EU: ['#E9F0FC', '#0B3A82', T('欧盟', 'EU')], INTL: ['#F1EDFB', '#5B3FA8', T('国际', 'International')], CN: ['#EAF6F2', '#0B5B4A', T('中国', 'China')] };
+      const rows = [
+        ['AUTO', 'GADSL / IMDS', T('你供的内饰件含 3 种需申报物质，且用于欧洲型号', 'Your parts contain three declarable substances used in EU models'), T('46 个零件号的 IMDS 提交更新', 'IMDS update for 46 part numbers'), T('提交到 IMDS，Autoliv 侧自动回收', 'Submit in IMDS'), '2026-09-20', T('已逾期 4 天', '4 days overdue'), 'over', T('去补提交', 'Submit now')],
+        ['CN', T('MOFCOM 两用物项出口管制', 'MOFCOM dual-use control'), T('你上游的磁材供应商在管控名单上', 'Your upstream magnet supplier is a listed entity'), T('筛查记录与上游穿透说明', 'Screening records and tier-2 statement'), T('上传到本门户 · 收资任务 CV-2041', 'Upload here · CV-2041'), '2026-09-12', T('剩 18 天', '18 days'), 'due', T('去上传', 'Upload')],
+        ['AUTO', T('欧盟电池法规', 'EU Battery Regulation'), T('你供的座椅电机含电池单元', 'Your motors contain battery cells'), T('电池碳足迹声明 ＋ 钴/锂/镍再生含量', 'Battery CF declaration and recycled content'), T('Autoliv 材料申报系统', 'Autoliv material system'), '2026-10-15', T('剩 51 天', '51 days'), 'due', T('查看要求', 'View')],
+        ['AUTO', 'Catena-X PCF', T('战略层供应商 2026 起须支持数据交换', 'Strategic tier must support data exchange from 2026'), T('可交换格式的 PCF 数据包（按型号）', 'Exchangeable PCF package per model'), T('本门户 · 气候问卷第 9 题', 'Portal · survey Q9'), '2026-12-31', T('剩 128 天', '128 days'), 'plan', T('查看要求', 'View')],
+        ['EU', 'CSRD / ESRS E1', T('你是 Autoliv 范围 3 类别 1 的重要来源', 'You are a material Scope 3 source for Autoliv'), T('范围 1/2 盘查结果 ＋ 绿电凭证', 'Scope 1/2 inventory and certificates'), T('本门户 · 气候问卷第 4、8 题', 'Portal · survey Q4 & Q8'), '2026-09-30', T('剩 36 天', '36 days'), 'due', T('去填报', 'Fill in')],
+        ['EU', 'LkSG / CSDDD', T('德国客户链条内的一级供应商', 'Tier-1 in a German customer chain'), T('人权尽调机制说明 ＋ 申诉渠道记录', 'Due diligence description and grievance records'), T('本门户 · 证据库', 'Portal · evidence library'), '2026-11-15', T('剩 82 天', '82 days'), 'plan', T('去上传', 'Upload')],
+        ['INTL', 'UFLPA', T('铝材上游涉及新增实体，需可举证', 'Aluminium upstream involves newly listed entities'), T('原料级溯源链条与采购凭证', 'Raw-material chain and purchase records'), T('本门户 · 证据库', 'Portal · evidence library'), '2026-09-30', T('剩 36 天', '36 days'), 'due', T('去上传', 'Upload')],
+        ['EU', 'REACH / SCIP', T('产品含 1 项 SVHC 且投放欧盟市场', 'One SVHC present, EU market'), T('SCIP 申报编号回传', 'Return the SCIP notification number'), 'ECHA SCIP → ' + T('回传本门户', 'return here'), '2026-10-31', T('剩 67 天', '67 days'), 'plan', T('去回传', 'Submit')],
+        ['CN', T('中国安全生产', 'China work safety'), T('生产基地属重点监管行业', 'Your site is in a supervised sector'), T('作业许可制度与近一年演练记录', 'Permit system and drill records'), T('本门户 · 证据库', 'Portal · evidence library'), '2026-12-15', T('剩 112 天', '112 days'), 'plan', T('去上传', 'Upload')]
+      ];
+      const stC = { over: ['#FBE9E7', '#B0291D', T('已逾期', 'Overdue'), '#B0291D', '#EFD8D4'], due: ['#FDF0E3', '#8A4B08', T('待提交', 'Due'), '#8A4B08', '#DCE7E3'], plan: ['#E9F0FC', '#0B3A82', T('未开始', 'Not started'), '#0B3A82', '#DCE7E3'] };
+      R.regTasks = rows.map(r => {
+        const sc = scopeC[r[0]], st = stC[r[7]];
+        return {
+          scope: sc[2], tagBg: sc[0], tagFg: sc[1],
+          reg: r[1], why: r[2], what: r[3], how: '→ ' + r[4],
+          due: r[5], left: r[6], dueFg: st[3],
+          state: st[2], stBg: st[0], stFg: st[1],
+          accent: st[3], bd: st[4], cta: r[8],
+          go: r[7] === 'over' ? ts(T(r[1] + '：46 个零件号的待更新清单已生成，逐个提交或用批量模板一次导入。', 'A list of the 46 parts is ready.')) : set({ sTab: 'ev' }),
+          appeal: ts(T('申诉已提交：说明为什么这条法规不该管到你（品类、市场或工艺不适用）。Autoliv 合规会在 5 个工作日内回复。', 'Appeal submitted; compliance replies within five working days.'))
+        };
+      });
+    }
+
+    if (R.onEv) {
+      R.evStats = [
+        { val: '86', label: T('已归集文件', 'Files'), bg: '#F3FAF7', bd: '#CFE8DE', color: '#0B5B4A' },
+        { val: '312', label: T('结构化记录', 'Records'), bg: '#F2FAFC', bd: '#D6EDF3', color: '#045B75' },
+        { val: '3', label: T('90 天内到期', 'Expiring'), bg: '#FDF6F5', bd: '#EFD8D4', color: '#B0291D' }
+      ];
+      R.evUpload = ts(T('支持拖入整个文件夹，按分类自动归档后进入 AI 抽取队列。抽出的指标可直接被气候问卷与收资任务取数。', 'Drop a folder; auto-filed and queued for extraction.'));
+      const fs = [
+        ['cert', T('体系与产品证书', 'Certificates'), 14, '#8A4B08'],
+        ['ghg', T('盘查报告与核算底稿', 'GHG reports'), 11, '#0B5B4A'],
+        ['ene', T('能源与排放台账', 'Energy ledgers'), 18, '#045B75'],
+        ['grn', T('绿电与绿证凭证', 'Green power certs'), 9, '#1E6B3A'],
+        ['mat', T('材料与成分申报', 'Material declarations'), 12, '#5B3FA8'],
+        ['hr', T('人事与工时记录', 'HR & hours'), 8, '#0B3A82'],
+        ['ehs', T('安全与职业健康记录', 'EHS records'), 10, '#B0291D'],
+        ['aud', T('审核与整改材料', 'Audits & CAPA'), 4, '#4C6169']
+      ];
+      const cur = p.evFolder || 'cert';
+      R.evFolders = fs.map(f => ({
+        name: f[1], n: f[2], bar: f[3], go: set({ evFolder: f[0] }),
+        bg: cur === f[0] ? '#F3FAF7' : 'transparent',
+        fg: cur === f[0] ? '#0B5B4A' : '#33484F',
+        fw: cur === f[0] ? '700' : '500'
+      }));
+      const cf = fs.find(f => f[0] === cur) || fs[0];
+      R.evTitle = cf[1];
+      R.evPill = T(cf[2] + ' 份', cf[2] + ' files');
+      const sets = {
+        cert: [
+          ['ISO 14001-2015 认证证书.pdf', 'PDF', '2023–2026', '2026-11', 'warn', ['T30', 'T23'], 'v3'],
+          ['ISO 45001-2018 认证证书.pdf', 'PDF', '2023–2026', '2026-10', 'warn', ['T30', 'T32'], 'v3'],
+          ['ISO 50001 能源管理体系证书.pdf', 'PDF', '2024–2027', '2027-05', 'ok', ['T09', 'T10'], 'v2'],
+          ['IATF 16949 证书.pdf', 'PDF', '2024–2027', '2027-02', 'ok', ['T37'], 'v1'],
+          ['产品碳足迹核查声明_座椅电机.pdf', 'PDF', 'FY2025', '2026-12', 'ok', ['T07', 'T08'], 'v1'],
+          ['行为准则签署页.pdf', 'PDF', '2025', '—', 'ok', ['T33'], 'v2'],
+          ['社会保险缴纳证明.pdf', 'PDF', 'FY2025', '2026-12', 'ok', ['T27', 'T29'], 'v1']
+        ],
+        grn: [
+          ['绿证购买凭证_2025Q1-Q4.xlsx', 'XLSX', 'FY2025', '—', 'part', ['T11', 'T12'], 'v4'],
+          ['PPA 结算单_2025.pdf', 'PDF', 'FY2025', '—', 'part', ['T11', 'T12'], 'v2'],
+          ['自发自用光伏发电量台账.xlsx', 'XLSX', 'FY2025', '—', 'excl', [], 'v1'],
+          ['电网购电发票汇总.xlsx', 'XLSX', 'FY2025', '—', 'ok', ['T11'], 'v1']
+        ],
+        ghg: [
+          ['2025 年度温室气体盘查报告.pdf', 'PDF', 'FY2025', '—', 'ok', ['T01', 'T02', 'T06'], 'v2'],
+          ['PCF 核算底稿_座椅电机.xlsx', 'XLSX', 'FY2025', '—', 'ver', ['T07', 'T08'], 'v3'],
+          ['PCF 边界说明_2026.pdf', 'PDF', 'FY2025', '—', 'ok', ['T07'], 'v1'],
+          ['排放因子清单_2021版.xlsx', 'XLSX', 'FY2025', '—', 'bad', ['T07'], 'v1'],
+          ['范围3 类别1 支出法估算底稿.xlsx', 'XLSX', 'FY2025', '—', 'part', ['T03'], 'v1']
+        ]
+      };
+      const dflt = [
+        ['2025 年度汇总台账.xlsx', 'XLSX', 'FY2025', '—', 'ok', ['T01'], 'v2'],
+        ['2025 上半年明细.xlsx', 'XLSX', 'H1 2025', '—', 'ok', ['T01'], 'v1'],
+        ['口径说明与填报指引.docx', 'DOCX', 'FY2025', '—', 'ok', [], 'v1'],
+        ['第三方核查意见.pdf', 'PDF', 'FY2024', '2027-01', 'ok', ['T02'], 'v1']
+      ];
+      const list = sets[cur] || dflt;
+      const extC = { PDF: ['#FBE9E7', '#B0291D'], XLSX: ['#E4F3EA', '#1E6B3A'], DOCX: ['#E9F0FC', '#0B3A82'] };
+      const stC = {
+        ok: ['#E4F3EA', '#1E6B3A', T('有效', 'Valid')],
+        warn: ['#FBE9E7', '#B0291D', T('即将到期', 'Expiring')],
+        part: ['#FDF0E3', '#8A4B08', T('覆盖不足', 'Partial')],
+        ver: ['#FDF0E3', '#8A4B08', T('核验中', 'Verifying')],
+        bad: ['#FBE9E7', '#B0291D', T('版本过旧', 'Outdated')],
+        excl: ['#F0F3F5', '#4C6169', T('不计入口径', 'Excluded')]
+      };
+      R.evFiles = list.map(f => {
+        const refs = f[5] || [];
+        return {
+          name: f[0], ext: f[1], period: f[2],
+          ver: T('版本 ' + f[6] + ' · 已 AI 抽取', 'Version ' + f[6] + ' · extracted'),
+          extBg: (extC[f[1]] || extC.PDF)[0], extFg: (extC[f[1]] || extC.PDF)[1],
+          exp: f[3],
+          expNote: f[4] === 'warn' ? T('60 天后到期', 'in 60 days') : '',
+          expFg: f[4] === 'warn' ? '#B0291D' : '#4C6169',
+          hasRefs: refs.length > 0,
+          r0: refs[0] || '', r1: refs[1] || '', r2: refs[2] || '',
+          r1d: refs[1] ? 'inline-flex' : 'none', r2d: refs[2] ? 'inline-flex' : 'none',
+          rMore: refs.length > 3 ? '+' + (refs.length - 3) : (refs.length ? '' : T('未被引用', 'Unused')),
+          rmD: (refs.length > 3 || refs.length === 0) ? 'inline-flex' : 'none',
+          state: stC[f[4]][2], stBg: stC[f[4]][0], stFg: stC[f[4]][1],
+          go: () => api.openDw && api.openDw('evidence', f[0])
+        };
+      });
+      R.expN = '3';
+      R.expiring = [
+        { name: T('ISO 45001-2018 认证证书', 'ISO 45001 certificate'), left: T('剩 60 天', '60 days'), impact: T('支撑 T30 职业健康安全体系与 T32 重大风险作业管控。到期未换证，这两条会自动回退为未达成。', 'Supports T30 and T32; expiry reverts both to "not met".') },
+        { name: T('ISO 14001-2015 认证证书', 'ISO 14001 certificate'), left: T('剩 88 天', '88 days'), impact: T('支撑 T30 与 T23 废弃物合规处置。换证材料已开始准备。', 'Supports T30 and T23; renewal in preparation.') },
+        { name: T('产品碳足迹核查声明', 'PCF verification statement'), left: T('剩 112 天', '112 days'), impact: T('支撑 T07 与 T08。本轮收资核验若判为口径纠正，需重新核查后换新声明。', 'Supports T07 and T08; a restatement would require re-verification.') }
+      ];
+      R.evHealth = [
+        { label: T('气候与能源类证据', 'Climate & energy'), pct: '82%', color: '#1E6B3A', note: T('缺范围 3 类别 1 的实测占比说明（EV-06 强制项）', 'Missing the primary-data share note (EV-06)') },
+        { label: T('材料与成分申报', 'Material declarations'), pct: '54%', color: '#8A4B08', note: T('46 个零件号的 IMDS 更新未提交；电池再生含量台账未建', '46 IMDS updates pending; recycled-content ledger missing') },
+        { label: T('人权与劳工', 'Labour & human rights'), pct: '61%', color: '#8A4B08', note: T('有政策文件，缺风险识别与申诉受理记录', 'Policy present; identification and grievance records missing') },
+        { label: T('健康安全', 'Health & safety'), pct: '94%', color: '#1E6B3A', note: T('两张证书 90 天内到期，换证材料在准备', 'Two certificates expiring; renewals in preparation') },
+        { label: T('商业道德与出口管制', 'Ethics & export control'), pct: '47%', color: '#B0291D', note: T('筛查记录只到一级，二级穿透说明未提交', 'Screening records stop at tier-1') }
+      ];
+    }
+
+    return R;
+  }
+}
+
+</script>
+</body>
+</html>

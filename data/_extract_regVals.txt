@@ -1,0 +1,205 @@
+
+  regVals(anon){
+    const s=this.state, zh=s.lang==='zh';
+    const P=s.regPack||null, all=(P&&P.regulations)||[];
+    const v6=all.filter(r=>r.view.indexOf('V6')>=0);
+    const v8=all.filter(r=>r.view==='V8');
+    const star=n=>'★★★★★'.slice(0,n)+'☆☆☆☆☆'.slice(0,5-n);
+    const urgC=u=>u==='高'?['#FEECEA','#B0291D']:(u==='中高'?['#FDF3E7','#A3620F']:(u==='中'?['#FDF9F2','#A3620F']:['#F0F3F5','#5A6E75']));
+    const inC=p=>p==='新增'?['#FDF3E7','#A3620F','#F2D9AE']:(p==='部分'?['#F2F6FD','#0B3A82','#D7E3F6']:['#F3F6F7','#5A6E75','#E1E7EA']);
+    const cut=(t,n)=>{t=String(t||'');return t.length>n?t.slice(0,n)+'…':t;};
+    const casNos=this.casReqNos();
+    const q6=(s.q||'').trim().toLowerCase();
+    const SC={'绿':['#3FAE55','#EAF7EA','#1F6B32','#BFE3C6','齐全可提交','Ready'],
+      '黄':['#E2A85C','#FDF3E7','#A3620F','#F2D9AE','需补验证','Needs verification'],
+      '红':['#DC3A2C','#FEECEA','#B0291D','#E9C9C4','重大缺口 · 升级','Major gap · escalate']};
+    const DIMOF=r=>this.dimsOf(r);
+    const collectShort=t=>{const s2=String(t||'');
+      if(/贸易合规字段|不在 ASSI/.test(s2)) return zh?'贸易合规字段 · V8 交易筛查采集':'Trade-compliance fields · V8 screening';
+      if(/ASSI/.test(s2)){const m=s2.match(/共\s*(\d+)\s*题/); return (zh?'ASSI 统一问卷 · ':'ASSI survey · ')+(m?m[1]:'—')+(zh?' 题一次采集':' items');}
+      return zh?'贸易合规字段 · V8 交易筛查采集':'Trade-compliance fields · V8 screening';};
+    const mk=r=>{
+      const uc=urgC(r.urgency), ic=inC(r.inPlatform);
+      const nos=this.reqNosOf(r.relatedReq37);
+      const inCas=nos.filter(n=>casNos.indexOf(n)>=0).length;
+      const sc=SC[r.statusColor]||SC['黄'];
+      return {code:r.id, zh:r.name, en:r.nameEn, cat:r.category,
+        stDot:sc[0], stBg:sc[1], stFg:sc[2], stBd:sc[3], stZh:sc[4], stEn:sc[5],
+        oneLine:cut(r.coreRequirement,58),
+        deliv:r.deliverable||'—', agent:(zh?'由 ':'by ')+(r.agent||'—')+(zh?' 执行':''),
+        collect:collectShort(r.collectedBy), collectFull:r.collectedBy||'',
+        origin:(r.category==='C1'?(zh?'气候 · 披露 · 尽调':'Climate & diligence')
+          :(r.category==='C2'?(zh?'产品 · 材料 · 循环':'Product & materials')
+          :(zh?'出口管制与地缘':'Export control')))+' · '+r.inPlatform,
+        why:[{k:zh?'核心要求：':'Core: ',v:cut(zh?r.coreRequirement:r.coreRequirement,86)},
+          {k:zh?'对 Autoliv：':'Impact: ',v:cut(r.impactAutoliv,86)}],
+        periodZh:(r.keyDates&&r.keyDates.length)?(zh?'关键日期':'Key dates'):(zh?'持续义务':'Standing'),
+        periodEn:(r.keyDates&&r.keyDates.length)?'Key dates':'Standing',
+        nextZh:(r.keyDates&&r.keyDates[0])||(zh?'无固定时点':'no fixed date'),
+        nextEn:(r.keyDates&&r.keyDates[0])||'no fixed date',
+        stars:star(r.impactStar), starPct:(r.impactStar*20)+'%',
+        starFg:r.impactStar>=5?'#B0291D':(r.impactStar>=4?'#A3620F':'#5A6E75'),
+        urg:(zh?'紧迫 ':'')+r.urgency, urgBg:uc[0], urgFg:uc[1],
+        inLabel:zh?r.inPlatform:(r.inPlatform==='新增'?'New':(r.inPlatform==='部分'?'Partial':'Existing')),
+        inBg:ic[0], inFg:ic[1], inBd:ic[2],
+        linkZh:nos.length?('→ 落到 '+nos.length+' 项供应商要求 '+nos.map(n=>'#'+n).join(' ')+(inCas?('（'+inCas+' 项本轮在传导）'):'（本轮未传导）')):'→ 仅对 Autoliv 自身，未落到供应商要求',
+        linkEn:nos.length?('→ '+nos.length+' supplier requirements '+nos.map(n=>'#'+n).join(' ')):'→ binds Autoliv only',
+        linkFg:inCas?'#0B5B4A':'#8397A0',
+        open:()=>this.setState({drawer:'reg',dwKey:r.id})};
+    };
+    const hit=r=>!q6||[r.id,r.name,r.nameEn,r.category,r.coreRequirement].join(' ').toLowerCase().indexOf(q6)>=0;
+    const hi=v6.filter(r=>r.impactStar>=4&&hit(r)).map(mk);
+    const ex=[
+      {code:'US IRA',zh:'美国通胀削减法案',en:'US IRA',reasonZh:'无美国本土生产实体',reasonEn:'No US production entity'},
+      {code:'加州 SB253',zh:'加州气候披露法',en:'CA SB-253',reasonZh:'营收未达门槛',reasonEn:'Below revenue threshold'},
+    ];
+    const toV8=()=>{ this.setState({view:'v8'}); this.showToast('出口管制类在「实时监控墙」按事件与名单管理 —— 与 V6 的常态义务分开','Export controls are handled on the watch wall'); };
+    // ── 分类筛选 ──────────────────────────────────────────────
+    const fCat=s.regCat||'all', fSt=s.regSt||'all', fStar=!!s.regStar, fNew=!!s.regNew, fDim=s.regDim||'';
+    const filterOn=fCat!=='all'||fSt!=='all'||fStar||fNew||!!fDim||!!q6;
+    const pass=r=>hit(r)&&(fCat==='all'||r.category===fCat)&&(fSt==='all'||r.statusColor===fSt)
+      &&(!fStar||r.impactStar>=4)&&(!fNew||r.inPlatform==='新增')&&(!fDim||DIMOF(r).indexOf(fDim)>=0);
+    const shown=all.filter(pass);
+    const chip=(on,c)=>({bg:on?(c||'#0F1E24'):'#fff',fg:on?'#fff':'#4C6169',bd:on?(c||'#0F1E24'):'#E1E7EA',fw:on?'800':'600',
+      nFg:on?'rgba(255,255,255,.72)':'#9AABB1'});
+    const nCat=k=>all.filter(r=>k==='all'||r.category===k).length;
+    const nSt=k=>all.filter(r=>k==='all'||r.statusColor===k).length;
+    const catChips=[['all',zh?'全部 16 条':'All 16','#0F1E24'],['C1',zh?'C1 气候 · 披露 · 尽调':'C1 Climate & diligence','#0B3A82'],
+      ['C2',zh?'C2 产品 · 材料 · 循环':'C2 Product & materials','#0B5B4A'],['C3',zh?'C3 出口管制与地缘':'C3 Export control','#B0291D']]
+      .map(x=>({label:x[0]==='all'?x[1]:x[1],n:String(nCat(x[0])),...chip(fCat===x[0],x[2]),pick:()=>this.setState({regCat:x[0]})}));
+    const stTip={'all':zh?'不限状态':'Any state',
+      '红':zh?'重大缺口或高风险：数据/证据缺失或命中高风险，触发采购与合规升级':'Major gap or high risk — escalates to purchasing & compliance',
+      '黄':zh?'可暂用但需补验证：先用现有数据出结果，同时自动生成整改任务':'Usable but needs verification — auto-creates a CAP',
+      '绿':zh?'数据与证据齐全，可直接提交客户 / 报告':'Data & evidence complete — ready to submit'};
+    const stChips=[['all',zh?'全部状态':'All states','#0F1E24',''],['红',zh?'重大缺口 · 升级':'Major gap','#B0291D','#DC3A2C'],
+      ['黄',zh?'需补验证 · 自动整改':'Needs verification','#A3620F','#E2A85C'],['绿',zh?'齐全可提交':'Ready to submit','#1F6B32','#3FAE55']]
+      .map(x=>({label:x[1],n:String(nSt(x[0])),dot:x[3],dotShow:x[3]?'inline-block':'none',tip:stTip[x[0]]||'',
+        ...chip(fSt===x[0],x[2]),pick:()=>this.setState({regSt:x[0]})}));
+    const togChips=[
+      {label:zh?'仅 ★4 以上':'★4+ only',n:String(all.filter(r=>r.impactStar>=4).length),...chip(fStar,'#8A1E14'),pick:()=>this.setState({regStar:!fStar})},
+      {label:zh?'仅本次新增':'New only',n:String(all.filter(r=>r.inPlatform==='新增').length),...chip(fNew,'#A3620F'),pick:()=>this.setState({regNew:!fNew})}];
+    // ── 三组聚类（可收起）───────────────────────────────────────
+    const gdefs=[
+      {k:'C1',dot:'#0B3A82',bd:'#0B3A82',zh:'C1 · 气候 / 披露 / 尽调',en:'C1 · Climate, disclosure & due diligence',
+        subZh:'跨全公司的报告与尽调义务，落在同一套价值链数据上',subEn:'Company-wide reporting & diligence on one value-chain dataset'},
+      {k:'C2',dot:'#0B5B4A',bd:'#0B5B4A',zh:'C2 · 产品 / 材料 / 循环',en:'C2 · Product, materials & circularity',
+        subZh:'按零件与物料判定，产出直接进 IMDS / 护照 / 声明',subEn:'Judged per part & material; feeds IMDS, passports, declarations'},
+      {k:'C3',dot:'#B0291D',bd:'#B0291D',zh:'C3 · 出口管制与地缘（在监控墙执行）',en:'C3 · Export control & geopolitics (run on the watch wall)',
+        subZh:'按事件与名单管理，命中不由 AI 放行',subEn:'Event- and list-driven; hits are never released by AI'}];
+    const openMap=s.regOpen||{};
+    const groups=gdefs.map(g=>{
+      const rows=all.filter(r=>r.category===g.k&&pass(r)).sort((a,b)=>(b.impactStar-a.impactStar)||(a.id<b.id?-1:1)).map(mk);
+      const total=all.filter(r=>r.category===g.k).length;
+      const dflt=g.k!=='C3';
+      const open=filterOn?rows.length>0:(openMap[g.k]===undefined?dflt:!!openMap[g.k]);
+      const redN=all.filter(r=>r.category===g.k&&r.statusColor==='红').length;
+      const ylwN=all.filter(r=>r.category===g.k&&r.statusColor==='黄').length;
+      const grnN=all.filter(r=>r.category===g.k&&r.statusColor==='绿').length;
+      return {key:g.k, dot:g.dot, bd:g.bd, zh:g.zh, en:g.en, subZh:g.subZh, subEn:g.subEn,
+        rows, count:(rows.length===total?String(total):(rows.length+' / '+total)),
+        mixParts:[['#DC3A2C','#FEECEA','#B0291D',redN],['#E2A85C','#FDF3E7','#A3620F',ylwN],['#3FAE55','#EAF7EA','#1F6B32',grnN]]
+          .filter(x=>x[3]).map(x=>({dot:x[0],bg:x[1],fg:x[2],n:String(x[3])})),
+        caret:open?'▾':'▸', bodyShow:open?'block':'none', headBg:open?'#fff':'#FBFCFD',
+        emptyShow:(open&&!rows.length)?'block':'none',
+        toggle:()=>{const n2={...(this.state.regOpen||{})}; n2[g.k]=!(n2[g.k]===undefined?dflt:n2[g.k]); this.setState({regOpen:n2});}};
+    });
+    const exOpen=!!(s.regExOpen);
+    const dim=[
+      {k:'reg',zh:'法规与管制',en:'Regulation',star:5,urg:'高',subZh:'16 条在库 · 10 条新增',subEn:'16 tracked · 10 new',go:()=>this.showToast('下方即为 16 条法规库：C1 气候披露尽调 6 条 · C2 产品材料循环 7 条 · C3 出口管制 3 条（在监控墙）','The 16-regulation library is below')},
+      {k:'oem',zh:'品牌方要求',en:'OEM asks',star:5,urg:'高',subZh:'47 条客户条款 · 评级挂授标',subEn:'47 clauses · scores gate awards',go:()=>this.setState({view:'v2'})},
+      {k:'std',zh:'行业标准与评级',en:'Standards & ratings',star:4,urg:'中',subZh:'EcoVadis · RSCI · SAQ 5.0',subEn:'EcoVadis · RSCI · SAQ 5.0',go:()=>this.setState({view:'v4'})},
+      {k:'own',zh:'自有 37 项要求',en:'Own 37 requirements',star:4,urg:'中',subZh:'硬性 18 · 新增 2 · 期望 17',subEn:'18 required · 2 new · 17 expected',go:()=>this.setState({view:'v13'})},
+      {k:'geo',zh:'地缘政治与管制',en:'Geopolitics',star:5,urg:'高',subZh:'稀土 2026-11-10 · 强迫劳动双禁',subEn:'Rare earth · forced-labour bans',go:()=>this.setState({view:'v8'})}
+    ];
+    const nodes=(P&&P.businessNodes)||[];
+    const cal=(P&&P.calendar)||{};
+    const dayTo=t=>Math.ceil((new Date(t)-new Date())/86400000);
+    // ── 合规时间日历：月轨 + 倒计时 ──────────────────────────────
+    const KW=[[/CBAM/,'CBAM','CBAM'],[/ESPR|DPP/,'ESPR','ESPR'],[/PPWR|包装/,'PPWR','PPWR'],[/稀土/,'RARE','RARE'],
+      [/EUDR|毁林/,'EUDR','EUDR'],[/CSRD/,'CSRD','CSRD'],[/电池/,'BATT','BATT'],[/强迫劳动/,'FLR','FLDUAL'],
+      [/CSDDD/,'CSDDD','CSDDD'],[/SBTi/,'SBTi',''],[/碳中和|绿电|净零/,'ALV',''] ];
+    const today=new Date();
+    const openReg=id=>id?(()=>this.setState({drawer:'reg',dwKey:id}))
+      :(()=>this.showToast('这是 Autoliv 自身的目标节点，不对应外部法规条目','This is an Autoliv internal target, not an external regulation'));
+    const parseItem=(t,y)=>{
+      const s2=String(t);
+      const kw=KW.find(k=>k[0].test(s2))||[null,'—',''];
+      const md2=s2.match(/^(\d\d)-(\d\d)/), full=s2.match(/^(20\d\d)-(\d\d)(?:-(\d\d))?/);
+      const yy=full?full[1]:y, mm=full?+full[2]:(md2?+md2[1]:null), dd=full?(+full[3]||1):(md2?+md2[2]:1);
+      const iso=mm?(yy+'-'+String(mm).padStart(2,'0')+'-'+String(dd).padStart(2,'0')):null;
+      const days=iso?dayTo(iso):null, passed=days!==null&&days<0;
+      let rest=s2.replace(/^(20\d\d-)?\d\d(-\d\d)?\s*/,'').replace(kw[1],'').trim();
+      if(!rest) rest=s2;
+      const hot=days!==null&&days>=0&&days<=180;
+      return {code:kw[1], regId:kw[2], short:rest.length>13?rest.slice(0,13)+'…':rest, full:s2,
+        col:mm||1, gcol:String(Math.min((mm||1)+1,11))+' / span 3',
+        date:(mm?String(mm).padStart(2,'0')+'-'+String(dd).padStart(2,'0'):yy), days, passed, hot,
+        bg:passed?'#F3F6F7':(hot?'#FEECEA':'#fff'), bd:passed?'#E6EBEE':(hot?'#E9C9C4':'#DCE6F5'),
+        fg:passed?'#9AABB1':(hot?'#8A1E14':'#33484F'),
+        cbg:passed?'#E9EEF0':(hot?'#B0291D':'#EEF3F8'), cfg:passed?'#8397A0':(hot?'#fff':'#0B3A82'),
+        cd:days===null?'':(passed?(zh?'已生效':'in force'):((zh?'剩 ':'')+days+(zh?' 天':'d'))),
+        cdBg:passed?'#EAF7EA':(hot?'#B0291D':'#F2F6FD'), cdFg:passed?'#1F6B32':(hot?'#fff':'#0B3A82'),
+        open:openReg(kw[2])};
+    };
+    const monthCells=y=>Array.from({length:12},(_,i)=>{
+      const now=y===String(today.getFullYear())&&(i+1)===today.getMonth()+1;
+      return {label:String(i+1), bg:now?'#0F1E24':'transparent', fg:now?'#fff':'#9AABB1', fw:now?'800':'600'};});
+    const rails=['2026','2027'].map(y=>({year:y, months:monthCells(y),
+      items:(cal[y]||[]).map(t=>parseItem(t,y))}));
+    const far=(cal['2028–2040']||[]).map(t=>{const p=parseItem(t,'2028');
+      return {label:String(t).replace(/^(20\d\d)(-\d\d)?(-\d\d)?\s*/,''), yr:String(t).slice(0,4), code:p.code, open:p.open,
+        bg:/Autoliv/.test(t)?'#EDF9F4':'#F5F8FC', bd:/Autoliv/.test(t)?'#BFE3D6':'#DCE6F5', fg:/Autoliv/.test(t)?'#0B5B4A':'#0B3A82'};});
+    const upcoming=rails.reduce((a,r)=>a.concat(r.items),[]).filter(x=>x.days!==null&&x.days>=0)
+      .sort((a,b)=>a.days-b.days).slice(0,3)
+      .map(x=>({...x, dayN:String(x.days), unit:zh?'天':'days',
+        nbg:x.days<=120?'#FEECEA':'#FDF9F2', nbd:x.days<=120?'#E9C9C4':'#F2E0C4',
+        nfg:x.days<=120?'#B0291D':'#A3620F'}));
+    return {
+      regKpis:[
+        {lzh:'扫描法规',len:'Scanned',v:'124',color:'#0F1E24',szh:'公开来源',sen:'public',subColor:'#8397A0'},
+        {lzh:'相关义务',len:'Relevant',v:String(all.length||16),color:'#002D6B',szh:'本屏 '+(v6.length||13)+' · 管制 '+(v8.length||3)+' 在监控墙',sen:v6.length+' here · '+v8.length+' on the wall',subColor:'#8397A0'},
+        {lzh:'强相关 ★4+',len:'High impact',v:String(hi.length||8),color:'#B0291D',szh:'建议优先承接',sen:'adopt first',subColor:'#B0291D'},
+        {lzh:'本次新增',len:'New',v:String(all.filter(r=>r.inPlatform==='新增').length||10),color:'#A3620F',szh:'原库仅 7 条',sen:'library had 7',subColor:'#A3620F'},
+        {lzh:'已落到要求',len:'Mapped to asks',v:String(new Set(all.reduce((a,r)=>a.concat(this.reqNosOf(r.relatedReq37)),[])).size||12),color:'#0F1E24',szh:'/ 37 项供应商要求',sen:'of the 37 supplier asks',subColor:'#8397A0'},
+      ],
+      regRelN:String(all.length||16), regV6N:String(v6.length||13), regV8N:String(v8.length||3),
+      regHiN:String(hi.length||8),
+      regAdoptLabel:zh?('一键承接 '+(hi.length||8)+' 项强相关'):('Adopt '+(hi.length||8)+' high-impact'),
+      regGroups:groups, regEx:ex, regExCount:ex.length,
+      regExCaret:exOpen?'▾':'▸', regExShow:exOpen?'block':'none',
+      regExToggle:()=>this.setState({regExOpen:!exOpen}),
+      regCatChips:catChips, regStChips:stChips, regTogChips:togChips,
+      regShownN:String(shown.length), regFilterShow:filterOn?'inline-flex':'none',
+      regClear:()=>this.setState({regCat:'all',regSt:'all',regStar:false,regNew:false,regDim:'',q:''}),
+      regFoldAll:()=>this.setState({regOpen:{C1:false,C2:false,C3:false},regExOpen:false}),
+      regUnfoldAll:()=>this.setState({regOpen:{C1:true,C2:true,C3:true},regExOpen:true}),
+      regHiCount:hi.length,
+      regDims:dim.map(d=>{const n2=all.filter(r=>DIMOF(r).indexOf(d.k)>=0).length, on=fDim===d.k;
+        const ac=d.star>=5?'#B0291D':'#A3620F';
+        return {zh:d.zh,en:d.en,stars:star(d.star),
+          cls:on?'dimsel':'', fw:on?'800':'600', dot:on?'rgba(255,255,255,.75)':ac,
+          tip:(zh?d.zh+'：影响强度 '+d.star+'/5 · 紧迫 '+d.urg+' · '+d.subZh+' —— 点击只看这类压力驱动的 '+n2+' 条义务'
+            :d.en+': impact '+d.star+'/5 · '+d.urg+' urgency · '+d.subEn),
+          starFg:on?'rgba(255,255,255,.8)':ac,
+          urg:(zh?'紧迫 ':'')+d.urg, urgBg:on?'rgba(255,255,255,.16)':urgC(d.urg)[0], urgFg:on?'#fff':urgC(d.urg)[1],
+          subZh:d.subZh, subEn:d.subEn,
+          n:String(n2), nFg:on?'#fff':'#0F1E24', nSub:on?'rgba(255,255,255,.6)':'#8397A0',
+          bg:on?'#0F1E24':'#fff', bd:on?'#0F1E24':'#E1E7EA', fg:on?'#fff':'#4C6169',
+          barBg:on?'rgba(255,255,255,.22)':'#EDF1F3', barFill:(d.star*20)+'%', barFg:on?'#fff':ac,
+          hintZh:on?'点击取消筛选':'点击只看这类压力', hintEn:on?'Click to clear':'Filter by this source',
+          hintFg:on?'rgba(255,255,255,.66)':'#9AABB1',
+          pick:()=>this.setState({regDim:on?'':d.k}), go:d.go};}),
+      regDimNote:zh?'矩阵即筛选器：点任一来源，只看这类压力驱动的义务条目':'The matrix is the filter — click a source to see only the obligations it drives',
+      regNodes:nodes.map(n=>({node:n.node, thr:n.newThreshold, fail:n.failureConsequence,
+        bg:n.highStakes?'#FDF6F5':'#fff', bd:n.highStakes?'#E9C9C4':'#E6EBEE',
+        fg:n.highStakes?'#8A1E14':'#0F1E24', failFg:n.highStakes?'#B0291D':'#5A6E75',
+        tag:n.highStakes?(zh?'高风险节点':'High stakes'):'', tagShow:n.highStakes?'inline-flex':'none'})),
+      regCalRails:rails, regCalFar:far, regCalNext:upcoming,
+      regChain:[
+        {dotBg:'#DC3A2C',dotBd:'#FBD5D0',titleColor:'#B0291D',tzh:'稀土窗口 2026-11-10',ten:'Rare-earth window',dzh:'磁材 BOM 溯源 → 双源认证',den:'Trace magnet BOM → dual source'},
+        {dotBg:'#E2A85C',dotBd:'#FAE7CC',titleColor:'#A3620F',tzh:'CBAM 与 PCF 同源',ten:'CBAM shares PCF',dzh:'ISO 14067 产线核算提供方法学',den:'ISO 14067 line accounting'},
+        {dotBg:'#3FAE55',dotBd:'#CDEBD3',titleColor:'#1F6B32',tzh:'一次取证多处复用',ten:'Collect once, reuse',dzh:'同一份供应商证据供 CSRD / 客户 / CBAM',den:'One evidence set for CSRD, OEM and CBAM'},
+        {dotBg:'#0891B2',dotBd:'#CDEEF5',titleColor:'#045B75',tzh:'变更触发重评',ten:'Change triggers re-check',dzh:'法规或 BOM 变更自动重跑适用性',den:'Reg or BOM change re-runs applicability'},
+      ],
+    };
+  }

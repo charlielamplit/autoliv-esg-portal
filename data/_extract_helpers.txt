@@ -1,0 +1,89 @@
+
+  regFromPack(r,zh){
+    const S={高:['#FEECEA','#B0291D','紧迫 高','High urgency'],中高:['#FDF3E7','#A3620F','紧迫 中高','Med-high'],
+      中:['#FDF9F2','#A3620F','紧迫 中','Medium'],已生效:['#F0F3F5','#5A6E75','已生效 · 持续','In force']};
+    const u=S[r.urgency]||S['中'];
+    const inC=r.inPlatform==='新增'?['#FDF3E7','#A3620F','#F2D9AE','新增','New']
+      :(r.inPlatform==='部分'?['#F2F6FD','#0B3A82','#D7E3F6','部分覆盖','Partial']:['#F3F6F7','#5A6E75','#E1E7EA','已在库','Existing']);
+    const star=n=>'★★★★★'.slice(0,n)+'☆☆☆☆☆'.slice(0,5-n);
+    const dayTo=t=>{const m=String(t).match(/(20\d\d)-(\d\d)-(\d\d)/); if(!m) return null;
+      return Math.ceil((new Date(m[0])-new Date())/86400000);};
+    const nodeC=n=>/RFQ|出口/.test(n)?['#FDF2F0','#B0291D','#E9C9C4']:['#F5F7F8','#4C6169','#E1E7EA'];
+    const SC={'绿':['#3FAE55','#EAF7EA','#1F6B32','#BFE3C6','数据与证据齐全 · 可直接提交','Ready to submit'],
+      '黄':['#E2A85C','#FDF3E7','#A3620F','#F2D9AE','可暂用但需补验证 · 自动生成整改任务','Needs verification · auto CAP'],
+      '红':['#DC3A2C','#FEECEA','#B0291D','#E9C9C4','重大缺口或高风险 · 触发采购/合规升级','Major gap · escalate']};
+    const sc=SC[r.statusColor]||SC['黄'];
+    const mkts=[];
+    const txt=[r.name,r.nameEn,r.coreRequirement].join(' ');
+    if(/欧盟|EU |CBAM|CSRD|CSDDD|EUDR|PPWR|ESPR|REACH|电池|循环|毁林/.test(txt)) mkts.push([zh?'欧盟市场':'EU market','#0B3A82','#F2F6FD']);
+    if(/美国|UFLPA|SEC/.test(txt)) mkts.push([zh?'美国市场':'US market','#8A1E14','#FDF2F0']);
+    if(/德国|LkSG/.test(txt)) mkts.push([zh?'德国法人 / 客户':'German entity','#0B3A82','#F2F6FD']);
+    if(/中国|稀土|出口管制|两用物项/.test(txt)) mkts.push([zh?'中国出口管制':'China export control','#B0291D','#FEECEA']);
+    if(!mkts.length) mkts.push([zh?'全球客户传导':'Global cascade','#4C6169','#F3F6F7']);
+    const basis={C1:zh?'企业规模门槛（员工 / 净营业额）+ 法人所在地 + 是否达门槛第三方集团 → 再看客户合同传导'
+        :'Headcount & turnover thresholds + entity location + third-country group tests, then contractual cascade',
+      C2:zh?'CN / HS 编码 + 材料构成 + 产品类别与角色（制造商 / 进口商 / 包装填充者）→ 逐零件判定'
+        :'CN/HS code + material composition + product class & role (manufacturer / importer / packer), judged per part',
+      C3:zh?'物项归类（两用物项清单）+ 原产地与中国成分占比 + 最终用户 / 最终用途 → 逐交易判定'
+        :'Item classification + origin & China-content share + end-user/end-use, judged per transaction'}[r.category];
+    const clShort=(function(t){const s2=String(t||'');
+      if(/贸易合规字段|不在 ASSI/.test(s2)) return zh?'贸易合规字段 · 由 V8 交易筛查采集':'Trade-compliance fields · V8 screening';
+      const m=s2.match(/共\s*(\d+)\s*题/); return (zh?'ASSI 统一问卷 · ':'ASSI survey · ')+(m?m[1]:'—')+(zh?' 题，一次采集多处复用':' items, collected once');})(r.collectedBy);
+    return {
+      scDot:sc[0], scBg:sc[1], scFg:sc[2], scBd:sc[3], scZh:sc[4], scEn:sc[5],
+      srcTags:[['reg','法规硬性义务','Statutory'],['oem','品牌方要求传导','OEM cascade'],['std','行业标准与评级','Standards'],
+        ['own','自有 37 项要求','Own 37 asks'],['geo','地缘政治与管制','Geopolitics']]
+        .filter(x=>this.dimsOf(r).indexOf(x[0])>=0)
+        .map(x=>({zh:x[1],en:x[2],bg:x[0]==='geo'?'#FDF2F0':'#F2F6FD',fg:x[0]==='geo'?'#8A1E14':'#0B3A82'})),
+      applicShow:'flex',
+      applicMkts:mkts.map(m=>({label:m[0], fg:m[1], bg:m[2]})),
+      applicBasis:basis||'',
+      applicVerdict:(zh?('判定结论：适用于 Autoliv 中国 —— '+(r.autolivStatus||'待补充'))
+        :('Verdict: applies to Autoliv China — '+(r.autolivStatus||''))),
+      delivShow:'flex', delivText:r.deliverable||'—',
+      delivAgent:(zh?'由 ':'by ')+(r.agent||'—')+(zh?' 自动执行产出':''),
+      collectLabel:clShort, collectFull:r.collectedBy||'',
+      collectPick:()=>this.showToast('采集链：'+(r.collectedBy||'—')+' —— 同一批题同时支撑客户问卷、报告与本条法规，不重复问供应商',
+        'Collected via: '+(r.collectedBy||'—')),
+      code:r.id, zh:r.name, en:r.nameEn, accentBg:'#E7F6FA', accentFg:'#045B75',
+      origin:(r.category==='C1'?(zh?'气候 · 披露 · 尽调':'Climate, disclosure & diligence')
+        :(r.category==='C2'?(zh?'产品 · 材料 · 循环':'Product, materials & circularity'):(zh?'出口管制与地缘':'Export control'))),
+      stBg:u[0], stFg:u[1], stZh:u[2], stEn:u[3],
+      stars:star(r.impactStar), starFg:r.impactStar>=5?'#B0291D':(r.impactStar>=4?'#A3620F':'#5A6E75'),
+      urg:zh?u[2]:u[3], urgBg:u[0], urgFg:u[1],
+      inLabel:zh?inC[3]:inC[4], inBg:inC[0], inFg:inC[1], inBd:inC[2],
+      statusShow:r.autolivStatus?'flex':'none', autolivStatus:r.autolivStatus||'', legacyShow:'none', legacyGrid:'none',
+      summaryZh:r.coreRequirement, summaryEn:r.coreRequirement,
+      periodZh:(r.keyDates&&r.keyDates.length)?(zh?'有明确时点':'Dated'):(zh?'持续义务':'Standing'),
+      periodEn:(r.keyDates&&r.keyDates.length)?'Dated':'Standing',
+      nextZh:(r.keyDates&&r.keyDates[0])||(zh?'无固定时点':'—'), nextEn:(r.keyDates&&r.keyDates[0])||'—',
+      fourShow:'flex',
+      four:[
+        {k:zh?'状态与核心要求':'Core requirement',v:r.coreRequirement,accent:'#045B75'},
+        {k:zh?'对 Autoliv 影响':'Impact on Autoliv',v:r.impactAutoliv,accent:'#B0291D'},
+        {k:zh?'对供应商要求 · 关键证据':'Supplier requirement & evidence',v:r.supplierRequirement,accent:'#0B5B4A'}
+      ],
+      datesShow:(r.keyDates&&r.keyDates.length)?'flex':'none',
+      dates:(r.keyDates||[]).map(t=>{const d=dayTo(t), hot=d!==null&&d<=200;
+        return {text:t, dot:hot?'#B0291D':'#C4D0D5', fg:hot?'#8A1E14':'#33484F', fw:hot?'700':'600',
+          cd:d===null?'':(d<0?(zh?'已过':'passed'):((zh?'剩 ':'')+d+(zh?' 天':'d'))), cdFg:hot?'#B0291D':'#8397A0'};}),
+      nodesShow:(r.businessNodes&&r.businessNodes.length)?'flex':'none',
+      nodes:(r.businessNodes||[]).map(n=>{const c=nodeC(n);
+        return {label:(zh?'穿透 · ':'Hits · ')+n, bg:c[0], fg:c[1], bd:c[2]};}),
+      why:[],
+      reqs:this.reqNosOf(r.relatedReq37),
+      actions:[{n:1,zh:'把本条的证据要求并入下一轮供应商任务单',en:'Fold the evidence needs into the next supplier pack'},
+        {n:2,zh:'指定责任人与复核周期，变更自动触发重评',en:'Assign an owner and review cycle; changes retrigger assessment'}]
+    };
+  }
+
+  dimsOf(r){
+    const t=[r.name,r.nameEn,r.coreRequirement,r.impactAutoliv,r.deliverable,r.relatedReq37].join(' ');
+    const out=[];
+    if(/罚|禁|扣留|暂停|下架|资格|不得|强制/.test(t)) out.push('reg');
+    if(/客户|OEM|主机厂|传导|授标|问卷|报告/.test(t)) out.push('oem');
+    if(/IMDS|CMRT|EMRT|SCIP|GADSL|EcoVadis|RSCI|SAQ|ISO|PCF|LCA|护照|声明/.test(t)) out.push('std');
+    if(this.reqNosOf(r.relatedReq37).length) out.push('own');
+    if(r.category==='C3'||/强迫劳动|制裁|名单|出口管制|地缘/.test(t)) out.push('geo');
+    return out;
+  }
